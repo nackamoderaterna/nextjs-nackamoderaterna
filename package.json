@@ -6,14 +6,20 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typegen": "cd ../studio-nackamoderaterna && sanity typegen generate && cp sanity.types.ts ../nextjs-nackamoderaterna"
   },
   "dependencies": {
+    "@portabletext/react": "^5.0.0",
+    "@sanity/client": "^7.13.0",
+    "@sanity/image-url": "^1.2.0",
     "next": "16.0.3",
+    "next-sanity": "^11.6.8",
     "react": "19.2.0",
     "react-dom": "19.2.0"
   },
   "devDependencies": {
+    "@sanity/codegen": "^4.18.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
