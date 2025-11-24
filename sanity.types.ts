@@ -34,6 +34,7 @@ export type BlockText = {
     _key: string
   }>
   textColumns?: 1 | 2 | 3
+  containerWidth?: 'full' | 'contained' | 'narrow'
   theme?: 'default' | 'dark' | 'primary'
 }
 

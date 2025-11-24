@@ -1,8 +1,8 @@
 export const CONTAINER_MAX_WIDTH = "max-w-6xl";
 export const containerClasses = {
-  full: "w-full",
-  contained: `w-full max-w-${CONTAINER_MAX_WIDTH} mx-auto px-4`,
-  narrow: "w-full max-w-3xl mx-auto px-4",
+  full: "w-full px-4",
+  contained: `w-full ${CONTAINER_MAX_WIDTH} mx-auto px-4 rounded`,
+  narrow: "w-full max-w-3xl mx-auto px-4 rounded",
 };
 
 export const TEXT_COLUMN_WIDTH = "max-w-lg";
@@ -12,7 +12,7 @@ export const textColumnClasses = {
     columns: "columns-1",
   },
   2: {
-    container: `max-w-5xl`, // 2 columns = wider container
+    container: CONTAINER_MAX_WIDTH, // 2 columns = wider container
     columns: "columns-1 md:columns-2 gap-8",
   },
   3: {
