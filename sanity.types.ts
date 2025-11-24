@@ -13,6 +13,32 @@
  */
 
 // Source: schema.json
+export type BlockHero = {
+  _type: 'block.hero'
+  heading?: string
+  subheading?: string
+  backgroundImage?: {
+    asset?: {
+      _ref: string
+      _type: 'reference'
+      _weak?: boolean
+      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+    }
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: 'image'
+  }
+  overlayOpacity?: number
+  textColor?: 'Light' | 'Dark'
+  ctaButton?: {
+    label?: string
+    link?: string
+  }
+  alignment?: 'left' | 'center' | 'right'
+  height?: 'small' | 'medium' | 'large' | 'fullscreen'
+}
+
 export type BlockText = {
   _type: 'block.text'
   content?: Array<{
@@ -34,7 +60,7 @@ export type BlockText = {
     _key: string
   }>
   textColumns?: 1 | 2 | 3
-  containerWidth?: 'full' | 'contained' | 'narrow'
+  containerWidth?: 'full' | 'contained'
   theme?: 'default' | 'dark' | 'primary'
 }
 
@@ -47,10 +73,29 @@ export type Page = {
   title?: string
   slug?: Slug
   blocks?: Array<
-    {
-      _key: string
-    } & BlockText
+    | ({
+        _key: string
+      } & BlockText)
+    | ({
+        _key: string
+      } & BlockHero)
   >
+}
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top?: number
+  bottom?: number
+  left?: number
+  right?: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x?: number
+  y?: number
+  height?: number
+  width?: number
 }
 
 export type Slug = {
@@ -94,22 +139,6 @@ export type SanityImageMetadata = {
   blurHash?: string
   hasAlpha?: boolean
   isOpaque?: boolean
-}
-
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x?: number
-  y?: number
-  height?: number
-  width?: number
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top?: number
-  bottom?: number
-  left?: number
-  right?: number
 }
 
 export type SanityFileAsset = {
@@ -172,15 +201,16 @@ export type Geopoint = {
 }
 
 export type AllSanitySchemaTypes =
+  | BlockHero
   | BlockText
   | Page
+  | SanityImageCrop
+  | SanityImageHotspot
   | Slug
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
   | SanityImageMetadata
-  | SanityImageHotspot
-  | SanityImageCrop
   | SanityFileAsset
   | SanityAssetSourceData
   | SanityImageAsset

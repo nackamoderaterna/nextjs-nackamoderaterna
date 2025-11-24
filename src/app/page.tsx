@@ -1,16 +1,5 @@
-import { sanityClient } from "@/sanity/client";
-import { SanityDocument } from "next-sanity";
+import { sanityClient } from "@/lib/sanity/client";
 import { PageBuilder } from "./components/PageBuilder";
-
-const PAGE_QUERY = `*[
-  _type == "page"
-  && slug.current == "example" {
-    _id,
-    title,
-    slug,
-    blocks
-  }
-]`;
 
 async function getPageBySlug(slug: string) {
   const query = `*[_type == "page" && slug.current == $slug][0] {
