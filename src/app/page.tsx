@@ -27,7 +27,6 @@ export default async function Home() {
   const page = await getPageBySlug("example");
   return (
     <div>
-      <h1>{page.title}</h1>
       <PageBuilder blocks={page.blocks} />
     </div>
   );

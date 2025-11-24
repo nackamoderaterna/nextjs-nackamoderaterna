@@ -15,13 +15,15 @@ export function TextBlock({ block }: { block: BlockText }) {
   const padding = block.theme && block.theme !== "default" ? "px-4" : "";
 
   return (
-    <div
-      className={`py-12 flex justify-center ${containerClasses} ${theme.bg} rounded`}
-    >
-      <div className={`${layout.container} ${padding}`}>
-        <div className={`${layout.columns}`}>
-          <div className={` prose ${theme.prose} ${theme.text}`}>
-            {block.content && <PortableText value={block.content} />}
+    <div className="w-full px-4">
+      <div
+        className={`py-12 flex justify-center ${containerClasses} ${theme.bg} rounded`}
+      >
+        <div className={`${padding} w-full`}>
+          <div className={`${layout.columns} ${layout.container}`}>
+            <div className={` prose ${theme.prose} ${theme.text}`}>
+              {block.content && <PortableText value={block.content} />}
+            </div>
           </div>
         </div>
       </div>
