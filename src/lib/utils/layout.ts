@@ -5,10 +5,12 @@ export const containerClasses = {
   narrow: "w-full max-w-3xl mx-auto rounded",
 };
 
-export const TEXT_COLUMN_WIDTH = "max-w-lg";
+export const CONTAINER_PADDING = "px-4";
+
+export const TEXT_COLUMN_MAX_WIDTH = "max-w-lg";
 export const textColumnClasses = {
   1: {
-    container: TEXT_COLUMN_WIDTH, // Single column = reading width
+    container: TEXT_COLUMN_MAX_WIDTH, // Single column = reading width
     columns: "columns-1",
   },
   2: {

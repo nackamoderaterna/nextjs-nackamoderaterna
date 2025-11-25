@@ -1,6 +1,7 @@
 import { getThemeClasses } from "@/app/shared/utils/theme";
 import {
   CONTAINER_MAX_WIDTH,
+  CONTAINER_PADDING,
   getContainerClasses,
   getTextColumnClasses,
 } from "@/lib/utils/layout";
@@ -15,7 +16,7 @@ export function TextBlock({ block }: { block: BlockText }) {
   const padding = block.theme && block.theme !== "default" ? "px-4" : "";
 
   return (
-    <div className="w-full px-4">
+    <div className={`w-full ${CONTAINER_PADDING}`}>
       <div
         className={`py-12 flex justify-center ${containerClasses} ${theme.bg} ${padding}`}
       >

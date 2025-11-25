@@ -13,9 +13,16 @@
  */
 
 // Source: schema.json
-export type BlockMedia = {
-  _type: 'block.media'
-  mediaType?: 'image' | 'video'
+export type BlockVideo = {
+  _type: 'block.video'
+  video?: string
+  caption?: string
+  width?: 'contained' | 'inline'
+  alignment?: 'left' | 'center' | 'right'
+}
+
+export type BlockImage = {
+  _type: 'block.image'
   image?: {
     asset?: {
       _ref: string
@@ -29,10 +36,9 @@ export type BlockMedia = {
     alt?: string
     _type: 'image'
   }
-  video?: string
   caption?: string
   aspectRatio?: '16/9' | '4/3' | '1/1' | '9/16' | 'auto'
-  width?: 'full' | 'wide' | 'medium' | 'small'
+  width?: 'full' | 'contained' | 'inline'
   alignment?: 'left' | 'center' | 'right'
 }
 
@@ -104,7 +110,10 @@ export type Page = {
       } & BlockHero)
     | ({
         _key: string
-      } & BlockMedia)
+      } & BlockImage)
+    | ({
+        _key: string
+      } & BlockVideo)
   >
 }
 
@@ -227,7 +236,8 @@ export type Geopoint = {
 }
 
 export type AllSanitySchemaTypes =
-  | BlockMedia
+  | BlockVideo
+  | BlockImage
   | BlockHero
   | BlockText
   | Page

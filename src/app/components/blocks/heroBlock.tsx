@@ -1,6 +1,6 @@
 import type { BlockHero } from "../../../../sanity.types";
 import { buildImageUrl } from "@/lib/sanity/image";
-import { CONTAINER_MAX_WIDTH } from "@/lib/utils/layout";
+import { CONTAINER_MAX_WIDTH, CONTAINER_PADDING } from "@/lib/utils/layout";
 import Link from "next/link";
 
 const heightClasses = {
@@ -71,7 +71,7 @@ export function HeroBlock({ block }: HeroBlockProps) {
       <div
         className={`relative h-full flex flex-col justify-center ${alignment}`}
       >
-        <div className={`px-4  w-full mx-auto`}>
+        <div className={`${CONTAINER_PADDING}  w-full mx-auto`}>
           <div className={`${CONTAINER_MAX_WIDTH} mx-auto w-full`}>
             <div className="max-w-4xl">
               {block.heading && (
