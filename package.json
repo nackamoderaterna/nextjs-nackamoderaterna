@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typegen": "cd ../studio-nackamoderaterna && sanity schema extract && sanity typegen generate && cp sanity.types.ts ../nextjs-nackamoderaterna"
+    "typegen": "dir=($pwd) cd ../studio-nackamoderaterna && sanity schema extract && sanity typegen generate && cp sanity.types.ts ../nextjs-nackamoderaterna/src/lib/sanity/sanity.types.ts"
   },
   "dependencies": {
     "@portabletext/react": "^5.0.0",
