@@ -36,8 +36,8 @@ export class ImageBlockUtils {
     return alignmentClasses[alignment];
   }
 
-  static getBlockContainerClasses(): string {
-    return `w-full flex justify-center my-8 px-4`;
+  static getBlockContainerClasses(width: ImageWidth): string {
+    return `w-full flex justify-center my-8 ${this.isFullWidth(width) ? "" : "px-4"}`;
   }
 
   static getImageClasses(width: ImageWidth): string {
@@ -47,11 +47,11 @@ export class ImageBlockUtils {
     alignment: ImageAlignment,
     width: ImageWidth,
   ) {
-    return `${CONTAINER_MAX_WIDTH} ${CONTAINER_PADDING} w-full flex ${this.getAlignmentClass(alignment)}`;
+    return `${this.isFullWidth(width) ? "w-full" : CONTAINER_MAX_WIDTH} w-full flex ${this.getAlignmentClass(alignment)}`;
   }
 
   static getImageContainerClasses(width: ImageWidth): string {
-    return `${this.getWidthClass(width)} w-full`;
+    return `${this.getWidthClass(width)} w-full flex flex-col items-center`;
   }
 
   static getImageSizes(width: ImageWidth): string {

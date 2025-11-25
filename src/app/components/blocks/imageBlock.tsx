@@ -3,7 +3,11 @@ import { urlFor } from "@/lib/sanity/image";
 import { BlockImage } from "../../../lib/sanity/sanity.types";
 
 import { ImageBlockUtils } from "@/lib/utils/imageBlock";
-import { TEXT_COLUMN_MAX_WIDTH } from "@/lib/utils/layout";
+import {
+  CONTAINER_MAX_WIDTH,
+  CONTAINER_PADDING,
+  TEXT_COLUMN_MAX_WIDTH,
+} from "@/lib/utils/layout";
 
 interface ImageBlockProps {
   block: BlockImage;
@@ -40,7 +44,7 @@ export function ImageBlock({ block }: ImageBlockProps) {
   };
 
   return (
-    <div className={ImageBlockUtils.getBlockContainerClasses()}>
+    <div className={ImageBlockUtils.getBlockContainerClasses(width)}>
       <div
         className={ImageBlockUtils.getContentConstraintClasses(
           alignment,
@@ -58,11 +62,15 @@ export function ImageBlock({ block }: ImageBlockProps) {
           </div>
 
           {caption && (
-            <p
-              className={`${TEXT_COLUMN_MAX_WIDTH} w-full mt-3 text-sm text-gray-600`}
+            <div
+              className={`${CONTAINER_MAX_WIDTH} ${CONTAINER_PADDING} w-full`}
             >
-              {caption}
-            </p>
+              <p
+                className={`${TEXT_COLUMN_MAX_WIDTH} w-full mt-3 text-sm text-gray-600`}
+              >
+                {caption}
+              </p>
+            </div>
           )}
         </div>
       </div>
