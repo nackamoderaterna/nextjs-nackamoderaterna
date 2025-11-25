@@ -7,6 +7,7 @@ import {
 } from "@/lib/utils/layout";
 import { PortableText } from "next-sanity";
 import { BlockText } from "../../../../sanity.types";
+import ContainedBlock from "../core/containedBlock";
 
 export function TextBlock({ block }: { block: BlockText }) {
   const theme = getThemeClasses(block?.theme);
@@ -16,7 +17,7 @@ export function TextBlock({ block }: { block: BlockText }) {
   const padding = block.theme && block.theme !== "default" ? "px-4" : "";
 
   return (
-    <div className={`w-full ${CONTAINER_PADDING}`}>
+    <ContainedBlock>
       <div
         className={`py-12 flex justify-center ${containerClasses} ${theme.bg} ${padding}`}
       >
@@ -26,6 +27,6 @@ export function TextBlock({ block }: { block: BlockText }) {
           </div>
         </div>
       </div>
-    </div>
+    </ContainedBlock>
   );
 }

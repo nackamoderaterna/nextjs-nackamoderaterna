@@ -7,7 +7,7 @@ export const containerClasses = {
 
 export const CONTAINER_PADDING = "px-4";
 
-export const TEXT_COLUMN_MAX_WIDTH = "max-w-lg";
+export const TEXT_COLUMN_MAX_WIDTH = "max-w-xl";
 export const textColumnClasses = {
   1: {
     container: TEXT_COLUMN_MAX_WIDTH, // Single column = reading width
