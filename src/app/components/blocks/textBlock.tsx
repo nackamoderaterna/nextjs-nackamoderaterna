@@ -17,13 +17,11 @@ export function TextBlock({ block }: { block: BlockText }) {
   return (
     <div className="w-full px-4">
       <div
-        className={`py-12 flex justify-center ${containerClasses} ${theme.bg} rounded`}
+        className={`py-12 flex justify-center ${containerClasses} ${theme.bg} ${padding}`}
       >
-        <div className={`${padding} w-full`}>
-          <div className={`${layout.columns} ${layout.container}`}>
-            <div className={` prose ${theme.prose} ${theme.text}`}>
-              {block.content && <PortableText value={block.content} />}
-            </div>
+        <div className={`${layout.columns} ${layout.container}`}>
+          <div className={` prose ${theme.prose} ${theme.text}`}>
+            {block.content && <PortableText value={block.content} />}
           </div>
         </div>
       </div>

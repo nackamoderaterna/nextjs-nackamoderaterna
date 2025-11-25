@@ -71,30 +71,34 @@ export function HeroBlock({ block }: HeroBlockProps) {
       <div
         className={`relative h-full flex flex-col justify-center ${alignment}`}
       >
-        <div className={`${CONTAINER_MAX_WIDTH} mx-auto px-4 w-full`}>
-          <div className="max-w-4xl">
-            {block.heading && (
-              <h1
-                className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-4 ${textColor}`}
-              >
-                {block.heading}
-              </h1>
-            )}
+        <div className={`px-4  w-full mx-auto`}>
+          <div className={`${CONTAINER_MAX_WIDTH} mx-auto w-full`}>
+            <div className="max-w-4xl">
+              {block.heading && (
+                <h1
+                  className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-4 ${textColor}`}
+                >
+                  {block.heading}
+                </h1>
+              )}
 
-            {block.subheading && (
-              <p className={`text-xl md:text-2xl mb-8 ${textColor} opacity-90`}>
-                {block.subheading}
-              </p>
-            )}
+              {block.subheading && (
+                <p
+                  className={`text-xl md:text-2xl mb-8 ${textColor} opacity-90`}
+                >
+                  {block.subheading}
+                </p>
+              )}
 
-            {block.ctaButton?.label && block.ctaButton?.link && (
-              <Link
-                href={block.ctaButton.link}
-                className="inline-block bg-white text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-              >
-                {block.ctaButton.label}
-              </Link>
-            )}
+              {block.ctaButton?.label && block.ctaButton?.link && (
+                <Link
+                  href={block.ctaButton.link}
+                  className="inline-block bg-white text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+                >
+                  {block.ctaButton.label}
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </div>
