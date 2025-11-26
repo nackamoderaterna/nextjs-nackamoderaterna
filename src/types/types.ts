@@ -1,2 +1,1 @@
-import { BlockText } from "./sanity.types";
-export type PageBlock = BlockText;
+export type BlockAlignment = "left" | "center" | "right";

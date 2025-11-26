@@ -7,8 +7,8 @@ export default function ContainedBlock({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`w-full flex justify-center ${CONTAINER_PADDING}`}>
-      <div className={`${CONTAINER_MAX_WIDTH}`}>{children}</div>
+    <div className={`max-w-6xl mx-auto grid grid-cols-12 gap-2 w-full`}>
+      {children}
     </div>
   );
 }

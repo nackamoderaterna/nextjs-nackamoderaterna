@@ -2,6 +2,7 @@ import React from "react";
 import { BlockVideo } from "@/lib/sanity/sanity.types";
 import { VideoBlockUtils } from "@/lib/utils/videoBlock";
 import { TEXT_COLUMN_MAX_WIDTH } from "@/lib/utils/layout";
+import ContainedBlock from "../core/containedBlock";
 
 interface VideoBlockProps {
   block: BlockVideo;
@@ -46,18 +47,18 @@ export default function VideoBlock({ block }: VideoBlockProps) {
   };
 
   return (
-    <div className="w-full px-4">
-      <div className={containerClasses}>
-        <div className="relative overflow-hidden rounded-lg bg-gray-100 aspect-16/9">
-          {renderVideo()}
-        </div>
-
-        {caption && (
-          <p className="mt-3 text-sm text-gray-600 text-center italic">
-            {caption}
-          </p>
-        )}
+    <ContainedBlock>
+      <div
+        className={`${TEXT_COLUMN_MAX_WIDTH} relative w-full overflow-hidden rounded-lg bg-gray-100 aspect-16/9`}
+      >
+        {renderVideo()}
       </div>
-    </div>
+
+      {caption && (
+        <p className="mt-3 text-sm text-gray-600 text-center italic">
+          {caption}
+        </p>
+      )}
+    </ContainedBlock>
   );
 }

@@ -10,31 +10,35 @@ export function urlFor(source: SanityImageSource) {
 
 // Build image URL with hotspot support
 export function buildImageUrl(
-  image: any,
+  image: SanityImageSource,
   options?: {
     width?: number;
     height?: number;
     quality?: number;
+    fit?: "crop" | "fill" | "fillmax" | "max" | "scale" | "min";
   },
 ) {
   if (!image) return "";
 
-  let url = builder.image(image).fit("crop").auto("format");
+  let url = builder
+    .image(image)
+    .auto("format")
+    .fit(options?.fit || "crop");
 
-  // Apply hotspot as focal point
-  if (image.hotspot) {
+  // Hotspot is automatically applied when using .crop('focalpoint')
+  // OR when the image has hotspot data and you use fit('crop')
+  if (
+    image &&
+    typeof image === "object" &&
+    "hotspot" in image &&
+    image.hotspot
+  ) {
     url = url.focalPoint(image.hotspot.x, image.hotspot.y);
   }
-  // Apply dimensions
-  if (options?.width) {
-    url = url.width(options.width);
-  }
-  if (options?.height) {
-    url = url.height(options.height);
-  }
-  if (options?.quality) {
-    url = url.quality(options.quality);
-  }
+
+  if (options?.width) url = url.width(options.width);
+  if (options?.height) url = url.height(options.height);
+  if (options?.quality) url = url.quality(options.quality);
 
   return url.url();
 }

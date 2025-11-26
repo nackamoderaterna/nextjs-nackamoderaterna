@@ -1,7 +1,10 @@
-import type { BlockHero } from "../../../../sanity.types";
 import { buildImageUrl } from "@/lib/sanity/image";
-import { CONTAINER_MAX_WIDTH, CONTAINER_PADDING } from "@/lib/utils/layout";
+import Image from "next/image";
 import Link from "next/link";
+import { BlockHero } from "@/lib/sanity/sanity.types";
+import AlignedBlock from "../core/alignedBlock";
+import { getThemeClasses } from "@/app/shared/utils/theme";
+import HotspotImage from "../shared/hotspotImage";
 
 const heightClasses = {
   small: "h-[400px]",
@@ -10,34 +13,20 @@ const heightClasses = {
   fullscreen: "h-[calc(100vh-var(--header-height))]",
 };
 
-const alignmentClasses = {
-  left: "items-start text-left",
-  center: "items-center text-center",
-  right: "items-end text-right",
-};
-
-const textColorClasses = {
-  light: "text-white",
-  dark: "text-gray-900",
-};
-
 interface HeroBlockProps {
   block: BlockHero;
 }
 
 export function HeroBlock({ block }: HeroBlockProps) {
+  const { alignment = "left", reflow = true, theme = "default" } = block;
+  const themeClasses = getThemeClasses(theme);
+
   const height =
     heightClasses[block.height as keyof typeof heightClasses] ||
     heightClasses.medium;
-  const alignment =
-    alignmentClasses[block.alignment as keyof typeof alignmentClasses] ||
-    alignmentClasses.center;
-  const textColor =
-    textColorClasses[block.textColor as keyof typeof textColorClasses] ||
-    textColorClasses.light;
-
   // Build responsive image URL with hotspot
-  const imageUrl = buildImageUrl(block.backgroundImage, {
+
+  const imageUrl = buildImageUrl(block.backgroundImage || "", {
     width: 1920,
     quality: 80,
   });
@@ -48,13 +37,18 @@ export function HeroBlock({ block }: HeroBlockProps) {
     ? `${block.backgroundImage.hotspot.x! * 100}% ${block.backgroundImage.hotspot.y! * 100}%`
     : "center";
   return (
-    <div className={`relative w-full ${height} overflow-hidden`}>
+    <div
+      className={`relative w-full ${height} flex items-center justify-center overflow-hidden`}
+    >
       {/* Background Image with Hotspot */}
       <div className="absolute inset-0">
-        <img
+        <Image
           src={imageUrl}
           alt={block.heading || ""}
           className="w-full h-full object-cover"
+          sizes="100vw"
+          height={1200}
+          width={2000}
           style={{
             objectPosition,
           }}
@@ -68,39 +62,33 @@ export function HeroBlock({ block }: HeroBlockProps) {
       />
 
       {/* Content */}
-      <div
-        className={`relative h-full flex flex-col justify-center ${alignment}`}
-      >
-        <div className={`${CONTAINER_PADDING}  w-full mx-auto`}>
-          <div className={`${CONTAINER_MAX_WIDTH} mx-auto w-full`}>
-            <div className="max-w-4xl">
-              {block.heading && (
-                <h1
-                  className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-4 ${textColor}`}
-                >
-                  {block.heading}
-                </h1>
-              )}
+      <div className="z-20 w-full">
+        <AlignedBlock alignment={alignment} reflow={reflow}>
+          {block.heading && (
+            <h1
+              className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-4 ${themeClasses.text}`}
+            >
+              {block.heading}
+            </h1>
+          )}
 
-              {block.subheading && (
-                <p
-                  className={`text-xl md:text-2xl mb-8 ${textColor} opacity-90`}
-                >
-                  {block.subheading}
-                </p>
-              )}
+          {block.subheading && (
+            <p
+              className={`text-xl md:text-2xl mb-8 ${themeClasses.text} opacity-90`}
+            >
+              {block.subheading}
+            </p>
+          )}
 
-              {block.ctaButton?.label && block.ctaButton?.link && (
-                <Link
-                  href={block.ctaButton.link}
-                  className="inline-block bg-white text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-                >
-                  {block.ctaButton.label}
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
+          {block.ctaButton?.label && block.ctaButton?.link && (
+            <Link
+              href={block.ctaButton.link}
+              className="inline-block bg-white text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+            >
+              {block.ctaButton.label}
+            </Link>
+          )}
+        </AlignedBlock>
       </div>
     </div>
   );

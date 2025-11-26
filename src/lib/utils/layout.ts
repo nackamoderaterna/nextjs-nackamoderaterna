@@ -1,13 +1,13 @@
 export const CONTAINER_MAX_WIDTH = "max-w-6xl";
+export const CONTAINER_PADDING = "px-4";
+export const TEXT_COLUMN_MAX_WIDTH = "max-w-xl";
+
 export const containerClasses = {
   full: "w-full",
   contained: `w-full ${CONTAINER_MAX_WIDTH} mx-auto rounded`,
   narrow: "w-full max-w-3xl mx-auto rounded",
 };
 
-export const CONTAINER_PADDING = "px-4";
-
-export const TEXT_COLUMN_MAX_WIDTH = "max-w-xl";
 export const textColumnClasses = {
   1: {
     container: TEXT_COLUMN_MAX_WIDTH, // Single column = reading width
@@ -23,16 +23,7 @@ export const textColumnClasses = {
   },
 };
 
-export const gridClasses = {
-  1: "grid-cols-1",
-  2: "grid-cols-1 md:grid-cols-2",
-  3: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
-  4: "grid-cols-1 md:grid-cols-2 lg:grid-cols-4",
-  6: "grid-cols-2 md:grid-cols-3 lg:grid-cols-6",
-};
-
 export type ContainerWidth = keyof typeof containerClasses;
-export type GridColumns = keyof typeof gridClasses;
 
 export function getContainerClasses(width?: ContainerWidth | string) {
   return (
@@ -45,8 +36,4 @@ export function getTextColumnClasses(columns?: number) {
     textColumnClasses[columns as keyof typeof textColumnClasses] ||
     textColumnClasses[1]
   );
-}
-
-export function getGridClasses(columns?: GridColumns | number) {
-  return gridClasses[columns as GridColumns] || gridClasses[1];
 }

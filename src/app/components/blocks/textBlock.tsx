@@ -1,32 +1,32 @@
 import { getThemeClasses } from "@/app/shared/utils/theme";
-import {
-  CONTAINER_MAX_WIDTH,
-  CONTAINER_PADDING,
-  getContainerClasses,
-  getTextColumnClasses,
-} from "@/lib/utils/layout";
+import { getTextColumnClasses } from "@/lib/utils/layout";
 import { PortableText } from "next-sanity";
-import { BlockText } from "../../../../sanity.types";
 import ContainedBlock from "../core/containedBlock";
+import AlignedBlock from "../core/alignedBlock";
+import { BlockText } from "@/lib/sanity/sanity.types";
 
 export function TextBlock({ block }: { block: BlockText }) {
   const theme = getThemeClasses(block?.theme);
-  const layout = getTextColumnClasses(block?.textColumns);
-  const containerClasses = getContainerClasses(block?.containerWidth);
+  const columnClass = block.columns === 1 ? "columns-1" : "columns-2";
 
-  const padding = block.theme && block.theme !== "default" ? "px-4" : "";
-
-  return (
-    <ContainedBlock>
-      <div
-        className={`py-12 flex justify-center ${containerClasses} ${theme.bg} ${padding}`}
-      >
-        <div className={`${layout.columns} ${layout.container}`}>
-          <div className={` prose ${theme.prose} ${theme.text}`}>
+  const renderText = () => {
+    return (
+      <div className="bg-red-100 col-span-full">
+        <div className={`${columnClass} border-red-500 border-2 w-full`}>
+          <div className={`prose ${theme.prose}`}>
             {block.content && <PortableText value={block.content} />}
           </div>
         </div>
       </div>
-    </ContainedBlock>
+    );
+  };
+
+  if (block.columns === 2) {
+    return <ContainedBlock>{renderText()}</ContainedBlock>;
+  }
+  return (
+    <AlignedBlock alignment={block.alignment!} reflow={false}>
+      {renderText()}
+    </AlignedBlock>
   );
 }

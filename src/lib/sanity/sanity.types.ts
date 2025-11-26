@@ -17,7 +17,6 @@ export type BlockVideo = {
   _type: 'block.video'
   video?: string
   caption?: string
-  width?: 'contained' | 'inline'
   alignment?: 'left' | 'center' | 'right'
 }
 
@@ -59,11 +58,12 @@ export type BlockHero = {
     _type: 'image'
   }
   overlayOpacity?: number
-  textColor?: 'Light' | 'Dark'
   ctaButton?: {
     label?: string
     link?: string
   }
+  reflow?: boolean
+  theme?: 'default' | 'dark' | 'primary'
   alignment?: 'left' | 'center' | 'right'
   height?: 'small' | 'medium' | 'large' | 'fullscreen'
 }
@@ -88,8 +88,8 @@ export type BlockText = {
     _type: 'block'
     _key: string
   }>
-  textColumns?: 1 | 2 | 3
-  containerWidth?: 'full' | 'contained'
+  columns?: 1 | 2
+  alignment?: 'left' | 'center' | 'right'
   theme?: 'default' | 'dark' | 'primary'
 }
 

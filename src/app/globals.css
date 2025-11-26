@@ -8,6 +8,10 @@
   --header-height: theme(height.16);
 }
 
+@theme {
+  --color-brand: oklch(38% 36% 267deg);
+}
+
 
 @theme inline {
   --color-background: var(--background);
