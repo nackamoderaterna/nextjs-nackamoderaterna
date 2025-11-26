@@ -2,6 +2,8 @@ export const CONTAINER_MAX_WIDTH = "max-w-6xl";
 export const CONTAINER_PADDING = "px-4";
 export const TEXT_COLUMN_MAX_WIDTH = "max-w-xl";
 
+export const TEXT_BASE_COL_SPAN = "col-span-6";
+
 export const containerClasses = {
   full: "w-full",
   contained: `w-full ${CONTAINER_MAX_WIDTH} mx-auto rounded`,

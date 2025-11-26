@@ -3,13 +3,14 @@ import { BlockVideo } from "@/lib/sanity/sanity.types";
 import { VideoBlockUtils } from "@/lib/utils/videoBlock";
 import { TEXT_COLUMN_MAX_WIDTH } from "@/lib/utils/layout";
 import ContainedBlock from "../core/containedBlock";
+import AlignedBlock from "../core/alignedBlock";
 
 interface VideoBlockProps {
   block: BlockVideo;
 }
 
 export default function VideoBlock({ block }: VideoBlockProps) {
-  const { video, caption, width = "full", alignment = "center" } = block;
+  const { video, caption, alignment = "left" } = block;
 
   const containerClasses = VideoBlockUtils.getContainerClasses(alignment);
   if (!video) {
@@ -47,18 +48,14 @@ export default function VideoBlock({ block }: VideoBlockProps) {
   };
 
   return (
-    <ContainedBlock>
+    <AlignedBlock alignment={alignment} reflow={false}>
       <div
-        className={`${TEXT_COLUMN_MAX_WIDTH} relative w-full overflow-hidden rounded-lg bg-gray-100 aspect-16/9`}
+        className={` relative overflow-hidden rounded-lg bg-gray-100 aspect-16/9`}
       >
         {renderVideo()}
       </div>
 
-      {caption && (
-        <p className="mt-3 text-sm text-gray-600 text-center italic">
-          {caption}
-        </p>
-      )}
-    </ContainedBlock>
+      {caption && <p className="mt-2 text-sm text-gray-600">{caption}</p>}
+    </AlignedBlock>
   );
 }

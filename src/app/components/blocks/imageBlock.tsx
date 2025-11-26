@@ -6,8 +6,11 @@ import { ImageBlockUtils } from "@/lib/utils/imageBlock";
 import {
   CONTAINER_MAX_WIDTH,
   CONTAINER_PADDING,
+  TEXT_BASE_COL_SPAN,
   TEXT_COLUMN_MAX_WIDTH,
 } from "@/lib/utils/layout";
+import ContainedBlock from "../core/containedBlock";
+import AlignedBlock from "../core/alignedBlock";
 
 interface ImageBlockProps {
   block: BlockImage;
@@ -31,49 +34,58 @@ export function ImageBlock({ block }: ImageBlockProps) {
     const imageSizes = ImageBlockUtils.getImageSizes(width);
 
     return (
-      <Image
-        src={urlFor(image).url()}
-        alt={image.alt || caption || "Media image"}
-        fill={useFillLayout}
-        width={dimensions.width}
-        height={dimensions.height}
-        className={imageClassName}
-        sizes={imageSizes}
-      />
+      <div
+        className="overflow-hidden w-full"
+        style={{
+          aspectRatio: aspectRatio !== "auto" ? aspectRatio : undefined,
+        }}
+      >
+        <Image
+          src={urlFor(image).url()}
+          alt={image.alt || caption || "Media image"}
+          fill={useFillLayout}
+          width={dimensions.width}
+          height={dimensions.height}
+          className={imageClassName}
+          sizes={imageSizes}
+        />
+      </div>
     );
   };
 
-  return (
-    <div className={ImageBlockUtils.getBlockContainerClasses(width)}>
-      <div
-        className={ImageBlockUtils.getContentConstraintClasses(
-          alignment,
-          width,
-        )}
-      >
-        <div className={ImageBlockUtils.getImageContainerClasses(width)}>
-          <div
-            className={ImageBlockUtils.getImageClasses(width)}
-            style={{
-              aspectRatio: aspectRatio !== "auto" ? aspectRatio : undefined,
-            }}
-          >
-            {renderImage()}
-          </div>
+  const colSpanClass = block.width === "contained" ? "col-span-full" : "";
 
+  const renderBlock = () => {
+    return (
+      <div className={`${colSpanClass} w-full grid gap-2`}>
+        {renderImage()}
+        <ContainedBlock verticalPadding={false}>
           {caption && (
-            <div
-              className={`${CONTAINER_MAX_WIDTH} ${CONTAINER_PADDING} w-full`}
-            >
-              <p
-                className={`${TEXT_COLUMN_MAX_WIDTH} w-full mt-3 text-sm text-gray-600`}
-              >
-                {caption}
-              </p>
-            </div>
+            <p className={`${TEXT_BASE_COL_SPAN} text-sm text-gray-600`}>
+              {caption}
+            </p>
           )}
-        </div>
+        </ContainedBlock>
       </div>
-    </div>
-  );
+    );
+  };
+
+  const fullBleedImage = () => {
+    return <div className="w-full"></div>;
+  };
+
+  switch (block.width) {
+    case "full":
+      return renderBlock();
+    case "contained": {
+      return <ContainedBlock>{renderBlock()}</ContainedBlock>;
+    }
+    default: {
+      return (
+        <AlignedBlock alignment={alignment} reflow={false}>
+          {renderBlock()}
+        </AlignedBlock>
+      );
+    }
+  }
 }

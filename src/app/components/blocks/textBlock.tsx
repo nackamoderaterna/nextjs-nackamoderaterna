@@ -11,8 +11,8 @@ export function TextBlock({ block }: { block: BlockText }) {
 
   const renderText = () => {
     return (
-      <div className="bg-red-100 col-span-full">
-        <div className={`${columnClass} border-red-500 border-2 w-full`}>
+      <div className="col-span-full">
+        <div className={`${columnClass} w-full`}>
           <div className={`prose ${theme.prose}`}>
             {block.content && <PortableText value={block.content} />}
           </div>
