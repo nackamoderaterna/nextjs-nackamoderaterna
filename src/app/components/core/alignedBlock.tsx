@@ -1,15 +1,18 @@
 import { BlockAlignment } from "@/types/types";
 import ContainedBlock from "./containedBlock";
+import { getThemeClasses, Theme } from "@/app/shared/utils/theme";
 
 interface AlignedBlockProps {
   alignment: BlockAlignment;
   reflow: boolean;
+  theme?: Theme;
   children: React.ReactNode;
 }
 
 export default function AlginedBlock({
   alignment,
   reflow,
+  theme = "default",
   children,
 }: AlignedBlockProps) {
   const alignmentClasses = {
@@ -24,9 +27,9 @@ export default function AlginedBlock({
     right: "text-right flex flex-col items-end",
   };
   return (
-    <ContainedBlock>
+    <ContainedBlock theme={theme}>
       <div
-        className={`${alignmentClasses[alignment]} ${reflow ? reflowClasses[alignment] : ""}`}
+        className={`$ ${alignmentClasses[alignment]} ${reflow ? reflowClasses[alignment] : ""}`}
       >
         {children}
       </div>

@@ -1,8 +1,7 @@
 // utils/videoBlock.ts
 
-import { TEXT_COLUMN_MAX_WIDTH } from "./layout";
+import { ContentAlignment } from "@/app/shared/layout/container";
 
-export type VideoAlignment = "left" | "center" | "right";
 export type VideoType = "youtube" | "vimeo" | "unsupported";
 
 interface VideoInfo {
@@ -10,25 +9,7 @@ interface VideoInfo {
   id: string;
 }
 
-const alignmentClasses: Record<VideoAlignment, string> = {
-  left: "mr-auto",
-  center: "mx-auto",
-  right: "ml-auto",
-};
-
 export class VideoBlockUtils {
-  static getWidthClass(): string {
-    return TEXT_COLUMN_MAX_WIDTH;
-  }
-
-  static getAlignmentClass(alignment: VideoAlignment): string {
-    return alignmentClasses[alignment];
-  }
-
-  static getContainerClasses(alignment: VideoAlignment): string {
-    return `${this.getAlignmentClass(alignment)} my-8`;
-  }
-
   /**
    * Parse video URL and detect platform
    * Supports YouTube (multiple formats) and Vimeo

@@ -13,11 +13,20 @@
  */
 
 // Source: schema.json
+export type BlockSettings = {
+  _type: 'blockSettings'
+  theme?: 'light' | 'dark' | 'brand'
+  containerWidth?: 'full' | 'contained'
+  contentWidth?: 'full' | 'wide' | 'narrow'
+  blockPlacement?: 'left' | 'center' | 'right'
+  contentAlignment?: 'left' | 'center' | 'right'
+}
+
 export type BlockVideo = {
   _type: 'block.video'
   video?: string
   caption?: string
-  alignment?: 'left' | 'center' | 'right'
+  blockSettings?: BlockSettings
 }
 
 export type BlockImage = {
@@ -37,8 +46,7 @@ export type BlockImage = {
   }
   caption?: string
   aspectRatio?: '16/9' | '4/3' | '1/1' | '9/16' | 'auto'
-  width?: 'full' | 'contained' | 'inline'
-  alignment?: 'left' | 'center' | 'right'
+  blockSettings?: BlockSettings
 }
 
 export type BlockHero = {
@@ -63,9 +71,8 @@ export type BlockHero = {
     link?: string
   }
   reflow?: boolean
-  theme?: 'default' | 'dark' | 'primary'
-  alignment?: 'left' | 'center' | 'right'
   height?: 'small' | 'medium' | 'large' | 'fullscreen'
+  blockSettings?: BlockSettings
 }
 
 export type BlockText = {
@@ -89,8 +96,7 @@ export type BlockText = {
     _key: string
   }>
   columns?: 1 | 2
-  alignment?: 'left' | 'center' | 'right'
-  theme?: 'default' | 'dark' | 'primary'
+  blockSettings?: BlockSettings
 }
 
 export type Page = {
@@ -236,6 +242,7 @@ export type Geopoint = {
 }
 
 export type AllSanitySchemaTypes =
+  | BlockSettings
   | BlockVideo
   | BlockImage
   | BlockHero

@@ -1,32 +1,27 @@
-import { getThemeClasses } from "@/app/shared/utils/theme";
-import { getTextColumnClasses } from "@/lib/utils/layout";
 import { PortableText } from "next-sanity";
 import ContainedBlock from "../core/containedBlock";
 import AlignedBlock from "../core/alignedBlock";
-import { BlockText } from "@/lib/sanity/sanity.types";
+import { BlockSettings, BlockText } from "@/lib/sanity/sanity.types";
+import Block from "./Block";
+import { proseMap } from "@/app/shared/theme/theme";
 
-export function TextBlock({ block }: { block: BlockText }) {
-  const theme = getThemeClasses(block?.theme);
+export interface TextBlockProps {
+  block: BlockText;
+}
+export function TextBlock({ block }: TextBlockProps) {
   const columnClass = block.columns === 1 ? "columns-1" : "columns-2";
 
-  const renderText = () => {
-    return (
-      <div className="col-span-full">
+  return (
+    <Block settings={block.blockSettings} applyProse={true}>
+      {
         <div className={`${columnClass} w-full`}>
-          <div className={`prose ${theme.prose}`}>
+          <div
+            className={`prose ${proseMap[block.blockSettings?.theme ?? "light"]}`}
+          >
             {block.content && <PortableText value={block.content} />}
           </div>
         </div>
-      </div>
-    );
-  };
-
-  if (block.columns === 2) {
-    return <ContainedBlock>{renderText()}</ContainedBlock>;
-  }
-  return (
-    <AlignedBlock alignment={block.alignment!} reflow={false}>
-      {renderText()}
-    </AlignedBlock>
+      }
+    </Block>
   );
 }

@@ -2,9 +2,7 @@ import { buildImageUrl } from "@/lib/sanity/image";
 import Image from "next/image";
 import Link from "next/link";
 import { BlockHero } from "@/lib/sanity/sanity.types";
-import AlignedBlock from "../core/alignedBlock";
-import { getThemeClasses } from "@/app/shared/utils/theme";
-import HotspotImage from "../shared/hotspotImage";
+import Block from "./Block";
 
 const heightClasses = {
   small: "h-[400px]",
@@ -18,9 +16,6 @@ interface HeroBlockProps {
 }
 
 export function HeroBlock({ block }: HeroBlockProps) {
-  const { alignment = "left", reflow = true, theme = "default" } = block;
-  const themeClasses = getThemeClasses(theme);
-
   const height =
     heightClasses[block.height as keyof typeof heightClasses] ||
     heightClasses.medium;
@@ -62,20 +57,16 @@ export function HeroBlock({ block }: HeroBlockProps) {
       />
 
       {/* Content */}
-      <div className="z-20 w-full">
-        <AlignedBlock alignment={alignment} reflow={reflow}>
+      <Block settings={block.blockSettings} applyBackground={false}>
+        <div className="z-20 w-full">
           {block.heading && (
-            <h1
-              className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-4 ${themeClasses.text}`}
-            >
+            <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-4`}>
               {block.heading}
             </h1>
           )}
 
           {block.subheading && (
-            <p
-              className={`text-xl md:text-2xl mb-8 ${themeClasses.text} opacity-90`}
-            >
+            <p className={`text-xl md:text-2xl mb-8 opacity-90`}>
               {block.subheading}
             </p>
           )}
@@ -88,8 +79,8 @@ export function HeroBlock({ block }: HeroBlockProps) {
               {block.ctaButton.label}
             </Link>
           )}
-        </AlignedBlock>
-      </div>
+        </div>
+      </Block>
     </div>
   );
 }

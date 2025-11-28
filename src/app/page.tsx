@@ -15,7 +15,7 @@ async function getPageBySlug(slug: string) {
 export default async function Home() {
   const page = await getPageBySlug("example");
   return (
-    <div>
+    <div className="w-full mx-auto">
       <PageBuilder blocks={page.blocks} />
     </div>
   );
