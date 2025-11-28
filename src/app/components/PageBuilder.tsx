@@ -1,5 +1,5 @@
 import { TextBlock } from "./blocks/textBlock";
-import { HeroBlock } from "./blocks/heroBlock";
+import { HeroBlock } from "./blocks/HeroBlock";
 import { ImageBlock } from "./blocks/imageBlock";
 import VideoBlock from "./blocks/videoBlock";
 import PageLoader from "next/dist/client/page-loader";
