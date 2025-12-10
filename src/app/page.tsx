@@ -6,7 +6,15 @@ async function getPageBySlug(slug: string) {
     _id,
     title,
     slug,
-    blocks
+    blocks[] {
+      ...,
+      _type == "block.politician" => {
+        mode,
+        items[]->{
+          ...,
+        }
+      },
+    }
   }`;
 
   return await sanityClient.fetch(query, { slug });

@@ -2,8 +2,8 @@ import { TextBlock } from "./blocks/textBlock";
 import { HeroBlock } from "./blocks/HeroBlock";
 import { ImageBlock } from "./blocks/imageBlock";
 import VideoBlock from "./blocks/videoBlock";
-import PageLoader from "next/dist/client/page-loader";
 import { PageBlock } from "@/types/types";
+import { PoliticianReferenceBlock } from "./blocks/PoliticianReference";
 
 interface PageBuilderProps {
   blocks: PageBlock[];
@@ -21,6 +21,8 @@ export function PageBuilder({ blocks }: PageBuilderProps) {
             return <ImageBlock key={index} block={block} />;
           case "block.video":
             return <VideoBlock key={index} block={block} />;
+          case "block.politician":
+            return <PoliticianReferenceBlock key={index} block={block} />;
         }
       })}
     </div>
