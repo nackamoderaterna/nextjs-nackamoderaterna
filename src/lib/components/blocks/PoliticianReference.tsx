@@ -28,7 +28,7 @@ export const PoliticianReferenceBlock = ({
           <div key={p._id} className="border rounded p-3">
             <h3 className="font-bold">{p.name}</h3>
             <a
-              href={`/politician/${p.slug?.current}`}
+              href={`/politiker/${p.slug?.current}`}
               className="text-blue-600 hover:underline"
             >
               Läs mer
