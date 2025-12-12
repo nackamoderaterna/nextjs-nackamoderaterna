@@ -1,9 +1,7 @@
 import { PortableText } from "next-sanity";
-import ContainedBlock from "../core/containedBlock";
-import AlignedBlock from "../core/alignedBlock";
-import { BlockSettings, BlockText } from "@/lib/sanity/sanity.types";
 import Block from "./Block";
-import { proseMap } from "@/app/shared/theme/theme";
+import { BlockText } from "@/lib/sanity/sanity.types";
+import { proseMap } from "@/lib/shared/theme/theme";
 
 export interface TextBlockProps {
   block: BlockText;

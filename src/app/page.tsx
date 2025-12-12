@@ -1,5 +1,5 @@
+import { PageBuilder } from "@/lib/components/PageBuilder";
 import { sanityClient } from "@/lib/sanity/client";
-import { PageBuilder } from "./components/PageBuilder";
 
 async function getPageBySlug(slug: string) {
   const query = `*[_type == "page" && slug.current == $slug][0] {
@@ -8,12 +8,113 @@ async function getPageBySlug(slug: string) {
     slug,
     blocks[] {
       ...,
+      // POLITICAN START
       _type == "block.politician" => {
         mode,
-        items[]->{
+       "items": select(
+          mode == "kommunalrad" => 
+            *[_type == "politician" && kommunalrad.active == true]{
+              _id,
+              name,
+              slug,
+              kommunalrad,
+              position
+          },
+
+      // default = manual selection
+          items[]->{
+            _id,
+            name,
+            slug,
+            kommunalrad,
+            position
+          }
+        )
+      },
+      // POLITICIAN END
+      // NEWS START
+      _type == "block.news" => {
+      title,
+      mode,
+      limit,
+      politicalArea,
+      geographicArea,
+      items[]->{
+        _id,
+        title,
+        excerpt,
+        publishedAt,
+        slug,
+        heroImage{
           ...,
+          "url": asset->url
         }
       },
+
+      // Resolved items depending on mode
+      "resolvedItems": select(
+        // MANUAL
+        mode == "manual" => items[]->{
+          _id,
+          title,
+          excerpt,
+          publishedAt,
+          slug,
+          heroImage{
+            ...,
+            "url": asset->url
+          }
+        },
+
+        // LATEST
+        mode == "latest" => *[_type == "news"] 
+          | order(publishedAt desc)
+          [0...10]{
+            _id,
+            title,
+            excerpt,
+            publishedAt,
+            slug,
+            heroImage{
+              ...,
+              "url": asset->url
+            }
+          },
+
+        // BY POLITICAL AREA
+        mode == "byPoliticalArea" && defined(politicalArea) => *[_type == "news" && references(^.politicalArea._ref)]
+          | order(publishedAt desc)
+          [0...10]{
+            _id,
+            title,
+            excerpt,
+            publishedAt,
+            slug,
+            heroImage{
+              ...,
+              "url": asset->url
+            }
+          },
+
+        // BY GEOGRAPHIC AREA
+        mode == "byGeographicArea" && defined(geographicArea) => *[_type == "news" && references(^.geographicArea._ref)]
+          | order(publishedAt desc)
+          [0...10]{
+            _id,
+            title,
+            excerpt,
+            publishedAt,
+            slug,
+            heroImage{
+              ...,
+              "url": asset->url
+            }
+          },
+
+        // DEFAULT → empty array
+        []
+      )
+    }
     }
   }`;
 
