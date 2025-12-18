@@ -1,6 +1,6 @@
-import { getGridAlignment } from "@/app/shared/layout/container";
-import { themeTextMap } from "@/app/shared/theme/theme";
-import { BlockSettings } from "@/lib/sanity/sanity.types";
+import { getGridAlignment } from "@/lib/shared/layout/container";
+import { themeTextMap } from "@/lib/shared/theme/theme";
+import { BlockSettings } from "~/sanity.types";
 
 export type ContentProps = {
   settings?: BlockSettings;

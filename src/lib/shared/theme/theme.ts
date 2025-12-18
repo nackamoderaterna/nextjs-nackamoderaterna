@@ -1,4 +1,4 @@
-import { BlockSettings } from "@/lib/sanity/sanity.types";
+import { BlockSettings } from "~/sanity.types";
 
 export type Theme = "light" | "dark" | "brand";
 

@@ -1,10 +1,7 @@
 import React from "react";
-import { BlockVideo } from "@/lib/sanity/sanity.types";
 import { VideoBlockUtils } from "@/lib/utils/videoBlock";
-import { TEXT_COLUMN_MAX_WIDTH } from "@/lib/utils/layout";
-import ContainedBlock from "../core/containedBlock";
-import AlignedBlock from "../core/alignedBlock";
 import Block from "./Block";
+import { BlockVideo } from "~/sanity.types";
 
 interface VideoBlockProps {
   block: BlockVideo;

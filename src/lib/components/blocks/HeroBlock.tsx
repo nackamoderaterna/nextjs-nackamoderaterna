@@ -1,8 +1,8 @@
 import { buildImageUrl } from "@/lib/sanity/image";
 import Image from "next/image";
 import Link from "next/link";
-import { BlockHero } from "@/lib/sanity/sanity.types";
 import Block from "./Block";
+import { BlockHero } from "~/sanity.types";
 
 const heightClasses = {
   small: "h-[400px]",

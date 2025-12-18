@@ -1,7 +1,7 @@
 import { PortableText } from "next-sanity";
 import Block from "./Block";
-import { BlockText } from "@/lib/sanity/sanity.types";
 import { proseMap } from "@/lib/shared/theme/theme";
+import { BlockText } from "~/sanity.types";
 
 export interface TextBlockProps {
   block: BlockText;

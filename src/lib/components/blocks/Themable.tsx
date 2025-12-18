@@ -1,14 +1,9 @@
 // ThemedContainer.tsx
 
-import {
-  blockPlacementMap,
-  contentAlignmentMap,
-  contentWidthMap,
-} from "@/app/shared/layout/container";
-import { resolveBlockTheme } from "@/app/shared/theme/theme";
-import { BlockSettings } from "@/lib/sanity/sanity.types";
+import { resolveBlockTheme } from "@/lib/shared/theme/theme";
 import Container from "./Container";
 import Content from "./Content";
+import { BlockSettings } from "~/sanity.types";
 
 export interface ThemedProps {
   blockSettings?: BlockSettings;

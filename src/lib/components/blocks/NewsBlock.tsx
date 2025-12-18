@@ -1,8 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import { News } from "@/lib/sanity/sanity.types";
 import { buildImageUrl } from "@/lib/sanity/image";
 import Block from "./Block";
+import { News } from "~/sanity.types";
 
 export interface NewsBlockProps {
   _type: "block.news";

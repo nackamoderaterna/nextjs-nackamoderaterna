@@ -1,4 +1,4 @@
-import { BlockSettings } from "@/lib/sanity/sanity.types";
+import { BlockSettings } from "~/sanity.types";
 import Container from "./Container";
 import Content from "./Content";
 import { Themable } from "./Themable";

@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { urlFor } from "@/lib/sanity/image";
-import { BlockImage } from "../../../lib/sanity/sanity.types";
 
 import * as imageBlock from "@/lib/utils/imageBlock";
 import Block from "./Block";
+import { BlockImage } from "~/sanity.types";
 
 interface ImageBlockProps {
   block: BlockImage;

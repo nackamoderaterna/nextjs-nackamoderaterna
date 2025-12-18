@@ -1,6 +1,5 @@
-import { sanityClient } from "@/lib/sanity/client";
-import { BlockPolitician, Politician } from "@/lib/sanity/sanity.types";
 import Block from "./Block";
+import { Politician } from "~/sanity.types";
 
 export interface BlockPoliticianDereferenced {
   _type: "block.politician";
