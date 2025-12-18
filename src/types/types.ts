@@ -6,7 +6,7 @@ import {
   BlockPolitician,
   BlockText,
   BlockVideo,
-} from "@/lib/sanity/sanity.types";
+} from "~/sanity.types";
 
 export type BlockAlignment = "left" | "center" | "right";
 
