@@ -15,9 +15,11 @@
     "@sanity/image-url": "^1.2.0",
     "@tabler/icons-react": "^3.35.0",
     "next": "16.0.3",
-    "next-sanity": "^11.6.8",
+    "next-sanity": "^11.6.10",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "sanity": "^4.21.1",
+    "styled-components": "^6.1.19"
   },
   "devDependencies": {
     "@sanity/codegen": "^4.18.0",
