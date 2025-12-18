@@ -1,7 +1,5 @@
 // utils/videoBlock.ts
 
-import { ContentAlignment } from "@/app/shared/layout/container";
-
 export type VideoType = "youtube" | "vimeo" | "unsupported";
 
 interface VideoInfo {
@@ -10,19 +8,6 @@ interface VideoInfo {
 }
 
 export class VideoBlockUtils {
-  /**
-   * Parse video URL and detect platform
-   * Supports YouTube (multiple formats) and Vimeo
-   * @param url - Video URL from YouTube, Vimeo, or direct source
-   * @returns VideoInfo object with type ('youtube' | 'vimeo' | 'direct') and video ID
-   *
-   * @example
-   * parseVideoUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
-   * // Returns: { type: 'youtube', id: 'dQw4w9WgXcQ' }
-   *
-   * parseVideoUrl('https://vimeo.com/123456789')
-   * // Returns: { type: 'vimeo', id: '123456789' }
-   */
   static parseVideoUrl(url: string): VideoInfo {
     // YouTube patterns - supports multiple URL formats:
     // - https://www.youtube.com/watch?v=VIDEO_ID

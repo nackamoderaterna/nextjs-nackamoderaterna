@@ -1,4 +1,4 @@
-import { ContainerWidth, ContentWidth } from "@/app/shared/layout/container";
+import { ContentWidth } from "../shared/layout/container";
 
 export type AspectRatio = "16/9" | "4/3" | "1/1" | "9/16" | "auto";
 
