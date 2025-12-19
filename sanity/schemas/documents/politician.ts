@@ -178,6 +178,29 @@ export const politician = defineType({
               initialValue: "member",
             },
           ],
+          preview: {
+            select: {
+              title: "namndRef.title",
+              subtitle: "position",
+            },
+            prepare({ title, subtitle }) {
+              const positionTitles = {
+                president: "Ordförande",
+                "first-president": "1:e vice ordförande",
+                "second-president": "2:e vice ordförande",
+                groupleader: "Gruppledare",
+                member: "Ledamot",
+                replacement: "Ersättare",
+              };
+
+              return {
+                title,
+                subtitle:
+                  positionTitles[subtitle as keyof typeof positionTitles] ||
+                  subtitle,
+              };
+            },
+          },
         },
       ],
       group: "uppdrag",
