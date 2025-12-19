@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Block from "./Block";
 import { BlockHero } from "~/sanity.types";
+import { SanityBackgroundImage } from "../shared/SanityBackgroundImage";
 
 const heightClasses = {
   small: "h-[400px]",
@@ -33,28 +34,7 @@ export function HeroBlock({ block }: HeroBlockProps) {
 
   return (
     <div className={`relative w-full ${height} overflow-hidden`}>
-      {/* Background Image with Hotspot */}
-      <div className="absolute inset-0">
-        <Image
-          src={imageUrl}
-          alt={block.heading || ""}
-          className="w-full h-full object-cover"
-          sizes="100vw"
-          height={1200}
-          width={2000}
-          style={{
-            objectPosition,
-          }}
-        />
-      </div>
-
-      {/* Overlay */}
-      <div
-        className="absolute inset-0 bg-black"
-        style={{ opacity: overlayOpacity }}
-      />
-
-      {/* Content Container - Full height flex to center content */}
+      <SanityBackgroundImage image={block.backgroundImage} />
       <div className={`relative ${height} flex items-center`}>
         <Block settings={block.blockSettings} applyBackground={false}>
           <div className="z-20">
