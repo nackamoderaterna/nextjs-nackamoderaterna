@@ -87,6 +87,24 @@ export const news = defineType({
       type: "date",
     },
   ],
+  orderings: [
+    {
+      title: "Publiceringsdatum (med override)",
+      name: "effectiveDateDesc",
+      by: [
+        { field: "dateOverride", direction: "desc" },
+        { field: "_createdAt", direction: "desc" },
+      ],
+    },
+    {
+      title: "Publiceringsdatum (stigande)",
+      name: "effectiveDateAsc",
+      by: [
+        { field: "dateOverride", direction: "asc" },
+        { field: "_createdAt", direction: "asc" },
+      ],
+    },
+  ],
   preview: {
     select: {
       title: "title",
