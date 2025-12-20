@@ -63,37 +63,25 @@ export const politician = defineType({
       fields: [
         {
           name: "active",
+          title: "Aktiv",
           type: "boolean",
           initialValue: false,
         },
         {
           name: "role",
-          title: "Role Type",
+          title: "Roll",
           type: "string",
           options: {
             list: [
               {
-                name: "active",
-                type: "boolean",
-                initialValue: false,
+                title: "Kommunstyrelsens ordförande",
+                value: "president",
               },
-              {
-                name: "role",
-                type: "string",
-                options: {
-                  list: [
-                    {
-                      title: "Kommunstyrelsens ordförande",
-                      value: "president",
-                    },
-                    { title: "Kommunalråd", value: "ordinary" },
-                  ],
-                },
-              },
+              { title: "Kommunalråd", value: "ordinary" },
             ],
           },
           initialValue: "ordinary",
-          hidden: (Rule) => Rule.parent?.kommunalrad?.active,
+          hidden: ({ parent }) => !parent.active,
         },
       ],
     },
@@ -105,12 +93,13 @@ export const politician = defineType({
       fields: [
         {
           name: "active",
+          title: "Aktiv",
           type: "boolean",
           initialValue: false,
         },
         {
           name: "position",
-          title: "Position",
+          title: "Roll",
           type: "string",
           options: {
             list: [
@@ -118,6 +107,8 @@ export const politician = defineType({
               { title: "Ledamot", value: "ledamot" },
             ],
           },
+          initialValue: "ledamot",
+          hidden: ({ parent }) => !parent.active,
         },
       ],
     },
@@ -129,11 +120,13 @@ export const politician = defineType({
       fields: [
         {
           name: "active",
+          title: "Aktiv",
           type: "boolean",
           initialValue: false,
         },
         {
           name: "role",
+          title: "Roll",
           type: "string",
           options: {
             list: [
@@ -141,6 +134,8 @@ export const politician = defineType({
               { title: "Ersättare", value: "substitute" },
             ],
           },
+          initialValue: "ordinary",
+          hidden: ({ parent }) => !parent.active,
         },
       ],
     },
@@ -175,7 +170,6 @@ export const politician = defineType({
                   { title: "Ersättare", value: "replacement" },
                 ],
               },
-              initialValue: "member",
             },
           ],
           preview: {

@@ -2645,10 +2645,12 @@
                 "type": "union",
                 "of": [
                   {
-                    "type": "string"
+                    "type": "string",
+                    "value": "president"
                   },
                   {
-                    "type": "string"
+                    "type": "string",
+                    "value": "ordinary"
                   }
                 ]
               },

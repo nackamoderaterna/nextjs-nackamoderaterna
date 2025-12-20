@@ -415,7 +415,7 @@ export type Politician = {
   }>;
   kommunalrad?: {
     active?: boolean;
-    role?: string | string;
+    role?: "president" | "ordinary";
   };
   partyBoard?: {
     active?: boolean;

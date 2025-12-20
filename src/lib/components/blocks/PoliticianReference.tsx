@@ -28,6 +28,11 @@ export const PoliticianReferenceBlock = ({
           <div key={p._id} className="rounded p-3">
             <SanityImage image={p.image} />
             <h3 className="font-bold">{p.name}</h3>
+            <h4 className="text-sm color-gray-600">
+              {p.kommunalrad?.role === "ordinary"
+                ? "Ledamot"
+                : "Kommunstyrelsens ordförande"}
+            </h4>
             <a
               href={`/politiker/${p.slug?.current}`}
               className="text-blue-600 hover:underline"
