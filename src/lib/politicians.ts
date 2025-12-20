@@ -176,7 +176,7 @@ export const positionTitles = {
 // Section title translations
 export const sectionTitles = {
   kommunalrad: "Kommunalråd",
-  partyBoard: "Styrelseuppdrag",
+  partyBoard: "Styrelsen",
   kommunfullmaktige: "Kommunfullmäktige",
   namnder: "Nämnder",
   other: "Övriga politiker",
