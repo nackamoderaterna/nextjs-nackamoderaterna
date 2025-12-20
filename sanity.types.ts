@@ -13,6 +13,58 @@
  */
 
 // Source: schema.json
+export type ContentSettings = {
+  _type: "contentSettings";
+  contentWidth?: "full" | "wide" | "narrow";
+  contentAlignment?: "left" | "center" | "right";
+};
+
+export type ContainerSettings = {
+  _type: "containerSettings";
+  containerWidth?: "full" | "contained";
+  blockPlacement?: "left" | "center" | "right";
+};
+
+export type ThemeSettings = {
+  _type: "themeSettings";
+  theme?: "light" | "dark" | "brand";
+};
+
+export type Seo = {
+  _type: "seo";
+  title?: string;
+  description?: string;
+  keywords?: Array<string>;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
+};
+
 export type MenuItem = {
   _type: "menuItem";
   title?: string;
@@ -47,15 +99,6 @@ export type MenuItem = {
   children?: Array<{
     _key: string;
   } & MenuItem>;
-};
-
-export type BlockSettings = {
-  _type: "blockSettings";
-  theme?: "light" | "dark" | "brand";
-  containerWidth?: "full" | "contained";
-  blockPlacement?: "left" | "center" | "right";
-  contentWidth?: "full" | "wide" | "narrow";
-  contentAlignment?: "left" | "center" | "right";
 };
 
 export type BlockNews = {
@@ -100,7 +143,6 @@ export type BlockVideo = {
   _type: "block.video";
   video?: string;
   caption?: string;
-  blockSettings?: BlockSettings;
 };
 
 export type BlockImage = {
@@ -120,7 +162,6 @@ export type BlockImage = {
   };
   caption?: string;
   aspectRatio?: "16/9" | "4/3" | "1/1" | "9/16" | "auto";
-  blockSettings?: BlockSettings;
 };
 
 export type BlockHero = {
@@ -146,7 +187,6 @@ export type BlockHero = {
   };
   reflow?: boolean;
   height?: "small" | "medium" | "large" | "fullscreen";
-  blockSettings?: BlockSettings;
 };
 
 export type BlockText = {
@@ -170,7 +210,6 @@ export type BlockText = {
     _key: string;
   }>;
   columns?: 1 | 2;
-  blockSettings?: BlockSettings;
 };
 
 export type GlobalSettings = {
@@ -231,22 +270,6 @@ export type GlobalSettings = {
       _type: "image";
     };
   };
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
 };
 
 export type NavigationHeader = {
@@ -350,6 +373,91 @@ export type NamndPosition = {
   description?: string;
 };
 
+export type Politician = {
+  _id: string;
+  _type: "politician";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  email?: string;
+  phone?: string;
+  bio?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+  kommunalrad?: {
+    active?: boolean;
+    role?: string | string;
+  };
+  partyBoard?: {
+    active?: boolean;
+    position?: "ordforande" | "ledamot";
+  };
+  kommunfullmaktige?: {
+    active?: boolean;
+    role?: "ordinary" | "substitute";
+  };
+  namndPositions?: Array<{
+    namndRef?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "namnd";
+    };
+    position?: "president" | "first-president" | "second-president" | "groupleader" | "member" | "replacement";
+    _type: "namndPosition";
+    _key: string;
+  }>;
+  livingArea?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "geographicalArea";
+  };
+  politicalAreas?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "politicalArea";
+  }>;
+  socialMedia?: {
+    facebook?: string;
+    twitter?: string;
+    instagram?: string;
+    linkedin?: string;
+    tiktok?: string;
+  };
+};
+
 export type Namnd = {
   _id: string;
   _type: "namnd";
@@ -419,6 +527,17 @@ export type Event = {
     _key: string;
     [internalGroqTypeReferenceTo]?: "politicalArea";
   }>;
+};
+
+export type GeographicalArea = {
+  _id: string;
+  _type: "geographicalArea";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  description?: string;
 };
 
 export type Page = {
@@ -496,12 +615,13 @@ export type News = {
     _type: "image";
     _key: string;
   }>;
-  author?: {
+  referencedPolitician?: Array<{
     _ref: string;
     _type: "reference";
     _weak?: boolean;
+    _key: string;
     [internalGroqTypeReferenceTo]?: "politician";
-  };
+  }>;
   politicalAreas?: Array<{
     _ref: string;
     _type: "reference";
@@ -523,98 +643,7 @@ export type News = {
     _key: string;
     [internalGroqTypeReferenceTo]?: "news";
   }>;
-};
-
-export type Politician = {
-  _id: string;
-  _type: "politician";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  slug?: Slug;
-  image?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  };
-  email?: string;
-  phone?: string;
-  bio?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }>;
-  kommunalrad?: {
-    active?: boolean;
-    role?: "ordinary" | "substitute";
-  };
-  partyBoard?: {
-    active?: boolean;
-    position?: "ordforande" | "ledamot";
-  };
-  kommunfullmaktige?: {
-    active?: boolean;
-    role?: "ordinary" | "substitute";
-  };
-  namndPositions?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "namndPosition";
-  }>;
-  livingArea?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "geographicalArea";
-  };
-  politicalAreas?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "politicalArea";
-  }>;
-  socialMedia?: {
-    facebook?: string;
-    twitter?: string;
-    instagram?: string;
-    linkedin?: string;
-    tiktok?: string;
-  };
-};
-
-export type GeographicalArea = {
-  _id: string;
-  _type: "geographicalArea";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  slug?: Slug;
-  description?: string;
+  dateOverride?: string;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -713,5 +742,5 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type AllSanitySchemaTypes = MenuItem | BlockSettings | BlockNews | BlockPolitician | BlockVideo | BlockImage | BlockHero | BlockText | GlobalSettings | SanityImageCrop | SanityImageHotspot | NavigationHeader | PoliticalIssue | PoliticalArea | Slug | NamndPosition | Namnd | Event | Page | News | Politician | GeographicalArea | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
+export type AllSanitySchemaTypes = ContentSettings | ContainerSettings | ThemeSettings | Seo | SanityImageCrop | SanityImageHotspot | MenuItem | BlockNews | BlockPolitician | BlockVideo | BlockImage | BlockHero | BlockText | GlobalSettings | NavigationHeader | PoliticalIssue | PoliticalArea | Slug | NamndPosition | Politician | Namnd | Event | GeographicalArea | Page | News | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
 export declare const internalGroqTypeReferenceTo: unique symbol;

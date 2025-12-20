@@ -17,6 +17,7 @@ async function getPageBySlug(slug: string) {
               _id,
               name,
               slug,
+              image,
               kommunalrad,
               position
           },
@@ -26,6 +27,7 @@ async function getPageBySlug(slug: string) {
             _id,
             name,
             slug,
+            image,
             kommunalrad,
             position
           }

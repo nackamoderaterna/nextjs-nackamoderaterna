@@ -1,3 +1,4 @@
+import { SanityImage } from "../shared/SanityImage";
 import Block from "./Block";
 import { Politician } from "~/sanity.types";
 
@@ -22,9 +23,10 @@ export const PoliticianReferenceBlock = ({
 
   return (
     <Block>
-      <div className="space-y-4">
+      <div className="grid grid-cols-4">
         {items.map((p) => (
-          <div key={p._id} className="border rounded p-3">
+          <div key={p._id} className="rounded p-3">
+            <SanityImage image={p.image} />
             <h3 className="font-bold">{p.name}</h3>
             <a
               href={`/politiker/${p.slug?.current}`}

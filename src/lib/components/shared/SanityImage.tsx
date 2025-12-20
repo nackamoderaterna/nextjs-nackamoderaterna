@@ -38,7 +38,7 @@ export function SanityImage({
       height={height || 700}
       sizes={sizes}
       priority={priority}
-      className={`object-cover ${className}`}
+      className={`object-cover ${className} h-full`}
       style={{ objectPosition }}
     />
   );
