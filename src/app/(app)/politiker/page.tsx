@@ -194,7 +194,7 @@ function LargePoliticianCard({
         </h3>
         {politician.livingArea && (
           <p className="text-sm text-gray-600 mt-1">
-            {politician.livingArea.title}
+            {politician.livingArea.name}
           </p>
         )}
       </div>
@@ -232,7 +232,7 @@ function CompactPoliticianCard({
         {role && <p className="text-xs text-gray-600 mt-0.5">{role}</p>}
         {politician.livingArea && (
           <p className="text-xs text-gray-500 mt-0.5">
-            {politician.livingArea.title}
+            {politician.livingArea.name}
           </p>
         )}
       </div>
