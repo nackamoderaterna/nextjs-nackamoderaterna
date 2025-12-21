@@ -8,7 +8,7 @@ interface VideoBlockProps {
 }
 
 export default function VideoBlock({ block }: VideoBlockProps) {
-  const { video, caption, blockSettings } = block;
+  const { video, caption } = block;
 
   if (!video) {
     return null;
@@ -44,7 +44,7 @@ export default function VideoBlock({ block }: VideoBlockProps) {
   };
 
   return (
-    <Block settings={block?.blockSettings}>
+    <Block>
       <div className={`rounded bg-gray-100 aspect-16/9`}>{renderVideo()}</div>
 
       {caption && <p className="mt-2 text-sm text-gray-600">{caption}</p>}

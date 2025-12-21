@@ -36,7 +36,7 @@ export function HeroBlock({ block }: HeroBlockProps) {
     <div className={`relative w-full ${height} overflow-hidden`}>
       <SanityBackgroundImage image={block.backgroundImage} />
       <div className={`relative ${height} flex items-center`}>
-        <Block settings={block.blockSettings} applyBackground={false}>
+        <Block applyBackground={false}>
           <div className="z-20">
             {block.heading && (
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white">

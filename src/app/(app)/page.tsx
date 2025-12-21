@@ -114,7 +114,16 @@ async function getPageBySlug(slug: string) {
           },
 
         // DEFAULT → empty array
-        []
+         *[_type == "news"] 
+          | order(publishedAt desc)
+          [0...10]{
+            _id,
+            title,
+            excerpt,
+            publishedAt,
+            slug,
+            mainImage
+          },
       )
     }
     }

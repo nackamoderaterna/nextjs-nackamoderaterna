@@ -1,5 +1,3 @@
-import { BlockSettings } from "~/sanity.types";
-
 export type Theme = "light" | "dark" | "brand";
 
 export const themeBgMap: Record<Theme, string> = {
@@ -22,21 +20,4 @@ export const proseMap: Record<Theme, string> = {
 
 export interface ResolveThemeOptions {
   applyBackground: boolean;
-  settings?: BlockSettings;
 }
-
-export const resolveBlockTheme = (opts: ResolveThemeOptions) => {
-  const { applyBackground, settings } = opts;
-  const bg = themeBgMap[settings?.theme ?? "light"];
-
-  const text = themeTextMap[settings?.theme ?? "light"];
-
-  const outerBackground = settings?.containerWidth === "full" ? bg : "";
-  const innerBackground = settings?.containerWidth === "contained" ? bg : "";
-
-  return {
-    outerBackground: applyBackground ? outerBackground : "",
-    innerBackground: applyBackground ? innerBackground : "",
-    text,
-  };
-};

@@ -15,7 +15,7 @@ export interface PoliticianReferenceBlockProps {
 export const PoliticianReferenceBlock = ({
   block,
 }: PoliticianReferenceBlockProps) => {
-  const { items, mode } = block;
+  const { items } = block;
 
   if (!items.length) {
     return <p>Inga politiker att visa.</p>;
@@ -26,7 +26,7 @@ export const PoliticianReferenceBlock = ({
       <div className="grid grid-cols-4">
         {items.map((p) => (
           <div key={p._id} className="rounded p-3">
-            <SanityImage image={p.image} />
+            <SanityImage image={p.image} width={300} height={300} />
             <h3 className="font-bold">{p.name}</h3>
             <h4 className="text-sm color-gray-600">
               {p.kommunalrad?.role === "ordinary"
