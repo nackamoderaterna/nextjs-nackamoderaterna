@@ -178,7 +178,7 @@ function LargePoliticianCard({
     >
       <div className="aspect-square relative bg-gray-200">
         {politician.image ? (
-          <SanityImage image={politician.image} />
+          <SanityImage image={politician.image} height={500} width={500} />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-400">
             <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
