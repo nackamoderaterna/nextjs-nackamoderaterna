@@ -56,7 +56,8 @@ export type PoliticianWithReferences = Omit<
   }>;
   livingArea?: {
     _id: string;
-    title: string;
+    name: string;
+    slug: string;
   };
   politicalAreas?: Array<{
     _id: string;
