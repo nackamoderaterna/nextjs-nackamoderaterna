@@ -2,7 +2,7 @@ import Link from "next/link";
 import {
   groupPoliticiansByRole,
   politiciansDirectoryQuery,
-  PoliticianWithReferences,
+  PoliticianWithNamnd,
   positionTitles,
   sectionTitles,
 } from "@/lib/politicians";
@@ -10,7 +10,7 @@ import { sanityClient } from "@/lib/sanity/client";
 import { SanityImage } from "@/lib/components/shared/SanityImage";
 
 export default async function PoliticiansPage() {
-  const politicians = await sanityClient.fetch<PoliticianWithReferences[]>(
+  const politicians = await sanityClient.fetch<PoliticianWithNamnd[]>(
     politiciansDirectoryQuery,
   );
   const grouped = groupPoliticiansByRole(politicians);
@@ -168,7 +168,7 @@ function LargePoliticianCard({
   politician,
   role,
 }: {
-  politician: PoliticianWithReferences;
+  politician: PoliticianWithNamnd;
   role: string;
 }) {
   return (
@@ -206,7 +206,7 @@ function CompactPoliticianCard({
   politician,
   role,
 }: {
-  politician: PoliticianWithReferences;
+  politician: PoliticianWithNamnd;
   role?: string;
 }) {
   return (

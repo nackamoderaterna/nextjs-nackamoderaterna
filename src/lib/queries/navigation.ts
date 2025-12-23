@@ -66,7 +66,8 @@ export function getMenuItemHref(item: MenuItemWithReference): string {
       politicalIssue: "fragor",
     };
 
-    const baseRoute = routeMap[_type] || _type;
+    const baseRoute = routeMap[_type] ?? _type;
+    console.log(_type, baseRoute);
     return baseRoute ? `/${baseRoute}/${slug}` : `/${slug}`;
   }
 

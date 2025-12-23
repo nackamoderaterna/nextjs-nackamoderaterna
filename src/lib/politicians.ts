@@ -34,7 +34,7 @@ export const politiciansDirectoryQuery = groq`*[_type == "politician"] | order(n
 }`;
 
 // Type for the query result with dereferenced namnd
-export type PoliticianWithReferences = Omit<
+export type PoliticianWithNamnd = Omit<
   Politician,
   "namndPositions" | "livingArea" | "politicalAreas"
 > & {
@@ -64,24 +64,38 @@ export type PoliticianWithReferences = Omit<
     name: string;
     slug: string;
   }>;
+  referencedInNews?: Array<{
+    _id: string;
+    title: string;
+    slug: {
+      current: string;
+    };
+    publishedAt?: string;
+    excerpt?: string;
+    mainImage?: {
+      asset: {
+        _ref: string;
+        _type: "reference";
+      };
+      alt?: string;
+    };
+  }>;
 };
 
 // Helper function to group politicians by their roles
-export function groupPoliticiansByRole(
-  politicians: PoliticianWithReferences[],
-) {
+export function groupPoliticiansByRole(politicians: PoliticianWithNamnd[]) {
   const groups = {
     kommunalrad: {
-      president: [] as PoliticianWithReferences[],
-      ordinary: [] as PoliticianWithReferences[],
+      president: [] as PoliticianWithNamnd[],
+      ordinary: [] as PoliticianWithNamnd[],
     },
     partyBoard: {
-      ordforande: [] as PoliticianWithReferences[],
-      ledamot: [] as PoliticianWithReferences[],
+      ordforande: [] as PoliticianWithNamnd[],
+      ledamot: [] as PoliticianWithNamnd[],
     },
     kommunfullmaktige: {
-      ordinary: [] as PoliticianWithReferences[],
-      substitute: [] as PoliticianWithReferences[],
+      ordinary: [] as PoliticianWithNamnd[],
+      substitute: [] as PoliticianWithNamnd[],
     },
     namnder: {} as Record<
       string,
@@ -91,10 +105,10 @@ export function groupPoliticiansByRole(
           title: string;
           slug: { current: string };
         };
-        positions: Record<string, PoliticianWithReferences[]>;
+        positions: Record<string, PoliticianWithNamnd[]>;
       }
     >,
-    other: [] as PoliticianWithReferences[], // Politicians with no active assignments
+    other: [] as PoliticianWithNamnd[], // Politicians with no active assignments
   };
 
   politicians.forEach((politician) => {
