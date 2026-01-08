@@ -12,11 +12,11 @@ export function NewsHeader({ news }: { news: NewsWithReferences }) {
   return (
     <header>
       {news.mainImage && (
-        <div className="aspect-video relative bg-gray-200">
+        <div className="relative bg-gray-200 w-full h-[500px]">
           <SanityImage
+            fill
             image={news.mainImage}
             alt={news.mainImage.alt || news.title}
-            className="w-full h-full object-cover"
           />
         </div>
       )}

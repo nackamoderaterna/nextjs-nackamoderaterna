@@ -11,16 +11,18 @@ type SanityImageProps = {
   sizes?: string;
   className?: string;
   priority?: boolean;
+  fill?: boolean;
 };
 
 export function SanityImage({
   image,
   alt = "",
-  width = 1200,
+  width = 700,
   height,
   sizes = "(max-width: 768px) 100vw, 1200px",
   className = "",
   priority = false,
+  fill = false,
 }: SanityImageProps) {
   const imageUrl = buildImageUrl(image, {
     width,
@@ -30,12 +32,22 @@ export function SanityImage({
 
   const objectPosition = getObjectPositionFromHotspot(image);
 
-  return (
+  return fill ? (
     <Image
       src={imageUrl}
       alt={alt}
-      width={width}
-      height={height || 700}
+      fill
+      sizes={sizes}
+      priority={priority}
+      className={`object-cover ${className}`}
+      style={{ objectPosition }}
+    />
+  ) : (
+    <Image
+      src={imageUrl}
+      alt={alt}
+      height={height || 500}
+      width={width || 700}
       sizes={sizes}
       priority={priority}
       className={`object-cover ${className}`}

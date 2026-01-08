@@ -20,26 +20,16 @@ export function HeroBlock({ block }: HeroBlockProps) {
   const height =
     heightClasses[block.height as keyof typeof heightClasses] ||
     heightClasses.medium;
-
-  // Build responsive image URL with hotspot
-  const imageUrl = buildImageUrl(block.backgroundImage || "", {
-    width: 1920,
-    quality: 80,
-  });
-
-  const overlayOpacity = (block.overlayOpacity || 40) / 100;
-  const objectPosition = block.backgroundImage?.hotspot
-    ? `${block.backgroundImage.hotspot.x! * 100}% ${block.backgroundImage.hotspot.y! * 100}%`
-    : "center";
+  console.log(block);
 
   return (
     <div className={`relative w-full ${height} overflow-hidden`}>
       <SanityBackgroundImage image={block.backgroundImage} />
       <div className={`relative ${height} flex items-center`}>
-        <Block applyBackground={false}>
-          <div className="z-20">
+        <Block>
+          <div className="z-90">
             {block.heading && (
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white">
+              <h1 className=" text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white">
                 {block.heading}
               </h1>
             )}

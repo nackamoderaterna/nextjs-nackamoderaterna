@@ -3,6 +3,7 @@ import Image from "next/image";
 import { buildImageUrl } from "@/lib/sanity/image";
 import Block from "./Block";
 import { News } from "~/sanity.types";
+import { NewsCard } from "../news/NewsCard";
 
 export interface NewsBlockProps {
   _type: "block.news";
@@ -30,37 +31,15 @@ export function NewsBlock({ block }: { block: NewsBlockProps }) {
           </div>
         )}
 
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {resolvedItems?.map((item) => (
-            <Link
-              href={`/nyheter/${item.slug?.current}`}
-              key={item._id}
-              className="block border rounded-lg overflow-hidden hover:shadow-lg transition"
-            >
-              {item.mainImage && (
-                <div className="relative aspect-[16/9]">
-                  <Image
-                    src={buildImageUrl(item.mainImage)}
-                    alt={item.title ?? "Main image"}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              )}
-
-              <div className="p-4">
-                <h3 className="font-semibold text-lg">{item.title}</h3>
-
-                {item.excerpt && (
-                  <p className="text-sm text-gray-600 mt-2">{item.excerpt}</p>
-                )}
-              </div>
-            </Link>
+            <NewsCard key={item._id} item={item} />
           ))}
         </div>
       </section>
     </Block>
   );
+
   // {item.publishedAt && (
   //   <p className="text-xs text-gray-400 mt-3">
   //     {new Date(item.publishedAt).toLocaleDateString("sv-SE")}

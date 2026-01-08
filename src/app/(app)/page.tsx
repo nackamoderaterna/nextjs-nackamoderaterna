@@ -47,7 +47,7 @@ async function getPageBySlug(slug: string) {
         excerpt,
         publishedAt,
         slug,
-        heroImage{
+        mainImage{
           ...,
           "url": asset->url
         }
@@ -62,7 +62,7 @@ async function getPageBySlug(slug: string) {
           excerpt,
           publishedAt,
           slug,
-          heroImage{
+          mainImage{
             ...,
             "url": asset->url
           }
@@ -71,13 +71,13 @@ async function getPageBySlug(slug: string) {
         // LATEST
         mode == "latest" => *[_type == "news"] 
           | order(publishedAt desc)
-          [0...10]{
+          [0...4]{
             _id,
             title,
             excerpt,
             publishedAt,
             slug,
-            heroImage{
+            mainImage{
               ...,
               "url": asset->url
             }
@@ -86,13 +86,13 @@ async function getPageBySlug(slug: string) {
         // BY POLITICAL AREA
         mode == "byPoliticalArea" && defined(politicalArea) => *[_type == "news" && references(^.politicalArea._ref)]
           | order(publishedAt desc)
-          [0...10]{
+          [0...4]{
             _id,
             title,
             excerpt,
             publishedAt,
             slug,
-            heroImage{
+            mainImage{
               ...,
               "url": asset->url
             }
@@ -101,13 +101,13 @@ async function getPageBySlug(slug: string) {
         // BY GEOGRAPHIC AREA
         mode == "byGeographicArea" && defined(geographicArea) => *[_type == "news" && references(^.geographicArea._ref)]
           | order(publishedAt desc)
-          [0...10]{
+          [0...4]{
             _id,
             title,
             excerpt,
             publishedAt,
             slug,
-            heroImage{
+            mainImage{
               ...,
               "url": asset->url
             }
@@ -116,7 +116,7 @@ async function getPageBySlug(slug: string) {
         // DEFAULT → empty array
          *[_type == "news"] 
           | order(publishedAt desc)
-          [0...10]{
+          [0...4]{
             _id,
             title,
             excerpt,

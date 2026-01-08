@@ -14,6 +14,7 @@ export const deskStructure: StructureResolver = (S) =>
       // Politics documents
       S.documentTypeListItem("namnd"),
       S.documentTypeListItem("politicalArea"),
+      S.documentTypeListItem("politicalIssue"),
       S.documentTypeListItem("geographicalArea"),
       S.divider().title("Inställningar"),
       S.listItem()
