@@ -1,37 +1,45 @@
-import {defineType} from 'sanity'
+import { defineType } from "sanity";
 
 export const politicalArea = defineType({
-  name: 'politicalArea',
-  title: 'Politiskt område',
-  type: 'document',
+  name: "politicalArea",
+  title: "Politiskt område",
+  type: "document",
   fields: [
     {
-      name: 'name',
-      title: 'Namn',
-      type: 'string',
+      name: "name",
+      title: "Namn",
+      type: "string",
       description: 'T.ex. "Ekonomi", "Vård", "Klimat och miljö"',
       validation: (Rule) => Rule.required(),
     },
     {
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
+      name: "slug",
+      title: "Slug",
+      type: "slug",
       options: {
-        source: 'name',
+        source: "name",
         maxLength: 96,
       },
       validation: (Rule) => Rule.required(),
     },
     {
-      name: 'description',
-      title: 'Beskrivning',
-      type: 'array',
-      of: [{type: 'block'}],
+      name: "description",
+      title: "Beskrivning",
+      type: "array",
+      of: [{ type: "block" }],
+    },
+    {
+      name: "image",
+      title: "Huvudbild",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
     },
   ],
   preview: {
     select: {
-      title: 'name',
+      title: "name",
     },
   },
-})
+});
