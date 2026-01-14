@@ -8,7 +8,7 @@ import {
 } from "@/lib/politicians";
 import { sanityClient } from "@/lib/sanity/client";
 import { SanityImage } from "@/lib/components/shared/SanityImage";
-import { PoliticianCardLarge } from "@/lib/components/politician/PoliticianCardLarge";
+import { PeopleCard } from "@/lib/components/politician/PoliticianCardLarge";
 import { PoliticianCardSmall } from "@/lib/components/politician/PoliticianCardSmall";
 
 export default async function PoliticiansPage() {
@@ -33,19 +33,21 @@ export default async function PoliticiansPage() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {grouped.kommunalrad.president.map((p) => (
-                <PoliticianCardLarge
+                <PeopleCard
                   key={p._id}
                   image={p.image}
                   name={p.name}
-                  subtitle={positionTitles.ordforande}
+                  title={positionTitles.ordforande}
+                  size="large"
                 />
               ))}
               {grouped.kommunalrad.ordinary.map((p) => (
-                <PoliticianCardLarge
+                <PeopleCard
                   key={p._id}
                   image={p.image}
                   name={p.name}
-                  subtitle={positionTitles.ledamot}
+                  title={positionTitles.ordforande}
+                  size="large"
                 />
               ))}
             </div>
@@ -61,19 +63,21 @@ export default async function PoliticiansPage() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {grouped.partyBoard.ordforande.map((p) => (
-                <PoliticianCardSmall
+                <PeopleCard
                   key={p._id}
-                  name={p.name}
                   image={p.image}
-                  subtitle={positionTitles.ordforande}
+                  name={p.name}
+                  title={positionTitles.ordforande}
+                  size="small"
                 />
               ))}
               {grouped.partyBoard.ledamot.map((p) => (
-                <PoliticianCardSmall
+                <PeopleCard
                   key={p._id}
-                  name={p.name}
                   image={p.image}
-                  subtitle={positionTitles.ledamot}
+                  name={p.name}
+                  title={positionTitles.ordforande}
+                  size="small"
                 />
               ))}
             </div>

@@ -1,3 +1,4 @@
+import { PeopleCard } from "../politician/PoliticianCardLarge";
 import { SanityImage } from "../shared/SanityImage";
 import Block from "./Block";
 import { Politician } from "~/sanity.types";
@@ -23,23 +24,15 @@ export const PoliticianReferenceBlock = ({
 
   return (
     <Block>
-      <div className="grid grid-cols-4">
+      <div className="grid lg:grid-cols-4 gap-4">
         {items.map((p) => (
-          <div key={p._id} className="rounded p-3">
-            <SanityImage image={p.image} width={300} height={300} />
-            <h3 className="font-bold">{p.name}</h3>
-            <h4 className="text-sm color-gray-600">
-              {p.kommunalrad?.role === "ordinary"
-                ? "Ledamot"
-                : "Kommunstyrelsens ordförande"}
-            </h4>
-            <a
-              href={`/politiker/${p.slug?.current}`}
-              className="text-blue-600 hover:underline"
-            >
-              Läs mer
-            </a>
-          </div>
+          <PeopleCard
+            key={p._id}
+            image={p.image}
+            name={p.name}
+            title={"-"}
+            size="large"
+          />
         ))}
       </div>
     </Block>

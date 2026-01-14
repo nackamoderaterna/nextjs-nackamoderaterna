@@ -72,13 +72,15 @@ export type PoliticianWithNamnd = Omit<
     };
     publishedAt?: string;
     excerpt?: string;
-    mainImage?: {
-      asset: {
-        _ref: string;
-        _type: "reference";
-      };
-      alt?: string;
-    };
+    _createdAt: string;
+    dateOverride?: string;
+    // mainImage?: {
+    //   asset: {
+    //     _ref: string;
+    //     _type: "reference";
+    //   };
+    //   alt?: string;
+    // };
   }>;
 };
 

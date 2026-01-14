@@ -171,6 +171,11 @@ export const politician = defineType({
                 ],
               },
             },
+            {
+              name: "isGruppledare",
+              title: "Gruppledare",
+              type: "boolean",
+            },
           ],
           preview: {
             select: {

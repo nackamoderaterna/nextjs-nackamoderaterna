@@ -20,7 +20,6 @@ export function HeroBlock({ block }: HeroBlockProps) {
   const height =
     heightClasses[block.height as keyof typeof heightClasses] ||
     heightClasses.medium;
-  console.log(block);
 
   return (
     <div className={`relative w-full ${height} overflow-hidden`}>

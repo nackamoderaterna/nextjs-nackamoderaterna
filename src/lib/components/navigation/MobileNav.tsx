@@ -6,96 +6,70 @@ import {
 import { useState } from "react";
 import { IconChevronDown, IconMenu2, IconX } from "@tabler/icons-react";
 import Link from "next/link";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { ChevronDown, Menu } from "lucide-react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 export function MobileNav({ items }: { items: MenuItemWithReference[] }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="md:hidden relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="p-2 text-gray-700 hover:bg-gray-100 rounded-md"
-        aria-label="Toggle menu"
-      >
-        {isOpen ? (
-          <IconX className="w-6 h-6" />
-        ) : (
-          <IconMenu2 className="w-6 h-6" />
-        )}
-      </button>
-
-      {isOpen && (
-        <div className="absolute top-full right-0 bg-white border border-gray-200 shadow-lg z-50">
-          <nav className="grid gap-4 p-4 whitespace-nowrap">
-            {items.map((item, index) => (
-              <MobileNavItem
-                key={index}
-                item={item}
-                onNavigate={() => setIsOpen(false)}
-              />
-            ))}
-          </nav>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function MobileNavItem({
-  item,
-  onNavigate,
-  depth = 0,
-}: {
-  item: MenuItemWithReference;
-  onNavigate: () => void;
-  depth?: number;
-}) {
-  const [isOpen, setIsOpen] = useState(false);
-  const hasChildren = item.children && item.children.length > 0;
-  const href = getMenuItemHref(item);
-  const paddingLeft = depth * 16;
-
-  if (!hasChildren) {
-    return (
-      <Link
-        href={href}
-        className="text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-        onClick={onNavigate}
-        {...(item.linkType === "external" && {
-          target: "_blank",
-          rel: "noopener noreferrer",
-        })}
-      >
-        {item.title}
-      </Link>
-    );
-  }
-
-  return (
-    <div className="">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex whitespace-nowrap items-center justify-between py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-        style={{ paddingLeft: `${paddingLeft + 16}px` }}
-      >
-        {item.title}
-        <IconChevronDown
-          className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
-        />
-      </button>
-
-      {isOpen && (
-        <div className="relative">
-          {item.children.map((child, index) => (
-            <MobileNavItem
-              key={index}
-              item={child}
-              onNavigate={onNavigate}
-              depth={depth + 1}
-            />
-          ))}
-        </div>
-      )}
-    </div>
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild className="md:hidden">
+        <Button variant="ghost" size="icon">
+          <Menu className="h-6 w-6" />
+          <span className="sr-only">Toggle menu</span>
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="right" className="w-full sm:w-[400px]">
+        <SheetHeader>Meny</SheetHeader>
+        <nav className="flex flex-col gap-4 mt-8 px-4">
+          {items.map((item) => {
+            if (item.children) {
+              return (
+                <Collapsible key={item.title}>
+                  <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-lg font-medium">
+                    {item.title}
+                    <ChevronDown className="w-5 h-5" />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="pl-4 pt-2 flex flex-col gap-2">
+                    {item.children.map((child) => (
+                      <Link
+                        key={child.title}
+                        href={getMenuItemHref(child)}
+                        onClick={() => setOpen(false)}
+                        className="py-2 text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        {child.title}
+                      </Link>
+                    ))}
+                  </CollapsibleContent>
+                </Collapsible>
+              );
+            }
+            return (
+              <Link
+                key={item.title}
+                href={getMenuItemHref(item)}
+                onClick={() => setOpen(false)}
+                className="py-2 text-lg font-medium transition-colors hover:text-primary"
+              >
+                {item.title}
+              </Link>
+            );
+          })}
+        </nav>
+      </SheetContent>
+    </Sheet>
   );
 }

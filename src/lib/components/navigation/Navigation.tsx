@@ -3,9 +3,9 @@ import {
   NavigationData,
   navigationQuery,
 } from "@/lib/queries/navigation";
-import { MainNav } from "./MainNav";
 import { MobileNav } from "./MobileNav";
 import { sanityClient } from "@/lib/sanity/client";
+import { MainNav } from "./MainNav";
 
 export async function Navigation() {
   const navigation = await sanityClient.fetch<NavigationData>(navigationQuery);
@@ -16,7 +16,7 @@ export async function Navigation() {
 
   return (
     <>
-      <MainNav items={navigation.items} />
+      <MainNav items={navigation.items} />{" "}
       <MobileNav items={navigation.items} />
     </>
   );

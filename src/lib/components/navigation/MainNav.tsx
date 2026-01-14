@@ -1,38 +1,71 @@
+"use client";
 import Link from "next/link";
 import {
   getMenuItemHref,
   MenuItemWithReference,
 } from "@/lib/queries/navigation";
-import { NavDropdown } from "./NavDropdown";
+import useIsMobile from "@/hooks/use-is-mobile";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import { DropdownMenu } from "@/components/ui/dropdown-menu";
 
 export function MainNav({ items }: { items: MenuItemWithReference[] }) {
+  const { isMobile } = useIsMobile();
   return (
-    <nav className="hidden md:flex items-center space-x-1">
-      {items.map((item, index) => (
-        <NavItem key={index} item={item} />
-      ))}
-    </nav>
+    <NavigationMenu
+      viewport={isMobile}
+      className={isMobile ? "hidden" : "block"}
+    >
+      <NavigationMenuList>
+        {items.map((item, index) => (
+          <DesktopNavItem item={item} key={item.title} />
+        ))}
+      </NavigationMenuList>
+    </NavigationMenu>
   );
 }
 
-function NavItem({ item }: { item: MenuItemWithReference }) {
+function DesktopNavItem({ item }: { item: MenuItemWithReference }) {
   const hasChildren = item.children && item.children.length > 0;
   const href = getMenuItemHref(item);
 
   if (!hasChildren) {
     return (
-      <Link
-        href={href}
-        className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
-        {...(item.linkType === "external" && {
-          target: "_blank",
-          rel: "noopener noreferrer",
-        })}
-      >
-        {item.title}
-      </Link>
+      <NavigationMenuItem asChild className={navigationMenuTriggerStyle()}>
+        <Link
+          href={href}
+          {...(item.linkType === "external" && {
+            target: "_blank",
+            rel: "noopener noreferrer",
+          })}
+        >
+          {item.title}
+        </Link>
+      </NavigationMenuItem>
     );
   }
 
-  return <NavDropdown item={item} />;
+  return (
+    <NavigationMenuItem className="hidden md:block">
+      <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
+      <NavigationMenuContent>
+        <ul className="grid w-xl gap-4">
+          {item.children?.map((child, index) => (
+            <li>
+              <NavigationMenuLink asChild key={child.title}>
+                <Link href={getMenuItemHref(child)}>{child.title}</Link>
+              </NavigationMenuLink>
+            </li>
+          ))}
+        </ul>
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+  );
 }

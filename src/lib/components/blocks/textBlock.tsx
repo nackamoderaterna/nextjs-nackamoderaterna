@@ -10,8 +10,8 @@ export function TextBlock({ block }: TextBlockProps) {
 
   return (
     <Block>
-      <div className={`${columnClass} w-full`}>
-        <div className={`prose`}>
+      <div className={`${columnClass} max-w-3xl mx-auto`}>
+        <div className={`prose prose-neutral md:prose-lg`}>
           {block.content && <PortableText value={block.content} />}
         </div>
       </div>

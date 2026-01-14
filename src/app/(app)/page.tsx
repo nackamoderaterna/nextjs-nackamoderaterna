@@ -58,9 +58,11 @@ async function getPageBySlug(slug: string) {
         // MANUAL
         mode == "manual" => items[]->{
           _id,
+          _publishedAt,
           title,
           excerpt,
           publishedAt,
+          dateOverride,
           slug,
           mainImage{
             ...,
@@ -70,13 +72,15 @@ async function getPageBySlug(slug: string) {
 
         // LATEST
         mode == "latest" => *[_type == "news"] 
-          | order(publishedAt desc)
+          | order(coalesce(dateOverride, publishedAt) desc)
           [0...4]{
             _id,
+            _createdAt,
             title,
             excerpt,
             publishedAt,
             slug,
+            dateOverride,
             mainImage{
               ...,
               "url": asset->url
@@ -85,13 +89,15 @@ async function getPageBySlug(slug: string) {
 
         // BY POLITICAL AREA
         mode == "byPoliticalArea" && defined(politicalArea) => *[_type == "news" && references(^.politicalArea._ref)]
-          | order(publishedAt desc)
+          | order(coalesce(dateOverride, publishedAt) desc)
           [0...4]{
             _id,
+            _createdAt,
             title,
             excerpt,
             publishedAt,
             slug,
+            dateOverride,
             mainImage{
               ...,
               "url": asset->url
@@ -100,13 +106,15 @@ async function getPageBySlug(slug: string) {
 
         // BY GEOGRAPHIC AREA
         mode == "byGeographicArea" && defined(geographicArea) => *[_type == "news" && references(^.geographicArea._ref)]
-          | order(publishedAt desc)
+          | order(coalesce(dateOverride, publishedAt) desc)
           [0...4]{
             _id,
+            _createdAt,
             title,
             excerpt,
             publishedAt,
             slug,
+            dateOverride,
             mainImage{
               ...,
               "url": asset->url
@@ -115,9 +123,10 @@ async function getPageBySlug(slug: string) {
 
         // DEFAULT → empty array
          *[_type == "news"] 
-          | order(publishedAt desc)
+          | order(coalesce(dateOverride, publishedAt) desc)
           [0...4]{
             _id,
+            _createdAt,
             title,
             excerpt,
             publishedAt,

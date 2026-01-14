@@ -1,0 +1,30 @@
+import {
+  Banknote,
+  Leaf,
+  GraduationCap,
+  Globe,
+  Scale,
+  type LucideIcon,
+  Coins,
+  Home,
+  Heart,
+  Shield,
+  Briefcase,
+  Bus,
+  Dumbbell,
+} from "lucide-react";
+
+export const lucideIconMap: Record<string, LucideIcon> = {
+  Banknote,
+  Leaf,
+  Coins,
+  Home,
+  GraduationCap,
+  Globe,
+  Scale,
+  Heart,
+  Shield,
+  Briefcase,
+  Bus,
+  Dumbbell,
+};
