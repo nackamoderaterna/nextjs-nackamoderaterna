@@ -55,6 +55,7 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
         <h2 className="text-2xl font-bold text-foreground mb-6">Företrädare</h2>
         {data.politicians.map((politician) => (
           <PeopleCard
+            slug={politician.slug?.current || ""}
             image={politician.image}
             title={politician.name || ""}
             size={"small"}

@@ -55,8 +55,8 @@ function DesktopNavItem({ item }: { item: MenuItemWithReference }) {
   return (
     <NavigationMenuItem className="hidden md:block">
       <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
-      <NavigationMenuContent>
-        <ul className="grid w-xl gap-4">
+      <NavigationMenuContent className="z-20">
+        <ul className="grid w-[200px] gap-4">
           {item.children?.map((child, index) => (
             <li>
               <NavigationMenuLink asChild key={child.title}>

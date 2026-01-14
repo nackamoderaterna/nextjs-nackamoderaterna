@@ -18,7 +18,7 @@ export default async function PoliticiansPage() {
   const grouped = groupPoliticiansByRole(politicians);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">
           Våra politiker
@@ -34,6 +34,7 @@ export default async function PoliticiansPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {grouped.kommunalrad.president.map((p) => (
                 <PeopleCard
+                  slug={p.slug?.current || ""}
                   key={p._id}
                   image={p.image}
                   name={p.name}
@@ -44,6 +45,7 @@ export default async function PoliticiansPage() {
               {grouped.kommunalrad.ordinary.map((p) => (
                 <PeopleCard
                   key={p._id}
+                  slug={p.slug?.current || ""}
                   image={p.image}
                   name={p.name}
                   title={positionTitles.ordforande}
@@ -64,6 +66,7 @@ export default async function PoliticiansPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {grouped.partyBoard.ordforande.map((p) => (
                 <PeopleCard
+                  slug={p.slug?.current || ""}
                   key={p._id}
                   image={p.image}
                   name={p.name}
@@ -73,6 +76,7 @@ export default async function PoliticiansPage() {
               ))}
               {grouped.partyBoard.ledamot.map((p) => (
                 <PeopleCard
+                  slug={p.slug?.current || ""}
                   key={p._id}
                   image={p.image}
                   name={p.name}

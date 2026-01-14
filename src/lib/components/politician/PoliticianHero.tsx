@@ -7,8 +7,8 @@ import { SanityImage } from "../shared/SanityImage";
 interface PoliticianHeroProps {
   name: string;
   location: string;
-  email: string;
-  phone: string;
+  email?: string;
+  phone?: string;
   image: any;
   socialLinks?: {
     tiktok?: string;
@@ -35,62 +35,68 @@ export function PoliticianHero({
 
           {/* Contact Info */}
           <div className="space-y-4 mb-8">
-            <div>
-              <p className="text-xs text-muted-foreground uppercase mb-1">
-                Epost
-              </p>
-              <Link
-                href={`mailto:${email}`}
-                className="text-foreground hover:text-blue-600 transition-colors underline"
-              >
-                {email}
-              </Link>
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground uppercase mb-1">
-                Telefon
-              </p>
-              <Link
-                href={`tel:${phone}`}
-                className="text-foreground hover:text-blue-600 transition-colors underline"
-              >
-                {phone}
-              </Link>
-            </div>
+            {email && (
+              <div>
+                <p className="text-xs text-muted-foreground uppercase mb-1">
+                  Epost
+                </p>
+                <Link
+                  href={`mailto:${email}`}
+                  className="text-foreground hover:text-blue-600 transition-colors underline"
+                >
+                  {email}
+                </Link>
+              </div>
+            )}
+            {phone && (
+              <div>
+                <p className="text-xs text-muted-foreground uppercase mb-1">
+                  Telefon
+                </p>
+                <Link
+                  href={`tel:${phone}`}
+                  className="text-foreground hover:text-blue-600 transition-colors underline"
+                >
+                  {phone}
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Social Media */}
-          <div>
-            <p className="text-xs text-muted-foreground uppercase mb-3">
-              Sociala media
-            </p>
-            <div className="flex gap-3">
-              {socialLinks?.tiktok && (
-                <Button variant="outline" size="sm" asChild>
-                  <Link href={socialLinks.tiktok}>
-                    <span className="mr-2">🎵</span>
-                    TikTok
-                  </Link>
-                </Button>
-              )}
-              {socialLinks?.facebook && (
-                <Button variant="outline" size="sm" asChild>
-                  <Link href={socialLinks.facebook}>
-                    <Facebook className="w-4 h-4 mr-2" />
-                    Facebook
-                  </Link>
-                </Button>
-              )}
-              {socialLinks?.instagram && (
-                <Button variant="outline" size="sm" asChild>
-                  <Link href={socialLinks.instagram}>
-                    <Instagram className="w-4 h-4 mr-2" />
-                    Instagram
-                  </Link>
-                </Button>
-              )}
+          {socialLinks && (
+            <div>
+              <p className="text-xs text-muted-foreground uppercase mb-3">
+                Sociala media
+              </p>
+              <div className="flex gap-3">
+                {socialLinks?.tiktok && (
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href={socialLinks.tiktok}>
+                      <span className="mr-2">🎵</span>
+                      TikTok
+                    </Link>
+                  </Button>
+                )}
+                {socialLinks?.facebook && (
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href={socialLinks.facebook}>
+                      <Facebook className="w-4 h-4 mr-2" />
+                      Facebook
+                    </Link>
+                  </Button>
+                )}
+                {socialLinks?.instagram && (
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href={socialLinks.instagram}>
+                      <Instagram className="w-4 h-4 mr-2" />
+                      Instagram
+                    </Link>
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Right column - Image */}

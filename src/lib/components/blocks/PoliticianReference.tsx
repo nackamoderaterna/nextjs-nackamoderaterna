@@ -27,6 +27,7 @@ export const PoliticianReferenceBlock = ({
       <div className="grid lg:grid-cols-4 gap-4">
         {items.map((p) => (
           <PeopleCard
+            slug={p.slug?.current || ""}
             key={p._id}
             image={p.image}
             name={p.name}

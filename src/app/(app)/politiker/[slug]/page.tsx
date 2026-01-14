@@ -96,8 +96,8 @@ export default async function PoliticianPage({
       <PoliticianHero
         name={politician.name || ""}
         location={politician.livingArea?.name || ""}
-        email={politician.email || ""}
-        phone={politician.phone || ""}
+        email={politician.email}
+        phone={politician.phone}
         image={politician.image}
         socialLinks={{
           facebook: politician.socialMedia?.facebook,
@@ -121,29 +121,34 @@ export default async function PoliticianPage({
         </div>
       </div>
 
-      <div className="mt-8 flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-foreground">
-          Artiklar som omnämner Filip Wiljander
-        </h2>
-        <Link
-          href="/nyheter"
-          className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
-        >
-          Se alla nyheter
-          <ArrowRight className="w-4 h-4" />
-        </Link>
-      </div>
-      <div className="grid">
-        {politician.referencedInNews?.map((news) => (
-          <NewsCard
-            date={news.dateOverride ? news.dateOverride : news._createdAt}
-            slug={news.slug.current}
-            title={news.title}
-            isLast={false}
-            excerpt={news.excerpt || ""}
-          />
-        ))}
-      </div>
+      {politician.referencedInNews &&
+        politician.referencedInNews.length > 0 && (
+          <>
+            <div className="mt-8 flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-foreground">
+                Artiklar som omnämner {politician.name}
+              </h2>
+              <Link
+                href="/nyheter"
+                className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+              >
+                Se alla nyheter
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+            <div className="grid">
+              {politician.referencedInNews?.map((news) => (
+                <NewsCard
+                  date={news.dateOverride ? news.dateOverride : news._createdAt}
+                  slug={news.slug.current}
+                  title={news.title}
+                  isLast={false}
+                  excerpt={news.excerpt || ""}
+                />
+              ))}
+            </div>
+          </>
+        )}
     </main>
   );
 }

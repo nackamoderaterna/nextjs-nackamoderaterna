@@ -1,9 +1,8 @@
-import { buildImageUrl } from "@/lib/sanity/image";
-import Image from "next/image";
 import Link from "next/link";
 import Block from "./Block";
 import { BlockHero } from "~/sanity.types";
 import { SanityBackgroundImage } from "../shared/SanityBackgroundImage";
+import { Button } from "@/components/ui/button";
 
 const heightClasses = {
   small: "h-[400px]",
@@ -23,7 +22,9 @@ export function HeroBlock({ block }: HeroBlockProps) {
 
   return (
     <div className={`relative w-full ${height} overflow-hidden`}>
-      <SanityBackgroundImage image={block.backgroundImage} />
+      <div className="inset-0 absolute">
+        <SanityBackgroundImage image={block.backgroundImage} />
+      </div>
       <div className={`relative ${height} flex items-center`}>
         <Block>
           <div className="z-90">
@@ -38,12 +39,9 @@ export function HeroBlock({ block }: HeroBlockProps) {
               </p>
             )}
             {block.ctaButton?.label && block.ctaButton?.link && (
-              <Link
-                href={block.ctaButton.link}
-                className="inline-block bg-white text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-              >
-                {block.ctaButton.label}
-              </Link>
+              <Button variant="secondary">
+                <Link href={block.ctaButton.link}>{block.ctaButton.label}</Link>
+              </Button>
             )}
           </div>
         </Block>
