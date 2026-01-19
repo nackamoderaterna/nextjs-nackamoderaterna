@@ -1,14 +1,4 @@
-import { NewDocumentOptionsResolver } from "sanity";
-import { News } from "~/sanity.types";
-import { SanityImage } from "../shared/SanityImage";
 import Link from "next/link";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { formatDate } from "@/lib/utils/dateUtils";
 import { ArrowRight } from "lucide-react";
 

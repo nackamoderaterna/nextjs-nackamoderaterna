@@ -1,8 +1,7 @@
 // components/news/NewsBody.tsx
 import { PortableText } from "@portabletext/react";
-import React from "react";
 import { SanityImage } from "../shared/SanityImage";
-import { NewsWithReferences } from "@/app/(app)/nyheter/[slug]/page";
+import { NewsWithReferences } from "@/types/news";
 
 const portableTextComponents = {
   types: {

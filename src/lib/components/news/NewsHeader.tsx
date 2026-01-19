@@ -1,4 +1,4 @@
-import { NewsWithReferences } from "@/app/(app)/nyheter/[slug]/page";
+import { NewsWithReferences } from "@/types/news";
 import { SanityImage } from "../shared/SanityImage";
 
 export function NewsHeader({ news }: { news: NewsWithReferences }) {

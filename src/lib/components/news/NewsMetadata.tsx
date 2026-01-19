@@ -1,7 +1,6 @@
-// components/news/NewsMetadata.tsx
-import { NewsWithReferences } from "@/app/(app)/nyheter/[slug]/page";
 import Link from "next/link";
 import { SanityImage } from "../shared/SanityImage";
+import { NewsWithReferences } from "@/types/news";
 
 export function NewsMetadata({ news }: { news: NewsWithReferences }) {
   const hasMetadata =
@@ -24,7 +23,7 @@ export function NewsMetadata({ news }: { news: NewsWithReferences }) {
                 {news.referencedPoliticians.map((politician) => (
                   <Link
                     key={politician._id}
-                    href={`/politiker/${politician.slug.current}`}
+                    href={`/politiker/${politician.slug?.current}`}
                     className="flex items-center gap-2 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-2"
                   >
                     {politician.image && (

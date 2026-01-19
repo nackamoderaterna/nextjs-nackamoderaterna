@@ -1,18 +1,12 @@
-import { groq, PortableText } from "next-sanity";
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import { News } from "~/sanity.types";
 import { sanityClient } from "@/lib/sanity/client";
-import { NewsHeader } from "@/lib/components/news/NewsHeader";
-import { NewsBody } from "@/lib/components/news/NewsBody";
-import { NewsMetadata } from "@/lib/components/news/NewsMetadata";
-import { NewsRelated } from "@/lib/components/news/NewsRelated";
 import { NewsWithReferences } from "@/types/news";
 import { newsQuery } from "@/lib/queries/nyheter";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { SanityImage } from "@/lib/components/shared/SanityImage";
 import { formatDate } from "@/lib/utils/dateUtils";
 import { PeopleCard } from "@/lib/components/politician/PoliticianCardLarge";
+import { PortableText } from "next-sanity";
 
 export default async function NewsArticlePage({
   params,
