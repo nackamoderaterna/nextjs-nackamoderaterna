@@ -4,7 +4,7 @@ import { SanityImage } from "../shared/SanityImage";
 interface PeopleCardProps {
   image: any;
   name?: string;
-  title: string;
+  title?: string;
   slug: string;
   size: "small" | "large";
 }
@@ -32,9 +32,11 @@ export function PeopleCard({
             <h3 className="font-semibold text-foreground text-sm leading-tight">
               {name}
             </h3>
-            <p className="text-muted-foreground text-xs mt-0.5 leading-tight">
-              {title}
-            </p>
+            {title && (
+              <p className="text-muted-foreground text-xs mt-0.5 leading-tight">
+                {title}
+              </p>
+            )}
           </div>
         </div>
       </Link>

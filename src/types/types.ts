@@ -17,3 +17,16 @@ export type PageBlock =
   | BlockVideo
   | BlockPoliticianDereferenced
   | NewsBlockProps;
+
+type SanityDocumentBase = {
+  _id: string;
+  _type: string;
+};
+
+export type WithEffectiveDate<T> = T & {
+  effectiveDate: string;
+};
+
+export type Dereferenced<T extends SanityDocumentBase> = Array<
+  Pick<T, "_id"> & Omit<T, "_type">
+>;
