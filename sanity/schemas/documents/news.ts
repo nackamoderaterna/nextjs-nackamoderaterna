@@ -22,6 +22,20 @@ export const news = defineType({
       validation: (Rule) => Rule.required(),
     },
     {
+      name: "variant",
+      title: "Typ av nyhet",
+      type: "string",
+      options: {
+        list: [
+          { value: "default", title: "Nyhet" },
+          { value: "debate", title: "Debattartikel" },
+          { value: "pressrelease", title: "Pressmeddelande" },
+        ],
+      },
+      initialValue: "default",
+      validation: (Rule) => Rule.required(),
+    },
+    {
       name: "excerpt",
       title: "Ingress",
       type: "text",
