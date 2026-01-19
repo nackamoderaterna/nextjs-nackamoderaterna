@@ -63,6 +63,11 @@ export const news = defineType({
       of: [{ type: "block" }, { type: "image" }],
     },
     {
+      name: "document",
+      title: "Dokument",
+      type: "file",
+    },
+    {
       name: "referencedPolitician",
       title: "Omnämnda politiker",
       type: "array",
