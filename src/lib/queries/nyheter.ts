@@ -37,3 +37,44 @@ export const newsQuery = groq`
   }
 }
 `;
+
+export const newsListQuery = groq`*[_type == "news"] | order(
+  coalesce(dateOverride, _createdAt) desc
+) {
+  _id,
+  title,
+  slug,
+  excerpt,
+  mainImage,
+  _createdAt,
+  _updatedAt,
+  dateOverride,
+  _rev,
+  "effectiveDate": coalesce(dateOverride, _createdAt),
+  "politicalAreas": politicalAreas[]-> {
+    _id,
+    title
+  }
+}`;
+
+export const newsListPaginatedQuery = groq`{
+  "items": *[_type == "news"] | order(
+    coalesce(dateOverride, _createdAt) desc
+  )[$start...$end] {
+    _id,
+    title,
+    slug,
+    excerpt,
+    mainImage,
+    _createdAt,
+    _updatedAt,
+    dateOverride,
+    _rev,
+    "effectiveDate": coalesce(dateOverride, _createdAt),
+    "politicalAreas": politicalAreas[]-> {
+      _id,
+      title
+    }
+  },
+  "total": count(*[_type == "news"])
+}`;

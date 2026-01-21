@@ -2,7 +2,25 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+First, install dependencies:
+
+```bash
+npm install
+```
+
+Then, create a `.env.local` file in the root directory and add your environment variables (see `.env.example` for reference):
+
+```bash
+cp .env.example .env.local
+```
+
+Required environment variables:
+- `NEXT_PUBLIC_SANITY_PROJECT_ID` - Your Sanity project ID
+- `NEXT_PUBLIC_SANITY_DATASET` - Your Sanity dataset (e.g., "production")
+- `RESEND_API_KEY` - Your Resend API key (get from https://resend.com)
+- `CONTACT_EMAIL` - Email address where contact form submissions will be sent
+
+Run the development server:
 
 ```bash
 npm run dev
@@ -16,7 +34,42 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Email Configuration
+
+This project uses [Resend](https://resend.com) for sending emails from the contact form. 
+
+### Setup Steps:
+
+1. Sign up for a free account at [resend.com](https://resend.com)
+2. Create an API key in your Resend dashboard
+3. Add the API key to your `.env.local` file:
+   ```
+   RESEND_API_KEY=re_xxxxxxxxxxxxx
+   ```
+4. Configure your sender email in `.env.local`:
+   ```
+   # Option 1: Simple email format (recommended)
+   RESEND_FROM_EMAIL=noreply@yourdomain.com
+   
+   # Option 2: With display name (must use proper format)
+   RESEND_FROM_EMAIL="Contact Form <noreply@yourdomain.com>"
+   
+   # Recipient email (where form submissions go)
+   CONTACT_EMAIL=your-email@example.com
+   ```
+   
+   **Important:** 
+   - The `from` email must use a verified domain in Resend
+   - Format must be: `email@domain.com` or `"Name <email@domain.com>"`
+   - For development/testing, you can use Resend's test domain: `onboarding@resend.dev`
+   - Make sure your domain is verified in Resend dashboard before using it
+
+### Rate Limiting
+
+The contact form has built-in rate limiting:
+- Maximum 5 requests per IP address
+- 15-minute time window
+- Prevents abuse and spam
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

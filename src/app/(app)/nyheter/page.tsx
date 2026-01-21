@@ -1,29 +1,10 @@
-// app/nyheter/page.tsx
 import { NewsCard } from "@/lib/components/news/NewsCard";
-import { SanityImage } from "@/lib/components/shared/SanityImage";
-import { sanityClient } from "@/lib/sanity/client";
-import { groq } from "next-sanity";
-import Link from "next/link";
+import { Pagination } from "@/lib/components/news/Pagination";
+import { sanityClient, REVALIDATE_TIME } from "@/lib/sanity/client";
+import { newsListPaginatedQuery } from "@/lib/queries/nyheter";
 import { News } from "~/sanity.types";
-
-const newsListQuery = groq`*[_type == "news"] | order(
-  coalesce(dateOverride, _createdAt) desc
-) {
-  _id,
-  title,
-  slug,
-  excerpt,
-  mainImage,
-  _createdAt,
-  _updatedAt,
-  dateOverride,
-  _rev,
-  "effectiveDate": coalesce(dateOverride, _createdAt),
-  "politicalAreas": politicalAreas[]-> {
-    _id,
-    title
-  }
-}`;
+import { generateMetadata } from "@/lib/utils/seo";
+import { Metadata } from "next";
 
 type NewsListItem = Pick<
   News,
@@ -44,26 +25,88 @@ type NewsListItem = Pick<
   }>;
 };
 
-export default async function NewsPage() {
-  const newsList = await sanityClient.fetch<NewsListItem[]>(newsListQuery);
+type NewsListPaginatedResult = {
+  items: NewsListItem[];
+  total: number;
+};
+
+const ITEMS_PER_PAGE = 10;
+
+export const metadata: Metadata = generateMetadata({
+  title: "Nyheter | Nackamoderaterna",
+  description: "Läs de senaste nyheterna från Nackamoderaterna",
+  url: "/nyheter",
+});
+
+export const dynamic = "force-dynamic";
+export const revalidate = REVALIDATE_TIME;
+
+interface NewsPageProps {
+  searchParams: Promise<{ page?: string }>;
+}
+
+export default async function NewsPage({ searchParams }: NewsPageProps) {
+  const params = await searchParams;
+  const currentPage = Math.max(1, parseInt(params.page || "1", 10));
+  const start = (currentPage - 1) * ITEMS_PER_PAGE;
+  const end = start + ITEMS_PER_PAGE;
+
+  const result = await sanityClient.fetch<NewsListPaginatedResult>(
+    newsListPaginatedQuery,
+    { start, end },
+    {
+      next: { revalidate: REVALIDATE_TIME },
+    }
+  );
+
+  const { items: newsList, total } = result;
+  const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+
+  // Redirect to last page if page number is too high
+  if (currentPage > totalPages && totalPages > 0) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-8">Nyheter</h1>
+          <p className="text-muted-foreground text-center py-12">
+            Sidan kunde inte hittas.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-8">Nyheter</h1>
 
-        <div className="grid">
-          {newsList.map((news, index) => (
-            <NewsCard
-              key={news._id}
-              title={news.title || ""}
-              isLast={index === newsList.length - 1}
-              date={news.dateOverride ? news.dateOverride : news._createdAt}
-              slug={news.slug?.current || ""}
-              excerpt={news.excerpt || ""}
+        {newsList.length === 0 ? (
+          <p className="text-muted-foreground text-center py-12">
+            Inga nyheter tillgängliga för tillfället.
+          </p>
+        ) : (
+          <>
+            <div className="grid">
+              {newsList.map((news, index) => (
+                <NewsCard
+                  key={news._id}
+                  title={news.title || ""}
+                  isLast={index === newsList.length - 1}
+                  date={news.effectiveDate}
+                  slug={news.slug?.current || ""}
+                  excerpt={news.excerpt || ""}
+                />
+              ))}
+            </div>
+
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              basePath="/nyheter"
             />
-          ))}
-        </div>
+          </>
+        )}
       </div>
     </div>
   );
