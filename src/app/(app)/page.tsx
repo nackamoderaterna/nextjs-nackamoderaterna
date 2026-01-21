@@ -10,8 +10,7 @@ export const metadata: Metadata = generateMetadata({
   url: "/",
 });
 
-export const dynamic = "force-dynamic";
-export const revalidate = REVALIDATE_TIME;
+export const revalidate = 300;
 
 async function getPageBySlug(slug: string) {
   return await sanityClient.fetch(

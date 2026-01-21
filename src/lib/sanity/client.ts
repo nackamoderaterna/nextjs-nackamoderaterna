@@ -1,8 +1,7 @@
 import { createClient } from "next-sanity";
 
 const isDevelopment = process.env.NODE_ENV === "development";
-const studioUrl =
-  process.env.NEXT_PUBLIC_SANITY_STUDIO_URL || "/studio";
+const studioUrl = process.env.NEXT_PUBLIC_SANITY_STUDIO_URL || "/studio";
 
 export const sanityClient = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,

@@ -14,8 +14,7 @@ export const metadata: Metadata = generateMetadata({
   url: "/event",
 });
 
-export const dynamic = "force-dynamic";
-export const revalidate = REVALIDATE_TIME;
+export const revalidate = 300;
 
 export default async function EventsPage() {
   const events: Event[] = await sanityClient.fetch(

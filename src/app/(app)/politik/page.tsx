@@ -18,8 +18,7 @@ export const metadata: Metadata = generateMetadata({
   url: "/politik",
 });
 
-export const dynamic = "force-dynamic";
-export const revalidate = REVALIDATE_TIME;
+export const revalidate = 300;
 
 export type PoliticalIssueWithAreas = Omit<
   PoliticalIssue,

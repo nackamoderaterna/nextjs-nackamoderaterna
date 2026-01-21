@@ -45,8 +45,7 @@ export async function generateMetadata({
   });
 }
 
-export const dynamic = "force-dynamic";
-export const revalidate = REVALIDATE_TIME;
+export const revalidate = 300;
 
 export default async function EventPage({ params }: Props) {
   const { slug } = await params;

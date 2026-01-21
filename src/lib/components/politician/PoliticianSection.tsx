@@ -43,7 +43,7 @@ export function PoliticianSection({
               key={politician._id}
               name={politician.name}
               image={politician.image}
-              subtitle={positionTitle}
+              subtitle={positionTitle || ""}
             />
           );
         })}

@@ -16,8 +16,7 @@ export const metadata: Metadata = generateMetadata({
   url: "/politiker",
 });
 
-export const dynamic = "force-dynamic";
-export const revalidate = REVALIDATE_TIME;
+export const revalidate = 300;
 
 export default async function PoliticiansPage() {
   const politicians = await sanityClient.fetch<PoliticianWithNamnd[]>(
