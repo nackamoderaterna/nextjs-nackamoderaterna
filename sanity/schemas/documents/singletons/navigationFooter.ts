@@ -57,13 +57,34 @@ export default defineType({
               name: 'platform',
               type: 'string',
               title: 'Platform',
+              options: {
+                list: [
+                  {title: 'Facebook', value: 'facebook'},
+                  {title: 'Instagram', value: 'instagram'},
+                  {title: 'LinkedIn', value: 'linkedin'},
+                  {title: 'Twitter/X', value: 'twitter'},
+                ],
+              },
             }),
             defineField({
               name: 'url',
               type: 'url',
               title: 'URL',
+              validation: (Rule) => Rule.required(),
             }),
           ],
+          preview: {
+            select: {
+              platform: 'platform',
+              url: 'url',
+            },
+            prepare({platform, url}) {
+              return {
+                title: platform || 'Social Link',
+                subtitle: url,
+              };
+            },
+          },
         },
       ],
     }),

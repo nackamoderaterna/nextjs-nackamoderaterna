@@ -26,6 +26,15 @@ export const deskStructure: StructureResolver = (S) =>
             .documentId("navigationHeader")
             .title("Huvudmeny"),
         ),
+        S.listItem()
+        .title("Footermeny")
+        .schemaType("navigationFooter")
+        .child(
+          S.document()
+            .schemaType("navigationFooter")
+            .documentId("navigationFooter")
+            .title("Footermeny"),
+        ),
       S.listItem()
         .title("Globala Inställningar")
         .schemaType("globalSettings")

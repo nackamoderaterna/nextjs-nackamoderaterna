@@ -58,7 +58,10 @@ export const newsListQuery = groq`*[_type == "news"] | order(
 }`;
 
 export const newsListPaginatedQuery = groq`{
-  "items": *[_type == "news"] | order(
+  "items": *[
+    _type == "news"
+    && ($politicalArea == null || references($politicalArea))
+  ] | order(
     coalesce(dateOverride, _createdAt) desc
   )[$start...$end] {
     _id,
@@ -73,8 +76,21 @@ export const newsListPaginatedQuery = groq`{
     "effectiveDate": coalesce(dateOverride, _createdAt),
     "politicalAreas": politicalAreas[]-> {
       _id,
-      title
+      title,
+      slug
     }
   },
-  "total": count(*[_type == "news"])
+  "total": count(*[
+    _type == "news"
+    && ($politicalArea == null || references($politicalArea))
+  ])
 }`;
+
+export const allPoliticalAreasQuery = groq`
+  *[_type == "politicalArea"] | order(name asc) {
+    _id,
+    name,
+    slug,
+    title
+  }
+`;

@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Menu } from "lucide-react";
+import { SearchBar } from "../search/SearchBar";
 import {
   Collapsible,
   CollapsibleContent,
@@ -33,6 +34,7 @@ export function MobileNav({ items }: { items: MenuItemWithReference[] }) {
       </SheetTrigger>
       <SheetContent side="right" className="w-full sm:w-[400px]">
         <SheetHeader>Meny</SheetHeader>
+      <SearchBar />
         <nav className="flex flex-col gap-4 mt-8 px-4">
           {items.map((item) => {
             if (item.children) {

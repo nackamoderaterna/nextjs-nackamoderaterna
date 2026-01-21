@@ -2,12 +2,13 @@ import { groq } from "next-sanity";
 import { MenuItem } from "~/sanity.types";
 import menuItem from "~/sanity/schemas/objects/menuItem";
 
-export const navigationQuery = groq`*[_type == "navigationHeader"][0] {
+export const navigationQuery = groq`*[_id == "navigationHeader"][0] {
   _id,
   title,
   items[] {
     title,
     linkType,
+    staticRoute,
     "internalLink": internalLink-> {
       ...,
       _type,
@@ -18,6 +19,7 @@ export const navigationQuery = groq`*[_type == "navigationHeader"][0] {
     url,
     children[] {
       ...,
+      staticRoute,
       "internalLink": internalLink-> {
         ...,
         _type,
@@ -29,17 +31,44 @@ export const navigationQuery = groq`*[_type == "navigationHeader"][0] {
   }
 }`;
 
+export const footerQuery = groq`*[_id == "navigationFooter"][0] {
+  _id,
+  columns[] {
+    title,
+    items[] {
+      title,
+      linkType,
+      staticRoute,
+      "internalLink": internalLink-> {
+        ...,
+        _type,
+        "slug": slug.current,
+        title,
+        name
+      },
+      url
+    }
+  },
+  footerText,
+  socialLinks[] {
+    platform,
+    url
+  },
+  legalText
+}`;
+
 export type MenuItemWithReference = Omit<
   MenuItem,
   "internalLink" | "children"
 > & {
-  internalLink: {
+  internalLink?: {
     _type: string;
     slug: string;
     title?: string;
     name?: string;
   };
-  children: MenuItemWithReference[];
+  staticRoute?: string;
+  children?: MenuItemWithReference[];
 };
 
 export interface NavigationData {
@@ -54,6 +83,10 @@ export function getMenuItemHref(item: MenuItemWithReference): string {
     return item.url;
   }
 
+  if ((item.linkType as string) === "static" && item.staticRoute) {
+    return item.staticRoute;
+  }
+
   if (item.linkType === "internal" && item.internalLink) {
     const { _type, slug } = item.internalLink;
 
@@ -61,7 +94,7 @@ export function getMenuItemHref(item: MenuItemWithReference): string {
     const routeMap: Record<string, string> = {
       page: "",
       news: "nyheter",
-      event: "evenemang",
+      event: "event",
       politician: "politiker",
       politicalIssue: "fragor",
     };
@@ -71,4 +104,20 @@ export function getMenuItemHref(item: MenuItemWithReference): string {
   }
 
   return "#";
+}
+
+export interface FooterColumn {
+  title?: string;
+  items: MenuItemWithReference[];
+}
+
+export interface FooterData {
+  _id: string;
+  columns?: FooterColumn[];
+  footerText?: any[];
+  socialLinks?: Array<{
+    platform?: string;
+    url?: string;
+  }>;
+  legalText?: string;
 }

@@ -10,13 +10,90 @@ import {
 
 export type BlockAlignment = "left" | "center" | "right";
 
+// Inline types for new blocks (until Sanity types are regenerated)
+type BlockCta = {
+  _type: "block.cta";
+  heading: string;
+  description?: string;
+  primaryButton?: {
+    label: string;
+    link: string;
+  };
+  secondaryButton?: {
+    label: string;
+    link: string;
+  };
+  alignment?: "left" | "center" | "right";
+};
+
+type BlockStats = {
+  _type: "block.stats";
+  heading?: string;
+  description?: string;
+  stats: Array<{
+    value: string;
+    label: string;
+    description?: string;
+  }>;
+  columns?: 2 | 3 | 4;
+};
+
+type BlockTwoColumn = {
+  _type: "block.twoColumn";
+  leftContent?: any[];
+  rightContent?: any[];
+  leftImage?: any;
+  rightImage?: any;
+  reverse?: boolean;
+  verticalAlignment?: "top" | "center" | "bottom";
+};
+
+type BlockAccordion = {
+  _type: "block.accordion";
+  heading?: string;
+  description?: string;
+  items: Array<{
+    title: string;
+    content: any[];
+  }>;
+  allowMultiple?: boolean;
+};
+
+type BlockQuote = {
+  _type: "block.quote";
+  quote: string;
+  author?: string;
+  authorTitle?: string;
+  authorImage?: any;
+  alignment?: "left" | "center" | "right";
+};
+
+type BlockImageGallery = {
+  _type: "block.imageGallery";
+  heading?: string;
+  images?: Array<{
+    _key?: string;
+    asset?: any;
+    alt?: string;
+    caption?: string;
+  }>;
+  columns?: 2 | 3 | 4;
+  aspectRatio?: "square" | "landscape" | "portrait" | "auto";
+};
+
 export type PageBlock =
   | BlockHero
   | BlockText
   | BlockImage
   | BlockVideo
   | BlockPoliticianDereferenced
-  | NewsBlockProps;
+  | NewsBlockProps
+  | BlockCta
+  | BlockStats
+  | BlockTwoColumn
+  | BlockAccordion
+  | BlockQuote
+  | BlockImageGallery;
 
 type SanityDocumentBase = {
   _id: string;

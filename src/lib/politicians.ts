@@ -119,7 +119,7 @@ export function groupPoliticiansByRole(politicians: PoliticianWithNamnd[]) {
     if (politician.kommunalrad?.active && politician.kommunalrad.role) {
       const role = politician.kommunalrad
         .role as keyof typeof groups.kommunalrad;
-      groups.kommunalrad[role].push(politician);
+      groups.kommunalrad["ordinary"].push(politician);
       hasAssignment = true;
     }
 
@@ -127,7 +127,7 @@ export function groupPoliticiansByRole(politicians: PoliticianWithNamnd[]) {
     if (politician.partyBoard?.active && politician.partyBoard.position) {
       const position = politician.partyBoard
         .position as keyof typeof groups.partyBoard;
-      groups.partyBoard[position].push(politician);
+      groups.partyBoard["ledamot"].push(politician);
       hasAssignment = true;
     }
 
@@ -138,7 +138,7 @@ export function groupPoliticiansByRole(politicians: PoliticianWithNamnd[]) {
     ) {
       const role = politician.kommunfullmaktige
         .role as keyof typeof groups.kommunfullmaktige;
-      groups.kommunfullmaktige[role].push(politician);
+      groups.kommunfullmaktige["ordinary"].push(politician);
       hasAssignment = true;
     }
 

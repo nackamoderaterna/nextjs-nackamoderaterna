@@ -19,6 +19,7 @@ export default defineType({
       options: {
         list: [
           {title: 'Internal', value: 'internal'},
+          {title: 'Static Route', value: 'static'},
           {title: 'External', value: 'external'},
         ],
         layout: 'radio',
@@ -40,6 +41,24 @@ export default defineType({
         // add more if needed
       ],
       hidden: ({parent}) => parent?.linkType !== 'internal',
+    }),
+
+    // Static route
+    defineField({
+      name: 'staticRoute',
+      title: 'Static Route',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Hem', value: '/'},
+          {title: 'Politiker', value: '/politiker'},
+          {title: 'Nyheter', value: '/nyheter'},
+          {title: 'Evenemang', value: '/event'},
+          {title: 'Politik', value: '/politik'},
+          {title: 'Kontakt', value: '/kontakt'},
+        ],
+      },
+      hidden: ({parent}) => parent?.linkType !== 'static',
     }),
 
     // External URL

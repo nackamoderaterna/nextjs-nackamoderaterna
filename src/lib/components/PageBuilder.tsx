@@ -8,27 +8,54 @@ import {
   PoliticianReferenceBlock,
 } from "./blocks/PoliticianReference";
 import { NewsBlock } from "./blocks/NewsBlock";
+import { CTABlock } from "./blocks/CTABlock";
+import { StatsBlock } from "./blocks/StatsBlock";
+import { TwoColumnBlock } from "./blocks/TwoColumnBlock";
+import { AccordionBlock } from "./blocks/AccordionBlock";
+import { QuoteBlock } from "./blocks/QuoteBlock";
+import { ImageGalleryBlock } from "./blocks/ImageGalleryBlock";
 
 interface PageBuilderProps {
   blocks: PageBlock[];
 }
 export function PageBuilder({ blocks }: PageBuilderProps) {
+  if (!blocks || blocks.length === 0) {
+    return null;
+  }
+
   return (
     <div className="w-full mx-auto">
       {blocks.map((block, index) => {
-        switch (block._type) {
+        const key = (block as any)._id || `${block._type}-${index}`;
+        const blockType = block._type;
+        
+        switch (blockType) {
           case "block.text":
-            return <TextBlock key={index} block={block} />;
+            return <TextBlock key={key} block={block as any} />;
           case "block.hero":
-            return <HeroBlock key={index} block={block} />;
+            return <HeroBlock key={key} block={block as any} />;
           case "block.image":
-            return <ImageBlock key={index} block={block} />;
+            return <ImageBlock key={key} block={block as any} />;
           case "block.video":
-            return <VideoBlock key={index} block={block} />;
+            return <VideoBlock key={key} block={block as any} />;
           case "block.politician":
-            return <PoliticianReferenceBlock key={index} block={block} />;
+            return <PoliticianReferenceBlock key={key} block={block as any} />;
           case "block.news":
-            return <NewsBlock key={index} block={block} />;
+            return <NewsBlock key={key} block={block as any} />;
+          case "block.cta":
+            return <CTABlock key={key} block={block as any} />;
+          case "block.stats":
+            return <StatsBlock key={key} block={block as any} />;
+          case "block.twoColumn":
+            return <TwoColumnBlock key={key} block={block as any} />;
+          case "block.accordion":
+            return <AccordionBlock key={key} block={block as any} />;
+          case "block.quote":
+            return <QuoteBlock key={key} block={block as any} />;
+          case "block.imageGallery":
+            return <ImageGalleryBlock key={key} block={block as any} />;
+          default:
+            return null;
         }
       })}
     </div>

@@ -1,15 +1,3 @@
-import {
-  Shield,
-  Home,
-  GraduationCap,
-  Leaf,
-  Coins,
-  Theater,
-  Briefcase,
-  Heart,
-  Dumbbell,
-  Bus,
-} from "lucide-react";
 import { PoliticalAreaCard } from "@/lib/components/politics/politicalAreaCard";
 import { GeographicalAreaCard } from "@/lib/components/politics/geographicalAreaCard";
 import { KeyIssueCard } from "@/lib/components/politics/keyIssueCard";
@@ -19,8 +7,19 @@ import {
   PoliticalIssue,
 } from "~/sanity.types";
 import { politikPageQuery } from "@/lib/queries/politik";
-import { sanityClient } from "@/lib/sanity/client";
+import { sanityClient, REVALIDATE_TIME } from "@/lib/sanity/client";
 import { lucideIconMap } from "@/lib/utils/iconUtils";
+import { generateMetadata } from "@/lib/utils/seo";
+import { Metadata } from "next";
+
+export const metadata: Metadata = generateMetadata({
+  title: "Vår politik | Nackamoderaterna",
+  description: "Läs mer om vår politik och våra ståndpunkter i olika frågor",
+  url: "/politik",
+});
+
+export const dynamic = "force-dynamic";
+export const revalidate = REVALIDATE_TIME;
 
 export type PoliticalIssueWithAreas = Omit<
   PoliticalIssue,
@@ -51,8 +50,13 @@ export type PoliticalIssuesPageData = {
 };
 
 export default async function PoliticsPage() {
-  const data =
-    await sanityClient.fetch<PoliticalIssuesPageData>(politikPageQuery);
+  const data = await sanityClient.fetch<PoliticalIssuesPageData>(
+    politikPageQuery,
+    {},
+    {
+      next: { revalidate: REVALIDATE_TIME },
+    }
+  );
   return (
     <div className="min-h-screen bg-background">
       <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">

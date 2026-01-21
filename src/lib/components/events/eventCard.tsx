@@ -1,38 +1,59 @@
 import Link from "next/link";
-import { SanityImage } from "../shared/SanityImage";
-import { Event } from "~/sanity.types";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
-interface Props {
-  event: Event;
+interface EventCardProps {
+  day: string;
+  month: string;
+  title: string;
+  time: string;
+  location: string;
+  href: string;
+  isPublic?: boolean;
+  className?: string;
 }
 
-export function EventCard({ event }: Props) {
+export function EventCard({
+  day,
+  month,
+  title,
+  time,
+  location,
+  href,
+  isPublic = false,
+  className,
+}: EventCardProps) {
   return (
     <Link
-      href={`/event/${event.slug?.current}`}
-      className="group block rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition"
+      href={`event/${href}`}
+      className={cn(
+        "block bg-blue-50/70 rounded-lg p-6 hover:bg-blue-100/70 transition-colors group relative",
+        className,
+      )}
     >
-      {event.image && (
-        <div className="aspect-[16/9] overflow-hidden">
-          <SanityImage
-            image={event.image}
-            className="h-full w-full object-cover group-hover:scale-105 transition-transform"
-          />
-        </div>
+      {isPublic && (
+        <Badge className="absolute top-4 right-4 bg-blue-600 hover:bg-blue-700 text-white">
+          Öppet event
+        </Badge>
       )}
 
-      <div className="p-4 space-y-2">
-        <p className="text-sm text-gray-500">
-          {new Date(event.startDate || Date.now()).toLocaleDateString("sv-SE", {
-            dateStyle: "long",
-          })}
-        </p>
+      {/* Date */}
+      <div className="mb-8">
+        <span className="block text-4xl md:text-5xl font-bold text-blue-600">
+          {day}
+        </span>
+        <span className="block text-sm font-medium text-blue-600 uppercase tracking-wide">
+          {month}
+        </span>
+      </div>
 
-        <h3 className="text-lg font-semibold">{event.title}</h3>
-
-        {event.location?.city && (
-          <p className="text-sm text-gray-600">{event.location.city}</p>
-        )}
+      {/* Event Info */}
+      <div>
+        <h3 className="font-semibold text-foreground group-hover:text-blue-600 transition-colors mb-1">
+          {title}
+        </h3>
+        <p className="text-sm text-blue-600">{time}</p>
+        <p className="text-sm text-blue-600">@ {location}</p>
       </div>
     </Link>
   );

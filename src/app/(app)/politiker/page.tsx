@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   groupPoliticiansByRole,
   politiciansDirectoryQuery,
@@ -6,14 +5,27 @@ import {
   positionTitles,
   sectionTitles,
 } from "@/lib/politicians";
-import { sanityClient } from "@/lib/sanity/client";
-import { SanityImage } from "@/lib/components/shared/SanityImage";
-import { PeopleCard } from "@/lib/components/politician/PoliticianCardLarge";
-import { PoliticianCardSmall } from "@/lib/components/politician/PoliticianCardSmall";
+import { sanityClient, REVALIDATE_TIME } from "@/lib/sanity/client";
+import { PoliticianSection } from "@/lib/components/politician/PoliticianSection";
+import { generateMetadata } from "@/lib/utils/seo";
+import { Metadata } from "next";
+
+export const metadata: Metadata = generateMetadata({
+  title: "Våra politiker | Nackamoderaterna",
+  description: "Läs mer om våra politiker och deras engagemang i Nacka",
+  url: "/politiker",
+});
+
+export const dynamic = "force-dynamic";
+export const revalidate = REVALIDATE_TIME;
 
 export default async function PoliticiansPage() {
   const politicians = await sanityClient.fetch<PoliticianWithNamnd[]>(
     politiciansDirectoryQuery,
+    {},
+    {
+      next: { revalidate: REVALIDATE_TIME },
+    }
   );
   const grouped = groupPoliticiansByRole(politicians);
 
@@ -24,98 +36,60 @@ export default async function PoliticiansPage() {
           Våra politiker
         </h1>
 
-        {/* Kommunalråd */}
         {(grouped.kommunalrad.president.length > 0 ||
           grouped.kommunalrad.ordinary.length > 0) && (
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-              {sectionTitles.kommunalrad}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {grouped.kommunalrad.president.map((p) => (
-                <PeopleCard
-                  slug={p.slug?.current || ""}
-                  key={p._id}
-                  image={p.image}
-                  name={p.name}
-                  title={positionTitles.ordforande}
-                  size="large"
-                />
-              ))}
-              {grouped.kommunalrad.ordinary.map((p) => (
-                <PeopleCard
-                  key={p._id}
-                  slug={p.slug?.current || ""}
-                  image={p.image}
-                  name={p.name}
-                  title={positionTitles.ordforande}
-                  size="large"
-                />
-              ))}
-            </div>
-          </section>
+          <PoliticianSection
+            title={sectionTitles.kommunalrad}
+            politicians={[
+              ...grouped.kommunalrad.president,
+              ...grouped.kommunalrad.ordinary,
+            ]}
+            cardType="large"
+            positionTitle={positionTitles.ordforande}
+          />
         )}
 
-        {/* Party Board */}
         {(grouped.partyBoard.ordforande.length > 0 ||
           grouped.partyBoard.ledamot.length > 0) && (
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-              {sectionTitles.partyBoard}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {grouped.partyBoard.ordforande.map((p) => (
-                <PeopleCard
-                  slug={p.slug?.current || ""}
-                  key={p._id}
-                  image={p.image}
-                  name={p.name}
-                  title={positionTitles.ordforande}
-                  size="small"
-                />
-              ))}
-              {grouped.partyBoard.ledamot.map((p) => (
-                <PeopleCard
-                  slug={p.slug?.current || ""}
-                  key={p._id}
-                  image={p.image}
-                  name={p.name}
-                  title={positionTitles.ordforande}
-                  size="small"
-                />
-              ))}
-            </div>
-          </section>
+          <>
+            <PoliticianSection
+              title={sectionTitles.partyBoard}
+              politicians={grouped.partyBoard.ordforande}
+              cardType="small"
+              positionTitle={positionTitles.ordforande}
+            />
+            <PoliticianSection
+              title=""
+              politicians={grouped.partyBoard.ledamot}
+              cardType="small"
+              positionTitle={positionTitles.ledamot}
+            />
+          </>
         )}
 
-        {/* Kommunfullmäktige */}
         {(grouped.kommunfullmaktige.ordinary.length > 0 ||
           grouped.kommunfullmaktige.substitute.length > 0) && (
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-              {sectionTitles.kommunfullmaktige}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {grouped.kommunfullmaktige.ordinary.map((p) => (
-                <PoliticianCardSmall
-                  key={p._id}
-                  name={p.name}
-                  image={p.image}
-                  subtitle={positionTitles.ledamot}
-                />
-              ))}
-              {grouped.kommunfullmaktige.substitute.map((p) => (
-                <PoliticianCardSmall
-                  key={p._id}
-                  name={p.name}
-                  image={p.image}
-                  subtitle={positionTitles.substitute}
-                />
-              ))}
-            </div>
-          </section>
+          <>
+            <PoliticianSection
+              title={sectionTitles.kommunfullmaktige}
+              politicians={grouped.kommunfullmaktige.ordinary}
+              cardType="small"
+              positionTitle={positionTitles.ledamot}
+            />
+            <PoliticianSection
+              title=""
+              politicians={grouped.kommunfullmaktige.substitute}
+              cardType="small"
+              positionTitle={positionTitles.substitute}
+            />
+          </>
         )}
       </div>
+      {politicians.length === 0 && (
+        <p className="text-muted-foreground text-center py-12">
+          Inga politiker tillgängliga för tillfället.
+        </p>
+      )}
     </div>
   );
 }

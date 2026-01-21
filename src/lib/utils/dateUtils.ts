@@ -8,12 +8,12 @@ export function formatDate(timestamp: string | Date) {
     "FEB",
     "MAR",
     "APR",
-    "MAY",
+    "MAJ",
     "JUN",
     "JUL",
     "AUG",
     "SEP",
-    "OCT",
+    "OKT",
     "NOV",
     "DEC",
   ];
@@ -22,4 +22,41 @@ export function formatDate(timestamp: string | Date) {
   const year = date.getFullYear();
 
   return `${day} ${month} ${year}`;
+}
+
+export function getMonth(timestamp: string | Date) {
+  const month = new Date(timestamp).getMonth();
+  const months = [
+    "Januari",
+    "Februari",
+    "Mars",
+    "April",
+    "Maj",
+    "Juni",
+    "Juli",
+    "Augusti",
+    "September",
+    "Oktober",
+    "November",
+    "December",
+  ];
+  return months[month];
+}
+
+export function formatDateRange(startDate: string | Date, endDate?: string | Date): string {
+  const start = new Date(startDate);
+  const startFormatted = start.toLocaleDateString("sv-SE", {
+    dateStyle: "long",
+  });
+
+  if (!endDate) {
+    return startFormatted;
+  }
+
+  const end = new Date(endDate);
+  const endFormatted = end.toLocaleDateString("sv-SE", {
+    dateStyle: "long",
+  });
+
+  return `${startFormatted} – ${endFormatted}`;
 }

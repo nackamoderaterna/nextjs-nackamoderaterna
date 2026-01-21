@@ -19,5 +19,5 @@ export type NewsWithReferences = Omit<
   referencedPoliticians?: Dereferenced<Politician>;
   politicalAreas?: Dereferenced<PoliticalArea>;
   geographicalAreas?: Dereferenced<GeographicalArea>;
-  relatedNews?: Array<Dereferenced<News>>;
+  relatedNews?: Array<News>;
 };

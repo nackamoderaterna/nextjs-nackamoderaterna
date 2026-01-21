@@ -1,7 +1,11 @@
 import { NewsCard } from "@/lib/components/news/NewsCard";
 import { Pagination } from "@/lib/components/news/Pagination";
+import { NewsFilters } from "@/lib/components/news/NewsFilters";
 import { sanityClient, REVALIDATE_TIME } from "@/lib/sanity/client";
-import { newsListPaginatedQuery } from "@/lib/queries/nyheter";
+import {
+  newsListPaginatedQuery,
+  allPoliticalAreasQuery,
+} from "@/lib/queries/nyheter";
 import { News } from "~/sanity.types";
 import { generateMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
@@ -42,22 +46,30 @@ export const dynamic = "force-dynamic";
 export const revalidate = REVALIDATE_TIME;
 
 interface NewsPageProps {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; area?: string }>;
 }
 
 export default async function NewsPage({ searchParams }: NewsPageProps) {
   const params = await searchParams;
   const currentPage = Math.max(1, parseInt(params.page || "1", 10));
+  const politicalAreaId = params.area || undefined;
   const start = (currentPage - 1) * ITEMS_PER_PAGE;
   const end = start + ITEMS_PER_PAGE;
 
-  const result = await sanityClient.fetch<NewsListPaginatedResult>(
-    newsListPaginatedQuery,
-    { start, end },
-    {
+  const [result, politicalAreas] = await Promise.all([
+    sanityClient.fetch<NewsListPaginatedResult>(
+      newsListPaginatedQuery,
+      politicalAreaId
+        ? { start, end, politicalArea: politicalAreaId }
+        : { start, end, politicalArea: null },
+      {
+        next: { revalidate: REVALIDATE_TIME },
+      }
+    ),
+    sanityClient.fetch<any[]>(allPoliticalAreasQuery, {}, {
       next: { revalidate: REVALIDATE_TIME },
-    }
-  );
+    }),
+  ]);
 
   const { items: newsList, total } = result;
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
@@ -80,6 +92,8 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-8">Nyheter</h1>
+
+        <NewsFilters politicalAreas={politicalAreas || []} />
 
         {newsList.length === 0 ? (
           <p className="text-muted-foreground text-center py-12">
@@ -104,6 +118,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
               currentPage={currentPage}
               totalPages={totalPages}
               basePath="/nyheter"
+              preserveParams={politicalAreaId ? { area: politicalAreaId } : {}}
             />
           </>
         )}

@@ -12,6 +12,7 @@ type SanityImageProps = {
   className?: string;
   priority?: boolean;
   fill?: boolean;
+  loading?: "lazy" | "eager";
 };
 
 export function SanityImage({
@@ -23,33 +24,41 @@ export function SanityImage({
   className = "",
   priority = false,
   fill = false,
+  loading,
 }: SanityImageProps) {
+  if (!image) {
+    return null;
+  }
+
   const imageUrl = buildImageUrl(image, {
-    width,
-    height,
-    quality: 80,
+    width: fill ? undefined : width,
+    height: fill ? undefined : height,
+    quality: 85,
   });
 
   const objectPosition = getObjectPositionFromHotspot(image);
+  const imageAlt = alt || image.alt || "";
 
   return fill ? (
     <Image
       src={imageUrl}
-      alt={alt}
+      alt={imageAlt}
       fill
       sizes={sizes}
       priority={priority}
+      loading={loading}
       className={`object-cover ${className}`}
       style={{ objectPosition }}
     />
   ) : (
     <Image
       src={imageUrl}
-      alt={alt}
+      alt={imageAlt}
       height={height || 500}
       width={width || 700}
       sizes={sizes}
       priority={priority}
+      loading={loading}
       className={`object-cover ${className}`}
       style={{ objectPosition }}
     />

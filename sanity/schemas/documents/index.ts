@@ -9,6 +9,7 @@ import {politicalIssue} from './politicalIssue'
 import {politician} from './politician'
 import globalSettings from './singletons/globalSettings'
 import navigationHeader from './singletons/navigationHeader'
+import navigationFooter from './singletons/navigationFooter'
 export const documents = [
   news,
   page,
@@ -20,5 +21,6 @@ export const documents = [
   politicalIssue,
   geographicalArea,
   navigationHeader,
+  navigationFooter,
   globalSettings,
 ]

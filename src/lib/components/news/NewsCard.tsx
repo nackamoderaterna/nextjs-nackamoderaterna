@@ -53,39 +53,3 @@ export function NewsCard({
     </article>
   );
 }
-
-// export function NewsCard({ item }: NewsCardProps) {
-//   return (
-//     <Link
-//       href={`/nyheter/${item.slug?.current}`}
-//       className="block group h-full"
-//     >
-//       <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full">
-//         {item.mainImage && (
-//           <div className="relative aspect-[16/9] sm:aspect-[4/3] overflow-hidden">
-//             <SanityImage
-//               image={item.mainImage}
-//               fill
-//               className="group-hover:scale-105 transition-transform duration-300"
-//             />
-//           </div>
-//         )}
-//         <CardHeader>
-//           <CardDescription className="text-xs">
-//             {item.dateOverride || item._createdAt}
-//           </CardDescription>
-//           <CardTitle className="text-lg leading-6 line-clamp-2">
-//             {item.title}
-//           </CardTitle>
-//         </CardHeader>
-//         {item.excerpt && (
-//           <CardContent>
-//             <p className="text-sm text-muted-foreground line-clamp-3">
-//               {item.excerpt}
-//             </p>
-//           </CardContent>
-//         )}
-//       </Card>
-//     </Link>
-//   );
-// }

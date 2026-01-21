@@ -1,151 +1,42 @@
 import { PageBuilder } from "@/lib/components/PageBuilder";
-import { sanityClient } from "@/lib/sanity/client";
+import { sanityClient, REVALIDATE_TIME } from "@/lib/sanity/client";
+import { pageBySlugQuery } from "@/lib/queries/pages";
+import { generateMetadata } from "@/lib/utils/seo";
+import { Metadata } from "next";
+
+export const metadata: Metadata = generateMetadata({
+  title: "Nackamoderaterna",
+  description: "Moderaterna i Nacka - För ett starkare Nacka",
+  url: "/",
+});
+
+export const dynamic = "force-dynamic";
+export const revalidate = REVALIDATE_TIME;
 
 async function getPageBySlug(slug: string) {
-  const query = `*[_type == "page" && slug.current == $slug][0] {
-    _id,
-    title,
-    slug,
-    blocks[] {
-      ...,
-      // POLITICAN START
-      _type == "block.politician" => {
-        mode,
-       "items": select(
-          mode == "kommunalrad" => 
-            *[_type == "politician" && kommunalrad.active == true]{
-              _id,
-              name,
-              slug,
-              image,
-              kommunalrad,
-              position
-          },
-
-      // default = manual selection
-          items[]->{
-            _id,
-            name,
-            slug,
-            image,
-            kommunalrad,
-            position
-          }
-        )
-      },
-      // POLITICIAN END
-      // NEWS START
-      _type == "block.news" => {
-      title,
-      mode,
-      limit,
-      politicalArea,
-      geographicArea,
-      items[]->{
-        _id,
-        title,
-        excerpt,
-        publishedAt,
-        slug,
-        mainImage{
-          ...,
-          "url": asset->url
-        }
-      },
-
-      // Resolved items depending on mode
-      "resolvedItems": select(
-        // MANUAL
-        mode == "manual" => items[]->{
-          _id,
-          _publishedAt,
-          title,
-          excerpt,
-          publishedAt,
-          dateOverride,
-          slug,
-          mainImage{
-            ...,
-            "url": asset->url
-          }
-        },
-
-        // LATEST
-        mode == "latest" => *[_type == "news"] 
-          | order(coalesce(dateOverride, publishedAt) desc)
-          [0...4]{
-            _id,
-            _createdAt,
-            title,
-            excerpt,
-            publishedAt,
-            slug,
-            dateOverride,
-            mainImage{
-              ...,
-              "url": asset->url
-            }
-          },
-
-        // BY POLITICAL AREA
-        mode == "byPoliticalArea" && defined(politicalArea) => *[_type == "news" && references(^.politicalArea._ref)]
-          | order(coalesce(dateOverride, publishedAt) desc)
-          [0...4]{
-            _id,
-            _createdAt,
-            title,
-            excerpt,
-            publishedAt,
-            slug,
-            dateOverride,
-            mainImage{
-              ...,
-              "url": asset->url
-            }
-          },
-
-        // BY GEOGRAPHIC AREA
-        mode == "byGeographicArea" && defined(geographicArea) => *[_type == "news" && references(^.geographicArea._ref)]
-          | order(coalesce(dateOverride, publishedAt) desc)
-          [0...4]{
-            _id,
-            _createdAt,
-            title,
-            excerpt,
-            publishedAt,
-            slug,
-            dateOverride,
-            mainImage{
-              ...,
-              "url": asset->url
-            }
-          },
-
-        // DEFAULT → empty array
-         *[_type == "news"] 
-          | order(coalesce(dateOverride, publishedAt) desc)
-          [0...4]{
-            _id,
-            _createdAt,
-            title,
-            excerpt,
-            publishedAt,
-            slug,
-            mainImage
-          },
-      )
+  return await sanityClient.fetch(
+    pageBySlugQuery,
+    { slug },
+    {
+      next: { revalidate: REVALIDATE_TIME },
     }
-    }
-  }`;
-
-  return await sanityClient.fetch(query, { slug });
+  );
 }
 
 export default async function Home() {
   const page = await getPageBySlug("example");
+  
+  if (!page) {
+    return (
+      <div className="w-full mx-auto px-4 py-12 text-center">
+        <p className="text-muted-foreground">Sidan kunde inte hittas.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full mx-auto">
-      <PageBuilder blocks={page?.blocks} />
+      <PageBuilder blocks={page.blocks || []} />
     </div>
   );
 }

@@ -14,7 +14,9 @@ import {
   FieldGroup,
   FieldLabel,
   FieldLegend,
+  FieldError,
 } from "@/components/ui/field";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Namnet måste vara minst 2 tecken" }),
@@ -29,6 +31,12 @@ interface ContactPageClientProps {
 }
 
 export function ContactPageClient({ settings }: ContactPageClientProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({ type: null, message: "" });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,9 +46,51 @@ export function ContactPageClient({ settings }: ContactPageClientProps) {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    alert("Tack för ditt meddelande! Vi återkommer så snart som möjligt.");
-    form.reset();
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: "" });
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Handle rate limiting
+        if (response.status === 429) {
+          setSubmitStatus({
+            type: "error",
+            message:
+              "För många förfrågningar. Vänta en stund innan du försöker igen.",
+          });
+          return;
+        }
+
+        throw new Error(data.error || "Något gick fel");
+      }
+
+      setSubmitStatus({
+        type: "success",
+        message: "Tack för ditt meddelande! Vi återkommer så snart som möjligt.",
+      });
+      form.reset();
+    } catch (error) {
+      setSubmitStatus({
+        type: "error",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Kunde inte skicka meddelandet. Försök igen senare.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -57,6 +107,19 @@ export function ContactPageClient({ settings }: ContactPageClientProps) {
           <div className="lg:col-span-2">
             <div className="bg-muted p-8 rounded-lg">
               <h2 className="text-2xl font-bold mb-6">Skicka ett meddelande</h2>
+
+              {submitStatus.type === "success" && (
+                <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-800 dark:text-green-200">
+                  {submitStatus.message}
+                </div>
+              )}
+
+              {submitStatus.type === "error" && (
+                <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200">
+                  {submitStatus.message}
+                </div>
+              )}
+
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-6"
@@ -71,8 +134,10 @@ export function ContactPageClient({ settings }: ContactPageClientProps) {
                       id="name"
                       placeholder="Ditt namn"
                       className="bg-white"
+                      disabled={isSubmitting}
                       {...form.register("name")}
                     />
+                    <FieldError errors={[form.formState.errors.name]} />
                   </Field>
 
                   {/* Email */}
@@ -83,8 +148,10 @@ export function ContactPageClient({ settings }: ContactPageClientProps) {
                       type="email"
                       placeholder="din.email@example.com"
                       className="bg-white"
+                      disabled={isSubmitting}
                       {...form.register("email")}
                     />
+                    <FieldError errors={[form.formState.errors.email]} />
                   </Field>
 
                   {/* Message */}
@@ -94,13 +161,20 @@ export function ContactPageClient({ settings }: ContactPageClientProps) {
                       id="message"
                       placeholder="Skriv ditt meddelande här..."
                       className="min-h-32 bg-white"
+                      disabled={isSubmitting}
                       {...form.register("message")}
                     />
+                    <FieldError errors={[form.formState.errors.message]} />
                   </Field>
                 </FieldGroup>
 
-                <Button type="submit" size="lg" className="w-full md:w-auto">
-                  Skicka meddelande
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full md:w-auto"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Skickar..." : "Skicka meddelande"}
                 </Button>
               </form>
             </div>

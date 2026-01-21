@@ -20,11 +20,17 @@ export function PeopleCard({
 
   if (isSmall) {
     return (
-      <Link href={`politiker/${slug}`}>
+      <Link href={`politiker/${slug}`} aria-label={`Läs mer om ${name}`}>
         <div className="flex items-center gap-3 group hover:bg-muted rounded hover:cursor-pointer transition-colors duration-300">
           {/* Small circular image on the left */}
           <div className="relative w-12 h-12 flex-shrink-0 rounded overflow-hidden bg-muted">
-            <SanityImage image={image} fill />
+            <SanityImage
+              image={image}
+              fill
+              alt={name || ""}
+              sizes="48px"
+              loading="lazy"
+            />
           </div>
 
           {/* Text on the right */}
@@ -43,11 +49,17 @@ export function PeopleCard({
     );
   }
   return (
-    <Link href={`politiker/${slug}`}>
+    <Link href={`politiker/${slug}`} aria-label={`Läs mer om ${name}`}>
       <div className="group bg-card border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
         {/* Image */}
         <div className={`relative h-64 w-full overflow-hidden bg-muted`}>
-          <SanityImage fill image={image} />
+          <SanityImage
+            fill
+            image={image}
+            alt={name || ""}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            loading="lazy"
+          />
         </div>
 
         {/* Content */}

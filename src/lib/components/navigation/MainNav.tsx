@@ -58,7 +58,7 @@ function DesktopNavItem({ item }: { item: MenuItemWithReference }) {
       <NavigationMenuContent className="z-20">
         <ul className="grid w-[200px] gap-4">
           {item.children?.map((child, index) => (
-            <li>
+            <li key={child.title + "-" + index}>
               <NavigationMenuLink asChild key={child.title}>
                 <Link href={getMenuItemHref(child)}>{child.title}</Link>
               </NavigationMenuLink>
