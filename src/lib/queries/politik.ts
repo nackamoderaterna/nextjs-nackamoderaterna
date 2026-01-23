@@ -75,7 +75,12 @@ export const politicalAreaPageQuery = groq`
     },
     "politicians": *[
       _type == "politician" &&
-      references(^._id)
-    ]
+      count(politicalAreas[showOnPoliticalAreaPage == true && politicalArea._ref == ^._id]) > 0
+    ] {
+      _id,
+      name,
+      slug,
+      image
+    }
   }
 `;

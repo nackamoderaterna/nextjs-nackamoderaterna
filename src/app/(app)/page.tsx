@@ -1,14 +1,9 @@
 import { PageBuilder } from "@/lib/components/PageBuilder";
+import { PageModal } from "@/lib/components/shared/PageModal";
 import { sanityClient, REVALIDATE_TIME } from "@/lib/sanity/client";
 import { pageBySlugQuery } from "@/lib/queries/pages";
-import { generateMetadata } from "@/lib/utils/seo";
+import { generatePageMetadata } from "@/lib/utils/pageSeo";
 import { Metadata } from "next";
-
-export const metadata: Metadata = generateMetadata({
-  title: "Nackamoderaterna",
-  description: "Moderaterna i Nacka - För ett starkare Nacka",
-  url: "/",
-});
 
 export const revalidate = 300;
 
@@ -22,8 +17,13 @@ async function getPageBySlug(slug: string) {
   );
 }
 
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getPageBySlug("hem");
+  return generatePageMetadata(page, "Nackamoderaterna");
+}
+
 export default async function Home() {
-  const page = await getPageBySlug("example");
+  const page = await getPageBySlug("hem");
   
   if (!page) {
     return (
@@ -35,6 +35,7 @@ export default async function Home() {
 
   return (
     <div className="w-full mx-auto">
+      <PageModal modal={page.pageModal} pageSlug={page.slug?.current || "home"} />
       <PageBuilder blocks={page.blocks || []} />
     </div>
   );

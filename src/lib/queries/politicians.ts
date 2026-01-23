@@ -12,7 +12,8 @@ export const politicianBySlugQuery = groq`*[_type == "politician" && slug.curren
   partyBoard,
   kommunfullmaktige,
   "namndPositions": namndPositions[] {
-    position,
+    title,
+    isLeader,
     "namnd": namndRef-> {
       _id,
       title,
@@ -24,10 +25,13 @@ export const politicianBySlugQuery = groq`*[_type == "politician" && slug.curren
     name,
     slug,
   },
-  "politicalAreas": politicalAreas[]-> {
-    _id,
-    name,
-    
+  "politicalAreas": politicalAreas[] {
+    showOnPoliticalAreaPage,
+    "politicalArea": politicalArea-> {
+      _id,
+      name,
+      slug
+    }
   },
   socialMedia,
   "referencedInNews": *[_type == "news" && references(^._id)] | order(publishedAt desc) {

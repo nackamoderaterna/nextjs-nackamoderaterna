@@ -4,6 +4,32 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
   _id,
   title,
   slug,
+  description,
+  seo{
+    title,
+    description,
+    keywords,
+    image{
+      ...,
+      "url": asset->url
+    }
+  },
+  pageModal{
+    enabled,
+    onLoadDelayMs,
+    frequency,
+    storageKey,
+    title,
+    content,
+    primaryButton{
+      label,
+      href
+    },
+    secondaryButton{
+      label,
+      href
+    }
+  },
   blocks[] {
     ...,
     // POLITICAN START
@@ -16,8 +42,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
             name,
             slug,
             image,
-            kommunalrad,
-            position
+            kommunalrad
         },
 
     // default = manual selection
@@ -26,8 +51,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
           name,
           slug,
           image,
-          kommunalrad,
-          position
+          kommunalrad
         }
       )
     },

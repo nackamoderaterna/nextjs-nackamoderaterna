@@ -1,6 +1,9 @@
+import Link from "next/link";
+
 export interface Role {
   title: string;
   description: string;
+  href?: string;
 }
 
 interface RoleSidebarProps {
@@ -16,7 +19,16 @@ export function RoleSidebar({ heading, roles }: RoleSidebarProps) {
         {roles.map((role, index) => (
           <div key={index}>
             <h3 className="font-semibold text-foreground">{role.title}</h3>
-            <p className="text-sm text-muted-foreground">{role.description}</p>
+            {role.href ? (
+              <Link
+                href={role.href}
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {role.description}
+              </Link>
+            ) : (
+              <p className="text-sm text-muted-foreground">{role.description}</p>
+            )}
           </div>
         ))}
       </div>

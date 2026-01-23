@@ -53,14 +53,19 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
       <PolicyList title="Moderaterna vill" policies={data.politicalIssues} />
       <div className="grid gap-4 mt-8 bg-card border border-border rounded-lg p-6">
         <h2 className="text-2xl font-bold text-foreground mb-6">Företrädare</h2>
-        {data.politicians.map((politician) => (
-          <PeopleCard
-            slug={politician.slug?.current || ""}
-            image={politician.image}
-            title={politician.name || ""}
-            size={"small"}
-          />
-        ))}
+        {data.politicians.length > 0 ? (
+          data.politicians.map((politician) => (
+            <PeopleCard
+              key={politician._id}
+              slug={politician.slug?.current || ""}
+              image={politician.image}
+              title={politician.name || ""}
+              size={"small"}
+            />
+          ))
+        ) : (
+          <p className="text-muted-foreground">Inga företrädare registrerade för detta område.</p>
+        )}
       </div>
     </>
   );

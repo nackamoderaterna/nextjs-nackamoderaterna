@@ -26,7 +26,7 @@ export function MobileNav({ items }: { items: MenuItemWithReference[] }) {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild className="md:hidden">
+      <SheetTrigger asChild className="lg:hidden">
         <Button variant="ghost" size="icon">
           <Menu className="h-6 w-6" />
           <span className="sr-only">Toggle menu</span>

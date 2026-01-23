@@ -98,17 +98,18 @@ export const politician = defineType({
           initialValue: false,
         },
         {
-          name: "position",
-          title: "Roll",
+          name: "title",
+          title: "Titel",
           type: "string",
-          options: {
-            list: [
-              { title: "Ordförande", value: "ordforande" },
-              { title: "Ledamot", value: "ledamot" },
-            ],
-          },
-          initialValue: "ledamot",
-          hidden: ({ parent }) => !parent.active,
+          description: "T.ex. Ordförande, Ledamot, Kassör",
+          hidden: ({ parent }) => !parent?.active,
+        },
+        {
+          name: "isLeader",
+          title: "Är ordförande/ledare",
+          type: "boolean",
+          initialValue: false,
+          hidden: ({ parent }) => !parent?.active,
         },
       ],
     },
@@ -125,17 +126,24 @@ export const politician = defineType({
           initialValue: false,
         },
         {
+          name: "title",
+          title: "Titel",
+          type: "string",
+          description: "T.ex. Ledamot, Gruppledare",
+          hidden: ({ parent }) => !parent?.active,
+        },
+        {
           name: "role",
-          title: "Roll",
+          title: "Ordinarie eller ersättare",
           type: "string",
           options: {
             list: [
-              { title: "Ledamot", value: "ordinary" },
+              { title: "Ordinarie", value: "ordinary" },
               { title: "Ersättare", value: "substitute" },
             ],
           },
           initialValue: "ordinary",
-          hidden: ({ parent }) => !parent.active,
+          hidden: ({ parent }) => !parent?.active,
         },
       ],
     },
@@ -157,46 +165,27 @@ export const politician = defineType({
               to: [{ type: "namnd" }],
             },
             {
-              name: "position",
-              title: "Position",
+              name: "title",
+              title: "Titel",
               type: "string",
-              options: {
-                list: [
-                  { title: "Ordförande", value: "president" },
-                  { title: "1:e vice ordförande", value: "first-president" },
-                  { title: "2:e vice ordförande", value: "second-president" },
-                  { title: "Gruppledare", value: "groupleader" },
-                  { title: "Ledamot", value: "member" },
-                  { title: "Ersättare", value: "replacement" },
-                ],
-              },
+              description: "T.ex. Ordförande, Ledamot, Ersättare",
             },
             {
-              name: "isGruppledare",
-              title: "Gruppledare",
+              name: "isLeader",
+              title: "Är ordförande/ledare",
               type: "boolean",
+              initialValue: false,
             },
           ],
           preview: {
             select: {
-              title: "namndRef.title",
-              subtitle: "position",
+              namndTitle: "namndRef.title",
+              title: "title",
             },
-            prepare({ title, subtitle }) {
-              const positionTitles = {
-                president: "Ordförande",
-                "first-president": "1:e vice ordförande",
-                "second-president": "2:e vice ordförande",
-                groupleader: "Gruppledare",
-                member: "Ledamot",
-                replacement: "Ersättare",
-              };
-
+            prepare({ namndTitle, title }) {
               return {
-                title,
-                subtitle:
-                  positionTitles[subtitle as keyof typeof positionTitles] ||
-                  subtitle,
+                title: namndTitle,
+                subtitle: title || "–",
               };
             },
           },
@@ -214,7 +203,40 @@ export const politician = defineType({
       name: "politicalAreas",
       title: "Hjärtefrågor",
       type: "array",
-      of: [{ type: "reference", to: [{ type: "politicalArea" }] }],
+      of: [
+        {
+          name: "politicalAreaReference",
+          title: "Hjärtefråga",
+          type: "object",
+          fields: [
+            {
+              name: "politicalArea",
+              title: "Hjärtefråga",
+              type: "reference",
+              to: [{ type: "politicalArea" }],
+            },
+            {
+              name: "showOnPoliticalAreaPage",
+              title: "Visa på hjärtefrågans sida",
+              type: "boolean",
+              description: "Om markerad visas politiken på hjärtefrågans sida. Annars visas den endast på politikerns sida.",
+              initialValue: false,
+            },
+          ],
+          preview: {
+            select: {
+              title: "politicalArea.name",
+              showOnPage: "showOnPoliticalAreaPage",
+            },
+            prepare({ title, showOnPage }) {
+              return {
+                title: title || "–",
+                subtitle: showOnPage ? "Syns på hjärtefrågans sida" : "Endast på politikerns sida",
+              };
+            },
+          },
+        },
+      ],
     },
     {
       name: "socialMedia",

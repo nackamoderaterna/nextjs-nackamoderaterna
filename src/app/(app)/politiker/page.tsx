@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   groupPoliticiansByRole,
   politiciansDirectoryQuery,
@@ -7,6 +8,7 @@ import {
 } from "@/lib/politicians";
 import { sanityClient, REVALIDATE_TIME } from "@/lib/sanity/client";
 import { PoliticianSection } from "@/lib/components/politician/PoliticianSection";
+import { PoliticianCardSmall } from "@/lib/components/politician/PoliticianCardSmall";
 import { generateMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 
@@ -18,6 +20,15 @@ export const metadata: Metadata = generateMetadata({
 
 export const revalidate = 300;
 
+// Helper to sort politicians alphabetically by name
+function sortByName(politicians: PoliticianWithNamnd[]): PoliticianWithNamnd[] {
+  return [...politicians].sort((a, b) => {
+    const nameA = a.name || "";
+    const nameB = b.name || "";
+    return nameA.localeCompare(nameB, "sv");
+  });
+}
+
 export default async function PoliticiansPage() {
   const politicians = await sanityClient.fetch<PoliticianWithNamnd[]>(
     politiciansDirectoryQuery,
@@ -28,6 +39,39 @@ export default async function PoliticiansPage() {
   );
   const grouped = groupPoliticiansByRole(politicians);
 
+  // Debug: Check what we got
+  if (process.env.NODE_ENV === "development") {
+    console.log("Grouped politicians:", {
+      kommunalrad: {
+        president: grouped.kommunalrad.president.length,
+        ordinary: grouped.kommunalrad.ordinary.length,
+      },
+      kommunfullmaktige: {
+        ordinary: grouped.kommunfullmaktige.ordinary.length,
+        substitute: grouped.kommunfullmaktige.substitute.length,
+      },
+      partyBoard: {
+        leaders: grouped.partyBoard.leaders.length,
+        members: grouped.partyBoard.members.length,
+      },
+    });
+    // Find politicians with kommunalrad or kommunfullmaktige
+    const withKommunalrad = politicians.filter(p => p.kommunalrad);
+    const withKommunfullmaktige = politicians.filter(p => p.kommunfullmaktige);
+    console.log("Politicians with kommunalrad:", withKommunalrad.length, withKommunalrad.map(p => ({
+      name: p.name,
+      kommunalrad: p.kommunalrad
+    })));
+    console.log("Politicians with kommunfullmaktige:", withKommunfullmaktige.length, withKommunfullmaktige.map(p => ({
+      name: p.name,
+      kommunfullmaktige: p.kommunfullmaktige
+    })));
+  }
+
+  // Sort kommunfullmäktige alphabetically
+  const kommunfullmaktigeOrdinary = sortByName(grouped.kommunfullmaktige.ordinary);
+  const kommunfullmaktigeSubstitute = sortByName(grouped.kommunfullmaktige.substitute);
+
   return (
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -35,6 +79,7 @@ export default async function PoliticiansPage() {
           Våra politiker
         </h1>
 
+        {/* 1. Kommunalråd */}
         {(grouped.kommunalrad.president.length > 0 ||
           grouped.kommunalrad.ordinary.length > 0) && (
           <PoliticianSection
@@ -44,43 +89,81 @@ export default async function PoliticiansPage() {
               ...grouped.kommunalrad.ordinary,
             ]}
             cardType="large"
-            positionTitle={positionTitles.ordforande}
+            getTitle={(p) =>
+              p.kommunalrad?.role === "president"
+                ? "Kommunstyrelsens ordförande"
+                : "Kommunalråd"
+            }
           />
         )}
 
-        {(grouped.partyBoard.ordforande.length > 0 ||
-          grouped.partyBoard.ledamot.length > 0) && (
+        {/* 2. Nämnd leaders (no header, namnd name as subtitle) */}
+        {grouped.namndLeaders.length > 0 && (
+         
+          <section className="mb-10">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Gruppledare</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {grouped.namndLeaders.map(({ politician, namndTitle, positionTitle }) => (
+                <Link
+                  key={politician._id}
+                  href={`/politiker/${politician.slug?.current || ""}`}
+                  className="block"
+                >
+                  <PoliticianCardSmall
+                    name={politician.name}
+                    image={politician.image}
+                    subtitle={namndTitle}
+                  />
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* 3. Partistyrelse */}
+        {(grouped.partyBoard.leaders.length > 0 ||
+          grouped.partyBoard.members.length > 0) && (
           <>
             <PoliticianSection
               title={sectionTitles.partyBoard}
-              politicians={grouped.partyBoard.ordforande}
+              politicians={[
+                ...grouped.partyBoard.leaders,
+                ...grouped.partyBoard.members,
+              ]}
               cardType="small"
-              positionTitle={positionTitles.ordforande}
-            />
-            <PoliticianSection
-              title=""
-              politicians={grouped.partyBoard.ledamot}
-              cardType="small"
-              positionTitle={positionTitles.ledamot}
+              getTitle={(p) =>
+                p.partyBoard?.title || (p.partyBoard?.isLeader ? "Ordförande" : "Ledamot")
+              }
             />
           </>
         )}
 
-        {(grouped.kommunfullmaktige.ordinary.length > 0 ||
-          grouped.kommunfullmaktige.substitute.length > 0) && (
+        {/* 4. Kommunfullmäktige (ordinary first, then substitute, both alphabetically) */}
+        {(kommunfullmaktigeOrdinary.length > 0 ||
+          kommunfullmaktigeSubstitute.length > 0) && (
           <>
-            <PoliticianSection
-              title={sectionTitles.kommunfullmaktige}
-              politicians={grouped.kommunfullmaktige.ordinary}
-              cardType="small"
-              positionTitle={positionTitles.ledamot}
-            />
-            <PoliticianSection
-              title=""
-              politicians={grouped.kommunfullmaktige.substitute}
-              cardType="small"
-              positionTitle={positionTitles.substitute}
-            />
+            {kommunfullmaktigeOrdinary.length > 0 && (
+              <PoliticianSection
+                title={sectionTitles.kommunfullmaktige}
+                politicians={kommunfullmaktigeOrdinary}
+                cardType="small"
+                getTitle={(p) =>
+                  p.kommunfullmaktige?.title ||
+                  positionTitles.ordinary
+                }
+              />
+            )}
+            {kommunfullmaktigeSubstitute.length > 0 && (
+              <PoliticianSection
+                title=""
+                politicians={kommunfullmaktigeSubstitute}
+                cardType="small"
+                getTitle={(p) =>
+                  p.kommunfullmaktige?.title ||
+                  positionTitles.substitute
+                }
+              />
+            )}
           </>
         )}
       </div>

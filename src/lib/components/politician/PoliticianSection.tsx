@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { PeopleCard } from "./PoliticianCardLarge";
 import { PoliticianCardSmall } from "./PoliticianCardSmall";
 import { PoliticianWithNamnd } from "@/lib/politicians";
@@ -6,7 +7,10 @@ interface PoliticianSectionProps {
   title: string;
   politicians: PoliticianWithNamnd[];
   cardType: "large" | "small";
+  /** Shared title for all in section (e.g. for namnd groups) */
   positionTitle?: string;
+  /** Per-politician title (overrides positionTitle when set) */
+  getTitle?: (p: PoliticianWithNamnd) => string;
 }
 
 export function PoliticianSection({
@@ -14,10 +18,14 @@ export function PoliticianSection({
   politicians,
   cardType,
   positionTitle,
+  getTitle,
 }: PoliticianSectionProps) {
   if (politicians.length === 0) {
     return null;
   }
+
+  const resolveTitle = (p: PoliticianWithNamnd) =>
+    getTitle ? getTitle(p) : positionTitle;
 
   return (
     <section className="mb-10">
@@ -26,6 +34,7 @@ export function PoliticianSection({
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {politicians.map((politician) => {
+          const roleTitle = resolveTitle(politician);
           if (cardType === "large") {
             return (
               <PeopleCard
@@ -33,18 +42,23 @@ export function PoliticianSection({
                 slug={politician.slug?.current || ""}
                 image={politician.image}
                 name={politician.name}
-                title={positionTitle}
+                title={roleTitle}
                 size="large"
               />
             );
           }
           return (
-            <PoliticianCardSmall
+            <Link
               key={politician._id}
-              name={politician.name}
-              image={politician.image}
-              subtitle={positionTitle || ""}
-            />
+              href={`/politiker/${politician.slug?.current || ""}`}
+              className="block"
+            >
+              <PoliticianCardSmall
+                name={politician.name}
+                image={politician.image}
+                subtitle={roleTitle || ""}
+              />
+            </Link>
           );
         })}
       </div>

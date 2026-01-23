@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typegen": "dir=($pwd) cd ../studio-nackamoderaterna && sanity schema extract && sanity typegen generate && cp sanity.types.ts ../nextjs-nackamoderaterna/src/lib/sanity/sanity.types.ts"
+    "typegen": "dir=($pwd) cd ../studio-nackamoderaterna && sanity schema extract && sanity typegen generate && cp sanity.types.ts ../nextjs-nackamoderaterna/src/lib/sanity/sanity.types.ts",
+    "migrate:political-areas": "node scripts/migrate-political-areas.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

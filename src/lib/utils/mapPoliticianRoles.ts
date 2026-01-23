@@ -22,19 +22,20 @@ export function mapPoliticianRoles({ politician }: MapRolesArgs): Role[] {
     roles.push({
       title: "Styrelseuppdrag",
       description:
-        positionTitles[
-          politician.partyBoard.position as keyof typeof positionTitles
-        ],
+        politician.partyBoard.title ||
+        (politician.partyBoard.isLeader ? "Ordförande" : "Ledamot"),
     });
   }
 
   if (politician.kommunfullmaktige?.active) {
+    const desc =
+      politician.kommunfullmaktige.title ||
+      positionTitles[
+        politician.kommunfullmaktige.role as keyof typeof positionTitles
+      ];
     roles.push({
       title: "Kommunfullmäktige",
-      description:
-        positionTitles[
-          politician.kommunfullmaktige.role as keyof typeof positionTitles
-        ],
+      description: desc,
     });
   }
 
@@ -42,10 +43,23 @@ export function mapPoliticianRoles({ politician }: MapRolesArgs): Role[] {
     politician.namndPositions.forEach((pos: any) => {
       roles.push({
         title: pos.namnd.title,
-        description:
-          positionTitles[pos.position as keyof typeof positionTitles] ||
-          pos.position,
+        description: pos.title || "Ledamot",
       });
+    });
+  }
+
+  // Add political areas (hjärtefrågor)
+  if (politician.politicalAreas?.length > 0) {
+    politician.politicalAreas.forEach((areaRef: any) => {
+      if (areaRef.politicalArea?.name) {
+        roles.push({
+          title: "Hjärtefråga",
+          description: areaRef.politicalArea.name,
+          href: areaRef.politicalArea.slug?.current
+            ? `/politik/${areaRef.politicalArea.slug.current}`
+            : undefined,
+        });
+      }
     });
   }
 

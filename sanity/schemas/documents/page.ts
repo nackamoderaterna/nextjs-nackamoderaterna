@@ -22,6 +22,13 @@ export const page = defineType({
       validation: (Rule) => Rule.required(),
     },
     {
+      name: 'description',
+      title: 'Beskrivning',
+      type: 'text',
+      description: 'En kort beskrivning av sidan. Används som fallback för SEO om ingen SEO-beskrivning är angiven.',
+      rows: 3,
+    },
+    {
       name: 'blocks',
       title: 'Sidkomponenter',
       type: 'array',
@@ -39,6 +46,16 @@ export const page = defineType({
         {type: 'block.quote'},
         {type: 'block.imageGallery'},
       ],
+    },
+    {
+      name: 'pageModal',
+      title: 'Modal',
+      type: 'pageModal',
+    },
+    {
+      name: 'seo',
+      title: 'SEO',
+      type: 'seo',
     },
   ],
   preview: {

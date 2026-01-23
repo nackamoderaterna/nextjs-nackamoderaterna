@@ -14,7 +14,8 @@ export const politiciansDirectoryQuery = groq`*[_type == "politician"] | order(n
   partyBoard,
   kommunfullmaktige,
   "namndPositions": namndPositions[] {
-    position,
+    title,
+    isLeader,
     "namnd": namndRef-> {
       _id,
       title,
@@ -25,27 +26,39 @@ export const politiciansDirectoryQuery = groq`*[_type == "politician"] | order(n
     _id,
     title
   },
-  "politicalAreas": politicalAreas[]-> {
-    _id,
-    name,
-    slug,
+  "politicalAreas": politicalAreas[] {
+    showOnPoliticalAreaPage,
+    "politicalArea": politicalArea-> {
+      _id,
+      name,
+      slug
+    }
   },
   socialMedia
 }`;
 
-// Type for the query result with dereferenced namnd
+// Type for the query result with dereferenced namnd (overrides schema types for partyBoard, kommunfullmaktige, namndPositions, kommunalrad)
 export type PoliticianWithNamnd = Omit<
   Politician,
-  "namndPositions" | "livingArea" | "politicalAreas"
+  "namndPositions" | "livingArea" | "politicalAreas" | "partyBoard" | "kommunfullmaktige" | "kommunalrad"
 > & {
+  kommunalrad?: {
+    active?: boolean;
+    role?: "president" | "ordinary";
+  };
+  partyBoard?: {
+    active?: boolean;
+    title?: string;
+    isLeader?: boolean;
+  };
+  kommunfullmaktige?: {
+    active?: boolean;
+    title?: string;
+    role?: "ordinary" | "substitute";
+  };
   namndPositions: Array<{
-    position:
-      | "president"
-      | "first-president"
-      | "second-president"
-      | "groupleader"
-      | "member"
-      | "replacement";
+    title?: string;
+    isLeader?: boolean;
     namnd: {
       _id: string;
       title: string;
@@ -60,9 +73,14 @@ export type PoliticianWithNamnd = Omit<
     slug: string;
   };
   politicalAreas?: Array<{
-    _id: string;
-    name: string;
-    slug: string;
+    showOnPoliticalAreaPage?: boolean;
+    politicalArea: {
+      _id: string;
+      name: string;
+      slug: {
+        current: string;
+      };
+    };
   }>;
   referencedInNews?: Array<{
     _id: string;
@@ -92,74 +110,63 @@ export function groupPoliticiansByRole(politicians: PoliticianWithNamnd[]) {
       ordinary: [] as PoliticianWithNamnd[],
     },
     partyBoard: {
-      ordforande: [] as PoliticianWithNamnd[],
-      ledamot: [] as PoliticianWithNamnd[],
+      leaders: [] as PoliticianWithNamnd[],
+      members: [] as PoliticianWithNamnd[],
     },
     kommunfullmaktige: {
       ordinary: [] as PoliticianWithNamnd[],
       substitute: [] as PoliticianWithNamnd[],
     },
-    namnder: {} as Record<
-      string,
-      {
-        namndInfo: {
-          _id: string;
-          title: string;
-          slug: { current: string };
-        };
-        positions: Record<string, PoliticianWithNamnd[]>;
-      }
-    >,
+    namndLeaders: [] as Array<{
+      politician: PoliticianWithNamnd;
+      namndTitle: string;
+      positionTitle: string;
+    }>,
     other: [] as PoliticianWithNamnd[], // Politicians with no active assignments
   };
 
   politicians.forEach((politician) => {
     let hasAssignment = false;
     // Group by Kommunalråd
-    if (politician.kommunalrad?.active && politician.kommunalrad.role) {
-      const role = politician.kommunalrad
-        .role as keyof typeof groups.kommunalrad;
-      groups.kommunalrad["ordinary"].push(politician);
+    if (politician.kommunalrad && politician.kommunalrad.active === true) {
+      const role = (politician.kommunalrad.role || "ordinary") as keyof typeof groups.kommunalrad;
+      if (role === "president" || role === "ordinary") {
+        groups.kommunalrad[role].push(politician);
+        hasAssignment = true;
+      }
+    }
+
+    // Group by Party Board (isLeader -> leaders, else -> members)
+    if (politician.partyBoard && politician.partyBoard.active === true) {
+      if (politician.partyBoard.isLeader) {
+        groups.partyBoard.leaders.push(politician);
+      } else {
+        groups.partyBoard.members.push(politician);
+      }
       hasAssignment = true;
     }
 
-    // Group by Party Board
-    if (politician.partyBoard?.active && politician.partyBoard.position) {
-      const position = politician.partyBoard
-        .position as keyof typeof groups.partyBoard;
-      groups.partyBoard["ledamot"].push(politician);
-      hasAssignment = true;
+    // Group by Kommunfullmäktige (role: ordinary | substitute)
+    if (politician.kommunfullmaktige && politician.kommunfullmaktige.active === true) {
+      const role = politician.kommunfullmaktige.role || "ordinary"; // Default to ordinary if not set
+      if (role === "ordinary" || role === "substitute") {
+        groups.kommunfullmaktige[role].push(politician);
+        hasAssignment = true;
+      }
     }
 
-    // Group by Kommunfullmäktige
-    if (
-      politician.kommunfullmaktige?.active &&
-      politician.kommunfullmaktige.role
-    ) {
-      const role = politician.kommunfullmaktige
-        .role as keyof typeof groups.kommunfullmaktige;
-      groups.kommunfullmaktige["ordinary"].push(politician);
-      hasAssignment = true;
-    }
-
-    // Group by Nämnd
+    // Group by Nämnd (only leaders, flat list with namnd name as subtitle)
     if (politician.namndPositions && politician.namndPositions.length > 0) {
       politician.namndPositions.forEach((namndPos) => {
-        const namndId = namndPos.namnd._id;
-
-        if (!groups.namnder[namndId]) {
-          groups.namnder[namndId] = {
-            namndInfo: namndPos.namnd,
-            positions: {},
-          };
+        // Only include leaders (isLeader must be explicitly true)
+        if (namndPos.isLeader === true && namndPos.namnd?.title) {
+          groups.namndLeaders.push({
+            politician,
+            namndTitle: namndPos.namnd.title,
+            positionTitle: namndPos.title?.trim() || "Ordförande",
+          });
+          hasAssignment = true;
         }
-
-        if (!groups.namnder[namndId].positions[namndPos.position]) {
-          groups.namnder[namndId].positions[namndPos.position] = [];
-        }
-
-        groups.namnder[namndId].positions[namndPos.position].push(politician);
-        hasAssignment = true;
       });
     }
 
@@ -171,32 +178,16 @@ export function groupPoliticiansByRole(politicians: PoliticianWithNamnd[]) {
   return groups;
 }
 
-// Position title translations
+// Fallbacks when free-form title is empty (kommunfullmaktige role only)
 export const positionTitles = {
-  // Kommunalråd
-  president: "Ordförande",
-  ordinary: "Kommunalråd",
-
-  // Party Board
-  ordforande: "Ordförande",
-  ledamot: "Ledamot",
-
-  // Kommunfullmäktige
   substitute: "Ersättare",
-
-  // Nämnd positions
-  "first-president": "1:e vice ordförande",
-  "second-president": "2:e vice ordförande",
-  groupleader: "Gruppledare",
-  member: "Ledamot",
-  replacement: "Ersättare",
+  ordinary: "Ledamot",
 } as const;
 
 // Section title translations
 export const sectionTitles = {
   kommunalrad: "Kommunalråd",
-  partyBoard: "Styrelsen",
+  partyBoard: "Partistyrelse",
   kommunfullmaktige: "Kommunfullmäktige",
-  namnder: "Nämnder",
   other: "Övriga politiker",
 } as const;

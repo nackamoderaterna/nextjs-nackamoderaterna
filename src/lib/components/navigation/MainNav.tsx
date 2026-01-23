@@ -21,7 +21,7 @@ export function MainNav({ items }: { items: MenuItemWithReference[] }) {
   return (
     <NavigationMenu
       viewport={isMobile}
-      className={isMobile ? "hidden" : "block"}
+      className="hidden lg:block"
     >
       <NavigationMenuList>
         {items.map((item, index) => (
