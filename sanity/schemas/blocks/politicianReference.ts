@@ -9,6 +9,7 @@ export const politicianBlock = defineType({
     defineField({
       name: 'mode',
       title: 'Läge',
+      description: 'Välj om du vill välja politiker manuellt eller automatiskt visa alla kommunalråd.',
       type: 'string',
       initialValue: 'manual',
       options: {
@@ -23,6 +24,7 @@ export const politicianBlock = defineType({
     defineField({
       name: 'items',
       title: 'Utvalda politiker',
+      description: 'Välj vilka politiker som ska visas. Endast synligt när läget är "Utvalda politiker".',
       type: 'array',
       of: [{type: 'reference', to: [{type: 'politician'}]}],
       hidden: ({parent}) => parent?.mode !== 'manual',

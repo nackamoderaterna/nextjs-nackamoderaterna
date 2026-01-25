@@ -2,18 +2,18 @@ import { defineField, defineType } from "sanity";
 
 export const videoBlock = defineType({
   name: "block.video",
-  title: "Video block",
+  title: "Video",
   type: "object",
   fields: [
     defineField({
       name: "video",
-      title: "Video URL",
+      title: "Video-URL",
       type: "url",
-      description: "YouTube, Vimeo, or direct video URL",
+      description: "URL till video på YouTube, Vimeo eller direkt videolänk.",
     }),
     defineField({
       name: "caption",
-      title: "Caption",
+      title: "Bildtext",
       type: "text",
       rows: 2,
     }),
@@ -24,7 +24,7 @@ export const videoBlock = defineType({
     },
     prepare({ title }) {
       return {
-        title: title || "Media Block",
+        title: title || "Video",
         subtitle: "Video",
       };
     },

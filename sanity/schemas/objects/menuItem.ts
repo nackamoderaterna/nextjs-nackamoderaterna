@@ -2,25 +2,27 @@ import {defineType, defineField} from 'sanity'
 
 export default defineType({
   name: 'menuItem',
-  title: 'Menu Item',
+  title: 'Menypunkt',
   type: 'object',
   fields: [
     defineField({
       name: 'title',
-      title: 'Title',
+      title: 'Titel',
+      description: 'Texten som visas i menyn.',
       type: 'string',
       validation: (Rule) => Rule.required(),
     }),
 
     defineField({
       name: 'linkType',
-      title: 'Link Type',
+      title: 'Länktyp',
+      description: 'Välj typ av länk: intern (till en sida i systemet), statisk rutt (fördefinierad sida), eller extern (extern webbadress).',
       type: 'string',
       options: {
         list: [
-          {title: 'Internal', value: 'internal'},
-          {title: 'Static Route', value: 'static'},
-          {title: 'External', value: 'external'},
+          {title: 'Intern', value: 'internal'},
+          {title: 'Statisk rutt', value: 'static'},
+          {title: 'Extern', value: 'external'},
         ],
         layout: 'radio',
       },
@@ -30,7 +32,8 @@ export default defineType({
     // Internal link
     defineField({
       name: 'internalLink',
-      title: 'Internal Link',
+      title: 'Intern länk',
+      description: 'Välj en sida, nyhet, evenemang, politiker eller politisk fråga från systemet.',
       type: 'reference',
       to: [
         {type: 'page'},
@@ -46,7 +49,8 @@ export default defineType({
     // Static route
     defineField({
       name: 'staticRoute',
-      title: 'Static Route',
+      title: 'Statisk rutt',
+      description: 'Välj en fördefinierad sida i systemet.',
       type: 'string',
       options: {
         list: [
@@ -64,7 +68,8 @@ export default defineType({
     // External URL
     defineField({
       name: 'url',
-      title: 'URL (external)',
+      title: 'URL (extern)',
+      description: 'Extern webbadress (måste börja med http:// eller https://).',
       type: 'url',
       hidden: ({parent}) => parent?.linkType !== 'external',
     }),
@@ -72,7 +77,8 @@ export default defineType({
     // Submenu (optional)
     defineField({
       name: 'children',
-      title: 'Children',
+      title: 'Undermenyer',
+      description: 'Valfritt: skapa undermenyer genom att lägga till fler menypunkter här.',
       type: 'array',
       of: [{type: 'menuItem'}],
       options: {

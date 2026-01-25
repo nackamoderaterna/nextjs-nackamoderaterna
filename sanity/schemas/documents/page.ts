@@ -14,6 +14,7 @@ export const page = defineType({
     {
       name: 'slug',
       title: 'Slug',
+      description: 'URL-vänlig identifierare för sidan. Genereras automatiskt från titeln. Används för att skapa sidans URL.',
       type: 'slug',
       options: {
         source: 'title',
@@ -31,6 +32,7 @@ export const page = defineType({
     {
       name: 'blocks',
       title: 'Sidkomponenter',
+      description: 'Bygg upp sidan med olika komponenter (block). Dra och släpp för att ändra ordning.',
       type: 'array',
       of: [
         {type: 'block.text'},
@@ -50,11 +52,13 @@ export const page = defineType({
     {
       name: 'pageModal',
       title: 'Modal',
+      description: 'Konfigurera en modal som visas automatiskt när sidan laddas. Användbart för viktiga meddelanden eller kampanjer.',
       type: 'pageModal',
     },
     {
       name: 'seo',
       title: 'SEO',
+      description: 'Sökmotoroptimering. Ange titel, beskrivning, nyckelord och bild för bättre synlighet i sökmotorer.',
       type: 'seo',
     },
   ],

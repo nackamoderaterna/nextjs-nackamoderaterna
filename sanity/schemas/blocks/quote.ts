@@ -2,29 +2,29 @@ import { defineField, defineType } from "sanity";
 
 export const quoteBlock = defineType({
   name: "block.quote",
-  title: "Quote Block",
+  title: "Citat",
   type: "object",
   fields: [
     defineField({
       name: "quote",
-      title: "Quote",
+      title: "Citat",
       type: "text",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "author",
-      title: "Author",
+      title: "Författare",
       type: "string",
     }),
     defineField({
       name: "authorTitle",
-      title: "Author Title",
+      title: "Författarens titel",
       type: "string",
-      description: "e.g., 'Kommunalråd' or 'Ordförande'",
+      description: "T.ex. 'Kommunalråd' eller 'Ordförande'",
     }),
     defineField({
       name: "authorImage",
-      title: "Author Image",
+      title: "Författarens bild",
       type: "image",
       options: {
         hotspot: true,
@@ -32,13 +32,14 @@ export const quoteBlock = defineType({
     }),
     defineField({
       name: "alignment",
-      title: "Alignment",
+      title: "Justering",
+      description: "Hur citatet ska justeras horisontellt.",
       type: "string",
       options: {
         list: [
-          { title: "Left", value: "left" },
-          { title: "Center", value: "center" },
-          { title: "Right", value: "right" },
+          { title: "Vänster", value: "left" },
+          { title: "Centrerat", value: "center" },
+          { title: "Höger", value: "right" },
         ],
       },
       initialValue: "center",
@@ -50,9 +51,9 @@ export const quoteBlock = defineType({
       author: "author",
     },
     prepare({ quote, author }) {
-      const preview = quote ? quote.substring(0, 50) + "..." : "No quote";
+      const preview = quote ? quote.substring(0, 50) + "..." : "Inget citat";
       return {
-        title: "Quote Block",
+        title: "Citat",
         subtitle: author ? `${preview} - ${author}` : preview,
       };
     },

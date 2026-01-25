@@ -14,6 +14,7 @@ export const geographicalArea = defineType({
     {
       name: "slug",
       title: "Slug",
+      description: "URL-vänlig identifierare för området. Genereras automatiskt från namnet.",
       type: "slug",
       options: {
         source: "name",
@@ -24,6 +25,7 @@ export const geographicalArea = defineType({
     {
       name: "image",
       title: "Huvudbild",
+      description: "Huvudbild som visas på områdets sida och i listningar.",
       type: "image",
       options: {
         hotspot: false,
@@ -32,6 +34,7 @@ export const geographicalArea = defineType({
     {
       name: "description",
       title: "Beskrivning",
+      description: "Beskrivning av det geografiska området. Visas på områdets sida.",
       type: "array",
       of: [{ type: "block" }],
     },

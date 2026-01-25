@@ -2,26 +2,27 @@ import {defineType, defineField} from 'sanity'
 
 export const newsBlock = defineType({
   name: 'block.news',
-  title: 'News Block',
+  title: 'Nyheter',
   type: 'object',
   fields: [
     defineField({
       name: 'title',
       type: 'string',
-      title: 'Title',
+      title: 'Rubrik',
     }),
 
     {
       name: 'mode',
-      title: 'Mode',
+      title: 'Läge',
+      description: 'Välj hur nyheter ska hämtas: senaste automatiskt, manuellt valda, eller filtrerade på område.',
       type: 'string',
       initialValue: 'manual',
       options: {
         list: [
           {value: 'latest', title: 'Senaste'},
-          {value: 'manual', title: 'Manual'},
-          {value: 'area', title: 'Geografiskt omrade'},
-          {value: 'politics', title: 'Politiskt sakomrade'},
+          {value: 'manual', title: 'Manuellt'},
+          {value: 'area', title: 'Geografiskt område'},
+          {value: 'politics', title: 'Politiskt sakområde'},
         ],
       },
     },
@@ -30,9 +31,9 @@ export const newsBlock = defineType({
     defineField({
       name: 'politicalArea',
       type: 'reference',
-      title: 'Political Area',
+      title: 'Politiskt område',
       to: [{type: 'politicalArea'}],
-      description: 'Choose a political area to fetch news automatically.',
+      description: 'Välj ett politiskt område för att automatiskt hämta nyheter relaterade till det området.',
       options: {disableNew: true},
       hidden: ({parent}) => parent?.mode != 'politics',
     }),
@@ -41,9 +42,9 @@ export const newsBlock = defineType({
     defineField({
       name: 'geographicArea',
       type: 'reference',
-      title: 'Geographic Area',
+      title: 'Geografiskt område',
       to: [{type: 'geographicalArea'}],
-      description: 'Choose a geographic area to fetch news automatically.',
+      description: 'Välj ett geografiskt område för att automatiskt hämta nyheter relaterade till det området.',
       options: {disableNew: true},
       hidden: ({parent}) => parent?.mode != 'area',
     }),
@@ -51,16 +52,16 @@ export const newsBlock = defineType({
     // Manual overrides
     defineField({
       name: 'items',
-      title: 'Manual News Items',
+      title: 'Manuellt valda nyheter',
+      description: 'Valfritt. Om ifylld kommer dessa nyheter att visas istället för automatiska senaste nyheter.',
       type: 'array',
       of: [{type: 'reference', to: [{type: 'news'}]}],
-      description:
-        'Optional. If filled, these items will be shown instead of automatic latest news.',
       hidden: ({parent}) => parent?.mode != 'manual',
     }),
     {
       name: 'limit',
-      title: 'Limit',
+      title: 'Antal nyheter',
+      description: 'Maximalt antal nyheter som ska visas.',
       type: 'number',
       initialValue: 4,
     },
@@ -70,7 +71,7 @@ export const newsBlock = defineType({
   validation: (Rule) =>
     Rule.custom((block) => {
       if (block?.politicalArea && block.geographicArea) {
-        return 'Select *either* a political area OR a geographic area, not both.'
+        return 'Välj antingen ett politiskt område ELLER ett geografiskt område, inte båda.'
       }
       return true
     }),

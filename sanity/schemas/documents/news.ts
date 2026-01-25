@@ -14,6 +14,7 @@ export const news = defineType({
     {
       name: "slug",
       title: "Slug",
+      description: "URL-vänlig identifierare för nyheten. Genereras automatiskt från rubriken.",
       type: "slug",
       options: {
         source: "title",
@@ -24,6 +25,7 @@ export const news = defineType({
     {
       name: "variant",
       title: "Typ av nyhet",
+      description: "Kategoriserar nyheten för att visa rätt layout och stil.",
       type: "string",
       options: {
         list: [
@@ -38,12 +40,14 @@ export const news = defineType({
     {
       name: "excerpt",
       title: "Ingress",
+      description: "Kort sammanfattning som visas i listningar och förhandsvisningar.",
       type: "text",
       rows: 3,
     },
     {
       name: "mainImage",
       title: "Huvudbild",
+      description: "Huvudbild som visas i listningar och på nyhetens sida.",
       type: "image",
       options: {
         hotspot: true,
@@ -52,6 +56,7 @@ export const news = defineType({
         {
           name: "alt",
           title: "Alt-text",
+          description: "Beskrivning av bilden för tillgänglighet och SEO.",
           type: "string",
         },
       ],
@@ -59,17 +64,20 @@ export const news = defineType({
     {
       name: "body",
       title: "Innehåll",
+      description: "Huvudinnehållet i nyheten. Kan innehålla text, bilder och annat innehåll.",
       type: "array",
       of: [{ type: "block" }, { type: "image" }],
     },
     {
       name: "document",
       title: "Dokument",
+      description: "Valfritt: bifoga ett dokument (PDF, Word, etc.) till nyheten.",
       type: "file",
     },
     {
       name: "referencedPolitician",
       title: "Omnämnda politiker",
+      description: "Politiker som nämns eller är relaterade till nyheten.",
       type: "array",
       of: [
         {
@@ -83,26 +91,29 @@ export const news = defineType({
     {
       name: "politicalAreas",
       title: "Politiska områden",
+      description: "Politiska områden som nyheten är relaterad till.",
       type: "array",
       of: [{ type: "reference", to: [{ type: "politicalArea" }] }],
     },
     {
       name: "geographicalAreas",
       title: "Geografiska områden",
+      description: "Geografiska områden som nyheten är relaterad till.",
       type: "array",
       of: [{ type: "reference", to: [{ type: "geographicalArea" }] }],
     },
     {
       name: "related",
       title: "Nyhetsserie",
+      description: "Andra nyheter som är relaterade till denna. Används för att visa relaterade artiklar.",
       type: "array",
       of: [{ type: "reference", to: [{ type: "news" }] }],
     },
     {
       name: "dateOverride",
-      title: "Override publiceringsdatum",
+      title: "Överskriv publiceringsdatum",
       description:
-        "Ange datumet då artikeln publicerades för att överskrida publiceringsdatumet. Bra om artikeln publicerats i dåtiden.",
+        "Ange datumet då artikeln publicerades för att överskrida systemets publiceringsdatum. Användbart om artikeln publicerades tidigare eller ska publiceras i framtiden.",
       type: "date",
     },
   ],

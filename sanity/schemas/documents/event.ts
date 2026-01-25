@@ -14,6 +14,7 @@ export const eventDocument = defineType({
     {
       name: "slug",
       title: "Slug",
+      description: "URL-vänlig identifierare för evenemanget. Genereras automatiskt från titeln.",
       type: "slug",
       options: {
         source: "title",
@@ -24,23 +25,27 @@ export const eventDocument = defineType({
     {
       name: "startDate",
       title: "Startdatum",
+      description: "Datum och tid när evenemanget börjar.",
       type: "datetime",
       validation: (Rule) => Rule.required(),
     },
     {
       name: "endDate",
       title: "Slutdatum",
+      description: "Valfritt: datum och tid när evenemanget slutar. Om tomt är evenemanget en punkt i tiden.",
       type: "datetime",
     },
     {
       name: "description",
       title: "Beskrivning",
+      description: "Beskrivning av evenemanget. Visas på evenemangets sida.",
       type: "array",
       of: [{ type: "block" }],
     },
     {
       name: "image",
       title: "Bild",
+      description: "Bild som visas i listningar och på evenemangets sida.",
       type: "image",
       options: {
         hotspot: true,
@@ -49,16 +54,18 @@ export const eventDocument = defineType({
     {
       name: "location",
       title: "Plats",
+      description: "Var evenemanget äger rum.",
       type: "object",
       fields: [
-        { name: "venue", title: "Lokal", type: "string" },
-        { name: "address", title: "Adress", type: "string" },
-        { name: "city", title: "Stad", type: "string" },
+        { name: "venue", title: "Lokal", type: "string", description: "Namn på lokalen eller platsen." },
+        { name: "address", title: "Adress", type: "string", description: "Gatuadress." },
+        { name: "city", title: "Stad", type: "string", description: "Stad där evenemanget äger rum." },
       ],
     },
     {
       name: "eventType",
       title: "Typ av evenemang",
+      description: "Kategoriserar evenemanget för filtrering och visning.",
       type: "string",
       options: {
         list: [
@@ -72,23 +79,27 @@ export const eventDocument = defineType({
     {
       name: "registrationUrl",
       title: "Anmälningslänk",
+      description: "URL till anmälningssidan om anmälan krävs.",
       type: "url",
     },
     {
       name: "geographicalArea",
       title: "Geografiskt område",
+      description: "Valfritt: geografiskt område där evenemanget äger rum.",
       type: "reference",
       to: [{ type: "geographicalArea" }],
     },
     {
       name: "isPublic",
       title: "Öppet för allmänheten",
+      description: "Om markerat är evenemanget öppet för allmänheten. Annars är det endast för medlemmar.",
       type: "boolean",
       initialValue: false,
     },
     {
       name: "politicalAreas",
       title: "Politiska områden",
+      description: "Politiska områden som evenemanget är relaterat till.",
       type: "array",
       of: [{ type: "reference", to: [{ type: "politicalArea" }] }],
     },

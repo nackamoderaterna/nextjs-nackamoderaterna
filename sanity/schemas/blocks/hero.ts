@@ -2,24 +2,24 @@ import { defineField, defineType } from "sanity";
 
 export const heroBlock = defineType({
   name: "block.hero",
-  title: "Hero Block",
+  title: "Hero",
   type: "object",
-  groups: [{ name: "blockSettings", title: "Block Settings" }],
+  groups: [{ name: "blockSettings", title: "Blockinställningar" }],
   fields: [
     defineField({
       name: "heading",
-      title: "Heading",
+      title: "Rubrik",
       type: "string",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "subheading",
-      title: "Subheading",
+      title: "Underrubrik",
       type: "string",
     }),
     defineField({
       name: "backgroundImage",
-      title: "Background Image",
+      title: "Bakgrundsbild",
       type: "image",
       options: {
         hotspot: true,
@@ -28,43 +28,47 @@ export const heroBlock = defineType({
     }),
     defineField({
       name: "overlayOpacity",
-      title: "Overlay Opacity (0-100)",
+      title: "Överläggsopacitet (0-100)",
+      description: "Hur genomskinlig det mörka överlägget ska vara. 0 = helt genomskinligt, 100 = helt ogenomskinligt.",
       type: "number",
       initialValue: 40,
     }),
     defineField({
       name: "ctaButton",
-      title: "CTA Button",
+      title: "Knapp",
+      description: "Call-to-action knapp som visas i hero-området.",
       type: "object",
       fields: [
         defineField({
           name: "label",
-          title: "Label",
+          title: "Knapptext",
           type: "string",
         }),
         defineField({
           name: "link",
-          title: "Link",
+          title: "Länk",
           type: "string",
         }),
       ],
     }),
     defineField({
       name: "reflow",
-      title: "Reflow?",
+      title: "Omslag vid små skärmar",
+      description: "Om aktiverat kommer innehållet att omslås på små skärmar istället för att skalas ner.",
       type: "boolean",
       initialValue: true,
     }),
     defineField({
       name: "height",
-      title: "Height",
+      title: "Höjd",
+      description: "Höjden på hero-området. Fullskärm tar upp hela skärmhöjden.",
       type: "string",
       options: {
         list: [
-          { title: "Small (400px)", value: "small" },
+          { title: "Liten (400px)", value: "small" },
           { title: "Medium (600px)", value: "medium" },
-          { title: "Large (800px)", value: "large" },
-          { title: "Full Screen", value: "fullscreen" },
+          { title: "Stor (800px)", value: "large" },
+          { title: "Fullskärm", value: "fullscreen" },
         ],
       },
       initialValue: "medium",
@@ -76,7 +80,7 @@ export const heroBlock = defineType({
     },
     prepare(selection) {
       return {
-        title: "Hero Block",
+        title: "Hero",
         subtitle: selection.heading,
       };
     },

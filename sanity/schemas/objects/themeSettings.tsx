@@ -2,20 +2,21 @@ import { defineType } from "sanity";
 
 export const themeSettings = defineType({
   name: "themeSettings",
-  title: "Theme Settings",
+  title: "Temainställningar",
   type: "object",
   options: { collapsible: true },
   fields: [
     {
       name: "theme",
-      title: "Theme",
+      title: "Tema",
+      description: "Färgtema för blocket. Brand använder partifärger.",
       type: "string",
       initialValue: "default",
       options: {
         list: [
-          { title: "Light", value: "light" },
-          { title: "Dark", value: "dark" },
-          { title: "Brand", value: "brand" },
+          { title: "Ljust", value: "light" },
+          { title: "Mörkt", value: "dark" },
+          { title: "Partifärger", value: "brand" },
         ],
         layout: "radio",
       },

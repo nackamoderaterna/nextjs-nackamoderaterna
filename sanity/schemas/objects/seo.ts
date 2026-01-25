@@ -7,31 +7,31 @@ export default defineType({
   fields: [
     {
       name: "title",
-      title: "SEO Title",
+      title: "SEO-titel",
       type: "string",
       description:
-        "Meta title for search engines. Recommended: 50-60 characters.",
+        "Meta-titel för sökmotorer. Rekommenderat: 50-60 tecken. Om tomt används sidans titel.",
     },
     {
       name: "description",
-      title: "SEO Description",
+      title: "SEO-beskrivning",
       type: "text",
       description:
-        "Meta description for search engines. Recommended: 150-160 characters.",
+        "Meta-beskrivning för sökmotorer. Rekommenderat: 150-160 tecken. Om tomt används sidans beskrivning.",
     },
     {
       name: "keywords",
-      title: "SEO Keywords",
+      title: "SEO-nyckelord",
       type: "array",
       of: [{ type: "string" }],
-      description: "Optional: list of keywords separated by commas.",
+      description: "Valfritt: lista med nyckelord separerade med kommatecken. Används för sökmotoroptimering.",
     },
     {
       name: "image",
-      title: "SEO Image",
+      title: "SEO-bild",
       type: "image",
       description:
-        "Image used for social sharing (Open Graph / Twitter cards).",
+        "Bild som används för social delning (Open Graph / Twitter-kort). Visas när sidan delas på sociala medier.",
     },
   ],
   preview: {

@@ -23,6 +23,7 @@ export const politicalIssue = defineType({
     {
       name: "politicalAreas",
       title: "Politiska områden",
+      description: "Politiska områden som denna fråga tillhör. Minst ett område måste väljas.",
       type: "array",
       of: [{ type: "reference", to: [{ type: "politicalArea" }] }],
       validation: (Rule: any) => Rule.required().min(1),
@@ -30,12 +31,14 @@ export const politicalIssue = defineType({
     {
       name: "geographicalAreas",
       title: "Geografiska områden",
+      description: "Valfritt: geografiska områden som denna fråga är relaterad till.",
       type: "array",
       of: [{ type: "reference", to: [{ type: "geographicalArea" }] }],
     },
     {
       name: "responsiblePoliticians",
       title: "Ansvariga politiker",
+      description: "Valfritt: politiker som är ansvariga för denna fråga.",
       type: "array",
       of: [{ type: "reference", to: [{ type: "politician" }] }],
     },

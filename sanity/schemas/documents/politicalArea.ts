@@ -15,6 +15,7 @@ export const politicalArea = defineType({
     {
       name: "slug",
       title: "Slug",
+      description: "URL-vänlig identifierare för området. Genereras automatiskt från namnet.",
       type: "slug",
       options: {
         source: "name",
@@ -25,12 +26,14 @@ export const politicalArea = defineType({
     {
       name: "description",
       title: "Beskrivning",
+      description: "Beskrivning av det politiska området. Visas på områdets sida.",
       type: "array",
       of: [{ type: "block" }],
     },
     {
       name: "image",
       title: "Huvudbild",
+      description: "Huvudbild som visas på områdets sida och i listningar.",
       type: "image",
       options: {
         hotspot: true,

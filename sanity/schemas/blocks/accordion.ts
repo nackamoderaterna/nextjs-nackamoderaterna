@@ -2,22 +2,23 @@ import { defineField, defineType } from "sanity";
 
 export const accordionBlock = defineType({
   name: "block.accordion",
-  title: "Accordion/FAQ Block",
+  title: "Accordion/FAQ",
   type: "object",
   fields: [
     defineField({
       name: "heading",
-      title: "Heading",
+      title: "Rubrik",
       type: "string",
     }),
     defineField({
       name: "description",
-      title: "Description",
+      title: "Beskrivning",
       type: "text",
     }),
     defineField({
       name: "items",
-      title: "Items",
+      title: "Objekt",
+      description: "Lista med objekt som kan expanderas/kollapsas. Perfekt för FAQ-sektioner.",
       type: "array",
       of: [
         {
@@ -25,13 +26,13 @@ export const accordionBlock = defineType({
           fields: [
             defineField({
               name: "title",
-              title: "Title",
+              title: "Titel",
               type: "string",
               validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: "content",
-              title: "Content",
+              title: "Innehåll",
               type: "array",
               of: [{ type: "block" }],
               validation: (Rule) => Rule.required(),
@@ -53,9 +54,9 @@ export const accordionBlock = defineType({
     }),
     defineField({
       name: "allowMultiple",
-      title: "Allow Multiple Open",
+      title: "Tillåt flera öppna",
+      description: "Om aktiverat kan flera objekt vara öppna samtidigt. Annars stängs det tidigare öppnade objektet när ett nytt öppnas.",
       type: "boolean",
-      description: "Allow multiple items to be open at once",
       initialValue: false,
     }),
   ],
@@ -66,8 +67,8 @@ export const accordionBlock = defineType({
     },
     prepare({ heading, items }) {
       return {
-        title: "Accordion Block",
-        subtitle: heading || `${items?.length || 0} items`,
+        title: "Accordion",
+        subtitle: heading || `${items?.length || 0} objekt`,
       };
     },
   },

@@ -2,34 +2,35 @@ import { defineField, defineType } from "sanity";
 
 export const ctaBlock = defineType({
   name: "block.cta",
-  title: "CTA Block",
+  title: "Call-to-action",
   type: "object",
   fields: [
     defineField({
       name: "heading",
-      title: "Heading",
+      title: "Rubrik",
       type: "string",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "description",
-      title: "Description",
+      title: "Beskrivning",
       type: "text",
     }),
     defineField({
       name: "primaryButton",
-      title: "Primary Button",
+      title: "Primär knapp",
+      description: "Huvudknappen som ska fånga användarens uppmärksamhet.",
       type: "object",
       fields: [
         defineField({
           name: "label",
-          title: "Label",
+          title: "Knapptext",
           type: "string",
           validation: (Rule) => Rule.required(),
         }),
         defineField({
           name: "link",
-          title: "Link",
+          title: "Länk",
           type: "string",
           validation: (Rule) => Rule.required(),
         }),
@@ -37,30 +38,32 @@ export const ctaBlock = defineType({
     }),
     defineField({
       name: "secondaryButton",
-      title: "Secondary Button",
+      title: "Sekundär knapp",
+      description: "Valfri sekundär knapp för alternativa åtgärder.",
       type: "object",
       fields: [
         defineField({
           name: "label",
-          title: "Label",
+          title: "Knapptext",
           type: "string",
         }),
         defineField({
           name: "link",
-          title: "Link",
+          title: "Länk",
           type: "string",
         }),
       ],
     }),
     defineField({
       name: "alignment",
-      title: "Alignment",
+      title: "Justering",
+      description: "Hur innehållet ska justeras horisontellt.",
       type: "string",
       options: {
         list: [
-          { title: "Left", value: "left" },
-          { title: "Center", value: "center" },
-          { title: "Right", value: "right" },
+          { title: "Vänster", value: "left" },
+          { title: "Centrerat", value: "center" },
+          { title: "Höger", value: "right" },
         ],
       },
       initialValue: "center",
@@ -72,7 +75,7 @@ export const ctaBlock = defineType({
     },
     prepare(selection) {
       return {
-        title: "CTA Block",
+        title: "Call-to-action",
         subtitle: selection.heading,
       };
     },

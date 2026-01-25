@@ -3,45 +3,47 @@ import {defineType} from 'sanity'
 export const blockSettings = defineType({
   name: 'blockSettings',
   type: 'object',
+  title: 'Blockinställningar',
   options: {collapsible: true},
   fields: [
     {
       name: 'theme',
-      title: 'Theme',
+      title: 'Tema',
+      description: 'Färgtema för blocket. Brand använder partifärger.',
       type: 'string',
       initialValue: 'default',
       options: {
         list: [
-          {title: 'Light', value: 'light'},
-          {title: 'Dark', value: 'dark'},
-          {title: 'Brand', value: 'brand'},
+          {title: 'Ljust', value: 'light'},
+          {title: 'Mörkt', value: 'dark'},
+          {title: 'Partifärger', value: 'brand'},
         ],
         layout: 'radio',
       },
     },
     {
       name: 'containerWidth',
-      title: 'Container width',
+      title: 'Containerbredd',
+      description: 'Kontrollerar om containern kan expandera till skärmens kant eller begränsas till en maxbredd.',
       type: 'string',
-      description: 'Controlls if the container can expand to the edge of the screen or not.',
       options: {
         list: [
-          {title: 'Full Width', value: 'full'},
-          {title: 'Contained', value: 'contained'},
+          {title: 'Full bredd', value: 'full'},
+          {title: 'Begränsad', value: 'contained'},
         ],
       },
       initialValue: 'contained',
     },
     {
       name: 'blockPlacement',
-      title: 'Block Alignment',
-      description: 'Place the block inside the container',
+      title: 'Blockjustering',
+      description: 'Placerar blocket inom containern. Endast synligt när innehållsbredden inte är full.',
       type: 'string',
       options: {
         list: [
-          {title: 'Left', value: 'left'},
-          {title: 'Center', value: 'center'},
-          {title: 'Right', value: 'right'},
+          {title: 'Vänster', value: 'left'},
+          {title: 'Centrerat', value: 'center'},
+          {title: 'Höger', value: 'right'},
         ],
         layout: 'radio',
       },
@@ -50,27 +52,27 @@ export const blockSettings = defineType({
     },
     {
       name: 'contentWidth',
-      title: 'Content Width',
-      description: 'Controlls the width of the content of the block.',
+      title: 'Innehållsbredd',
+      description: 'Kontrollerar bredden på innehållet i blocket. Full bredd använder hela containern, smal begränsar till en smal kolumn.',
       type: 'string',
       options: {
         list: [
-          {title: 'Full Width', value: 'full'},
-          {title: 'wide', value: 'wide'},
-          {title: 'Narrow', value: 'narrow'},
+          {title: 'Full bredd', value: 'full'},
+          {title: 'Bred', value: 'wide'},
+          {title: 'Smal', value: 'narrow'},
         ],
       },
     },
     {
       name: 'contentAlignment',
-      title: 'Alignment Mode',
-      description: 'Align the content inside the block',
+      title: 'Justeringsläge',
+      description: 'Justerar innehållet horisontellt inom blocket.',
       type: 'string',
       options: {
         list: [
-          {title: 'Left', value: 'left'},
-          {title: 'Center', value: 'center'},
-          {title: 'Right', value: 'right'},
+          {title: 'Vänster', value: 'left'},
+          {title: 'Centrerat', value: 'center'},
+          {title: 'Höger', value: 'right'},
         ],
         layout: 'radio',
       },

@@ -2,33 +2,33 @@ import { defineType } from "sanity";
 
 export const contentSettings = defineType({
   name: "contentSettings",
-  title: "Content Settings",
+  title: "Innehållsinställningar",
   type: "object",
   options: { collapsible: true },
   fields: [
     {
       name: "contentWidth",
-      title: "Content Width",
-      description: "Controls the width of the content of the block.",
+      title: "Innehållsbredd",
+      description: "Kontrollerar bredden på innehållet i blocket. Full bredd använder hela containern, smal begränsar till en smal kolumn.",
       type: "string",
       options: {
         list: [
-          { title: "Full Width", value: "full" },
-          { title: "Wide", value: "wide" },
-          { title: "Narrow", value: "narrow" },
+          { title: "Full bredd", value: "full" },
+          { title: "Bred", value: "wide" },
+          { title: "Smal", value: "narrow" },
         ],
       },
     },
     {
       name: "contentAlignment",
-      title: "Alignment Mode",
-      description: "Align the content inside the block",
+      title: "Justeringsläge",
+      description: "Justerar innehållet horisontellt inom blocket.",
       type: "string",
       options: {
         list: [
-          { title: "Left", value: "left" },
-          { title: "Center", value: "center" },
-          { title: "Right", value: "right" },
+          { title: "Vänster", value: "left" },
+          { title: "Centrerat", value: "center" },
+          { title: "Höger", value: "right" },
         ],
         layout: "radio",
       },

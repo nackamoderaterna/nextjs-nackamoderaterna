@@ -19,6 +19,7 @@ export const politician = defineType({
     {
       name: "slug",
       title: "Slug",
+      description: "URL-vänlig identifierare för politikern. Genereras automatiskt från namnet. Används för att skapa politikerns sida.",
       type: "slug",
       options: {
         source: "name",
@@ -30,6 +31,7 @@ export const politician = defineType({
     {
       name: "image",
       title: "Profilbild",
+      description: "Profilbild som visas på politikerns sida och i listningar.",
       type: "image",
       group: "base",
       options: {
@@ -39,18 +41,21 @@ export const politician = defineType({
     {
       name: "email",
       title: "E-post",
+      description: "Kontakt-e-postadress för politikern.",
       type: "string",
       group: "base",
     },
     {
       name: "phone",
       title: "Telefon",
+      description: "Telefonnummer för kontakt med politikern.",
       type: "string",
       group: "base",
     },
     {
       name: "bio",
       title: "Biografi",
+      description: "Biografisk text om politikern. Visas på politikerns sida.",
       type: "array",
       group: "base",
       of: [{ type: "block" }],
@@ -196,6 +201,7 @@ export const politician = defineType({
     {
       name: "livingArea",
       title: "Bor i",
+      description: "Geografiskt område där politikern bor.",
       type: "reference",
       to: { type: "geographicalArea" },
     },

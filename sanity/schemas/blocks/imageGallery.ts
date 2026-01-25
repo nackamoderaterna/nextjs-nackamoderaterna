@@ -2,17 +2,18 @@ import { defineField, defineType } from "sanity";
 
 export const imageGalleryBlock = defineType({
   name: "block.imageGallery",
-  title: "Image Gallery Block",
+  title: "Bildgalleri",
   type: "object",
   fields: [
     defineField({
       name: "heading",
-      title: "Heading",
+      title: "Rubrik",
       type: "string",
     }),
     defineField({
       name: "images",
-      title: "Images",
+      title: "Bilder",
+      description: "Samling av bilder som visas i ett galleri.",
       type: "array",
       of: [
         {
@@ -23,12 +24,13 @@ export const imageGalleryBlock = defineType({
           fields: [
             defineField({
               name: "alt",
-              title: "Alt Text",
+              title: "Alt-text",
               type: "string",
+              description: "Beskrivning av bilden för tillgänglighet.",
             }),
             defineField({
               name: "caption",
-              title: "Caption",
+              title: "Bildtext",
               type: "string",
             }),
           ],
@@ -38,26 +40,28 @@ export const imageGalleryBlock = defineType({
     }),
     defineField({
       name: "columns",
-      title: "Columns",
+      title: "Kolumner",
+      description: "Antal kolumner för att visa bilderna i galleriet.",
       type: "number",
       options: {
         list: [
-          { title: "2 Columns", value: 2 },
-          { title: "3 Columns", value: 3 },
-          { title: "4 Columns", value: 4 },
+          { title: "2 kolumner", value: 2 },
+          { title: "3 kolumner", value: 3 },
+          { title: "4 kolumner", value: 4 },
         ],
       },
       initialValue: 3,
     }),
     defineField({
       name: "aspectRatio",
-      title: "Aspect Ratio",
+      title: "Bildförhållande",
+      description: "Förhållandet mellan bildernas bredd och höjd. Auto använder bildernas ursprungliga förhållande.",
       type: "string",
       options: {
         list: [
-          { title: "Square (1:1)", value: "square" },
-          { title: "Landscape (16:9)", value: "landscape" },
-          { title: "Portrait (4:5)", value: "portrait" },
+          { title: "Kvadrat (1:1)", value: "square" },
+          { title: "Landskap (16:9)", value: "landscape" },
+          { title: "Porträtt (4:5)", value: "portrait" },
           { title: "Auto", value: "auto" },
         ],
       },
@@ -71,8 +75,8 @@ export const imageGalleryBlock = defineType({
     },
     prepare({ heading, images }) {
       return {
-        title: "Image Gallery Block",
-        subtitle: heading || `${images?.length || 0} images`,
+        title: "Bildgalleri",
+        subtitle: heading || `${images?.length || 0} bilder`,
       };
     },
   },
