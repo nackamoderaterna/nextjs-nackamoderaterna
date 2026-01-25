@@ -45,11 +45,14 @@ const loadIcons = (): string[] => {
         }
         
         const icon = LucideIcons[name];
-        // Check if it's a valid React component - can be function, object, or callable
-        const isValidComponent = 
-          icon !== null &&
-          icon !== undefined &&
-          (typeof icon === "function" || typeof icon === "object");
+        // Check if it's a valid React component
+        // Lucide icons are objects with a render method, not functions
+        const isFunction = typeof icon === "function";
+        const isObject = typeof icon === "object" && icon !== null;
+        // Check if object has render method (valid React component)
+        const hasRender = isObject && typeof (icon as any).render === "function";
+        
+        const isValidComponent = isFunction || hasRender;
         
         if (isValidComponent) {
           // Use base name if it exists, otherwise use the current name
@@ -175,10 +178,10 @@ const LucideIconInput: React.FC<StringInputProps> = (props) => {
                     padding: "4px 8px",
                     fontSize: "12px",
                     cursor: "pointer",
-                    border: `1px solid ${theme.color.border.enabled}`,
+                    border: `1px solid ${theme?.color?.border?.enabled || "#ccc"}`,
                     borderRadius: "4px",
-                    background: theme.color.button.default.enabled.bg,
-                    color: theme.color.button.default.enabled.fg,
+                    background: theme?.color?.button?.default?.enabled?.bg || "transparent",
+                    color: theme?.color?.button?.default?.enabled?.fg || "currentColor",
                   }}
                 >
                   Rensa
@@ -222,7 +225,18 @@ const LucideIconInput: React.FC<StringInputProps> = (props) => {
                     }
                     
                     // Safety check - only render if IconComponent is valid
-                    if (!IconComponent || (typeof IconComponent !== "function" && typeof IconComponent !== "object")) {
+                    if (!IconComponent) {
+                      return null;
+                    }
+                    
+                    // Check if it's a valid React component
+                    // Lucide icons are objects with render methods, not plain functions
+                    const isFunction = typeof IconComponent === "function";
+                    const isObject = typeof IconComponent === "object" && IconComponent !== null;
+                    const hasRender = isObject && typeof (IconComponent as any).render === "function";
+                    
+                    // Only render if it's a function or an object with a render method
+                    if (!isFunction && !hasRender) {
                       return null;
                     }
                     
@@ -230,18 +244,22 @@ const LucideIconInput: React.FC<StringInputProps> = (props) => {
                     
                     const isSelected = value === iconName;
                     
-                    // Get theme colors - use Sanity's theme tokens
-                    // Card component already handles most theming, we just need to override specific styles
+                    // Get theme colors with safe fallbacks
+                    // Safely access theme properties with proper fallbacks
+                    const safeTheme = theme?.color || {};
+                    const safeCard = safeTheme?.card || {};
+                    const safeBorder = safeTheme?.border || {};
+                    
                     const cardBg = isSelected 
-                      ? (theme?.color?.card?.selected?.bg || theme?.color?.card?.enabled?.bg)
-                      : (theme?.color?.card?.enabled?.bg);
+                      ? (safeCard?.selected?.bg || safeCard?.enabled?.bg || undefined)
+                      : (safeCard?.enabled?.bg || undefined);
                     const cardBorder = isSelected
-                      ? (theme?.color?.card?.selected?.border || theme?.color?.border?.enabled)
-                      : (theme?.color?.border?.enabled);
-                    const cardHoverBg = theme?.color?.card?.hovered?.bg || theme?.color?.card?.enabled?.bg;
+                      ? (safeCard?.selected?.border || safeBorder?.enabled || "#ccc")
+                      : (safeBorder?.enabled || "#ccc");
+                    const cardHoverBg = safeCard?.hovered?.bg || safeCard?.enabled?.bg || undefined;
                     // Use currentColor for icon so it inherits from parent, or get from theme
-                    const iconColor = theme?.color?.card?.enabled?.fg || "currentColor";
-                    const hoverBorder = theme?.color?.border?.enabled;
+                    const iconColor = safeCard?.enabled?.fg || "currentColor";
+                    const hoverBorder = safeBorder?.enabled || "#ccc";
 
                     return (
                       <Card
@@ -255,18 +273,22 @@ const LucideIconInput: React.FC<StringInputProps> = (props) => {
                         style={{
                           cursor: "pointer",
                           border: `1px solid ${cardBorder}`,
-                          background: cardBg,
+                          ...(cardBg ? { background: cardBg } : {}),
                           transition: "all 0.2s",
                         }}
                         onMouseEnter={(e) => {
-                          if (!isSelected) {
+                          if (!isSelected && cardHoverBg) {
                             e.currentTarget.style.background = cardHoverBg;
                             e.currentTarget.style.borderColor = hoverBorder;
                           }
                         }}
                         onMouseLeave={(e) => {
                           if (!isSelected) {
-                            e.currentTarget.style.background = cardBg;
+                            if (cardBg) {
+                              e.currentTarget.style.background = cardBg;
+                            } else {
+                              e.currentTarget.style.background = "";
+                            }
                             e.currentTarget.style.borderColor = cardBorder;
                           }
                         }}
@@ -280,7 +302,7 @@ const LucideIconInput: React.FC<StringInputProps> = (props) => {
                               color: iconColor,
                             }}
                           >
-                            <Icon size={24} />
+                            {React.createElement(Icon, { size: 24 })}
                           </Box>
                           <Text
                             size={0}
