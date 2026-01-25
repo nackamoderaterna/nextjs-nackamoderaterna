@@ -1,37 +1,20 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { Stack, TextInput, Card, Grid, Box, Text } from "@sanity/ui";
+import { Stack, TextInput, Card, Grid, Box, Text, useTheme } from "@sanity/ui";
 import { set, unset } from "sanity";
 import { StringInputProps } from "sanity";
+import * as LucideIcons from "lucide-react";
 
-// Lazy load lucide-react to avoid issues in Sanity Studio
-let LucideIcons: any = null;
+// Cache icon names after first load
 let iconNames: string[] = [];
-let iconsLoading = false;
 
-// Function to load icons
+// Function to load and cache icon names
 const loadIcons = (): string[] => {
   // Return cached icons if already loaded
-  if (LucideIcons && iconNames.length > 0) {
-    return iconNames;
-  }
-  
-  // Prevent multiple simultaneous loads
-  if (iconsLoading) {
+  if (iconNames.length > 0) {
     return iconNames;
   }
   
   try {
-    iconsLoading = true;
-    // Dynamic require for better compatibility in Sanity Studio
-    LucideIcons = require("lucide-react");
-    
-    if (!LucideIcons) {
-      console.warn("lucide-react module not found");
-      iconNames = ["Heart", "Home", "User", "Settings", "Mail", "Phone", "MapPin", "Calendar"];
-      iconsLoading = false;
-      return iconNames;
-    }
-    
     const allKeys = Object.keys(LucideIcons);
     const excludeList = [
       "createLucideIcon",
@@ -45,21 +28,43 @@ const loadIcons = (): string[] => {
       "LucideIcon",
     ];
     
+    const seen = new Set<string>();
     const filtered = allKeys
       .filter((name) => {
         // Exclude known non-icon exports
-        if (excludeList.includes(name) || name.startsWith("_") || name.startsWith("lucide")) {
+        if (excludeList.includes(name) || name.startsWith("_") || name.startsWith("Lucide")) {
           return false;
         }
         
+        // Skip Icon-suffixed versions to avoid duplicates (e.g., "HeartIcon" when we have "Heart")
+        if (name.endsWith("Icon")) {
+          const baseName = name.slice(0, -4); // Remove "Icon" suffix
+          if (allKeys.includes(baseName)) {
+            return false; // Skip if base name exists
+          }
+        }
+        
         const icon = LucideIcons[name];
-        // Check if it's a function (React component)
-        return typeof icon === "function";
+        // Check if it's a valid React component - can be function, object, or callable
+        const isValidComponent = 
+          icon !== null &&
+          icon !== undefined &&
+          (typeof icon === "function" || typeof icon === "object");
+        
+        if (isValidComponent) {
+          // Use base name if it exists, otherwise use the current name
+          const baseName = name.endsWith("Icon") ? name.slice(0, -4) : name;
+          if (!seen.has(baseName)) {
+            seen.add(baseName);
+            return true;
+          }
+        }
+        return false;
       })
+      .map((name) => (name.endsWith("Icon") ? name.slice(0, -4) : name))
       .sort(); // Sort alphabetically for better UX
     
     iconNames = filtered;
-    iconsLoading = false;
     
     if (iconNames.length === 0) {
       console.warn("No Lucide icons found after filtering");
@@ -68,7 +73,6 @@ const loadIcons = (): string[] => {
     return iconNames;
   } catch (error) {
     console.error("Error loading Lucide icons:", error);
-    iconsLoading = false;
     // Return some common icons as fallback
     iconNames = ["Heart", "Home", "User", "Settings", "Mail", "Phone", "MapPin", "Calendar"];
     return iconNames;
@@ -79,15 +83,12 @@ const LucideIconInput: React.FC<StringInputProps> = (props) => {
   const { value, onChange } = props;
   const [search, setSearch] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [iconsLoaded, setIconsLoaded] = useState<boolean>(false);
+  const theme = useTheme();
 
   // Load icons on mount
   useEffect(() => {
-    if (!iconsLoaded) {
-      loadIcons();
-      setIconsLoaded(true);
-    }
-  }, [iconsLoaded]);
+    loadIcons();
+  }, []);
 
   const filteredIcons = useMemo(() => {
     const icons = loadIcons(); // Ensure icons are loaded
@@ -100,7 +101,7 @@ const LucideIconInput: React.FC<StringInputProps> = (props) => {
     return icons
       .filter((name) => name.toLowerCase().includes(searchLower))
       .slice(0, 100); // Limit search results
-  }, [search, iconsLoaded]);
+  }, [search]);
 
   const handleSelect = (iconName: string) => {
     onChange(set(iconName));
@@ -116,14 +117,18 @@ const LucideIconInput: React.FC<StringInputProps> = (props) => {
   // Get the selected icon component
   const getSelectedIcon = () => {
     if (!value || typeof value !== "string") return null;
-    if (!LucideIcons) {
-      loadIcons();
-    }
-    if (!LucideIcons) return null;
     
-    const Icon = LucideIcons[value];
-    if (typeof Icon === "function") {
-      return Icon as React.ComponentType<{ size?: number; className?: string }>;
+    // Try the exact name first
+    let Icon = LucideIcons[value as keyof typeof LucideIcons];
+    
+    // If not found, try with "Icon" suffix
+    if (!Icon) {
+      Icon = LucideIcons[`${value}Icon` as keyof typeof LucideIcons];
+    }
+    
+    // Check if it's a valid React component - can be function or object
+    if (Icon && (typeof Icon === "function" || (typeof Icon === "object" && Icon !== null))) {
+      return Icon as React.ComponentType<any>;
     }
     return null;
   };
@@ -170,9 +175,10 @@ const LucideIconInput: React.FC<StringInputProps> = (props) => {
                     padding: "4px 8px",
                     fontSize: "12px",
                     cursor: "pointer",
-                    border: "1px solid #ccc",
+                    border: `1px solid ${theme.color.border.enabled}`,
                     borderRadius: "4px",
-                    background: "white",
+                    background: theme.color.button.default.enabled.bg,
+                    color: theme.color.button.default.enabled.fg,
                   }}
                 >
                   Rensa
@@ -207,21 +213,36 @@ const LucideIconInput: React.FC<StringInputProps> = (props) => {
               <Grid columns={[3, 4, 5, 6]} gap={2}>
                 {filteredIcons.map((iconName) => {
                   try {
-                    if (!LucideIcons) {
-                      loadIcons();
-                    }
-                    if (!LucideIcons) return null;
+                    // Try the exact name first
+                    let IconComponent = LucideIcons[iconName as keyof typeof LucideIcons];
                     
-                    const IconComponent = LucideIcons[iconName] as React.ComponentType<{
-                      size?: number;
-                      className?: string;
-                    }>;
+                    // If not found, try with "Icon" suffix
+                    if (!IconComponent) {
+                      IconComponent = LucideIcons[`${iconName}Icon` as keyof typeof LucideIcons];
+                    }
                     
                     // Safety check - only render if IconComponent is valid
-                    if (!IconComponent || typeof IconComponent !== "function") {
+                    if (!IconComponent || (typeof IconComponent !== "function" && typeof IconComponent !== "object")) {
                       return null;
                     }
                     
+                    const Icon = IconComponent as React.ComponentType<any>;
+                    
+                    const isSelected = value === iconName;
+                    
+                    // Get theme colors - use Sanity's theme tokens
+                    // Card component already handles most theming, we just need to override specific styles
+                    const cardBg = isSelected 
+                      ? (theme?.color?.card?.selected?.bg || theme?.color?.card?.enabled?.bg)
+                      : (theme?.color?.card?.enabled?.bg);
+                    const cardBorder = isSelected
+                      ? (theme?.color?.card?.selected?.border || theme?.color?.border?.enabled)
+                      : (theme?.color?.border?.enabled);
+                    const cardHoverBg = theme?.color?.card?.hovered?.bg || theme?.color?.card?.enabled?.bg;
+                    // Use currentColor for icon so it inherits from parent, or get from theme
+                    const iconColor = theme?.color?.card?.enabled?.fg || "currentColor";
+                    const hoverBorder = theme?.color?.border?.enabled;
+
                     return (
                       <Card
                         key={iconName}
@@ -229,29 +250,38 @@ const LucideIconInput: React.FC<StringInputProps> = (props) => {
                         type="button"
                         padding={3}
                         radius={2}
-                        tone={value === iconName ? "primary" : "default"}
+                        tone={isSelected ? "primary" : "default"}
                         onClick={() => handleSelect(iconName)}
                         style={{
                           cursor: "pointer",
-                          border: value === iconName ? "2px solid #2276fc" : "1px solid #e1e3e6",
-                          background: value === iconName ? "#f1f5f9" : "white",
+                          border: `1px solid ${cardBorder}`,
+                          background: cardBg,
                           transition: "all 0.2s",
                         }}
                         onMouseEnter={(e) => {
-                          if (value !== iconName) {
-                            e.currentTarget.style.background = "#f9fafb";
-                            e.currentTarget.style.borderColor = "#cbd5e0";
+                          if (!isSelected) {
+                            e.currentTarget.style.background = cardHoverBg;
+                            e.currentTarget.style.borderColor = hoverBorder;
                           }
                         }}
                         onMouseLeave={(e) => {
-                          if (value !== iconName) {
-                            e.currentTarget.style.background = "white";
-                            e.currentTarget.style.borderColor = "#e1e3e6";
+                          if (!isSelected) {
+                            e.currentTarget.style.background = cardBg;
+                            e.currentTarget.style.borderColor = cardBorder;
                           }
                         }}
                       >
                         <Stack space={2} style={{ alignItems: "center" }}>
-                          <IconComponent size={24} />
+                          <Box 
+                            style={{ 
+                              display: "flex", 
+                              alignItems: "center", 
+                              justifyContent: "center",
+                              color: iconColor,
+                            }}
+                          >
+                            <Icon size={24} />
+                          </Box>
                           <Text
                             size={0}
                             style={{
