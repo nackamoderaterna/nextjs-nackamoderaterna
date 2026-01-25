@@ -78,7 +78,14 @@ export const politicalAreaPageQuery = groq`
     },
     "politicians": *[
       _type == "politician" &&
-      count(politicalAreas[showOnPoliticalAreaPage == true && politicalArea._ref == ^._id]) > 0
+      references(^._id) &&
+      count(
+        politicalAreas[
+          showOnPoliticalAreaPage == true && 
+          defined(politicalArea) &&
+          politicalArea._ref == ^._id
+        ]
+      ) > 0
     ] {
       _id,
       name,

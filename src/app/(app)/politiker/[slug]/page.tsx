@@ -5,6 +5,7 @@ import { sanityClient, REVALIDATE_TIME } from "@/lib/sanity/client";
 import { PoliticianWithNamnd } from "@/lib/politicians";
 import { PoliticianHero } from "@/lib/components/politician/PoliticianHero";
 import { RoleSidebar } from "@/lib/components/politician/roleSidebar";
+import { PoliticalAreasSidebar } from "@/lib/components/politician/PoliticalAreasSidebar";
 import { mapPoliticianRoles } from "@/lib/utils/mapPoliticianRoles";
 import { ArrowRight } from "lucide-react";
 import { NewsCard } from "@/lib/components/news/NewsCard";
@@ -45,7 +46,7 @@ export async function generateMetadata({
   });
 }
 
-export const revalidate = 300;
+export const revalidate = REVALIDATE_TIME;
 
 export default async function PoliticianPage({
   params,
@@ -87,10 +88,13 @@ export default async function PoliticianPage({
             <PortableText value={politician.bio} />
           </div>
         )}
-        <div>
+        <div className="space-y-6">
           <RoleSidebar
             heading={"Uppdrag"}
             roles={mapPoliticianRoles({ politician })}
+          />
+          <PoliticalAreasSidebar
+            politicalAreas={politician.politicalAreas}
           />
         </div>
       </div>

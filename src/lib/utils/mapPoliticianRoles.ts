@@ -48,20 +48,5 @@ export function mapPoliticianRoles({ politician }: MapRolesArgs): Role[] {
     });
   }
 
-  // Add political areas (hjärtefrågor)
-  if (politician.politicalAreas?.length > 0) {
-    politician.politicalAreas.forEach((areaRef: any) => {
-      if (areaRef.politicalArea?.name) {
-        roles.push({
-          title: "Hjärtefråga",
-          description: areaRef.politicalArea.name,
-          href: areaRef.politicalArea.slug?.current
-            ? `/politik/${areaRef.politicalArea.slug.current}`
-            : undefined,
-        });
-      }
-    });
-  }
-
   return roles;
 }
