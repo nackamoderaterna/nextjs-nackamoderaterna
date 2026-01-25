@@ -8,7 +8,7 @@ import {
 } from "~/sanity.types";
 import { politikPageQuery } from "@/lib/queries/politik";
 import { sanityClient, REVALIDATE_TIME } from "@/lib/sanity/client";
-import { lucideIconMap } from "@/lib/utils/iconUtils";
+import { getLucideIcon } from "@/lib/utils/iconUtils";
 import { generateMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 
@@ -44,7 +44,13 @@ export type PoliticalIssueWithAreas = Omit<
 
 export type PoliticalIssuesPageData = {
   featuredPoliticalIssues: PoliticalIssueWithAreas[];
-  politicalAreas: PoliticalArea[];
+  politicalAreas: Array<
+    Omit<PoliticalArea, "icon"> & {
+      icon?: {
+        name?: string;
+      };
+    }
+  >;
   geographicalAreas: GeographicalArea[];
 };
 
@@ -76,14 +82,17 @@ export default async function PoliticsPage() {
         {/* Political Areas Grid */}
         <section className="mb-16">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {data.politicalAreas.map((area) => (
-              <PoliticalAreaCard
-                key={area._id}
-                title={area.name || ""}
-                href={`/politik/${area.slug?.current}`}
-                icon={lucideIconMap["Heart"]}
-              />
-            ))}
+            {data.politicalAreas.map((area) => {
+              const Icon = getLucideIcon(area.icon?.name);
+              return (
+                <PoliticalAreaCard
+                  key={area._id}
+                  title={area.name || ""}
+                  href={`/politik/${area.slug?.current}`}
+                  icon={Icon || undefined}
+                />
+              );
+            })}
           </div>
         </section>
 

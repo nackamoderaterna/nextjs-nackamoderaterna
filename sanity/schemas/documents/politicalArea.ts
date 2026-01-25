@@ -39,6 +39,12 @@ export const politicalArea = defineType({
         hotspot: true,
       },
     },
+    {
+      name: "icon",
+      title: "Ikon",
+      description: "Ikon som visas i listningar av politiska områden. Välj en ikon från Lucide-biblioteket.",
+      type: "lucideIcon",
+    },
   ],
   preview: {
     select: {

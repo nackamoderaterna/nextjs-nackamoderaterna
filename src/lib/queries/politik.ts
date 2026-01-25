@@ -28,7 +28,10 @@ export const politikPageQuery = groq`
     name,
     slug,
     description,
-    image
+    image,
+    icon{
+      name
+    }
   },
 
   "geographicalAreas": *[_type == "geographicalArea"]{

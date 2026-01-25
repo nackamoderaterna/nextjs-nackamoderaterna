@@ -4,6 +4,7 @@ import menuItem from "./menuItem";
 import seo from "./seo";
 import { themeSettings } from "./themeSettings";
 import pageModal from "./pageModal";
+import lucideIcon from "./lucideIcon";
 
 export const objects = [
   menuItem,
@@ -12,4 +13,5 @@ export const objects = [
   themeSettings,
   containerSettings,
   contentSettings,
+  lucideIcon,
 ];
