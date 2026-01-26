@@ -18,7 +18,7 @@ export const statsBlock = defineType({
     defineField({
       name: "stats",
       title: "Statistik",
-      description: "Lista med statistik som ska visas. Max 4 statistik.",
+      description: "Lista med statistik som ska visas. Layouten anpassas automatiskt baserat på antal statistik (1-4).",
       type: "array",
       of: [
         {

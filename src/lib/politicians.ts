@@ -10,9 +10,20 @@ export const politiciansDirectoryQuery = groq`*[_type == "politician"] | order(n
   email,
   phone,
   bio,
-  kommunalrad,
-  partyBoard,
-  kommunfullmaktige,
+  kommunalrad {
+    active,
+    role
+  },
+  partyBoard {
+    active,
+    title,
+    isLeader
+  },
+  kommunfullmaktige {
+    active,
+    title,
+    role
+  },
   "namndPositions": namndPositions[] {
     title,
     isLeader,
@@ -24,7 +35,8 @@ export const politiciansDirectoryQuery = groq`*[_type == "politician"] | order(n
   },
   "livingArea": livingArea-> {
     _id,
-    title
+    name,
+    slug
   },
   "politicalAreas": politicalAreas[] {
     showOnPoliticalAreaPage,
@@ -101,6 +113,107 @@ export type PoliticianWithNamnd = Omit<
     // };
   }>;
 };
+
+/**
+ * Removes invisible Unicode characters from a string.
+ * This includes zero-width spaces, zero-width non-joiners, BOM markers, and other invisible characters.
+ */
+export function cleanInvisibleUnicode(str: string | null | undefined): string {
+  if (!str) return "";
+  
+  return str
+    // Remove BOM (Byte Order Mark) - \uFEFF
+    // Remove zero-width space - \u200B
+    // Remove zero-width non-joiner - \u200C
+    // Remove zero-width joiner - \u200D
+    // Remove word joiner - \u2060
+    // Remove left-to-right mark - \u200E
+    // Remove right-to-left mark - \u200F
+    // Remove directional formatting characters - \u202A-\u202E
+    // Remove isolate formatting characters - \u2066-\u2069
+    .replace(/[\u200B-\u200D\uFEFF\u2060\u200C\u200D\u200E\u200F\u202A-\u202E\u2066-\u2069]/g, "")
+    // Trim whitespace
+    .trim();
+}
+
+/**
+ * Recursively cleans all string fields in a politician object, including nested objects.
+ * This ensures that invisible Unicode characters are removed from all string values.
+ */
+export function cleanPoliticianData(politician: PoliticianWithNamnd): PoliticianWithNamnd {
+  const cleaned = { ...politician };
+  
+  // Clean top-level string fields
+  if (cleaned.name) {
+    cleaned.name = cleanInvisibleUnicode(cleaned.name);
+  }
+  
+  // Clean kommunalrad object
+  if (cleaned.kommunalrad) {
+    cleaned.kommunalrad = {
+      ...cleaned.kommunalrad,
+      role: cleaned.kommunalrad.role ? cleanInvisibleUnicode(cleaned.kommunalrad.role) as "president" | "ordinary" : undefined,
+    };
+  }
+  
+  // Clean partyBoard object
+  if (cleaned.partyBoard) {
+    cleaned.partyBoard = {
+      ...cleaned.partyBoard,
+      title: cleaned.partyBoard.title ? cleanInvisibleUnicode(cleaned.partyBoard.title) : undefined,
+    };
+  }
+  
+  // Clean kommunfullmaktige object
+  if (cleaned.kommunfullmaktige) {
+    cleaned.kommunfullmaktige = {
+      ...cleaned.kommunfullmaktige,
+      title: cleaned.kommunfullmaktige.title ? cleanInvisibleUnicode(cleaned.kommunfullmaktige.title) : undefined,
+      role: cleaned.kommunfullmaktige.role ? cleanInvisibleUnicode(cleaned.kommunfullmaktige.role) as "ordinary" | "substitute" : undefined,
+    };
+  }
+  
+  // Clean namndPositions array
+  if (cleaned.namndPositions && Array.isArray(cleaned.namndPositions)) {
+    cleaned.namndPositions = cleaned.namndPositions.map(pos => ({
+      ...pos,
+      title: pos.title ? cleanInvisibleUnicode(pos.title) : undefined,
+      namnd: pos.namnd ? {
+        ...pos.namnd,
+        title: cleanInvisibleUnicode(pos.namnd.title),
+      } : pos.namnd,
+    }));
+  }
+  
+  // Clean livingArea
+  if (cleaned.livingArea) {
+    cleaned.livingArea = {
+      ...cleaned.livingArea,
+      name: cleanInvisibleUnicode(cleaned.livingArea.name),
+    };
+  }
+  
+  // Clean politicalAreas array
+  if (cleaned.politicalAreas && Array.isArray(cleaned.politicalAreas)) {
+    cleaned.politicalAreas = cleaned.politicalAreas.map(area => ({
+      ...area,
+      politicalArea: area.politicalArea ? {
+        ...area.politicalArea,
+        name: cleanInvisibleUnicode(area.politicalArea.name),
+      } : area.politicalArea,
+    }));
+  }
+  
+  return cleaned;
+}
+
+/**
+ * Cleans invisible Unicode characters from politician names
+ * @deprecated Use cleanPoliticianData instead for comprehensive cleaning
+ */
+export function cleanPoliticianName(politician: PoliticianWithNamnd): PoliticianWithNamnd {
+  return cleanPoliticianData(politician);
+}
 
 // Helper function to group politicians by their roles
 export function groupPoliticiansByRole(politicians: PoliticianWithNamnd[]) {
@@ -187,7 +300,7 @@ export const positionTitles = {
 // Section title translations
 export const sectionTitles = {
   kommunalrad: "Kommunalråd",
-  partyBoard: "Partistyrelse",
+  partyBoard: "Föreningsstyrelsen",
   kommunfullmaktige: "Kommunfullmäktige",
   other: "Övriga politiker",
 } as const;

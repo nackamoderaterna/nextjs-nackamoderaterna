@@ -8,12 +8,12 @@ import {
   PoliticianReferenceBlock,
 } from "./blocks/PoliticianReference";
 import { NewsBlock } from "./blocks/NewsBlock";
-import { CTABlock } from "./blocks/CTABlock";
 import { StatsBlock } from "./blocks/StatsBlock";
 import { TwoColumnBlock } from "./blocks/TwoColumnBlock";
 import { AccordionBlock } from "./blocks/AccordionBlock";
 import { QuoteBlock } from "./blocks/QuoteBlock";
 import { ImageGalleryBlock } from "./blocks/ImageGalleryBlock";
+import { CTABlock } from "./blocks/cta-block";
 
 interface PageBuilderProps {
   blocks: PageBlock[];

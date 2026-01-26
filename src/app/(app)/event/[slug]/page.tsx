@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { PortableText } from "@portabletext/react";
-import { sanityClient, REVALIDATE_TIME } from "@/lib/sanity/client";
+import { sanityClient } from "@/lib/sanity/client";
 import { singleEventQuery } from "@/lib/queries/events";
 import { Event } from "~/sanity.types";
 import { SanityImage } from "@/lib/components/shared/SanityImage";
@@ -51,7 +51,7 @@ export async function generateMetadata({
   });
 }
 
-export const revalidate = REVALIDATE_TIME;
+export const revalidate = 300;
 
 export default async function EventPage({ params }: Props) {
   const { slug } = await params;
@@ -59,7 +59,7 @@ export default async function EventPage({ params }: Props) {
     singleEventQuery,
     { slug },
     {
-      next: { revalidate: REVALIDATE_TIME },
+      next: { revalidate: 300 },
     }
   );
 

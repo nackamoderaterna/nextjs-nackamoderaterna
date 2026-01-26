@@ -24,20 +24,44 @@ interface NewsFiltersProps {
   politicalAreas: PoliticalArea[];
 }
 
+const NEWS_TYPE_OPTIONS = [
+  { value: "all", label: "Alla typer" },
+  { value: "default", label: "Nyheter" },
+  { value: "debate", label: "Debattartikel" },
+  { value: "pressrelease", label: "Pressmeddelande" },
+] as const;
+
+function updateParams(
+  current: URLSearchParams,
+  updates: { area?: string; type?: string }
+) {
+  const params = new URLSearchParams(current.toString());
+  params.delete("page");
+  if (updates.area !== undefined) {
+    if (updates.area === "all") params.delete("area");
+    else params.set("area", updates.area);
+  }
+  if (updates.type !== undefined) {
+    if (updates.type === "all") params.delete("type");
+    else params.set("type", updates.type);
+  }
+  return params;
+}
+
 export function NewsFilters({ politicalAreas }: NewsFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const selectedArea = searchParams.get("area");
+  const selectedType = searchParams.get("type") || "all";
+  const hasActiveFilters = !!selectedArea || selectedType !== "all";
 
   const handleAreaChange = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (value === "all") {
-      params.delete("area");
-      params.delete("page"); // Reset to first page
-    } else {
-      params.set("area", value);
-      params.delete("page"); // Reset to first page
-    }
+    const params = updateParams(searchParams, { area: value });
+    router.push(`/nyheter?${params.toString()}`);
+  };
+
+  const handleTypeChange = (value: string) => {
+    const params = updateParams(searchParams, { type: value });
     router.push(`/nyheter?${params.toString()}`);
   };
 
@@ -51,10 +75,7 @@ export function NewsFilters({ politicalAreas }: NewsFiltersProps) {
         <label htmlFor="area-filter" className="text-sm font-medium">
           Filtrera på område:
         </label>
-        <Select
-          value={selectedArea || "all"}
-          onValueChange={handleAreaChange}
-        >
+        <Select value={selectedArea || "all"} onValueChange={handleAreaChange}>
           <SelectTrigger id="area-filter" className="w-[200px]">
             <SelectValue placeholder="Alla områden" />
           </SelectTrigger>
@@ -68,7 +89,24 @@ export function NewsFilters({ politicalAreas }: NewsFiltersProps) {
           </SelectContent>
         </Select>
       </div>
-      {selectedArea && (
+      <div className="flex items-center gap-2">
+        <label htmlFor="type-filter" className="text-sm font-medium">
+          Typ:
+        </label>
+        <Select value={selectedType} onValueChange={handleTypeChange}>
+          <SelectTrigger id="type-filter" className="w-[200px]">
+            <SelectValue placeholder="Alla typer" />
+          </SelectTrigger>
+          <SelectContent>
+            {NEWS_TYPE_OPTIONS.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      {hasActiveFilters && (
         <Button
           variant="outline"
           size="sm"

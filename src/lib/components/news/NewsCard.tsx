@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { formatDate } from "@/lib/utils/dateUtils";
 import { ArrowRight } from "lucide-react";
+import { NewsVariantBadge } from "./NewsVariantBadge";
+import type { NewsVariant } from "@/types/news";
 
 interface NewsCardProps {
   date: string;
@@ -8,6 +10,7 @@ interface NewsCardProps {
   title: string;
   isLast: boolean;
   excerpt: string;
+  variant?: NewsVariant | null;
 }
 
 export function NewsCard({
@@ -16,6 +19,7 @@ export function NewsCard({
   excerpt,
   slug,
   isLast,
+  variant,
 }: NewsCardProps) {
   return (
     <article
@@ -26,10 +30,13 @@ export function NewsCard({
         className="block py-8 md:py-10 lg:py-12 transition-colors hover:bg-accent/50"
       >
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
-          <div className="md:col-span-2 flex items-start">
+          <div className="md:col-span-2 flex flex-col gap-2 items-start">
             <time className="text-xs md:text-sm font-mono uppercase tracking-wider text-muted-foreground">
               {formatDate(date)}
             </time>
+            {variant && variant !== "default" && (
+              <NewsVariantBadge variant={variant} />
+            )}
           </div>
 
           <div className="md:col-span-8 space-y-3">

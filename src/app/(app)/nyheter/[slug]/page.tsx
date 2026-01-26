@@ -1,11 +1,12 @@
 import { notFound } from "next/navigation";
-import { sanityClient, REVALIDATE_TIME } from "@/lib/sanity/client";
+import { sanityClient } from "@/lib/sanity/client";
 import { NewsWithReferences } from "@/types/news";
 import { newsQuery } from "@/lib/queries/nyheter";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { formatDate } from "@/lib/utils/dateUtils";
 import { PortableText } from "next-sanity";
 import { NewsSidebar } from "@/lib/components/news/NewsSidebar";
+import { NewsVariantBadge } from "@/lib/components/news/NewsVariantBadge";
 import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
 import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
@@ -52,7 +53,7 @@ export default async function NewsArticlePage({
     newsQuery,
     { slug },
     {
-      next: { revalidate: REVALIDATE_TIME },
+      next: { revalidate: 300 },
     }
   );
 
@@ -62,13 +63,16 @@ export default async function NewsArticlePage({
 
   const mainContent = (
     <div>
-      {news.politicalAreas && news.politicalAreas.length > 0 && (
-        <div className="mb-4">
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        {news.politicalAreas && news.politicalAreas.length > 0 && (
           <span className="inline-block text-sm font-medium text-blue-600">
             {news.politicalAreas[0].name}
           </span>
-        </div>
-      )}
+        )}
+        {news.variant && news.variant !== "default" && (
+          <NewsVariantBadge variant={news.variant} />
+        )}
+      </div>
       <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4 text-balance">
         {news.title}
       </h1>

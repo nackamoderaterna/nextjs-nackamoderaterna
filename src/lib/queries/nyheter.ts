@@ -8,6 +8,12 @@ export const newsQuery = groq`
   ...,
   "effectiveDate": coalesce(dateOverride, _createdAt),
 
+  "document": document{
+    ...,
+    "url": asset->url,
+    "originalFilename": asset->originalFilename
+  },
+
   "referencedPoliticians": referencedPolitician[]->{
     _id,
     name,
@@ -61,6 +67,7 @@ export const newsListPaginatedQuery = groq`{
   "items": *[
     _type == "news"
     && ($politicalArea == null || references($politicalArea))
+    && ($variant == null || variant == $variant)
   ] | order(
     coalesce(dateOverride, _createdAt) desc
   )[$start...$end] {
@@ -69,6 +76,7 @@ export const newsListPaginatedQuery = groq`{
     slug,
     excerpt,
     mainImage,
+    variant,
     _createdAt,
     _updatedAt,
     dateOverride,
@@ -83,6 +91,7 @@ export const newsListPaginatedQuery = groq`{
   "total": count(*[
     _type == "news"
     && ($politicalArea == null || references($politicalArea))
+    && ($variant == null || variant == $variant)
   ])
 }`;
 

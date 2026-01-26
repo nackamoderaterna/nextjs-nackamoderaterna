@@ -6,6 +6,15 @@ import {
 } from "~/sanity.types";
 import { Dereferenced } from "./types";
 
+export type NewsDocumentWithUrl = {
+  url?: string;
+  originalFilename?: string;
+};
+
+export type RelatedNewsItem = News & { effectiveDate: string };
+
+export type NewsVariant = "default" | "debate" | "pressrelease";
+
 export type NewsWithReferences = Omit<
   News,
   | "referencedPolitician"
@@ -15,9 +24,11 @@ export type NewsWithReferences = Omit<
   | "dateOverride"
 > & {
   effectiveDate: string;
+  document?: NewsDocumentWithUrl;
+  variant?: NewsVariant;
 
   referencedPoliticians?: Dereferenced<Politician>;
   politicalAreas?: Dereferenced<PoliticalArea>;
   geographicalAreas?: Dereferenced<GeographicalArea>;
-  relatedNews?: Array<News>;
+  relatedNews?: Array<RelatedNewsItem>;
 };

@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { PageBuilder } from "@/lib/components/PageBuilder";
 import { PageModal } from "@/lib/components/shared/PageModal";
 import { pageBySlugQuery } from "@/lib/queries/pages";
-import { sanityClient, REVALIDATE_TIME } from "@/lib/sanity/client";
+import { sanityClient } from "@/lib/sanity/client";
 import { generatePageMetadata } from "@/lib/utils/pageSeo";
 
 export const revalidate = 300;
@@ -26,7 +26,7 @@ export async function generateMetadata({
   const page = await sanityClient.fetch<PageData>(
     pageBySlugQuery,
     { slug },
-    { next: { revalidate: REVALIDATE_TIME } }
+    { next: { revalidate: 300 } }
   );
 
   return generatePageMetadata(page, "Sidan hittades inte");
@@ -43,7 +43,7 @@ export default async function SanityPage({
     pageBySlugQuery,
     { slug },
     {
-      next: { revalidate: REVALIDATE_TIME },
+      next: { revalidate: 300 },
     }
   );
 

@@ -1,12 +1,13 @@
 import Link from "next/link";
 import {
+  cleanPoliticianData,
   groupPoliticiansByRole,
   politiciansDirectoryQuery,
   PoliticianWithNamnd,
   positionTitles,
   sectionTitles,
 } from "@/lib/politicians";
-import { sanityClient, REVALIDATE_TIME } from "@/lib/sanity/client";
+import { sanityClient } from "@/lib/sanity/client";
 import { PoliticianSection } from "@/lib/components/politician/PoliticianSection";
 import { PoliticianCardSmall } from "@/lib/components/politician/PoliticianCardSmall";
 import { generateMetadata } from "@/lib/utils/seo";
@@ -30,13 +31,16 @@ function sortByName(politicians: PoliticianWithNamnd[]): PoliticianWithNamnd[] {
 }
 
 export default async function PoliticiansPage() {
-  const politicians = await sanityClient.fetch<PoliticianWithNamnd[]>(
+  const politiciansRaw = await sanityClient.fetch<PoliticianWithNamnd[]>(
     politiciansDirectoryQuery,
     {},
     {
-      next: { revalidate: REVALIDATE_TIME },
+      next: { revalidate: 300 },
     }
   );
+  
+  // Clean all invisible Unicode characters from politician data
+  const politicians = politiciansRaw.map(cleanPoliticianData);
   const grouped = groupPoliticiansByRole(politicians);
 
   // Debug: Check what we got
@@ -56,8 +60,8 @@ export default async function PoliticiansPage() {
       },
     });
     // Find politicians with kommunalrad or kommunfullmaktige
-    const withKommunalrad = politicians.filter(p => p.kommunalrad);
-    const withKommunfullmaktige = politicians.filter(p => p.kommunfullmaktige);
+    const withKommunalrad = politicians.filter(p => p.kommunalrad?.active);
+    const withKommunfullmaktige = politicians.filter(p => p.kommunfullmaktige?.active);
     console.log("Politicians with kommunalrad:", withKommunalrad.length, withKommunalrad.map(p => ({
       name: p.name,
       kommunalrad: p.kommunalrad
@@ -66,6 +70,7 @@ export default async function PoliticiansPage() {
       name: p.name,
       kommunfullmaktige: p.kommunfullmaktige
     })));
+    console.log("Kommunfullmaktige details:", grouped.kommunfullmaktige);
   }
 
   // Sort kommunfullmäktige alphabetically

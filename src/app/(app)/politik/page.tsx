@@ -7,7 +7,7 @@ import {
   PoliticalIssue,
 } from "~/sanity.types";
 import { politikPageQuery } from "@/lib/queries/politik";
-import { sanityClient, REVALIDATE_TIME } from "@/lib/sanity/client";
+import { sanityClient } from "@/lib/sanity/client";
 import { getLucideIcon } from "@/lib/utils/iconUtils";
 import { generateMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
@@ -59,7 +59,7 @@ export default async function PoliticsPage() {
     politikPageQuery,
     {},
     {
-      next: { revalidate: REVALIDATE_TIME },
+      next: { revalidate: 300 },
     }
   );
   return (

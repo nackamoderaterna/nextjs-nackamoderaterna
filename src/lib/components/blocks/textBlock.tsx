@@ -2,11 +2,14 @@ import { PortableText } from "next-sanity";
 import Block from "./Block";
 import { BlockText } from "~/sanity.types";
 
+type BlockTextWithColumns = BlockText & { columns?: number };
+
 export interface TextBlockProps {
   block: BlockText;
 }
 export function TextBlock({ block }: TextBlockProps) {
-  const columnClass = block.columns === 1 ? "columns-1" : "columns-2";
+  const columns = (block as BlockTextWithColumns).columns;
+  const columnClass = columns === 2 ? "columns-2" : "columns-1";
 
   return (
     <Block>

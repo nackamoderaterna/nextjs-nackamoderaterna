@@ -86,7 +86,7 @@ export const politician = defineType({
             ],
           },
           initialValue: "ordinary",
-          hidden: ({ parent }) => !parent.active,
+          hidden: ({ parent }) => !parent?.active,
         },
       ],
     },

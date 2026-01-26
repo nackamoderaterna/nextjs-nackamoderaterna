@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import { PortableText } from "@portabletext/react";
 import Link from "next/link";
-import { sanityClient, REVALIDATE_TIME } from "@/lib/sanity/client";
-import { PoliticianWithNamnd } from "@/lib/politicians";
+import { sanityClient } from "@/lib/sanity/client";
+import { cleanPoliticianData, PoliticianWithNamnd } from "@/lib/politicians";
 import { PoliticianHero } from "@/lib/components/politician/PoliticianHero";
 import { RoleSidebar } from "@/lib/components/politician/roleSidebar";
 import { PoliticalAreasSidebar } from "@/lib/components/politician/PoliticalAreasSidebar";
@@ -20,17 +20,19 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const politician = await sanityClient.fetch<PoliticianWithNamnd>(
+  const politicianRaw = await sanityClient.fetch<PoliticianWithNamnd>(
     politicianBySlugQuery,
     { slug }
   );
 
-  if (!politician) {
+  if (!politicianRaw) {
     return generateSEOMetadata({
       title: "Politiker hittades inte",
       description: "Den begärda politikern kunde inte hittas",
     });
   }
+  
+  const politician = cleanPoliticianData(politicianRaw);
 
   const imageUrl = politician.image
     ? buildImageUrl(politician.image, { width: 1200, height: 630 })
@@ -46,7 +48,7 @@ export async function generateMetadata({
   });
 }
 
-export const revalidate = REVALIDATE_TIME;
+export const revalidate = 300;
 
 export default async function PoliticianPage({
   params,
@@ -54,17 +56,20 @@ export default async function PoliticianPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const politician = await sanityClient.fetch<PoliticianWithNamnd>(
+  const politicianRaw = await sanityClient.fetch<PoliticianWithNamnd>(
     politicianBySlugQuery,
     { slug },
     {
-      next: { revalidate: REVALIDATE_TIME },
+      next: { revalidate: 300 },
     }
   );
 
-  if (!politician) {
+  if (!politicianRaw) {
     notFound();
   }
+  
+  // Clean all invisible Unicode characters from politician data
+  const politician = cleanPoliticianData(politicianRaw);
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

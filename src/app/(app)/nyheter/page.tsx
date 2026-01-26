@@ -1,7 +1,7 @@
 import { NewsCard } from "@/lib/components/news/NewsCard";
 import { Pagination } from "@/lib/components/news/Pagination";
 import { NewsFilters } from "@/lib/components/news/NewsFilters";
-import { sanityClient, REVALIDATE_TIME } from "@/lib/sanity/client";
+import { sanityClient } from "@/lib/sanity/client";
 import {
   newsListPaginatedQuery,
   allPoliticalAreasQuery,
@@ -9,6 +9,7 @@ import {
 import { News } from "~/sanity.types";
 import { generateMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
+import type { NewsVariant } from "@/types/news";
 
 type NewsListItem = Pick<
   News,
@@ -23,6 +24,7 @@ type NewsListItem = Pick<
   | "_rev"
 > & {
   effectiveDate: string;
+  variant?: NewsVariant;
   politicalAreas?: Array<{
     _id: string;
     title: string;
@@ -45,28 +47,38 @@ export const metadata: Metadata = generateMetadata({
 export const revalidate = 300;
 
 interface NewsPageProps {
-  searchParams: Promise<{ page?: string; area?: string }>;
+  searchParams: Promise<{ page?: string; area?: string; type?: string }>;
 }
+
+const VALID_VARIANTS = ["default", "debate", "pressrelease"] as const;
 
 export default async function NewsPage({ searchParams }: NewsPageProps) {
   const params = await searchParams;
   const currentPage = Math.max(1, parseInt(params.page || "1", 10));
   const politicalAreaId = params.area || undefined;
+  const typeParam = params.type;
+  const variantFilter =
+    typeParam && VALID_VARIANTS.includes(typeParam as (typeof VALID_VARIANTS)[number])
+      ? (typeParam as NewsVariant)
+      : null;
   const start = (currentPage - 1) * ITEMS_PER_PAGE;
   const end = start + ITEMS_PER_PAGE;
 
   const [result, politicalAreas] = await Promise.all([
     sanityClient.fetch<NewsListPaginatedResult>(
       newsListPaginatedQuery,
-      politicalAreaId
-        ? { start, end, politicalArea: politicalAreaId }
-        : { start, end, politicalArea: null },
       {
-        next: { revalidate: REVALIDATE_TIME },
+        start,
+        end,
+        politicalArea: politicalAreaId || null,
+        variant: variantFilter,
+      },
+      {
+        next: { revalidate: 300 },
       }
     ),
     sanityClient.fetch<any[]>(allPoliticalAreasQuery, {}, {
-      next: { revalidate: REVALIDATE_TIME },
+      next: { revalidate: 300 },
     }),
   ]);
 
@@ -76,7 +88,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
   // Redirect to last page if page number is too high
   if (currentPage > totalPages && totalPages > 0) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-8">Nyheter</h1>
           <p className="text-muted-foreground text-center py-12">
@@ -88,7 +100,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-8">Nyheter</h1>
 
@@ -109,6 +121,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                   date={news.effectiveDate}
                   slug={news.slug?.current || ""}
                   excerpt={news.excerpt || ""}
+                  variant={news.variant}
                 />
               ))}
             </div>
@@ -117,7 +130,10 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
               currentPage={currentPage}
               totalPages={totalPages}
               basePath="/nyheter"
-              preserveParams={politicalAreaId ? { area: politicalAreaId } : {}}
+              preserveParams={{
+                ...(politicalAreaId && { area: politicalAreaId }),
+                ...(typeParam && { type: typeParam }),
+              }}
             />
           </>
         )}

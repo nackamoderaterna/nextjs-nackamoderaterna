@@ -4,6 +4,20 @@ import { set, unset } from "sanity";
 import { StringInputProps } from "sanity";
 import * as LucideIcons from "lucide-react";
 
+/** @sanity/ui Theme doesn't declare .color; we use it for border/button/card tokens */
+type ThemeColorTokens = {
+  border?: { enabled?: string };
+  button?: { default?: { enabled?: { bg?: string; fg?: string } } };
+  card?: {
+    enabled?: { bg?: string; fg?: string };
+    selected?: { bg?: string; border?: string };
+    hovered?: { bg?: string };
+  };
+};
+interface ThemeWithColor {
+  color?: ThemeColorTokens;
+}
+
 // Cache icon names after first load
 let iconNames: string[] = [];
 
@@ -44,7 +58,7 @@ const loadIcons = (): string[] => {
           }
         }
         
-        const icon = LucideIcons[name];
+        const icon = LucideIcons[name as keyof typeof LucideIcons];
         // Check if it's a valid React component
         // Lucide icons are objects with a render method, not functions
         const isFunction = typeof icon === "function";
@@ -86,7 +100,7 @@ const LucideIconInput: React.FC<StringInputProps> = (props) => {
   const { value, onChange } = props;
   const [search, setSearch] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const theme = useTheme();
+  const theme = useTheme() as ThemeWithColor;
 
   // Load icons on mount
   useEffect(() => {
@@ -245,10 +259,9 @@ const LucideIconInput: React.FC<StringInputProps> = (props) => {
                     const isSelected = value === iconName;
                     
                     // Get theme colors with safe fallbacks
-                    // Safely access theme properties with proper fallbacks
-                    const safeTheme = theme?.color || {};
-                    const safeCard = safeTheme?.card || {};
-                    const safeBorder = safeTheme?.border || {};
+                    const safeTheme: ThemeColorTokens = theme?.color ?? {};
+                    const safeCard = safeTheme.card ?? {};
+                    const safeBorder = safeTheme.border ?? {};
                     
                     const cardBg = isSelected 
                       ? (safeCard?.selected?.bg || safeCard?.enabled?.bg || undefined)

@@ -94,3 +94,39 @@ export const politicalAreaPageQuery = groq`
     }
   }
 `;
+
+export const geographicalAreaPageQuery = groq`
+  *[_type == "geographicalArea" && slug.current == $slug][0] {
+    _id,
+    _type,
+    name,
+    slug,
+    description,
+    image,
+
+    "latestNews": *[
+      _type == "news" &&
+      references(^._id)
+    ] | order(
+      coalesce(dateOverride, _createdAt) desc
+    )[0...4] {
+      _id,
+      title,
+      slug,
+      excerpt,
+      mainImage,
+      dateOverride,
+      _createdAt
+    },
+
+    "politicians": *[
+      _type == "politician" &&
+      livingArea._ref == ^._id
+    ] {
+      _id,
+      name,
+      slug,
+      image
+    }
+  }
+`;

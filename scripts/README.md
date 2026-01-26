@@ -85,3 +85,25 @@ Errors: 0
 - **Backup**: Consider backing up your dataset before running migrations
 - **Test first**: Run on a development dataset first if possible
 - **Default value**: All migrated entries will have `showOnPoliticalAreaPage: false` by default. You'll need to manually set this to `true` in Sanity Studio for politicians you want to show on political area pages.
+
+## set-news-variant-default
+
+Sets `variant` to `"default"` for all news documents that have no variant (or an invalid value).
+
+### Usage
+
+```bash
+SANITY_API_TOKEN="your-token" npm run migrate:news-variant
+```
+
+Or directly:
+
+```bash
+SANITY_API_TOKEN="your-token" npx tsx scripts/set-news-variant-default.ts
+```
+
+### What it does
+
+- Fetches all news documents
+- Updates those where `variant` is missing, `null`, or not one of `default` / `debate` / `pressrelease`
+- Leaves documents that already have a valid variant unchanged

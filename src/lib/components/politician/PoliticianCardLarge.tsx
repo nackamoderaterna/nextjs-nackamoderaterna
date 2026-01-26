@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SanityImage } from "../shared/SanityImage";
+import { cn } from "@/lib/utils";
 
 interface PeopleCardProps {
   image: any;
@@ -7,6 +8,8 @@ interface PeopleCardProps {
   title?: string;
   slug: string;
   size: "small" | "large";
+  /** Optional class for the small variant container (e.g. to override hover in muted boxes) */
+  className?: string;
 }
 
 export function PeopleCard({
@@ -15,13 +18,19 @@ export function PeopleCard({
   name,
   slug,
   size = "small",
+  className,
 }: PeopleCardProps) {
   const isSmall = size === "small";
 
   if (isSmall) {
     return (
-      <Link href={`politiker/${slug}`} aria-label={`Läs mer om ${name}`}>
-        <div className="flex items-center gap-3 group hover:bg-muted rounded hover:cursor-pointer transition-colors duration-300">
+      <Link href={`/politiker/${slug}`} aria-label={`Läs mer om ${name}`}>
+        <div
+          className={cn(
+            "flex items-center gap-3 group hover:bg-muted rounded hover:cursor-pointer transition-colors duration-300",
+            className
+          )}
+        >
           {/* Small circular image on the left */}
           <div className="relative w-12 h-12 flex-shrink-0 rounded overflow-hidden bg-muted">
             <SanityImage

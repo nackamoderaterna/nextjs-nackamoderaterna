@@ -35,24 +35,33 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
     // POLITICAN START
     _type == "block.politician" => {
       mode,
-     "items": select(
-        mode == "kommunalrad" => 
+      "items": select(
+        mode == "kommunalrad" =>
           *[_type == "politician" && kommunalrad.active == true]{
             _id,
             name,
             slug,
             image,
             kommunalrad
-        },
-
-    // default = manual selection
-        items[]->{
-          _id,
-          name,
-          slug,
-          image,
-          kommunalrad
+          },
+        items[] {
+          "politician": politician->{
+            _id,
+            name,
+            slug,
+            image,
+            kommunalrad
+          },
+          titleOverride
         }
+      ),
+      "titleOverrides": select(
+        mode == "kommunalrad" =>
+          titleOverrides[] {
+            "politicianId": politician._ref,
+            titleOverride
+          },
+        []
       )
     },
     // POLITICIAN END
@@ -163,6 +172,19 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
           mainImage
         },
     )
-  }
+  },
+    // IMAGE GALLERY START
+    _type == "block.imageGallery" => {
+      heading,
+      columns,
+      aspectRatio,
+      images[]{
+        _key,
+        asset,
+        alt,
+        caption
+      }
+    },
+    // IMAGE GALLERY END
   }
 }`;

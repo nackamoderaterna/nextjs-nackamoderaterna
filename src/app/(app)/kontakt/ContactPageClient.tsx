@@ -93,6 +93,23 @@ export function ContactPageClient({ settings }: ContactPageClientProps) {
     }
   }
 
+  const formatAddress = (address: {
+    street?: string;
+    zip?: string;
+    city?: string;
+    country?: string;
+  } | null | undefined) => {
+    if (!address) return null;
+    const parts = [
+      address.street,
+      address.zip && address.city
+        ? `${address.zip} ${address.city}`
+        : address.zip || address.city,
+      address.country,
+    ].filter(Boolean);
+    return parts.length > 0 ? parts : null;
+  };
+
   return (
     <main className="container mx-auto px-4 py-12">
       <div className="max-w-5xl mx-auto">
@@ -185,43 +202,72 @@ export function ContactPageClient({ settings }: ContactPageClientProps) {
             <div className="bg-muted p-6 rounded-lg">
               <h3 className="font-bold text-lg mb-4">Kontaktuppgifter</h3>
               <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <IconMail className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                  <div>
-                    <p className="text-sm font-medium mb-1">E-post</p>
-                    <Link
-                      href="mailto:nacka@moderaterna.se"
-                      className="text-sm text-primary hover:underline"
-                    >
-                      nacka@moderaterna.se
-                    </Link>
+                {settings.contactInfo?.email && (
+                  <div className="flex items-start gap-3">
+                    <IconMail className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                    <div>
+                      <p className="text-sm font-medium mb-1">E-post</p>
+                      <Link
+                        href={`mailto:${settings.contactInfo.email}`}
+                        className="text-sm text-primary hover:underline"
+                      >
+                        {settings.contactInfo.email}
+                      </Link>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <IconPhone className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                  <div>
-                    <p className="text-sm font-medium mb-1">Telefon</p>
-                    <Link
-                      href="tel:08-123456789"
-                      className="text-sm text-primary hover:underline"
-                    >
-                      08-123 456 789
-                    </Link>
+                )}
+                {settings.contactInfo?.phone && (
+                  <div className="flex items-start gap-3">
+                    <IconPhone className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                    <div>
+                      <p className="text-sm font-medium mb-1">Telefon</p>
+                      <Link
+                        href={`tel:${settings.contactInfo.phone.replace(/\s/g, "")}`}
+                        className="text-sm text-primary hover:underline"
+                      >
+                        {settings.contactInfo.phone}
+                      </Link>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <IconMapPin className="h-5 w-5 text-primary mt-0.5 shrink-0" />
-                  <div>
-                    <p className="text-sm font-medium mb-1">Adress</p>
-                    <p className="text-sm text-muted-foreground">
-                      Nackamoderaterna
-                      <br />
-                      Box 4122
-                      <br />
-                      131 04 Nacka
-                    </p>
-                  </div>
-                </div>
+                )}
+                {(() => {
+                  const postAddr = formatAddress(settings.postAddress);
+                  return postAddr && (
+                    <div className="flex items-start gap-3">
+                      <IconMapPin className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                      <div>
+                        <p className="text-sm font-medium mb-1">Postadress</p>
+                        <p className="text-sm text-muted-foreground">
+                          {postAddr.map((line, i) => (
+                            <span key={i}>
+                              {line}
+                              {i < postAddr.length - 1 && <br />}
+                            </span>
+                          ))}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })()}
+                {(() => {
+                  const visitingAddr = formatAddress(settings.visitingAddress);
+                  return visitingAddr && (
+                    <div className="flex items-start gap-3">
+                      <IconMapPin className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                      <div>
+                        <p className="text-sm font-medium mb-1">Besöksadress</p>
+                        <p className="text-sm text-muted-foreground">
+                          {visitingAddr.map((line, i) => (
+                            <span key={i}>
+                              {line}
+                              {i < visitingAddr.length - 1 && <br />}
+                            </span>
+                          ))}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             </div>
           </div>

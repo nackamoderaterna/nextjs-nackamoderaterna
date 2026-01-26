@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Link } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 interface EngageBlockProps {
   title?: string;
@@ -28,9 +29,9 @@ export function EngageBlock({
           <Button
             asChild
             variant="outline"
-            className="bg-transparent border-white text-white hover:bg-white hover:text-blue-900"
+            className="bg-transparent border-white text-white hover:bg-white hover:text-white-100"
           >
-            <Link href={buttonHref}>{buttonText}</Link>
+            <Link href={buttonHref}>{buttonText}<ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" /></Link>
           </Button>
         </div>
       </div>

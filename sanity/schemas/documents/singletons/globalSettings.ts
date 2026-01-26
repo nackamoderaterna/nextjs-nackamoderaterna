@@ -57,8 +57,8 @@ export default defineType({
     // ─────────────────────────
     //
     defineField({
-      name: 'address',
-      title: 'Adress',
+      name: 'postAddress',
+      title: 'Postadress',
       type: 'object',
       fields: [
         defineField({
@@ -83,33 +83,31 @@ export default defineType({
         }),
       ],
     }),
-
-    //
-    // ─────────────────────────
-    // Opening Hours
-    // ─────────────────────────
-    //
     defineField({
-      name: 'openingHours',
-      title: 'Öppettider',
-      type: 'array',
-      of: [
-        {
-          type: 'object',
-          name: 'openingHour',
-          fields: [
-            defineField({
-              name: 'day',
-              title: 'Dag',
-              type: 'string',
-            }),
-            defineField({
-              name: 'hours',
-              title: 'Öppet',
-              type: 'string',
-            }),
-          ],
-        },
+      name: 'visitingAddress',
+      title: 'Besöksadress',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'street',
+          title: 'Gatuadress',
+          type: 'string',
+        }),
+        defineField({
+          name: 'zip',
+          title: 'Postnummer',
+          type: 'string',
+        }),
+        defineField({
+          name: 'city',
+          title: 'Stad',
+          type: 'string',
+        }),
+        defineField({
+          name: 'country',
+          title: 'Land',
+          type: 'string',
+        }),
       ],
     }),
 

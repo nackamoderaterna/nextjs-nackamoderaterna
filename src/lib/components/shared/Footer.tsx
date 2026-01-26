@@ -1,8 +1,10 @@
 import Link from "next/link";
-import { sanityClient, REVALIDATE_TIME } from "@/lib/sanity/client";
+import { sanityClient } from "@/lib/sanity/client";
 import { footerQuery, getMenuItemHref, FooterData } from "@/lib/queries/navigation";
+import { globalSettingsQuery } from "@/lib/queries/globalSettings";
 import { PortableText } from "next-sanity";
 import { Facebook, Instagram, Linkedin } from "lucide-react";
+import { GlobalSettings } from "~/sanity.types";
 
 const socialIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   facebook: Facebook,
@@ -12,13 +14,35 @@ const socialIcons: Record<string, React.ComponentType<{ className?: string }>> =
 };
 
 export async function Footer() {
-  const footer = await sanityClient.fetch<FooterData | null>(footerQuery, {}, {
-    next: { revalidate: REVALIDATE_TIME },
-  });
+  const [footer, settings] = await Promise.all([
+    sanityClient.fetch<FooterData | null>(footerQuery, {}, {
+      next: { revalidate: 300 },
+    }),
+    sanityClient.fetch<GlobalSettings | null>(globalSettingsQuery, {}, {
+      next: { revalidate: 300 },
+    }),
+  ]);
 
   if (!footer) {
     return null;
   }
+
+  const formatAddress = (address: {
+    street?: string;
+    zip?: string;
+    city?: string;
+    country?: string;
+  } | null | undefined) => {
+    if (!address) return null;
+    const parts = [
+      address.street,
+      address.zip && address.city
+        ? `${address.zip} ${address.city}`
+        : address.zip || address.city,
+      address.country,
+    ].filter(Boolean);
+    return parts.length > 0 ? parts : null;
+  };
 
   return (
     <footer className="border-t border-border bg-muted/30 mt-16">
@@ -149,24 +173,59 @@ export async function Footer() {
           )}
 
           {/* Contact Information */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">
-              Kontaktuppgifter
-            </h3>
-            <address className="not-italic text-sm text-muted-foreground space-y-1">
-              <p>Stockholmsvägen 8</p>
-              <p>Box 4372</p>
-              <p>131 04, Nacka</p>
-              <p className="mt-3">
-                <a
-                  href="mailto:nacka@moderaterna.se"
-                  className="hover:text-foreground transition-colors underline"
-                >
-                  nacka@moderaterna.se
-                </a>
-              </p>
-            </address>
-          </div>
+          {(settings?.contactInfo || settings?.postAddress || settings?.visitingAddress) && (
+            <div>
+              <h3 className="font-semibold text-foreground mb-4">
+                Kontaktuppgifter
+              </h3>
+              <div className="not-italic text-sm text-muted-foreground space-y-1">
+                {settings?.visitingAddress && formatAddress(settings.visitingAddress) && (
+                  <>
+                    <p className="text-xs font-medium text-foreground/70 mb-1">Besöksadress</p>
+                    {formatAddress(settings.visitingAddress)?.map((line, i) => (
+                      <p key={i}>{line}</p>
+                    ))}
+                  </>
+                )}
+                {settings?.postAddress && formatAddress(settings.postAddress) && (
+                  <>
+                    <p className={`text-xs font-medium text-foreground/70 mb-1 ${settings?.visitingAddress ? 'mt-3' : ''}`}>
+                      Postadress
+                    </p>
+                    {formatAddress(settings.postAddress)?.map((line, i) => (
+                      <p key={i}>{line}</p>
+                    ))}
+                  </>
+                )}
+                {settings?.contactInfo?.email && (
+                  <>
+                    <p className="text-xs font-medium text-foreground/70 mb-1 mt-3">E-post</p>
+                    <p>
+                      <a
+                        href={`mailto:${settings.contactInfo.email}`}
+                        className="hover:text-foreground transition-colors underline"
+                      >
+                        {settings.contactInfo.email}
+                      </a>
+                    </p>
+                  </>
+                )}
+                {settings?.contactInfo?.phone && (
+                  <>
+                    <p className="text-xs font-medium text-foreground/70 mb-1 mt-3">Telefon</p>
+                    <p>
+                      <a
+                        href={`tel:${settings.contactInfo.phone.replace(/\s/g, "")}`}
+                        className="hover:text-foreground transition-colors underline"
+                      >
+                        {settings.contactInfo.phone}
+                      </a>
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Footer Text */}

@@ -5,7 +5,8 @@ export const globalSettingsQuery = groq`
     companyName,
     logo,
     contactInfo,
-    address,
+    postAddress,
+    visitingAddress,
     socialLinks,
     seo
   }
