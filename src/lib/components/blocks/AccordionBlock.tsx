@@ -5,6 +5,7 @@ import { PortableText } from "next-sanity";
 import Block from "./Block";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
+import { portableTextComponents } from "../shared/PortableTextComponents";
 
 interface AccordionItem {
   title: string;
@@ -37,8 +38,8 @@ export function AccordionBlock({ block }: { block: AccordionBlockProps }) {
   };
 
   return (
-    <Block>
-      <div className="max-w-4xl mx-auto">
+    <Block maxWidth="4xl">
+      
         {(block.heading || block.description) && (
           <div className="mb-12 text-center">
             {block.heading && (
@@ -72,14 +73,13 @@ export function AccordionBlock({ block }: { block: AccordionBlockProps }) {
                 </CollapsibleTrigger>
                 <CollapsibleContent className="px-6 pb-6">
                   <div className="prose prose-neutral max-w-none pt-4">
-                    <PortableText value={item.content} />
+                    <PortableText value={item.content} components={portableTextComponents} />
                   </div>
                 </CollapsibleContent>
               </Collapsible>
             );
           })}
         </div>
-      </div>
     </Block>
   );
 }

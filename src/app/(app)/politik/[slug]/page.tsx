@@ -4,17 +4,32 @@ import { PeopleCard } from "@/lib/components/politician/PoliticianCardLarge";
 import { PolicyList } from "@/lib/components/politics/policyList";
 import { PoliticalAreaHero } from "@/lib/components/politics/politicalAreaHero";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
-import { politicalAreaPageQuery } from "@/lib/queries/politik";
+import { politicalAreaPageQuery, allPoliticalAreaSlugsQuery } from "@/lib/queries/politik";
+import { globalSettingsQuery } from "@/lib/queries/globalSettings";
 import { sanityClient } from "@/lib/sanity/client";
+import { groq } from "next-sanity";
 import { formatDate } from "@/lib/utils/dateUtils";
 import { ExternalLink } from "lucide-react";
 import { PortableText } from "next-sanity";
+import Link from "next/link";
 import {
   News,
   PoliticalArea,
   PoliticalIssue,
   Politician,
 } from "~/sanity.types";
+import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
+
+// Generate static params for all political areas at build time
+export async function generateStaticParams() {
+  const areas = await sanityClient.fetch<{ slug: string }[]>(
+    allPoliticalAreaSlugsQuery
+  );
+  
+  return areas.map((area) => ({
+    slug: area.slug,
+  }));
+}
 
 export type PoliticalAreaPage = Omit<PoliticalArea, never> & {
   latestNews: News[];
@@ -30,21 +45,35 @@ interface Props {
 
 export default async function PoliticalAreaSinglePage({ params }: Props) {
   const { slug } = await params;
+  // First get the political area to get its ID for the politician query
+  const area = await sanityClient.fetch<{ _id: string } | null>(
+    groq`*[_type == "politicalArea" && slug.current == $slug][0] { _id }`,
+    { slug }
+  );
   const data = await sanityClient.fetch<PoliticalAreaPage>(
     politicalAreaPageQuery,
-    { slug },
+    { slug, areaId: area?._id || "" },
   );
+  const globalSettings = await sanityClient.fetch(globalSettingsQuery);
+  console.log(data.politicians);
 
   const mainContent = (
     <div className="space-y-8 prose md:prose-lg">
       <div className="prose md:prose-lg">
-        {data.description && <PortableText value={data.description} />}
+        {data.description && <PortableText value={data.description} components={portableTextComponents} />}
       </div>
 
-      <Button className="mt-6 bg-blue-600 hover:bg-blue-700 text-white">
-        Läs vårt handlingsprogram
-        <ExternalLink className="w-4 h-4 ml-2" />
-      </Button>
+      {globalSettings?.handlingsprogram?.url && (
+        <Button 
+          asChild
+          className="mt-6 bg-blue-600 hover:bg-blue-700 text-white"
+        >
+          <Link href={globalSettings.handlingsprogram.url} target="_blank" rel="noopener noreferrer">
+            Läs vårt handlingsprogram
+            <ExternalLink className="w-4 h-4 ml-2" />
+          </Link>
+        </Button>
+      )}
     </div>
   );
 

@@ -3,11 +3,22 @@ import type { Metadata } from "next";
 
 import { PageBuilder } from "@/lib/components/PageBuilder";
 import { PageModal } from "@/lib/components/shared/PageModal";
-import { pageBySlugQuery } from "@/lib/queries/pages";
+import { pageBySlugQuery, allPageSlugsQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
 import { generatePageMetadata } from "@/lib/utils/pageSeo";
 
 export const revalidate = 300;
+
+// Generate static params for all pages at build time
+export async function generateStaticParams() {
+  const pages = await sanityClient.fetch<{ slug: string }[]>(
+    allPageSlugsQuery
+  );
+  
+  return pages.map((page) => ({
+    slug: page.slug,
+  }));
+}
 
 type PageData = {
   title?: string;

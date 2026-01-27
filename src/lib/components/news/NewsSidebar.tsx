@@ -16,8 +16,13 @@ export function NewsSidebar({ news }: NewsSidebarProps) {
   return (
     <div className="grid gap-4">
       {news.mainImage && (
-        <div className="aspect-[4/5]">
-          <SanityImage image={news.mainImage} />
+        <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-muted">
+          <SanityImage 
+            image={news.mainImage} 
+            fill
+            className="object-contain"
+            alt={news.mainImage.alt || news.title || ""}
+          />
         </div>
       )}
 
@@ -44,7 +49,7 @@ export function NewsSidebar({ news }: NewsSidebarProps) {
       )}
 
       {news.referencedPoliticians && news.referencedPoliticians.length > 0 && (
-        <aside className="mb-8" aria-label="Omnämnda företrädare">
+        <aside  aria-label="Omnämnda företrädare">
           <div className="space-y-4 rounded bg-muted grid p-4">
             <h2 className="text-muted-foreground mb-4">Omnämnda Företrädare</h2>
             <nav aria-label="Lista över omnämnda företrädare">
@@ -65,20 +70,58 @@ export function NewsSidebar({ news }: NewsSidebarProps) {
         </aside>
       )}
 
+      {news.geographicalAreas && news.geographicalAreas.length > 0 && (
+        <aside aria-label="Geografiska områden">
+          <div className="space-y-4 rounded bg-muted grid p-4">
+            <h2 className="text-muted-foreground mb-4">Geografiska Områden</h2>
+            <nav aria-label="Lista över geografiska områden">
+              <div className="grid gap-4">
+              {news.geographicalAreas.map((area) => (
+                <Link
+                  key={area._id}
+                  href={`/omrade/${area.slug?.current || ""}`}
+                  className="flex items-center gap-3 group hover:bg-background/80 rounded p-2 -m-2 transition-colors"
+                >
+                  {area.image && (
+                    <div className="relative w-12 h-12 flex-shrink-0 rounded overflow-hidden bg-muted">
+                      <SanityImage
+                        image={area.image}
+                        fill
+                        alt={area.name || ""}
+                        sizes="48px"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-foreground text-sm leading-tight">
+                      {area.name}
+                    </h3>
+                  </div>
+                </Link>
+              ))}
+              </div>
+            </nav>
+          </div>
+        </aside>
+      )}
+
       {news.relatedNews && news.relatedNews.length > 0 && (
-        <aside className="mb-8" aria-label="Artikelserie">
+        <aside aria-label="Artikelserie">
           <div className="space-y-4 rounded bg-muted grid p-4">
             <h2 className="text-muted-foreground mb-4">Artikelserie</h2>
             <nav aria-label="Artikelserie">
-              <ul className="space-y-3">
+              <ul className="grid gap-4">
                 {news.relatedNews.map((related) => (
+                       <Link
+                       key={related._id}
+                       href={`${ROUTE_BASE.NEWS}/${related.slug?.current ?? ""}`}
+                       className="block text-sm font-medium text-foreground hover:text-primary transition-colors hover:bg-background/80 rounded p-2 -m-2"
+                     >
                   <li key={related._id}>
-                    <Link
-                      href={`${ROUTE_BASE.NEWS}/${related.slug?.current ?? ""}`}
-                      className="block text-sm font-medium text-foreground hover:text-primary transition-colors"
-                    >
+               
                       {related.title}
-                    </Link>
+                   
                     {related.effectiveDate && (
                       <time
                         dateTime={related.effectiveDate}
@@ -88,6 +131,7 @@ export function NewsSidebar({ news }: NewsSidebarProps) {
                       </time>
                     )}
                   </li>
+                  </Link>
                 ))}
               </ul>
             </nav>

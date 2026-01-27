@@ -5,6 +5,8 @@ import seo from "./seo";
 import { themeSettings } from "./themeSettings";
 import pageModal from "./pageModal";
 import lucideIcon from "./lucideIcon";
+import { richTextQuote } from "./richTextQuote";
+import { richTextHighlightedLink } from "./richTextHighlightedLink";
 
 export const objects = [
   menuItem,
@@ -14,4 +16,6 @@ export const objects = [
   containerSettings,
   contentSettings,
   lucideIcon,
+  richTextQuote,
+  richTextHighlightedLink,
 ];

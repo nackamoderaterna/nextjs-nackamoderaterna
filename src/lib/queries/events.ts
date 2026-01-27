@@ -14,6 +14,11 @@ export const upcomingEventsQuery = groq`
   }
 `;
 
+// Query to get all event slugs for static generation
+export const allEventSlugsQuery = groq`*[_type == "event" && defined(slug.current)] {
+  "slug": slug.current
+}`;
+
 export const singleEventQuery = groq`
   *[_type == "event" && slug.current == $slug][0] {
     _id,

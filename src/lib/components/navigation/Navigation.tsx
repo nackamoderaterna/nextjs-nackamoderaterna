@@ -1,23 +1,16 @@
-import {
-  MenuItemWithReference,
-  NavigationData,
-  navigationQuery,
-} from "@/lib/queries/navigation";
+import { MenuItemWithReference } from "@/lib/queries/navigation";
 import { MobileNav } from "./MobileNav";
-import { sanityClient } from "@/lib/sanity/client";
 import { MainNav } from "./MainNav";
 
-export async function Navigation() {
-  const navigation = await sanityClient.fetch<NavigationData>(navigationQuery);
-
-  if (!navigation || !navigation.items) {
+export function Navigation({ items }: { items: MenuItemWithReference[] }) {
+  if (!items || items.length === 0) {
     return null;
   }
 
   return (
     <>
-      <MainNav items={navigation.items} />{" "}
-      <MobileNav items={navigation.items} />
+      <MainNav items={items} />
+      <MobileNav items={items} />
     </>
   );
 }

@@ -30,14 +30,13 @@ export function QuoteBlock({ block }: { block: QuoteBlockProps }) {
   const flexAlignClass = flexAlignmentClasses[alignment];
 
   return (
-    <Block>
-      <div className="max-w-7xl mx-auto">
+    <Block maxWidth="4xl">
         {block.heading && (
           <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
             {block.heading}
           </h2>
         )}
-        <div className={`max-w-4xl mx-auto ${alignClass} flex flex-col ${flexAlignClass}`}>
+        <div className={`${alignClass} flex flex-col ${flexAlignClass}`}>
           <blockquote className="text-2xl md:text-3xl font-light italic mb-8 leading-relaxed">
             "{block.quote}"
           </blockquote>
@@ -67,7 +66,6 @@ export function QuoteBlock({ block }: { block: QuoteBlockProps }) {
           </div>
         )}
         </div>
-      </div>
     </Block>
   );
 }

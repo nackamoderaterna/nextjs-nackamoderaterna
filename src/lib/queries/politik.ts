@@ -44,6 +44,16 @@ export const politikPageQuery = groq`
 }
 `;
 
+// Query to get all political area slugs for static generation
+export const allPoliticalAreaSlugsQuery = groq`*[_type == "politicalArea" && defined(slug.current)] {
+  "slug": slug.current
+}`;
+
+// Query to get all geographical area slugs for static generation
+export const allGeographicalAreaSlugsQuery = groq`*[_type == "geographicalArea" && defined(slug.current)] {
+  "slug": slug.current
+}`;
+
 export const politicalAreaPageQuery = groq`
   *[_type == "politicalArea" && slug.current == $slug][0] {
     _id,
@@ -78,12 +88,11 @@ export const politicalAreaPageQuery = groq`
     },
     "politicians": *[
       _type == "politician" &&
-      references(^._id) &&
       count(
         politicalAreas[
           showOnPoliticalAreaPage == true && 
           defined(politicalArea) &&
-          politicalArea._ref == ^._id
+          politicalArea._ref == $areaId
         ]
       ) > 0
     ] {

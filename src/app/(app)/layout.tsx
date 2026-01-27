@@ -2,6 +2,13 @@ import Header from "@/lib/components/shared/Header";
 import "../globals.css";
 import { Footer } from "@/lib/components/shared/Footer";
 import { Analytics } from "@vercel/analytics/react";
+import { Inter } from "next/font/google";
+
+const interDisplay = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter-display",
+});
 
 export default function RootLayout({
   children,
@@ -9,8 +16,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" className={interDisplay.variable}>
+      <body className={interDisplay.className}>
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />

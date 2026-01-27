@@ -1,4 +1,5 @@
 export const ROUTE_BASE = {
+  HOME: "/",
   POLITICIANS: "/politiker",
   POLITICS: "/politik",
   NEWS: "/nyheter",

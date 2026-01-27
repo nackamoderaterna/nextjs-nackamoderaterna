@@ -17,11 +17,29 @@ export const text = defineType({
       of: [{ type: "block" }],
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: "columns",
+      title: "Kolumner",
+      description: "Antal kolumner för textinnehållet. Innehållet flödar automatiskt mellan kolumnerna.",
+      type: "number",
+      options: {
+        list: [
+          { title: "1 kolumn", value: 1 },
+          { title: "2 kolumner", value: 2 },
+        ],
+      },
+      initialValue: 1,
+    }),
   ],
   preview: {
-    prepare() {
+    select: {
+      columns: "columns",
+      heading: "heading",
+    },
+    prepare(selection) {
       return {
         title: "Text",
+        subtitle: `${selection.heading} - ${selection.columns} kolumner`,
       };
     },
   },

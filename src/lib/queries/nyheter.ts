@@ -30,7 +30,8 @@ export const newsQuery = groq`
   "geographicalAreas": geographicalAreas[]->{
     _id,
     name,
-    slug
+    slug,
+    image
   },
 
   "relatedNews": related[]->{
@@ -63,6 +64,11 @@ export const newsListQuery = groq`*[_type == "news"] | order(
   }
 }`;
 
+// Query to get all news slugs for static generation
+export const allNewsSlugsQuery = groq`*[_type == "news" && defined(slug.current)] {
+  "slug": slug.current
+}`;
+
 export const newsListPaginatedQuery = groq`{
   "items": *[
     _type == "news"
@@ -84,7 +90,7 @@ export const newsListPaginatedQuery = groq`{
     "effectiveDate": coalesce(dateOverride, _createdAt),
     "politicalAreas": politicalAreas[]-> {
       _id,
-      title,
+      name,
       slug
     }
   },

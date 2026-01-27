@@ -40,8 +40,7 @@ export function StatsBlock({ block }: { block: StatsBlockProps }) {
   };
 
   return (
-    <Block>
-      <div className="max-w-6xl mx-auto">
+    <Block maxWidth="6xl">
         {(block.heading || block.description) && (
           <div className="text-center mb-12">
             {block.heading && (
@@ -71,7 +70,6 @@ export function StatsBlock({ block }: { block: StatsBlockProps }) {
             </div>
           ))}
         </div>
-      </div>
     </Block>
   );
 }

@@ -39,12 +39,10 @@ export function CTABlock({ block }: { block: CTABlockProps }) {
   };
 
   return (
-    <Block>
-      <div className="w-full py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <Block paddingY="xlarge" maxWidth="3xl">
           <div
             className={cn(
-              "mx-auto max-w-3xl rounded-xl p-12 md:p-16 border border-border bg-card shadow-sm",
+              "mx-auto rounded-xl p-12 md:p-16 border border-border bg-card shadow-sm",
               alignmentClasses[alignment]
             )}
           >
@@ -75,8 +73,6 @@ export function CTABlock({ block }: { block: CTABlockProps }) {
               )}
             </div>
           </div>
-        </div>
-      </div>
-    </Block>
+      </Block>
   );
 }

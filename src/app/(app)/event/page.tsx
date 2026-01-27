@@ -1,6 +1,6 @@
-import { ContactBlock } from "@/lib/components/blocks/ContactBlock";
-import { EngageBlock } from "@/lib/components/blocks/EngageBlock";
+import Block from "@/lib/components/blocks/Block";
 import { EventCard } from "@/lib/components/events/eventCard";
+import { ContactForm } from "@/lib/components/shared/ContactForm";
 import { upcomingEventsQuery } from "@/lib/queries/events";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
@@ -98,10 +98,9 @@ export default async function EventsPage() {
       </section>
 
       {/* Contact Block */}
-      <ContactBlock />
-
-      {/* Engage Block */}
-      <EngageBlock buttonText="Bli medlem" />
+      <Block maxWidth="3xl" paddingY="large" background="muted">
+      <ContactForm heading="Kontakta oss" description="Har du frågor eller vill engagera dig? Fyll i formuläret nedan så återkommer vi så snart som möjligt." />
+      </Block >
     </main>
   );
 }

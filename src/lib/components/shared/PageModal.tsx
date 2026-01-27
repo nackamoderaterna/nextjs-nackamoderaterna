@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { PortableText } from "next-sanity";
+import { portableTextComponents } from "./PortableTextComponents";
 
 import {
   Dialog,
@@ -119,7 +120,7 @@ export function PageModal({
           {modal.content?.length ? (
             <DialogDescription asChild>
               <div className="prose prose-neutral max-w-none">
-                <PortableText value={modal.content} />
+                <PortableText value={modal.content} components={portableTextComponents} />
               </div>
             </DialogDescription>
           ) : null}

@@ -26,7 +26,7 @@ export function HeroBlock({ block }: HeroBlockProps) {
         <SanityBackgroundImage image={block.backgroundImage} loading="eager" />
       </div>
       <div className={`relative ${height} flex items-center`}>
-        <Block>
+        <Block paddingX="standard" paddingY="none" asSection={false} className="w-full">
           <div className="z-90">
             {block.heading && (
               <h1 className=" text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white">

@@ -1,16 +1,29 @@
 import { notFound } from "next/navigation";
 import { sanityClient } from "@/lib/sanity/client";
 import { NewsWithReferences } from "@/types/news";
-import { newsQuery } from "@/lib/queries/nyheter";
+import { newsQuery, allNewsSlugsQuery } from "@/lib/queries/nyheter";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { formatDate } from "@/lib/utils/dateUtils";
 import { PortableText } from "next-sanity";
 import { NewsSidebar } from "@/lib/components/news/NewsSidebar";
 import { NewsVariantBadge } from "@/lib/components/news/NewsVariantBadge";
+import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
 import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
 import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
 import { ROUTE_BASE } from "@/lib/routes";
+import Link from "next/link";
+
+// Generate static params for all news articles at build time
+export async function generateStaticParams() {
+  const news = await sanityClient.fetch<{ slug: string }[]>(
+    allNewsSlugsQuery
+  );
+  
+  return news.map((article) => ({
+    slug: article.slug,
+  }));
+}
 
 export async function generateMetadata({
   params,
@@ -64,12 +77,8 @@ export default async function NewsArticlePage({
 
   const mainContent = (
     <div className="px-4">
-      <div className="mb-4 flex flex-wrap items-center gap-2">
-        {news.politicalAreas && news.politicalAreas.length > 0 && (
-          <span className="inline-block text-sm font-medium text-blue-600">
-            {news.politicalAreas[0].name}
-          </span>
-        )}
+      <div className="mb-4 flex flex-wrap items-center gap-4">
+       
         {news.variant && news.variant !== "default" && (
           <NewsVariantBadge variant={news.variant} />
         )}
@@ -77,6 +86,18 @@ export default async function NewsArticlePage({
       <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4 text-balance">
         {news.title}
       </h1>
+      {news.politicalAreas && news.politicalAreas.length > 0 && (
+
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            {news.politicalAreas.map((area) => (
+              <Link href={`${ROUTE_BASE.POLITICS}/${area.slug?.current}`} key={area._id}>
+              <span className="inline-block text-sm rounded-full px-3 py-1 bg-blue-100 text-blue-800 hover:bg-blue-200 hover:text-blue-900 transition-colors">
+                {area.name}
+              </span>
+              </Link>
+            ))}
+            </div>
+        )}
       <time
         dateTime={news.effectiveDate}
         className="text-sm text-muted-foreground"
@@ -89,7 +110,7 @@ export default async function NewsArticlePage({
       </h2>
       {news.body && (
         <div className="prose md:prose-lg mt-8">
-          <PortableText value={news.body} />
+          <PortableText value={news.body} components={portableTextComponents} />
         </div>
       )}
     </div>

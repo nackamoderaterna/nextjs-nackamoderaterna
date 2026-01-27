@@ -3,6 +3,7 @@ import { sanityClient } from "@/lib/sanity/client";
 import { footerQuery, getMenuItemHref, FooterData } from "@/lib/queries/navigation";
 import { globalSettingsQuery } from "@/lib/queries/globalSettings";
 import { PortableText } from "next-sanity";
+import { portableTextComponents } from "./PortableTextComponents";
 import { Facebook, Instagram, Linkedin } from "lucide-react";
 import { GlobalSettings } from "~/sanity.types";
 
@@ -232,7 +233,7 @@ export async function Footer() {
         {footer.footerText && footer.footerText.length > 0 && (
           <div className="mt-8 pt-8 border-t border-border">
             <div className="prose prose-sm prose-neutral max-w-none">
-              <PortableText value={footer.footerText} />
+              <PortableText value={footer.footerText} components={portableTextComponents} />
             </div>
           </div>
         )}

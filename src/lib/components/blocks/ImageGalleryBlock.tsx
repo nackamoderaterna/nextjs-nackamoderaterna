@@ -52,22 +52,7 @@ export function ImageGalleryBlock({ block }: { block: ImageGalleryBlockProps }) 
     return image && (image.asset?._ref || image.asset?._id || image.asset?.url);
   }) || [];
 
-  // Debug logging
-  if (process.env.NODE_ENV === "development" && block.images) {
-    console.log("ImageGalleryBlock - block:", {
-      heading,
-      columns,
-      aspectRatio,
-      imagesCount: block.images.length,
-      validImagesCount: validImages.length,
-      firstImage: block.images[0] ? {
-        _key: block.images[0]._key,
-        hasAsset: !!block.images[0].asset,
-        asset: block.images[0].asset,
-        assetKeys: block.images[0].asset ? Object.keys(block.images[0].asset) : [],
-      } : null,
-    });
-  }
+
 
   if (validImages.length === 0) {
     if (process.env.NODE_ENV === "development") {
@@ -81,7 +66,6 @@ export function ImageGalleryBlock({ block }: { block: ImageGalleryBlockProps }) 
 
   return (
     <Block>
-      <div className="max-w-7xl mx-auto">
         {heading && (
           <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
             {heading}
@@ -135,7 +119,6 @@ export function ImageGalleryBlock({ block }: { block: ImageGalleryBlockProps }) 
             </div>
           ))}
         </div>
-      </div>
     </Block>
   );
 }

@@ -36,8 +36,16 @@ export function SanityImage({
     quality: 85,
   });
 
+  if (!imageUrl) {
+    return null;
+  }
+
   const objectPosition = getObjectPositionFromHotspot(image);
   const imageAlt = alt || image.alt || "";
+    // Determine object-fit class: use className if it contains object-*, otherwise default to object-cover
+  const objectFitClass = className.includes("object-")
+    ? className
+    : `object-cover ${className}`;
 
   return fill ? (
     <Image
@@ -47,7 +55,7 @@ export function SanityImage({
       sizes={sizes}
       priority={priority}
       loading={loading}
-      className={`object-cover ${className}`}
+      className={objectFitClass}
       style={{ objectPosition }}
     />
   ) : (
@@ -59,7 +67,7 @@ export function SanityImage({
       sizes={sizes}
       priority={priority}
       loading={loading}
-      className={`object-cover ${className}`}
+      className={objectFitClass}
       style={{ objectPosition }}
     />
   );

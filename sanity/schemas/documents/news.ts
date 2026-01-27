@@ -66,7 +66,12 @@ export const news = defineType({
       title: "Innehåll",
       description: "Huvudinnehållet i nyheten. Kan innehålla text, bilder och annat innehåll.",
       type: "array",
-      of: [{ type: "block" }, { type: "image" }],
+      of: [
+        { type: "block" },
+        { type: "image" },
+        { type: "richTextQuote" },
+        { type: "richTextHighlightedLink" },
+      ],
     },
     {
       name: "document",

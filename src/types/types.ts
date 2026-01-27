@@ -40,11 +40,10 @@ type BlockStats = {
 
 type BlockTwoColumn = {
   _type: "block.twoColumn";
-  leftContent?: any[];
-  rightContent?: any[];
-  leftImage?: any;
-  rightImage?: any;
-  reverse?: boolean;
+  heading?: string;
+  image: any;
+  content: any[];
+  imagePosition?: "left" | "right";
   verticalAlignment?: "top" | "center" | "bottom";
 };
 
@@ -81,6 +80,13 @@ type BlockImageGallery = {
   aspectRatio?: "square" | "landscape" | "portrait" | "auto";
 };
 
+type BlockContact = {
+  _type: "block.contact";
+  heading?: string;
+  description?: string;
+  showContactInfo?: boolean;
+};
+
 export type PageBlock =
   | BlockHero
   | BlockText
@@ -93,7 +99,8 @@ export type PageBlock =
   | BlockTwoColumn
   | BlockAccordion
   | BlockQuote
-  | BlockImageGallery;
+  | BlockImageGallery
+  | BlockContact;
 
 type SanityDocumentBase = {
   _id: string;

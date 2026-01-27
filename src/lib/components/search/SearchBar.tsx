@@ -139,7 +139,7 @@ export function SearchBar() {
           {results.length > 0 ? (
             <div className="p-2">
               {results.map((result) => {
-                const imageUrl = result.image ? buildImageUrl(result.image, { width: 64, height: 64 }) : null;
+                const imageUrl = result.image ? buildImageUrl(result.image, { width:150, height:150 }) : null;
                 return (
                   <Link
                     key={result._id}

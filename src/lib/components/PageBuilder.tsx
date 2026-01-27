@@ -4,16 +4,16 @@ import { ImageBlock } from "./blocks/imageBlock";
 import VideoBlock from "./blocks/videoBlock";
 import { PageBlock } from "@/types/types";
 import {
-  BlockPoliticianDereferenced,
   PoliticianReferenceBlock,
 } from "./blocks/PoliticianReference";
 import { NewsBlock } from "./blocks/NewsBlock";
 import { StatsBlock } from "./blocks/StatsBlock";
-import { TwoColumnBlock } from "./blocks/TwoColumnBlock";
+import { TextMediaBlock } from "./blocks/TextMediaBlock";
 import { AccordionBlock } from "./blocks/AccordionBlock";
 import { QuoteBlock } from "./blocks/QuoteBlock";
 import { ImageGalleryBlock } from "./blocks/ImageGalleryBlock";
 import { CTABlock } from "./blocks/cta-block";
+import { ContactBlock } from "./blocks/ContactBlock";
 
 interface PageBuilderProps {
   blocks: PageBlock[];
@@ -47,13 +47,15 @@ export function PageBuilder({ blocks }: PageBuilderProps) {
           case "block.stats":
             return <StatsBlock key={key} block={block as any} />;
           case "block.twoColumn":
-            return <TwoColumnBlock key={key} block={block as any} />;
+            return <TextMediaBlock key={key} block={block as any} />;
           case "block.accordion":
             return <AccordionBlock key={key} block={block as any} />;
           case "block.quote":
             return <QuoteBlock key={key} block={block as any} />;
           case "block.imageGallery":
             return <ImageGalleryBlock key={key} block={block as any} />;
+          case "block.contact":
+            return <ContactBlock key={key} block={block as any} />;
           default:
             return null;
         }

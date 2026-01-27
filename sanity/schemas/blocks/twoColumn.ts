@@ -2,55 +2,48 @@ import { defineField, defineType } from "sanity";
 
 export const twoColumnBlock = defineType({
   name: "block.twoColumn",
-  title: "Tvåkolumnsblock",
+  title: "Text och bild",
   type: "object",
   fields: [
     defineField({
       name: "heading",
       title: "Rubrik",
       type: "string",
+      description: "Valfri rubrik som visas ovanför blocket",
     }),
     defineField({
-      name: "leftContent",
-      title: "Vänster innehåll",
+      name: "image",
+      title: "Bild",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "content",
+      title: "Textinnehåll",
       type: "array",
       of: [{ type: "block" }],
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "rightContent",
-      title: "Höger innehåll",
-      type: "array",
-      of: [{ type: "block" }],
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: "leftImage",
-      title: "Vänster bild",
-      type: "image",
+      name: "imagePosition",
+      title: "Bildens position",
+      description: "Välj om bilden ska visas till vänster eller höger om texten",
+      type: "string",
       options: {
-        hotspot: true,
+        list: [
+          { title: "Vänster", value: "left" },
+          { title: "Höger", value: "right" },
+        ],
       },
-    }),
-    defineField({
-      name: "rightImage",
-      title: "Höger bild",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
-    }),
-    defineField({
-      name: "reverse",
-      title: "Vänd layout",
-      description: "Byter plats på vänster och höger kolumn. Användbart för att variera layouten.",
-      type: "boolean",
-      initialValue: false,
+      initialValue: "left",
     }),
     defineField({
       name: "verticalAlignment",
-      title: "Vertikal justering",
-      description: "Hur innehållet ska justeras vertikalt i kolumnerna.",
+      title: "Vertikal justering av text",
+      description: "Hur texten ska justeras vertikalt i förhållande till bilden",
       type: "string",
       options: {
         list: [
@@ -63,9 +56,14 @@ export const twoColumnBlock = defineType({
     }),
   ],
   preview: {
-    prepare() {
+    select: {
+      heading: "heading",
+      imagePosition: "imagePosition",
+    },
+    prepare({ heading, imagePosition }) {
       return {
-        title: "Tvåkolumnsblock",
+        title: heading || "Text och bild",
+        subtitle: `Bild ${imagePosition === "right" ? "höger" : "vänster"}`,
       };
     },
   },

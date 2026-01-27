@@ -15,7 +15,6 @@ export function NewsBlock({ block }: { block: NewsBlockProps }) {
 
   return (
     <Block>
-      <section className="my-12">
         {heading && (
           <div className="mb-8">
             <h2 className="text-3xl md:text-4xl font-bold text-center">{heading}</h2>
@@ -37,7 +36,6 @@ export function NewsBlock({ block }: { block: NewsBlockProps }) {
             );
           })}
         </div>
-      </section>
     </Block>
   );
 }

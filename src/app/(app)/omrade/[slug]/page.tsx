@@ -3,7 +3,7 @@ import { NewsCard } from "@/lib/components/news/NewsCard";
 import { PoliticianCardSmall } from "@/lib/components/politician/PoliticianCardSmall";
 import { PoliticalAreaHero } from "@/lib/components/politics/politicalAreaHero";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
-import { geographicalAreaPageQuery } from "@/lib/queries/politik";
+import { geographicalAreaPageQuery, allGeographicalAreaSlugsQuery } from "@/lib/queries/politik";
 import { sanityClient } from "@/lib/sanity/client";
 import { formatDate } from "@/lib/utils/dateUtils";
 import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
@@ -11,8 +11,20 @@ import { Metadata } from "next";
 import { PortableText } from "next-sanity";
 import Link from "next/link";
 import { News, GeographicalArea, Politician } from "~/sanity.types";
+import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
 import { cleanPoliticianData, PoliticianWithNamnd } from "@/lib/politicians";
 import { ROUTE_BASE } from "@/lib/routes";
+
+// Generate static params for all geographical areas at build time
+export async function generateStaticParams() {
+  const areas = await sanityClient.fetch<{ slug: string }[]>(
+    allGeographicalAreaSlugsQuery
+  );
+  
+  return areas.map((area) => ({
+    slug: area.slug,
+  }));
+}
 
 export type GeographicalAreaPage = Omit<GeographicalArea, never> & {
   latestNews: News[];
@@ -74,7 +86,7 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
   const mainContent = (
     <div className="space-y-8 prose md:prose-lg">
       <div className="prose md:prose-lg">
-        {data.description && <PortableText value={data.description} />}
+        {data.description && <PortableText value={data.description} components={portableTextComponents} />}
       </div>
     </div>
   );

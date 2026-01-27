@@ -47,6 +47,7 @@ export const page = defineType({
         {type: 'block.accordion'},
         {type: 'block.quote'},
         {type: 'block.imageGallery'},
+        {type: 'block.contact'},
       ],
     },
     {

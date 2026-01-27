@@ -28,7 +28,8 @@ type NewsListItem = Pick<
   variant?: NewsVariant;
   politicalAreas?: Array<{
     _id: string;
-    title: string;
+    name: string;
+    slug?: { current: string } | null;
   }>;
 };
 
@@ -166,6 +167,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                   slug={news.slug?.current || ""}
                   excerpt={news.excerpt || ""}
                   variant={news.variant}
+                  politicalAreas={news.politicalAreas}
                 />
               ))}
             </div>

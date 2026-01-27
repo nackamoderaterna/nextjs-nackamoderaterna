@@ -8,6 +8,11 @@ export const globalSettingsQuery = groq`
     postAddress,
     visitingAddress,
     socialLinks,
-    seo
+    seo,
+    "handlingsprogram": handlingsprogram {
+      ...,
+      "url": asset->url,
+      "originalFilename": asset->originalFilename
+    }
   }
 `;

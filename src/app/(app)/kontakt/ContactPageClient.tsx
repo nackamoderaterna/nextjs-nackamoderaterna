@@ -1,101 +1,15 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { IconMail, IconMapPin, IconPhone } from "@tabler/icons-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { ROUTE_BASE } from "@/lib/routes";
-import { Input } from "@/components/ui/input";
 import { GlobalSettings } from "~/sanity.types";
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldError,
-} from "@/components/ui/field";
-import { useState } from "react";
-
-const formSchema = z.object({
-  name: z.string().min(2, { message: "Namnet måste vara minst 2 tecken" }),
-  email: z.email({ message: "Ange en giltig e-postadress" }),
-  phone: z.string().min(10, { message: "Telefonnumret måste vara minst 10 tecken" }),
-  message: z
-    .string()
-    .min(10, { message: "Meddelandet måste vara minst 10 tecken" }),
-});
+import { ContactForm } from "@/lib/components/shared/ContactForm";
 
 interface ContactPageClientProps {
   settings: GlobalSettings;
 }
 
 export function ContactPageClient({ settings }: ContactPageClientProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<{
-    type: "success" | "error" | null;
-    message: string;
-  }>({ type: null, message: "" });
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      message: "",
-    },
-  });
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSubmitting(true);
-    setSubmitStatus({ type: null, message: "" });
-
-    try {
-      const response = await fetch(ROUTE_BASE.API_CONTACT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        // Handle rate limiting
-        if (response.status === 429) {
-          setSubmitStatus({
-            type: "error",
-            message:
-              "För många förfrågningar. Vänta en stund innan du försöker igen.",
-          });
-          return;
-        }
-
-        throw new Error(data.error || "Något gick fel");
-      }
-
-      setSubmitStatus({
-        type: "success",
-        message: "Tack för ditt meddelande! Vi återkommer så snart som möjligt.",
-      });
-      form.reset();
-    } catch (error) {
-      setSubmitStatus({
-        type: "error",
-        message:
-          error instanceof Error
-            ? error.message
-            : "Kunde inte skicka meddelandet. Försök igen senare.",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
-
   const formatAddress = (address: {
     street?: string;
     zip?: string;
@@ -126,92 +40,7 @@ export function ContactPageClient({ settings }: ContactPageClientProps) {
           {/* Contact Form */}
           <div className="lg:col-span-2">
             <div className="bg-muted p-8 rounded-lg">
-              <h2 className="text-2xl font-bold mb-6">Skicka ett meddelande</h2>
-
-              {submitStatus.type === "success" && (
-                <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-800 dark:text-green-800">
-                  {submitStatus.message}
-                </div>
-              )}
-
-              {submitStatus.type === "error" && (
-                <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-600">
-                  {submitStatus.message}
-                </div>
-              )}
-
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6"
-              >
-                <FieldGroup>
-                  <FieldLegend className="sr-only">Kontaktformulär</FieldLegend>
-
-                  {/* Name */}
-                  <Field>
-                    <FieldLabel htmlFor="name">Namn</FieldLabel>
-                    <Input
-                      id="name"
-                      placeholder="Ditt namn"
-                      className="bg-white"
-                      disabled={isSubmitting}
-                      {...form.register("name")}
-                      required
-                    />
-                    <FieldError errors={[form.formState.errors.name]} />
-                  </Field>
-
-                  {/* Email */}
-                  <Field>
-                    <FieldLabel htmlFor="email">E-post</FieldLabel>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="din.email@example.com"
-                      className="bg-white"
-                      disabled={isSubmitting}
-                      {...form.register("email")}
-                      required
-                    />
-                    <FieldError errors={[form.formState.errors.email]} />
-                  </Field>
-                  <Field>
-                    <FieldLabel htmlFor="phone">Telefonnummer</FieldLabel>
-                    <Input
-                      id="phone"
-                      type="phone"
-                      placeholder="070-123 45 67"
-                      className="bg-white"
-                      disabled={isSubmitting}
-                      {...form.register("phone")}
-                    />
-                    <FieldError errors={[form.formState.errors.email]} />
-                  </Field>
-
-                  {/* Message */}
-                  <Field>
-                    <FieldLabel htmlFor="message">Meddelande</FieldLabel>
-                    <Textarea
-                      id="message"
-                      placeholder="Skriv ditt meddelande här..."
-                      className="min-h-32 bg-white"
-                      required
-                      disabled={isSubmitting}
-                      {...form.register("message")}
-                    />
-                    <FieldError errors={[form.formState.errors.message]} />
-                  </Field>
-                </FieldGroup>
-
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="w-full md:w-auto"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Skickar..." : "Skicka meddelande"}
-                </Button>
-              </form>
+              <ContactForm heading="Skicka ett meddelande" />
             </div>
           </div>
 

@@ -112,8 +112,23 @@ export function formatAddress(location?: {
   return parts.join(", ");
 }
 
+function formatIcalDate(date: Date): string {
+  const y = date.getUTCFullYear();
+  const m = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const d = String(date.getUTCDate()).padStart(2, "0");
+  const h = String(date.getUTCHours()).padStart(2, "0");
+  const min = String(date.getUTCMinutes()).padStart(2, "0");
+  const s = String(date.getUTCSeconds()).padStart(2, "0");
+  return `${y}${m}${d}T${h}${min}${s}Z`;
+}
+
+function escapeIcalText(text: string): string {
+  return text.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n");
+}
+
 /**
- * Generates a Google Calendar link for an event
+ * Generates a data-URL iCal link for an event. Works with Apple Calendar,
+ * Google Calendar, Outlook, etc. No API or server required.
  */
 export function generateCalendarLink(
   title: string,
@@ -123,26 +138,37 @@ export function generateCalendarLink(
   location?: string
 ): string {
   const start = new Date(startDate);
-  const end = endDate ? new Date(endDate) : new Date(start.getTime() + 60 * 60 * 1000); // Default to 1 hour if no end date
-  
-  // Format dates for Google Calendar (YYYYMMDDTHHmmssZ)
-  const formatDate = (date: Date): string => {
-    const year = date.getUTCFullYear();
-    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-    const day = String(date.getUTCDate()).padStart(2, "0");
-    const hours = String(date.getUTCHours()).padStart(2, "0");
-    const minutes = String(date.getUTCMinutes()).padStart(2, "0");
-    const seconds = String(date.getUTCSeconds()).padStart(2, "0");
-    return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
-  };
+  const end = endDate ? new Date(endDate) : new Date(start.getTime() + 60 * 60 * 1000);
+  const now = new Date();
+  const uid = `${formatIcalDate(now)}-${Math.random().toString(36).slice(2, 11)}@nackamoderaterna`;
 
-  const params = new URLSearchParams({
-    action: "TEMPLATE",
-    text: title,
-    dates: `${formatDate(start)}/${formatDate(end)}`,
-    details: description || "",
-    location: location || "",
-  });
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Nackamoderaterna//Calendar//SV",
+    "BEGIN:VEVENT",
+    `UID:${uid}`,
+    `DTSTAMP:${formatIcalDate(now)}`,
+    `DTSTART:${formatIcalDate(start)}`,
+    `DTEND:${formatIcalDate(end)}`,
+    `SUMMARY:${escapeIcalText(title)}`,
+  ];
+  if (description) lines.push(`DESCRIPTION:${escapeIcalText(description)}`);
+  if (location) lines.push(`LOCATION:${escapeIcalText(location)}`);
+  lines.push("END:VEVENT", "END:VCALENDAR");
 
-  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+  const ics = lines.join("\r\n");
+  return `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
+}
+
+/**
+ * Returns a safe filename for an iCal download, e.g. "Möt-med-borgen-nackamoderaterna.ics"
+ */
+export function calendarFilename(title: string): string {
+  const sanitized = (title || "evenemang")
+    .replace(/[\\/:*?"<>|&]+/g, "-")
+    .replace(/[\s_\-]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 60) || "evenemang";
+  return `${sanitized}-nackamoderaterna.ics`;
 }

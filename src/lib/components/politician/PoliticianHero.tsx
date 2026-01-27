@@ -64,7 +64,7 @@ export function PoliticianHero({
           </div>
 
           {/* Social Media */}
-          {socialLinks && (
+          {socialLinks && (socialLinks.tiktok || socialLinks.facebook || socialLinks.instagram) && (
             <div>
               <p className="text-xs text-muted-foreground uppercase mb-3">
                 Sociala media
@@ -100,8 +100,8 @@ export function PoliticianHero({
         </div>
 
         {/* Right column - Image */}
-        <div className="relative h-64 md:h-auto rounded-lg overflow-hidden">
-          <SanityImage image={image} />
+        <div className="relative h-64 md:h-96 rounded-lg overflow-hidden">
+          <SanityImage image={image} fill className="object-cover" />
         </div>
       </div>
     </div>

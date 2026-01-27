@@ -5,6 +5,12 @@ import { NewsVariantBadge } from "./NewsVariantBadge";
 import type { NewsVariant } from "@/types/news";
 import { ROUTE_BASE } from "@/lib/routes";
 
+export type PoliticalAreaRef = {
+  _id: string;
+  name: string;
+  slug?: { current: string } | null;
+};
+
 interface NewsCardProps {
   date: string;
   slug: string;
@@ -12,6 +18,7 @@ interface NewsCardProps {
   isLast: boolean;
   excerpt: string;
   variant?: NewsVariant | null;
+  politicalAreas?: PoliticalAreaRef[] | null;
 }
 
 export function NewsCard({
@@ -21,6 +28,7 @@ export function NewsCard({
   slug,
   isLast,
   variant,
+  politicalAreas,
 }: NewsCardProps) {
   return (
     <article
@@ -38,6 +46,7 @@ export function NewsCard({
             {variant && variant !== "default" && (
               <NewsVariantBadge variant={variant} />
             )}
+            
           </div>
 
           <div className="md:col-span-8 space-y-3">
@@ -45,14 +54,21 @@ export function NewsCard({
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight text-balance group-hover:text-primary transition-colors">
                 {title}
               </h2>
+              {politicalAreas && politicalAreas.length > 0 && (
+              <p className="text-xs capitalize text-muted-foreground mt-4 flex flex-wrap gap-4">
+                
+                {politicalAreas.map((a) => <span key={a._id}>{a.name}</span>)}
+              </p>
+            )}
             </div>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed text-pretty">
               {excerpt}
             </p>
+           
           </div>
 
-          <div className="md:col-span-2 flex items-center justify-start md:justify-end">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full border border-border group-hover:border-foreground group-hover:bg-foreground group-hover:text-background transition-all">
+          <div className="md:col-span-2 flex items-center justify-start md:justify-end mr-4">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full border border-border group-hover:border-muted-foreground group-hover:bg-muted-foreground group-hover:text-background transition-all">
               <ArrowRight className="w-5 h-5" />
             </div>
           </div>

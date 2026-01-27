@@ -61,42 +61,6 @@ export const politicianBlock = defineType({
       ],
     }),
 
-    defineField({
-      name: 'titleOverrides',
-      title: 'Titelöverskridningar',
-      description:
-        'Överskrid standardtiteln för enskilda kommunalråd. Lämna tom för att använda rolltiteln (t.ex. "Kommunalråd", "Kommunstyrelsens ordförande"). Endast synligt när läget är "Alla kommunalråd".',
-      type: 'array',
-      hidden: ({parent}) => parent?.mode !== 'kommunalrad',
-      of: [
-        {
-          type: 'object',
-          name: 'kommunalradTitleOverride',
-          fields: [
-            defineField({
-              name: 'politician',
-              title: 'Politiker',
-              type: 'reference',
-              to: [{type: 'politician'}],
-              validation: (Rule) => Rule.required(),
-            }),
-            defineField({
-              name: 'titleOverride',
-              title: 'Titel',
-              type: 'string',
-              validation: (Rule) => Rule.required(),
-            }),
-          ],
-          preview: {
-            select: {name: 'politician.name', override: 'titleOverride'},
-            prepare: ({name, override}: {name?: string; override?: string}) => ({
-              title: name ?? 'Politiker',
-              subtitle: override ? `"${override}"` : undefined,
-            }),
-          },
-        },
-      ],
-    }),
   ],
 
   preview: {

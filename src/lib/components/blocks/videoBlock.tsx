@@ -46,7 +46,6 @@ export default function VideoBlock({ block }: VideoBlockProps) {
 
   return (
     <Block>
-      <div className="max-w-7xl mx-auto">
         {heading && (
           <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
             {heading}
@@ -55,7 +54,6 @@ export default function VideoBlock({ block }: VideoBlockProps) {
         <div className={`rounded bg-gray-100 aspect-16/9`}>{renderVideo()}</div>
 
         {caption && <p className="mt-2 text-sm text-gray-600">{caption}</p>}
-      </div>
     </Block>
   );
 }

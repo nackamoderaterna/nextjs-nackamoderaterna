@@ -162,5 +162,19 @@ export default defineType({
         }),
       ],
     }),
+    //
+    // ─────────────────────────
+    // Handlingsprogram
+    // ─────────────────────────
+    //
+    defineField({
+      name: 'handlingsprogram',
+      title: 'Handlingsprogram',
+      description: 'Ladda upp handlingsprogrammet som PDF',
+      type: 'file',
+      options: {
+        accept: '.pdf',
+      },
+    }),
   ],
 })

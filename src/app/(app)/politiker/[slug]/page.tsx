@@ -3,17 +3,29 @@ import { PortableText } from "@portabletext/react";
 import Link from "next/link";
 import { sanityClient } from "@/lib/sanity/client";
 import { cleanPoliticianData, PoliticianWithNamnd } from "@/lib/politicians";
+import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
 import { PoliticianHero } from "@/lib/components/politician/PoliticianHero";
 import { RoleSidebar } from "@/lib/components/politician/roleSidebar";
 import { PoliticalAreasSidebar } from "@/lib/components/politician/PoliticalAreasSidebar";
 import { mapPoliticianRoles } from "@/lib/utils/mapPoliticianRoles";
 import { ArrowRight } from "lucide-react";
 import { NewsCard } from "@/lib/components/news/NewsCard";
-import { politicianBySlugQuery } from "@/lib/queries/politicians";
+import { politicianBySlugQuery, allPoliticianSlugsQuery } from "@/lib/queries/politicians";
 import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
 import { ROUTE_BASE } from "@/lib/routes";
+
+// Generate static params for all politicians at build time
+export async function generateStaticParams() {
+  const politicians = await sanityClient.fetch<{ slug: string }[]>(
+    allPoliticianSlugsQuery
+  );
+  
+  return politicians.map((politician) => ({
+    slug: politician.slug,
+  }));
+}
 
 export async function generateMetadata({
   params,
@@ -91,7 +103,7 @@ export default async function PoliticianPage({
         {/* Main Content */}
         {politician.bio && (
           <div className="md:col-span-2 prose md:prose-lg">
-            <PortableText value={politician.bio} />
+            <PortableText value={politician.bio} components={portableTextComponents} />
           </div>
         )}
         <div className="space-y-6">

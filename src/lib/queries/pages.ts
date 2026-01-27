@@ -37,7 +37,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
       mode,
       "items": select(
         mode == "kommunalrad" =>
-          *[_type == "politician" && kommunalrad.active == true]{
+          *[_type == "politician" && kommunalrad.active == true] | order(name asc){
             _id,
             name,
             slug,
@@ -54,14 +54,6 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
           },
           titleOverride
         }
-      ),
-      "titleOverrides": select(
-        mode == "kommunalrad" =>
-          titleOverrides[] {
-            "politicianId": politician._ref,
-            titleOverride
-          },
-        []
       )
     },
     // POLITICIAN END
@@ -187,6 +179,11 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
     },
     // IMAGE GALLERY END
   }
+}`;
+
+// Query to get all page slugs for static generation
+export const allPageSlugsQuery = groq`*[_type == "page" && defined(slug.current)] {
+  "slug": slug.current
 }`;
 
 export const listingPageByKeyQuery = groq`*[_type == "listingPage" && key == $key][0]{

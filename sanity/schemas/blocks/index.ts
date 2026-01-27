@@ -10,6 +10,7 @@ import {twoColumnBlock} from './twoColumn'
 import {accordionBlock} from './accordion'
 import {quoteBlock} from './quote'
 import {imageGalleryBlock} from './imageGallery'
+import {contactBlock} from './contact'
 
 export const blocks = [
   text, 
@@ -24,4 +25,5 @@ export const blocks = [
   accordionBlock,
   quoteBlock,
   imageGalleryBlock,
+  contactBlock,
 ]
