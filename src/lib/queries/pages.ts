@@ -67,7 +67,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
     // POLITICIAN END
     // NEWS START
     _type == "block.news" => {
-    title,
+    heading,
     mode,
     limit,
     politicalArea,
@@ -186,5 +186,20 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
       }
     },
     // IMAGE GALLERY END
+  }
+}`;
+
+export const listingPageByKeyQuery = groq`*[_type == "listingPage" && key == $key][0]{
+  _id,
+  key,
+  title,
+  intro,
+  seo{
+    title,
+    description,
+    image{
+      ...,
+      "url": asset->url
+    }
   }
 }`;

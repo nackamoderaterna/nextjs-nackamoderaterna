@@ -7,6 +7,11 @@ export const imageBlock = defineType({
   groups: [{ name: "blockSettings", title: "Blockinställningar" }],
   fields: [
     defineField({
+      name: "heading",
+      title: "Rubrik",
+      type: "string",
+    }),
+    defineField({
       name: "image",
       title: "Bild",
       type: "image",

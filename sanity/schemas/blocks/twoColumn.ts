@@ -6,6 +6,11 @@ export const twoColumnBlock = defineType({
   type: "object",
   fields: [
     defineField({
+      name: "heading",
+      title: "Rubrik",
+      type: "string",
+    }),
+    defineField({
       name: "leftContent",
       title: "Vänster innehåll",
       type: "array",

@@ -2,28 +2,59 @@ import { ContactBlock } from "@/lib/components/blocks/ContactBlock";
 import { EngageBlock } from "@/lib/components/blocks/EngageBlock";
 import { EventCard } from "@/lib/components/events/eventCard";
 import { upcomingEventsQuery } from "@/lib/queries/events";
+import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
-import { formatDate, getMonth } from "@/lib/utils/dateUtils";
-import { generateMetadata } from "@/lib/utils/seo";
+import { getMonth } from "@/lib/utils/dateUtils";
+import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { Event } from "~/sanity.types";
 
-export const metadata: Metadata = generateMetadata({
-  title: "Evenemang | Nackamoderaterna",
-  description: "Kommande evenemang och aktiviteter",
-  url: "/event",
-});
+type ListingPage = {
+  title?: string;
+  intro?: string;
+  seo?: {
+    title?: string;
+    description?: string;
+  };
+};
+
+export async function generateMetadata(): Promise<Metadata> {
+  const listing = await sanityClient.fetch<ListingPage>(
+    listingPageByKeyQuery,
+    { key: "events" }
+  );
+
+  const title =
+    listing?.seo?.title || listing?.title || "Evenemang | Nackamoderaterna";
+  const description =
+    listing?.seo?.description || "Kommande evenemang och aktiviteter";
+
+  return buildMetadata({
+    title,
+    description,
+    url: "/event",
+  });
+}
 
 export const revalidate = 300;
 
 export default async function EventsPage() {
-  const events: Event[] = await sanityClient.fetch(
-    upcomingEventsQuery,
-    {},
-    {
-      next: { revalidate: 300 },
-    }
-  );
+  const [events, listing] = await Promise.all([
+    sanityClient.fetch<Event[]>(
+      upcomingEventsQuery,
+      {},
+      {
+        next: { revalidate: 300 },
+      }
+    ),
+    sanityClient.fetch<ListingPage>(
+      listingPageByKeyQuery,
+      { key: "events" },
+      {
+        next: { revalidate: 300 },
+      }
+    ),
+  ]);
 
   return (
     <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -31,8 +62,13 @@ export default async function EventsPage() {
       <section className="py-12 md:py-16">
         <div className="max-w-7xl">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Event
+            {listing?.title || "Evenemang"}
           </h1>
+          {listing?.intro && (
+            <p className="text-muted-foreground max-w-2xl whitespace-pre-line">
+              {listing.intro}
+            </p>
+          )}
         </div>
       </section>
 

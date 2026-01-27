@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ROUTE_BASE } from "@/lib/routes";
 
 interface PoliticalArea {
   politicalArea?: {
@@ -30,7 +31,7 @@ export function PoliticalAreasSidebar({
           if (!areaRef.politicalArea?.name) return null;
 
           const href = areaRef.politicalArea.slug?.current
-            ? `/politik/${areaRef.politicalArea.slug.current}`
+            ? `${ROUTE_BASE.POLITICS}/${areaRef.politicalArea.slug.current}`
             : undefined;
 
           return (

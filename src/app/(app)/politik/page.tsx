@@ -7,16 +7,42 @@ import {
   PoliticalIssue,
 } from "~/sanity.types";
 import { politikPageQuery } from "@/lib/queries/politik";
+import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
 import { getLucideIcon } from "@/lib/utils/iconUtils";
-import { generateMetadata } from "@/lib/utils/seo";
+import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
+import { ROUTE_BASE } from "@/lib/routes";
 
-export const metadata: Metadata = generateMetadata({
-  title: "Vår politik | Nackamoderaterna",
-  description: "Läs mer om vår politik och våra ståndpunkter i olika frågor",
-  url: "/politik",
-});
+type ListingPage = {
+  title?: string;
+  intro?: string;
+  seo?: {
+    title?: string;
+    description?: string;
+  };
+};
+
+export async function generateMetadata(): Promise<Metadata> {
+  const listing = await sanityClient.fetch<ListingPage>(
+    listingPageByKeyQuery,
+    { key: "politics" }
+  );
+
+  const title =
+    listing?.seo?.title ||
+    listing?.title ||
+    "Vår politik | Nackamoderaterna";
+  const description =
+    listing?.seo?.description ||
+    "Läs mer om vår politik och våra ståndpunkter i olika frågor";
+
+  return buildMetadata({
+    title,
+    description,
+    url: ROUTE_BASE.POLITICS,
+  });
+}
 
 export const revalidate = 300;
 
@@ -55,28 +81,35 @@ export type PoliticalIssuesPageData = {
 };
 
 export default async function PoliticsPage() {
-  const data = await sanityClient.fetch<PoliticalIssuesPageData>(
-    politikPageQuery,
-    {},
-    {
-      next: { revalidate: 300 },
-    }
-  );
+  const [data, listing] = await Promise.all([
+    sanityClient.fetch<PoliticalIssuesPageData>(
+      politikPageQuery,
+      {},
+      {
+        next: { revalidate: 300 },
+      }
+    ),
+    sanityClient.fetch<ListingPage>(
+      listingPageByKeyQuery,
+      { key: "politics" },
+      {
+        next: { revalidate: 300 },
+      }
+    ),
+  ]);
   return (
     <div className="min-h-screen bg-background">
       <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         {/* Header Section */}
         <div className="mb-12">
           <h1 className="mb-4 text-4xl font-bold text-foreground">
-            Vår politik
+            {listing?.title || "Vår politik"}
           </h1>
-          <p className="max-w-3xl text-base leading-relaxed text-muted-foreground">
-            Lorem ipsum dolor sit amet consectetur. Luctus consequat dis
-            scelerisque convallis ut pretium urna. Gravida curabitur pretium sed
-            consequat eros sit pulvinar eget. Ultricies orci fringilla donec
-            velit massa. Pellentesque integer erat laoreet nulla. iaculis congue
-            massa mi dictum. Quam habitant faucis dui donec orci pharetra est.
-          </p>
+          {listing?.intro && (
+            <p className="max-w-3xl text-base leading-relaxed text-muted-foreground whitespace-pre-line">
+              {listing.intro}
+            </p>
+          )}
         </div>
 
         {/* Political Areas Grid */}
@@ -88,7 +121,7 @@ export default async function PoliticsPage() {
                 <PoliticalAreaCard
                   key={area._id}
                   title={area.name || ""}
-                  href={`/politik/${area.slug?.current}`}
+                  href={`${ROUTE_BASE.POLITICS}/${area.slug?.current}`}
                   icon={Icon || undefined}
                 />
               );

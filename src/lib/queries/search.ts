@@ -8,6 +8,7 @@ export const searchQuery = groq`
     name,
     slug,
     email,
+    image,
     "searchText": coalesce(name, "") + " " + coalesce(email, "")
   },
   "events": *[_type == "event"] {
@@ -19,6 +20,7 @@ export const searchQuery = groq`
     endDate,
     location,
     description,
+    image,
     "searchText": coalesce(title, "") + " " + coalesce(location, "") + " " + coalesce(description, "")
   },
   "news": *[_type == "news"] {
@@ -27,6 +29,7 @@ export const searchQuery = groq`
     title,
     slug,
     excerpt,
+    mainImage,
     "searchText": coalesce(title, "") + " " + coalesce(excerpt, "")
   },
   "politicalAreas": *[_type == "politicalArea"] {
@@ -43,6 +46,7 @@ export const searchQuery = groq`
     name,
     slug,
     description,
+    image,
     "searchText": coalesce(name, "") + " " + coalesce(description, "")
   }
 }

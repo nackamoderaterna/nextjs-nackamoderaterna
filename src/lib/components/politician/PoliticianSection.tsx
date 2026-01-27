@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PeopleCard } from "./PoliticianCardLarge";
 import { PoliticianCardSmall } from "./PoliticianCardSmall";
 import { PoliticianWithNamnd } from "@/lib/politicians";
+import { ROUTE_BASE } from "@/lib/routes";
 
 interface PoliticianSectionProps {
   title: string;
@@ -50,7 +51,7 @@ export function PoliticianSection({
           return (
             <Link
               key={politician._id}
-              href={`/politiker/${politician.slug?.current || ""}`}
+              href={`${ROUTE_BASE.POLITICIANS}/${politician.slug?.current || ""}`}
               className="block"
             >
               <PoliticianCardSmall

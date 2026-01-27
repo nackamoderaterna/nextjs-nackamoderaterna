@@ -10,6 +10,7 @@ import { NewsVariantBadge } from "@/lib/components/news/NewsVariantBadge";
 import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
 import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
+import { ROUTE_BASE } from "@/lib/routes";
 
 export async function generateMetadata({
   params,
@@ -34,7 +35,7 @@ export async function generateMetadata({
     title: `${news.title} | Nackamoderaterna`,
     description: news.excerpt || undefined,
     image: imageUrl,
-    url: `/nyheter/${slug}`,
+    url: `${ROUTE_BASE.NEWS}/${slug}`,
     type: "article",
     publishedTime: news.effectiveDate,
   });
@@ -62,7 +63,7 @@ export default async function NewsArticlePage({
   }
 
   const mainContent = (
-    <div>
+    <div className="px-4">
       <div className="mb-4 flex flex-wrap items-center gap-2">
         {news.politicalAreas && news.politicalAreas.length > 0 && (
           <span className="inline-block text-sm font-medium text-blue-600">
@@ -97,7 +98,7 @@ export default async function NewsArticlePage({
   const sidebar = <NewsSidebar news={news} />;
 
   return (
-    <div className="max-w-7xl mx-auto mt-8">
+    <div className="max-w-7xl mx-auto mt-8 px-4">
       <ContentWithSidebar mainContent={mainContent} sidebarContent={sidebar} />
     </div>
   );

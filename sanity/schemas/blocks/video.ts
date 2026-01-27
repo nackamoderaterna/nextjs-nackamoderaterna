@@ -6,6 +6,11 @@ export const videoBlock = defineType({
   type: "object",
   fields: [
     defineField({
+      name: "heading",
+      title: "Rubrik",
+      type: "string",
+    }),
+    defineField({
       name: "video",
       title: "Video-URL",
       type: "url",

@@ -4,6 +4,7 @@ import { SanityImage } from "../shared/SanityImage";
 
 interface TwoColumnBlockProps {
   _type: "block.twoColumn";
+  heading?: string;
   leftContent?: any[];
   rightContent?: any[];
   leftImage?: any;
@@ -65,6 +66,11 @@ export function TwoColumnBlock({ block }: { block: TwoColumnBlockProps }) {
   return (
     <Block>
       <div className="max-w-7xl mx-auto">
+        {block.heading && (
+          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
+            {block.heading}
+          </h2>
+        )}
         <div
           className={`grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 ${alignClasses[alignment]}`}
         >

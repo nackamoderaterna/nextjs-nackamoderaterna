@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SanityImage } from "../shared/SanityImage";
 import { cn } from "@/lib/utils";
+import { ROUTE_BASE } from "@/lib/routes";
 
 interface PeopleCardProps {
   image: any;
@@ -24,7 +25,10 @@ export function PeopleCard({
 
   if (isSmall) {
     return (
-      <Link href={`/politiker/${slug}`} aria-label={`Läs mer om ${name}`}>
+      <Link
+        href={`${ROUTE_BASE.POLITICIANS}/${slug}`}
+        aria-label={`Läs mer om ${name}`}
+      >
         <div
           className={cn(
             "flex items-center gap-3 group hover:bg-muted rounded hover:cursor-pointer transition-colors duration-300",
@@ -58,7 +62,10 @@ export function PeopleCard({
     );
   }
   return (
-    <Link href={`politiker/${slug}`} aria-label={`Läs mer om ${name}`}>
+    <Link
+      href={`${ROUTE_BASE.POLITICIANS}/${slug}`}
+      aria-label={`Läs mer om ${name}`}
+    >
       <div className="group bg-card border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
         {/* Image */}
         <div className={`relative h-64 w-full overflow-hidden bg-muted`}>

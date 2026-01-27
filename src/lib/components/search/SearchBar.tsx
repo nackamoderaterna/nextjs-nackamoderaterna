@@ -3,8 +3,10 @@
 import { useState, useEffect, useRef } from "react";
 import { Search, X, Loader2 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { ROUTE_BASE } from "@/lib/routes";
+import { buildImageUrl } from "@/lib/sanity/image";
 
 interface SearchResult {
   _id: string;
@@ -17,6 +19,13 @@ interface SearchResult {
   excerpt?: string;
   category: string;
   url: string;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+    };
+    _type: "image";
+  };
 }
 
 export function SearchBar() {
@@ -63,7 +72,7 @@ export function SearchBar() {
     const searchTimeout = setTimeout(async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        const response = await fetch(`${ROUTE_BASE.API_SEARCH}?q=${encodeURIComponent(query)}`);
         const data = await response.json();
         setResults(data.results || []);
         setIsOpen(true);
@@ -84,13 +93,13 @@ export function SearchBar() {
   };
 
   return (
-    <div ref={searchRef} className="relative w-full max-w-md">
+    <div ref={searchRef} className="relative w-full max-w-lg">
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
           ref={inputRef}
           type="text"
-          placeholder="Sök efter nyheter, politiker, evenemang, områden..."
+          placeholder="Sök efter information på sidan..."
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
@@ -129,26 +138,42 @@ export function SearchBar() {
         <div className="absolute top-full left-0 right-0 mt-2 bg-background border border-border rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
           {results.length > 0 ? (
             <div className="p-2">
-              {results.map((result) => (
-                <Link
-                  key={result._id}
-                  href={result.url}
-                  onClick={handleResultClick}
-                  className="block px-4 py-3 hover:bg-muted rounded-md transition-colors"
-                >
-                  <div className="font-semibold text-sm">
-                    {result.name || result.title}
-                  </div>
-                  {result.excerpt && (
-                    <div className="text-xs text-muted-foreground mt-1 line-clamp-1">
-                      {result.excerpt}
+              {results.map((result) => {
+                const imageUrl = result.image ? buildImageUrl(result.image, { width: 64, height: 64 }) : null;
+                return (
+                  <Link
+                    key={result._id}
+                    href={result.url}
+                    onClick={handleResultClick}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-muted rounded-md transition-colors"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="font-semibold text-sm">
+                        {result.name || result.title}
+                      </div>
+                      {result.excerpt && (
+                        <div className="text-xs text-muted-foreground mt-1 line-clamp-1">
+                          {result.excerpt}
+                        </div>
+                      )}
+                      <div className="text-xs text-muted-foreground mt-1">
+                        {result.category}
+                      </div>
                     </div>
-                  )}
-                  <div className="text-xs text-muted-foreground mt-1">
-                    {result.category}
-                  </div>
-                </Link>
-              ))}
+                    {imageUrl && (
+                      <div className="flex-shrink-0">
+                        <Image
+                          src={imageUrl}
+                          alt={result.name || result.title || ""}
+                          width={50}
+                          height={50}
+                          className="rounded object-cover"
+                        />
+                      </div>
+                    )}
+                  </Link>
+                );
+              })}
             </div>
           ) : query.length >= 2 && !isLoading ? (
             <div className="p-4 text-center text-sm text-muted-foreground">

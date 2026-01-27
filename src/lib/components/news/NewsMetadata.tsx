@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SanityImage } from "../shared/SanityImage";
 import { NewsWithReferences } from "@/types/news";
+import { ROUTE_BASE } from "@/lib/routes";
 
 export function NewsMetadata({ news }: { news: NewsWithReferences }) {
   const hasMetadata =
@@ -23,7 +24,7 @@ export function NewsMetadata({ news }: { news: NewsWithReferences }) {
                 {news.referencedPoliticians.map((politician) => (
                   <Link
                     key={politician._id}
-                    href={`/politiker/${politician.slug?.current}`}
+                    href={`${ROUTE_BASE.POLITICIANS}/${politician.slug?.current}`}
                     className="flex items-center gap-2 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-2"
                   >
                     {politician.image && (

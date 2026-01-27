@@ -7,6 +7,7 @@ import { IconMail, IconMapPin, IconPhone } from "@tabler/icons-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { ROUTE_BASE } from "@/lib/routes";
 import { Input } from "@/components/ui/input";
 import { GlobalSettings } from "~/sanity.types";
 import {
@@ -20,7 +21,8 @@ import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Namnet måste vara minst 2 tecken" }),
-  email: z.string().email({ message: "Ange en giltig e-postadress" }),
+  email: z.email({ message: "Ange en giltig e-postadress" }),
+  phone: z.string().min(10, { message: "Telefonnumret måste vara minst 10 tecken" }),
   message: z
     .string()
     .min(10, { message: "Meddelandet måste vara minst 10 tecken" }),
@@ -42,6 +44,7 @@ export function ContactPageClient({ settings }: ContactPageClientProps) {
     defaultValues: {
       name: "",
       email: "",
+      phone: "",
       message: "",
     },
   });
@@ -51,7 +54,7 @@ export function ContactPageClient({ settings }: ContactPageClientProps) {
     setSubmitStatus({ type: null, message: "" });
 
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch(ROUTE_BASE.API_CONTACT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -112,8 +115,8 @@ export function ContactPageClient({ settings }: ContactPageClientProps) {
 
   return (
     <main className="container mx-auto px-4 py-12">
-      <div className="max-w-5xl mx-auto">
-        <h1 className="text-5xl font-bold mb-4">Kontakta oss</h1>
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-3xl font-bold mb-4">Kontakta oss</h1>
         <p className="text-muted-foreground text-lg mb-12">
           Har du frågor eller vill komma i kontakt med oss? Fyll i formuläret
           nedan så återkommer vi så snart som möjligt.
@@ -126,13 +129,13 @@ export function ContactPageClient({ settings }: ContactPageClientProps) {
               <h2 className="text-2xl font-bold mb-6">Skicka ett meddelande</h2>
 
               {submitStatus.type === "success" && (
-                <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-800 dark:text-green-200">
+                <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-800 dark:text-green-800">
                   {submitStatus.message}
                 </div>
               )}
 
               {submitStatus.type === "error" && (
-                <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200">
+                <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-600">
                   {submitStatus.message}
                 </div>
               )}
@@ -153,6 +156,7 @@ export function ContactPageClient({ settings }: ContactPageClientProps) {
                       className="bg-white"
                       disabled={isSubmitting}
                       {...form.register("name")}
+                      required
                     />
                     <FieldError errors={[form.formState.errors.name]} />
                   </Field>
@@ -167,6 +171,19 @@ export function ContactPageClient({ settings }: ContactPageClientProps) {
                       className="bg-white"
                       disabled={isSubmitting}
                       {...form.register("email")}
+                      required
+                    />
+                    <FieldError errors={[form.formState.errors.email]} />
+                  </Field>
+                  <Field>
+                    <FieldLabel htmlFor="phone">Telefonnummer</FieldLabel>
+                    <Input
+                      id="phone"
+                      type="phone"
+                      placeholder="070-123 45 67"
+                      className="bg-white"
+                      disabled={isSubmitting}
+                      {...form.register("phone")}
                     />
                     <FieldError errors={[form.formState.errors.email]} />
                   </Field>
@@ -178,6 +195,7 @@ export function ContactPageClient({ settings }: ContactPageClientProps) {
                       id="message"
                       placeholder="Skriv ditt meddelande här..."
                       className="min-h-32 bg-white"
+                      required
                       disabled={isSubmitting}
                       {...form.register("message")}
                     />

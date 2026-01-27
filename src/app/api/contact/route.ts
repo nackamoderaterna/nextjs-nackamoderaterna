@@ -3,6 +3,12 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+// Shared validation regexes
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Must be either: email@example.com or Name <email@example.com>
+const FROM_EMAIL_REGEX =
+  /^(?:[^<]+<)?([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(?:>)?$/;
+
 // Rate limiting: Simple in-memory store
 // In production, consider using Redis or Upstash for distributed rate limiting
 interface RateLimitEntry {
@@ -57,6 +63,49 @@ function cleanupExpiredEntries() {
   }
 }
 
+function getFromEmail(): string | null {
+  let fromEmail = process.env.RESEND_FROM_EMAIL;
+
+  if (!fromEmail) {
+    // Default format: simple email address
+    fromEmail = process.env.RESEND_DOMAIN
+      ? `noreply@${process.env.RESEND_DOMAIN}`
+      : "onboarding@resend.dev"; // Resend's test domain
+  }
+
+  // Normalize and validate format
+  if (!FROM_EMAIL_REGEX.test(fromEmail)) {
+    console.error("Invalid RESEND_FROM_EMAIL format:", fromEmail);
+    return null;
+  }
+
+  // Extra safety: avoid accidentally using unverified *.resend.app domains
+  const lower = fromEmail.toLowerCase();
+  const match = lower.match(/<\s*([^>]+)\s*>/);
+  const emailOnly = match ? match[1] : lower;
+  const domain = emailOnly.split("@")[1] ?? "";
+
+  if (domain.endsWith(".resend.app") && emailOnly !== "onboarding@resend.dev") {
+    console.warn(
+      "RESEND_FROM_EMAIL appears to use an unverified .resend.app domain. Falling back to onboarding@resend.dev."
+    );
+    return "onboarding@resend.dev";
+  }
+
+  return fromEmail;
+}
+
+function getRecipientEmail(): string | null {
+  const recipientEmail = process.env.CONTACT_EMAIL || "nacka@moderaterna.se";
+
+  if (!EMAIL_REGEX.test(recipientEmail)) {
+    console.error("Invalid CONTACT_EMAIL:", recipientEmail);
+    return null;
+  }
+
+  return recipientEmail;
+}
+
 export async function POST(request: NextRequest) {
   try {
     // Clean up expired rate limit entries
@@ -86,8 +135,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
-    const { name, email, message } = body;
+    const { name, email, phone, message } = await request.json();
 
     // Validate input
     if (!name || !email || !message) {
@@ -97,7 +145,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Additional validation
     if (name.length < 2) {
       return NextResponse.json(
         { error: "Namnet måste vara minst 2 tecken" },
@@ -112,9 +159,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!EMAIL_REGEX.test(email)) {
       return NextResponse.json(
         { error: "Ogiltig e-postadress" },
         { status: 400 }
@@ -130,21 +175,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate and format the 'from' email
-    let fromEmail = process.env.RESEND_FROM_EMAIL;
+    const fromEmail = getFromEmail();
     if (!fromEmail) {
-      // Default format: simple email address
-      fromEmail = process.env.RESEND_DOMAIN
-        ? `noreply@${process.env.RESEND_DOMAIN}`
-        : "onboarding@resend.dev"; // Resend's test domain
-    }
-
-    // Validate from email format
-    // Must be either: email@example.com or Name <email@example.com>
-    const fromEmailRegex =
-      /^(?:[^<]+<)?([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(?:>)?$/;
-    if (!fromEmailRegex.test(fromEmail)) {
-      console.error("Invalid RESEND_FROM_EMAIL format:", fromEmail);
       return NextResponse.json(
         {
           error:
@@ -154,10 +186,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate recipient email
-    const recipientEmail = process.env.CONTACT_EMAIL || "nacka@moderaterna.se";
-    if (!emailRegex.test(recipientEmail)) {
-      console.error("Invalid CONTACT_EMAIL:", recipientEmail);
+    const recipientEmail = getRecipientEmail();
+    if (!recipientEmail) {
       return NextResponse.json(
         {
           error:
@@ -181,6 +211,7 @@ export async function POST(request: NextRequest) {
           <div style="margin: 20px 0;">
             <p><strong>Från:</strong> ${name}</p>
             <p><strong>E-post:</strong> ${email}</p>
+            <p><strong>Telefon:</strong> ${phone}</p>
           </div>
           <div style="margin: 20px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #0066cc;">
             <p><strong>Meddelande:</strong></p>
@@ -196,7 +227,7 @@ Nytt meddelande från kontaktformuläret
 
 Från: ${name}
 E-post: ${email}
-
+Telefon: ${phone}
 Meddelande:
 ${message}
 

@@ -4,6 +4,7 @@ import { PeopleCard } from "@/lib/components/politician/PoliticianCardLarge";
 import { NewsWithReferences } from "@/types/news";
 import { FileDown } from "lucide-react";
 import { formatDate } from "@/lib/utils/dateUtils";
+import { ROUTE_BASE } from "@/lib/routes";
 
 interface NewsSidebarProps {
   news: NewsWithReferences;
@@ -73,7 +74,7 @@ export function NewsSidebar({ news }: NewsSidebarProps) {
                 {news.relatedNews.map((related) => (
                   <li key={related._id}>
                     <Link
-                      href={`/nyheter/${related.slug?.current ?? ""}`}
+                      href={`${ROUTE_BASE.NEWS}/${related.slug?.current ?? ""}`}
                       className="block text-sm font-medium text-foreground hover:text-primary transition-colors"
                     >
                       {related.title}

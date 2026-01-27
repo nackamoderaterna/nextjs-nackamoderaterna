@@ -6,6 +6,11 @@ export const quoteBlock = defineType({
   type: "object",
   fields: [
     defineField({
+      name: "heading",
+      title: "Rubrik",
+      type: "string",
+    }),
+    defineField({
       name: "quote",
       title: "Citat",
       type: "text",

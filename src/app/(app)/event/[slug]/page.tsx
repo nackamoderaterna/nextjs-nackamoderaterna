@@ -14,6 +14,7 @@ import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
 import { Button } from "@/components/ui/button";
+import { ROUTE_BASE } from "@/lib/routes";
 
 interface Props {
   params: Promise<{
@@ -46,7 +47,7 @@ export async function generateMetadata({
       ? `${event.title} - ${event.description[0]?.children?.[0]?.text?.substring(0, 150)}...`
       : `Läs mer om evenemanget ${event.title}`,
     image: imageUrl,
-    url: `/event/${slug}`,
+    url: `${ROUTE_BASE.EVENTS}/${slug}`,
     type: "article",
   });
 }

@@ -1,6 +1,7 @@
 import { groq } from "next-sanity";
 import { MenuItem } from "~/sanity.types";
 import menuItem from "~/sanity/schemas/objects/menuItem";
+import { ROUTE_BASE } from "@/lib/routes";
 
 export const navigationQuery = groq`*[_id == "navigationHeader"][0] {
   _id,
@@ -93,9 +94,9 @@ export function getMenuItemHref(item: MenuItemWithReference): string {
     // Map content types to their routes
     const routeMap: Record<string, string> = {
       page: "",
-      news: "nyheter",
-      event: "event",
-      politician: "politiker",
+      news: ROUTE_BASE.NEWS.slice(1),
+      event: ROUTE_BASE.EVENTS.slice(1),
+      politician: ROUTE_BASE.POLITICIANS.slice(1),
       politicalIssue: "fragor",
     };
 

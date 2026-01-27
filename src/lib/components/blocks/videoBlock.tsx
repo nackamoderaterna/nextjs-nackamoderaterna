@@ -9,6 +9,7 @@ interface VideoBlockProps {
 
 export default function VideoBlock({ block }: VideoBlockProps) {
   const { video, caption } = block;
+  const heading = (block as any).heading;
 
   if (!video) {
     return null;
@@ -45,9 +46,16 @@ export default function VideoBlock({ block }: VideoBlockProps) {
 
   return (
     <Block>
-      <div className={`rounded bg-gray-100 aspect-16/9`}>{renderVideo()}</div>
+      <div className="max-w-7xl mx-auto">
+        {heading && (
+          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
+            {heading}
+          </h2>
+        )}
+        <div className={`rounded bg-gray-100 aspect-16/9`}>{renderVideo()}</div>
 
-      {caption && <p className="mt-2 text-sm text-gray-600">{caption}</p>}
+        {caption && <p className="mt-2 text-sm text-gray-600">{caption}</p>}
+      </div>
     </Block>
   );
 }

@@ -4,21 +4,21 @@ import { NewsCard } from "../news/NewsCard";
 
 export interface NewsBlockProps {
   _type: "block.news";
-  title?: string;
+  heading?: string;
   mode: "manual" | "latest" | "byPoliticalArea" | "byGeographicArea";
   limit?: number;
   resolvedItems: News[];
 }
 
 export function NewsBlock({ block }: { block: NewsBlockProps }) {
-  const { title, resolvedItems } = block;
+  const { heading, resolvedItems } = block;
 
   return (
     <Block>
       <section className="my-12">
-        {title && (
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold">{title}</h2>
+        {heading && (
+          <div className="mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-center">{heading}</h2>
           </div>
         )}
 

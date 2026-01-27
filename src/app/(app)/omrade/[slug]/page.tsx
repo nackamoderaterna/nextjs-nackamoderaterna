@@ -12,6 +12,7 @@ import { PortableText } from "next-sanity";
 import Link from "next/link";
 import { News, GeographicalArea, Politician } from "~/sanity.types";
 import { cleanPoliticianData, PoliticianWithNamnd } from "@/lib/politicians";
+import { ROUTE_BASE } from "@/lib/routes";
 
 export type GeographicalAreaPage = Omit<GeographicalArea, never> & {
   latestNews: News[];
@@ -122,7 +123,7 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
                 {cleanedPoliticians.map((politician) => (
                   <Link
                     key={politician._id}
-                    href={`/politiker/${politician.slug?.current || ""}`}
+                    href={`${ROUTE_BASE.POLITICIANS}/${politician.slug?.current || ""}`}
                     className="block"
                   >
                     <PoliticianCardSmall

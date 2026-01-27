@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Fuse from "fuse.js";
 import { sanityClient } from "@/lib/sanity/client";
 import { searchQuery } from "@/lib/queries/search";
+import { ROUTE_BASE } from "@/lib/routes";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +16,20 @@ interface SearchResult {
   };
   excerpt?: string;
   searchText?: string;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+    };
+    _type: "image";
+  };
+  mainImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+    };
+    _type: "image";
+  };
 }
 
 interface SearchData {
@@ -51,7 +66,7 @@ export async function GET(request: NextRequest) {
       allItems.push({
         ...item,
         category: "Politiker",
-        url: `/politiker/${item.slug?.current || ""}`,
+        url: `${ROUTE_BASE.POLITICIANS}/${item.slug?.current || ""}`,
       });
     });
 
@@ -60,7 +75,7 @@ export async function GET(request: NextRequest) {
       allItems.push({
         ...item,
         category: "Evenemang",
-        url: `/event/${item.slug?.current || ""}`,
+        url: `${ROUTE_BASE.EVENTS}/${item.slug?.current || ""}`,
       });
     });
 
@@ -69,7 +84,7 @@ export async function GET(request: NextRequest) {
       allItems.push({
         ...item,
         category: "Nyheter",
-        url: `/nyheter/${item.slug?.current || ""}`,
+        url: `${ROUTE_BASE.NEWS}/${item.slug?.current || ""}`,
       });
     });
 
@@ -78,7 +93,7 @@ export async function GET(request: NextRequest) {
       allItems.push({
         ...item,
         category: "Politiskt område",
-        url: `/politik/${item.slug?.current || ""}`,
+        url: `${ROUTE_BASE.POLITICS}/${item.slug?.current || ""}`,
       });
     });
 
@@ -87,7 +102,7 @@ export async function GET(request: NextRequest) {
       allItems.push({
         ...item,
         category: "Geografiskt område",
-        url: `/politik/${item.slug?.current || ""}`,
+        url: `${ROUTE_BASE.POLITICS}/${item.slug?.current || ""}`,
       });
     });
 
@@ -109,6 +124,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       results: results.map((result) => ({
         ...result.item,
+        // Normalize image field: use mainImage for news, image for others
+        image: result.item.mainImage || result.item.image,
         score: result.score,
       })),
     });

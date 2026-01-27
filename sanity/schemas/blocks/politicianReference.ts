@@ -7,6 +7,11 @@ export const politicianBlock = defineType({
 
   fields: [
     defineField({
+      name: 'heading',
+      title: 'Rubrik',
+      type: 'string',
+    }),
+    defineField({
       name: 'mode',
       title: 'Läge',
       description: 'Välj om du vill välja politiker manuellt eller automatiskt visa alla kommunalråd.',

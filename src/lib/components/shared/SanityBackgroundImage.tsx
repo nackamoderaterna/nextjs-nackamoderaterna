@@ -6,6 +6,7 @@ type SanityBackgroundImageProps = {
   image: any;
   alt?: string;
   height?: string;
+  loading?: "lazy" | "eager";
   overlayOpacity?: number;
   priority?: boolean;
 };
@@ -14,6 +15,7 @@ export function SanityBackgroundImage({
   image,
   alt = "",
   height = "h-full",
+  loading = "lazy",
   overlayOpacity = 40,
   priority = false,
 }: SanityBackgroundImageProps) {
@@ -33,6 +35,7 @@ export function SanityBackgroundImage({
           src={imageUrl}
           alt={alt}
           fill
+          loading={loading}
           priority={priority}
           sizes="100vw"
           className="object-cover"

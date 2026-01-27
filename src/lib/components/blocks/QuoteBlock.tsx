@@ -3,6 +3,7 @@ import { SanityImage } from "../shared/SanityImage";
 
 interface QuoteBlockProps {
   _type: "block.quote";
+  heading?: string;
   quote: string;
   author?: string;
   authorTitle?: string;
@@ -30,10 +31,16 @@ export function QuoteBlock({ block }: { block: QuoteBlockProps }) {
 
   return (
     <Block>
-      <div className={`max-w-4xl mx-auto ${alignClass} flex flex-col ${flexAlignClass}`}>
-        <blockquote className="text-2xl md:text-3xl font-light italic mb-8 leading-relaxed">
-          "{block.quote}"
-        </blockquote>
+      <div className="max-w-7xl mx-auto">
+        {block.heading && (
+          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
+            {block.heading}
+          </h2>
+        )}
+        <div className={`max-w-4xl mx-auto ${alignClass} flex flex-col ${flexAlignClass}`}>
+          <blockquote className="text-2xl md:text-3xl font-light italic mb-8 leading-relaxed">
+            "{block.quote}"
+          </blockquote>
         {(block.author || block.authorImage) && (
           <div className={`flex items-center gap-4 ${alignment === "right" ? "flex-row-reverse" : ""}`}>
             {block.authorImage && (
@@ -59,6 +66,7 @@ export function QuoteBlock({ block }: { block: QuoteBlockProps }) {
             </div>
           </div>
         )}
+        </div>
       </div>
     </Block>
   );

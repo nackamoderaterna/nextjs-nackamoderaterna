@@ -32,9 +32,11 @@ export function MobileNav({ items }: { items: MenuItemWithReference[] }) {
           <span className="sr-only">Toggle menu</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-full sm:w-[400px]">
+      <SheetContent side="right" className="w-full sm:w-md">
         <SheetHeader>Meny</SheetHeader>
+      <div className="px-4">
       <SearchBar />
+      </div>
         <nav className="flex flex-col gap-4 mt-8 px-4">
           {items.map((item) => {
             if (item.children) {

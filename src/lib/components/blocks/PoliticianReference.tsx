@@ -24,6 +24,7 @@ type TitleOverrideEntry = { politicianId: string; titleOverride: string };
 
 export interface BlockPoliticianDereferenced {
   _type: "block.politician";
+  heading?: string;
   mode: "manual" | "kommunalrad";
   items: Politician[] | ManualItem[];
   titleOverrides?: TitleOverrideEntry[];
@@ -69,17 +70,24 @@ export const PoliticianReferenceBlock = ({
 
   return (
     <Block>
-      <div className="grid lg:grid-cols-4 gap-4">
-        {entries.map(({ politician: p, title }) => (
-          <PeopleCard
-            slug={p.slug?.current ?? ""}
-            key={p._id}
-            image={p.image}
-            name={p.name}
-            title={title}
-            size="large"
-          />
-        ))}
+      <div className="max-w-7xl mx-auto">
+        {block.heading && (
+          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
+            {block.heading}
+          </h2>
+        )}
+        <div className="grid lg:grid-cols-4 gap-4">
+          {entries.map(({ politician: p, title }) => (
+            <PeopleCard
+              slug={p.slug?.current ?? ""}
+              key={p._id}
+              image={p.image}
+              name={p.name}
+              title={title}
+              size="large"
+            />
+          ))}
+        </div>
       </div>
     </Block>
   );

@@ -6,8 +6,9 @@ import {
   newsListPaginatedQuery,
   allPoliticalAreasQuery,
 } from "@/lib/queries/nyheter";
+import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { News } from "~/sanity.types";
-import { generateMetadata } from "@/lib/utils/seo";
+import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import type { NewsVariant } from "@/types/news";
 
@@ -36,13 +37,35 @@ type NewsListPaginatedResult = {
   total: number;
 };
 
+type ListingPage = {
+  title?: string;
+  intro?: string;
+  seo?: {
+    title?: string;
+    description?: string;
+  };
+};
+
 const ITEMS_PER_PAGE = 10;
 
-export const metadata: Metadata = generateMetadata({
-  title: "Nyheter | Nackamoderaterna",
-  description: "Läs de senaste nyheterna från Nackamoderaterna",
-  url: "/nyheter",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const listing = await sanityClient.fetch<ListingPage>(
+    listingPageByKeyQuery,
+    { key: "news" }
+  );
+
+  const title =
+    listing?.seo?.title || listing?.title || "Nyheter | Nackamoderaterna";
+  const description =
+    listing?.seo?.description ||
+    "Läs de senaste nyheterna från Nackamoderaterna";
+
+  return buildMetadata({
+    title,
+    description,
+    url: "/nyheter",
+  });
+}
 
 export const revalidate = 300;
 
@@ -64,7 +87,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
   const start = (currentPage - 1) * ITEMS_PER_PAGE;
   const end = start + ITEMS_PER_PAGE;
 
-  const [result, politicalAreas] = await Promise.all([
+  const [result, politicalAreas, listing] = await Promise.all([
     sanityClient.fetch<NewsListPaginatedResult>(
       newsListPaginatedQuery,
       {
@@ -80,6 +103,13 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
     sanityClient.fetch<any[]>(allPoliticalAreasQuery, {}, {
       next: { revalidate: 300 },
     }),
+    sanityClient.fetch<ListingPage>(
+      listingPageByKeyQuery,
+      { key: "news" },
+      {
+        next: { revalidate: 300 },
+      }
+    ),
   ]);
 
   const { items: newsList, total } = result;
@@ -90,7 +120,14 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
     return (
       <div className="min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-8">Nyheter</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            {listing?.title || "Nyheter"}
+          </h1>
+          {listing?.intro && (
+            <p className="text-muted-foreground max-w-2xl whitespace-pre-line mb-8">
+              {listing.intro}
+            </p>
+          )}
           <p className="text-muted-foreground text-center py-12">
             Sidan kunde inte hittas.
           </p>
@@ -102,7 +139,14 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
   return (
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8">Nyheter</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          {listing?.title || "Nyheter"}
+        </h1>
+        {listing?.intro && (
+          <p className="text-muted-foreground max-w-2xl whitespace-pre-line mb-8">
+            {listing.intro}
+          </p>
+        )}
 
         <NewsFilters politicalAreas={politicalAreas || []} />
 

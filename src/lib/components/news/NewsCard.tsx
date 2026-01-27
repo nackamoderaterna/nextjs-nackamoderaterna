@@ -3,6 +3,7 @@ import { formatDate } from "@/lib/utils/dateUtils";
 import { ArrowRight } from "lucide-react";
 import { NewsVariantBadge } from "./NewsVariantBadge";
 import type { NewsVariant } from "@/types/news";
+import { ROUTE_BASE } from "@/lib/routes";
 
 interface NewsCardProps {
   date: string;
@@ -26,7 +27,7 @@ export function NewsCard({
       className={`group relative ${!isLast ? "border-b border-border" : ""}`}
     >
       <Link
-        href={`/nyheter/${slug}`}
+        href={`${ROUTE_BASE.NEWS}/${slug}`}
         className="block py-8 md:py-10 lg:py-12 transition-colors hover:bg-accent/50"
       >
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">

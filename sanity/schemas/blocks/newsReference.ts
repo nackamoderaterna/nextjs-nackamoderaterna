@@ -6,7 +6,7 @@ export const newsBlock = defineType({
   type: 'object',
   fields: [
     defineField({
-      name: 'title',
+      name: 'heading',
       type: 'string',
       title: 'Rubrik',
     }),
@@ -77,11 +77,11 @@ export const newsBlock = defineType({
     }),
 
   preview: {
-    select: {mode: 'mode'},
-    prepare: ({mode}) => {
+    select: {heading: 'heading', mode: 'mode'},
+    prepare: ({heading, mode}) => {
       return {
         title: 'Nyheter',
-        subtitle: mode,
+        subtitle: heading || mode,
       }
     },
   },

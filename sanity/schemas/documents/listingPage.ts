@@ -1,0 +1,54 @@
+import { defineField, defineType } from "sanity";
+
+export const listingPage = defineType({
+  name: "listingPage",
+  title: "Listingsidor",
+  type: "document",
+  fields: [
+    defineField({
+      name: "key",
+      title: "Sida",
+      type: "string",
+      description: "Vilken katalogsida dessa texter gäller.",
+      options: {
+        list: [
+          { title: "Politiker", value: "politicians" },
+          { title: "Vår politik", value: "politics" },
+          { title: "Nyheter", value: "news" },
+          { title: "Evenemang", value: "events" },
+        ],
+        layout: "radio",
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "title",
+      title: "Sidrubrik",
+      type: "string",
+      description: "Rubriken som visas högst upp på sidan.",
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "intro",
+      title: "Ingress / introduktion",
+      type: "text",
+      rows: 4,
+      description:
+        "En kort text som visas överst på sidan. Endast enkel text, inga bilder eller länkar.",
+    }),
+    defineField({
+      name: "seo",
+      title: "SEO",
+      type: "seo",
+      description:
+        "Sökmotoroptimering för sidan. Om fält lämnas tomma används standardvärden.",
+    }),
+  ],
+  preview: {
+    select: {
+      title: "title",
+      subtitle: "key",
+    },
+  },
+});
+

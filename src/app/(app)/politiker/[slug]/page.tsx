@@ -13,6 +13,7 @@ import { politicianBySlugQuery } from "@/lib/queries/politicians";
 import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
+import { ROUTE_BASE } from "@/lib/routes";
 
 export async function generateMetadata({
   params,
@@ -44,7 +45,7 @@ export async function generateMetadata({
       ? `${politician.name} - ${politician.bio[0]?.children?.[0]?.text?.substring(0, 150)}...`
       : `Läs mer om ${politician.name}`,
     image: imageUrl,
-    url: `/politiker/${slug}`,
+    url: `${ROUTE_BASE.POLITICIANS}/${slug}`,
   });
 }
 
@@ -112,7 +113,7 @@ export default async function PoliticianPage({
                 Artiklar som omnämner {politician.name}
               </h2>
               <Link
-                href="/nyheter"
+                href={ROUTE_BASE.NEWS}
                 className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
               >
                 Se alla nyheter

@@ -7,17 +7,43 @@ import {
   positionTitles,
   sectionTitles,
 } from "@/lib/politicians";
+import { ROUTE_BASE } from "@/lib/routes";
+import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
 import { PoliticianSection } from "@/lib/components/politician/PoliticianSection";
 import { PoliticianCardSmall } from "@/lib/components/politician/PoliticianCardSmall";
-import { generateMetadata } from "@/lib/utils/seo";
+import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 
-export const metadata: Metadata = generateMetadata({
-  title: "Våra politiker | Nackamoderaterna",
-  description: "Läs mer om våra politiker och deras engagemang i Nacka",
-  url: "/politiker",
-});
+type ListingPage = {
+  title?: string;
+  intro?: string;
+  seo?: {
+    title?: string;
+    description?: string;
+  };
+};
+
+export async function generateMetadata(): Promise<Metadata> {
+  const listing = await sanityClient.fetch<ListingPage>(
+    listingPageByKeyQuery,
+    { key: "politicians" }
+  );
+
+  const title =
+    listing?.seo?.title ||
+    listing?.title ||
+    "Våra politiker | Nackamoderaterna";
+  const description =
+    listing?.seo?.description ||
+    "Läs mer om våra politiker och deras engagemang i Nacka";
+
+  return buildMetadata({
+    title,
+    description,
+    url: "/politiker",
+  });
+}
 
 export const revalidate = 300;
 
@@ -31,13 +57,22 @@ function sortByName(politicians: PoliticianWithNamnd[]): PoliticianWithNamnd[] {
 }
 
 export default async function PoliticiansPage() {
-  const politiciansRaw = await sanityClient.fetch<PoliticianWithNamnd[]>(
-    politiciansDirectoryQuery,
-    {},
-    {
-      next: { revalidate: 300 },
-    }
-  );
+  const [politiciansRaw, listing] = await Promise.all([
+    sanityClient.fetch<PoliticianWithNamnd[]>(
+      politiciansDirectoryQuery,
+      {},
+      {
+        next: { revalidate: 300 },
+      }
+    ),
+    sanityClient.fetch<ListingPage>(
+      listingPageByKeyQuery,
+      { key: "politicians" },
+      {
+        next: { revalidate: 300 },
+      }
+    ),
+  ]);
   
   // Clean all invisible Unicode characters from politician data
   const politicians = politiciansRaw.map(cleanPoliticianData);
@@ -80,9 +115,16 @@ export default async function PoliticiansPage() {
   return (
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">
-          Våra politiker
-        </h1>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+            {listing?.title || "Våra politiker"}
+          </h1>
+          {listing?.intro && (
+            <p className="text-muted-foreground max-w-2xl whitespace-pre-line">
+              {listing.intro}
+            </p>
+          )}
+        </div>
 
         {/* 1. Kommunalråd */}
         {(grouped.kommunalrad.president.length > 0 ||
@@ -111,7 +153,7 @@ export default async function PoliticiansPage() {
               {grouped.namndLeaders.map(({ politician, namndTitle, positionTitle }) => (
                 <Link
                   key={politician._id}
-                  href={`/politiker/${politician.slug?.current || ""}`}
+                  href={`${ROUTE_BASE.POLITICIANS}/${politician.slug?.current || ""}`}
                   className="block"
                 >
                   <PoliticianCardSmall
