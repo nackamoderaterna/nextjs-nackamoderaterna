@@ -129,14 +129,14 @@ export function PageModal({
         {(modal.primaryButton?.label || modal.secondaryButton?.label) && (
           <DialogFooter>
             {modal.secondaryButton?.label && modal.secondaryButton?.href ? (
-              <Button variant="outline" asChild>
+              <Button variant="outline" asChild onClick={() => setOpen(false)}>
                 <Link href={modal.secondaryButton.href}>
                   {modal.secondaryButton.label}
                 </Link>
               </Button>
             ) : null}
             {modal.primaryButton?.label && modal.primaryButton?.href ? (
-              <Button asChild>
+              <Button asChild onClick={() => setOpen(false)}>
                 <Link href={modal.primaryButton.href}>
                   {modal.primaryButton.label}
                 </Link>
