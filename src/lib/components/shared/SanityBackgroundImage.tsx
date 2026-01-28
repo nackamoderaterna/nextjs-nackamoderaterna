@@ -1,3 +1,5 @@
+"use client";
+
 import { buildImageUrl } from "@/lib/sanity/image";
 import { getObjectPositionFromHotspot } from "@/lib/sanity/imageHotspot";
 import Image from "next/image";
@@ -20,9 +22,18 @@ export function SanityBackgroundImage({
   priority = false,
 }: SanityBackgroundImageProps) {
   const imageUrl = buildImageUrl(image, {
-    width: 1920,
+    // Don't hardcode a large width here; let Next request appropriate sizes via `loader`.
     quality: 80,
   });
+
+  const sanityLoader: React.ComponentProps<typeof Image>["loader"] = ({
+    width,
+    quality,
+  }) =>
+    buildImageUrl(image, {
+      width,
+      quality: quality ?? 80,
+    });
 
   const objectPosition = getObjectPositionFromHotspot(image);
   const overlayAlpha = overlayOpacity / 100;
@@ -33,6 +44,7 @@ export function SanityBackgroundImage({
       <div className="absolute inset-0">
         <Image
           src={imageUrl}
+          loader={sanityLoader}
           alt={alt}
           fill
           loading={loading}

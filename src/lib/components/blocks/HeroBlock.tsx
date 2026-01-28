@@ -23,7 +23,11 @@ export function HeroBlock({ block }: HeroBlockProps) {
   return (
     <div className={`relative w-full ${height} overflow-hidden`}>
       <div className="inset-0 absolute">
-        <SanityBackgroundImage image={block.backgroundImage} loading="eager" />
+        <SanityBackgroundImage
+          image={block.backgroundImage}
+          loading="eager"
+          priority
+        />
       </div>
       <div className={`relative ${height} flex items-center`}>
         <Block paddingX="standard" paddingY="none" asSection={false} className="w-full">
