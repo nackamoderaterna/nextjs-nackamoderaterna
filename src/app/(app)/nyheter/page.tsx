@@ -12,6 +12,7 @@ import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import type { NewsVariant } from "@/types/news";
 import { ListingHeader } from "@/lib/components/shared/ListingHeader";
+import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 
 type NewsListItem = Pick<
   News,
@@ -158,7 +159,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                   key={news._id}
                   title={news.title || ""}
                   isLast={index === newsList.length - 1}
-                  date={news.effectiveDate}
+                  date={getEffectiveDate(news)}
                   slug={news.slug?.current || ""}
                   excerpt={news.excerpt || ""}
                   variant={news.variant}

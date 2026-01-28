@@ -15,6 +15,7 @@ import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
 import { ROUTE_BASE } from "@/lib/routes";
+import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 
 // Generate static params for all politicians at build time
 export async function generateStaticParams() {
@@ -136,7 +137,7 @@ export default async function PoliticianPage({
               {politician.referencedInNews?.map((news) => (
                 <NewsCard
                   key={news._id}
-                  date={news.dateOverride ? news.dateOverride : news._createdAt}
+                  date={getEffectiveDate(news)}
                   slug={news.slug.current}
                   title={news.title}
                   isLast={false}

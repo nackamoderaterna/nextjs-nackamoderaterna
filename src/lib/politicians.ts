@@ -104,6 +104,7 @@ export type PoliticianWithNamnd = Omit<
     excerpt?: string;
     _createdAt: string;
     dateOverride?: string;
+    effectiveDate?: string;
     // mainImage?: {
     //   asset: {
     //     _ref: string;

@@ -8,7 +8,6 @@ import { politicalAreaPageQuery, allPoliticalAreaSlugsQuery } from "@/lib/querie
 import { globalSettingsQuery } from "@/lib/queries/globalSettings";
 import { sanityClient } from "@/lib/sanity/client";
 import { groq } from "next-sanity";
-import { formatDate } from "@/lib/utils/dateUtils";
 import { ExternalLink } from "lucide-react";
 import { PortableText } from "next-sanity";
 import Link from "next/link";
@@ -19,6 +18,7 @@ import {
   Politician,
 } from "~/sanity.types";
 import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
+import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 
 // Generate static params for all political areas at build time
 export async function generateStaticParams() {
@@ -118,9 +118,7 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
             <div className="grid">
               {data.latestNews.map((news, index) => (
                 <NewsCard
-                  date={formatDate(
-                    news.dateOverride ? news.dateOverride : news._createdAt,
-                  )}
+                  date={getEffectiveDate(news)}
                   slug={news.slug?.current || ""}
                   title={news.title || ""}
                   isLast={index === data.latestNews.length - 1}

@@ -1,6 +1,7 @@
 import Block from "./Block";
 import { News } from "~/sanity.types";
 import { NewsCard } from "../news/NewsCard";
+import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 
 export interface NewsBlockProps {
   _type: "block.news";
@@ -23,12 +24,11 @@ export function NewsBlock({ block }: { block: NewsBlockProps }) {
 
         <div className="grid">
           {resolvedItems?.map((item, index) => {
-            const date = (item as any).effectiveDate || item.dateOverride || item._createdAt;
             return (
               <NewsCard
                 key={item._id}
                 isLast={index === resolvedItems.length - 1}
-                date={date}
+                date={getEffectiveDate(item)}
                 slug={item.slug?.current || ""}
                 title={item.title || ""}
                 excerpt={item.excerpt || ""}

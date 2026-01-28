@@ -5,7 +5,6 @@ import { PoliticalAreaHero } from "@/lib/components/politics/politicalAreaHero";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { geographicalAreaPageQuery, allGeographicalAreaSlugsQuery } from "@/lib/queries/politik";
 import { sanityClient } from "@/lib/sanity/client";
-import { formatDate } from "@/lib/utils/dateUtils";
 import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { PortableText } from "next-sanity";
@@ -14,6 +13,7 @@ import { News, GeographicalArea, Politician } from "~/sanity.types";
 import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
 import { cleanPoliticianData, PoliticianWithNamnd } from "@/lib/politicians";
 import { ROUTE_BASE } from "@/lib/routes";
+import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 
 // Generate static params for all geographical areas at build time
 export async function generateStaticParams() {
@@ -112,9 +112,7 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
                 {data.latestNews.map((news, index) => (
                   <NewsCard
                     key={news._id}
-                    date={formatDate(
-                      news.dateOverride ? news.dateOverride : news._createdAt,
-                    )}
+                    date={getEffectiveDate(news)}
                     slug={news.slug?.current || ""}
                     title={news.title || ""}
                     isLast={index === data.latestNews.length - 1}
