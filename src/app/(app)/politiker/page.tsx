@@ -77,36 +77,7 @@ export default async function PoliticiansPage() {
   const politicians = politiciansRaw.map(cleanPoliticianData);
   const grouped = groupPoliticiansByRole(politicians);
 
-  // Debug: Check what we got
-  if (process.env.NODE_ENV === "development") {
-    console.log("Grouped politicians:", {
-      kommunalrad: {
-        president: grouped.kommunalrad.president.length,
-        ordinary: grouped.kommunalrad.ordinary.length,
-      },
-      kommunfullmaktige: {
-        ordinary: grouped.kommunfullmaktige.ordinary.length,
-        substitute: grouped.kommunfullmaktige.substitute.length,
-      },
-      partyBoard: {
-        leaders: grouped.partyBoard.leaders.length,
-        members: grouped.partyBoard.members.length,
-      },
-    });
-    // Find politicians with kommunalrad or kommunfullmaktige
-    const withKommunalrad = politicians.filter(p => p.kommunalrad?.active);
-    const withKommunfullmaktige = politicians.filter(p => p.kommunfullmaktige?.active);
-    console.log("Politicians with kommunalrad:", withKommunalrad.length, withKommunalrad.map(p => ({
-      name: p.name,
-      kommunalrad: p.kommunalrad
-    })));
-    console.log("Politicians with kommunfullmaktige:", withKommunfullmaktige.length, withKommunfullmaktige.map(p => ({
-      name: p.name,
-      kommunfullmaktige: p.kommunfullmaktige
-    })));
-    console.log("Kommunfullmaktige details:", grouped.kommunfullmaktige);
-  }
-
+  
   // Sort kommunfullmäktige alphabetically
   const kommunfullmaktigeOrdinary = sortByName(grouped.kommunfullmaktige.ordinary);
   const kommunfullmaktigeSubstitute = sortByName(grouped.kommunfullmaktige.substitute);

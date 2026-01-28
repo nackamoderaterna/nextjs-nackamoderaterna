@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { NewsCard } from "@/lib/components/news/NewsCard";
-import { PoliticianCardSmall } from "@/lib/components/politician/PoliticianCardSmall";
 import { PoliticalAreaHero } from "@/lib/components/politics/politicalAreaHero";
 import { PolicyList } from "@/lib/components/politics/policyList";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
@@ -139,18 +138,14 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {cleanedPoliticians.map((politician) => (
-                  <Link
-                    key={politician._id}
-                    href={`${ROUTE_BASE.POLITICIANS}/${politician.slug?.current || ""}`}
-                    className="block"
-                  >
+                 
                     <PeopleCard
+                      key={politician._id}
                       name={politician.name}
                       image={politician.image}
                       slug={politician.slug?.current || ""}
                       size="large"
                     />
-                  </Link>
                 ))}
               </div>
             </section>

@@ -55,7 +55,7 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
     { slug, areaId: area?._id || "" },
   );
   const globalSettings = await sanityClient.fetch(globalSettingsQuery);
-  console.log(data.politicians);
+
 
   const mainContent = (
     <div className="space-y-8 prose md:prose-lg">
@@ -118,6 +118,7 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
             <div className="grid">
               {data.latestNews.map((news, index) => (
                 <NewsCard
+                  key={news._id}
                   date={getEffectiveDate(news)}
                   slug={news.slug?.current || ""}
                   title={news.title || ""}

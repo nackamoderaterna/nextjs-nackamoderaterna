@@ -11,6 +11,12 @@ export type PoliticalAreaRef = {
   slug?: { current: string } | null;
 };
 
+export type SeriesRef = {
+  _id: string;
+  title?: string;
+  slug?: { current: string } | null;
+};
+
 interface NewsCardProps {
   date: string;
   slug: string;
@@ -19,6 +25,7 @@ interface NewsCardProps {
   excerpt: string;
   variant?: NewsVariant | null;
   politicalAreas?: PoliticalAreaRef[] | null;
+  series?: SeriesRef | null;
 }
 
 export function NewsCard({
@@ -29,6 +36,7 @@ export function NewsCard({
   isLast,
   variant,
   politicalAreas,
+  series,
 }: NewsCardProps) {
   return (
     <article
@@ -46,7 +54,7 @@ export function NewsCard({
             {variant && variant !== "default" && (
               <NewsVariantBadge variant={variant} />
             )}
-            
+           
           </div>
 
           <div className="md:col-span-8 space-y-3">
@@ -55,15 +63,22 @@ export function NewsCard({
                 {title}
               </h2>
               {politicalAreas && politicalAreas.length > 0 && (
-              <p className="text-xs capitalize text-muted-foreground mt-4 flex flex-wrap gap-4">
-                
-                {politicalAreas.map((a) => <span key={a._id}>{a.name}</span>)}
+              <p className="text-xs uppercase text-muted-foreground mt-4 flex flex-wrap gap-4">
+                {[...politicalAreas]
+                  .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
+                  .map((a) => (
+                    <span key={a._id}>{a.name}</span>
+                  ))}
               </p>
             )}
             </div>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed text-pretty">
               {excerpt}
             </p>
+            {series?.title && (
+              <p className="text-xs capitalize text-muted-foreground mt-4">{series.title}</p>
+              
+            )}
            
           </div>
 

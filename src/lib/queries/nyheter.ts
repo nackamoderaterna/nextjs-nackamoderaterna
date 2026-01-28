@@ -116,6 +116,11 @@ export const newsListPaginatedQuery = groq`{
       _id,
       name,
       slug
+    },
+    "series": articleSeries->{
+      _id,
+      title,
+      slug
     }
   },
   "total": count(*[

@@ -48,19 +48,15 @@ export function PoliticianSection({
             );
           }
           return (
-            <Link
-              key={politician._id}
-              href={`${ROUTE_BASE.POLITICIANS}/${politician.slug?.current || ""}`}
-              className="block"
-            >
+          
               <PeopleCard
+                key={politician._id}
                 slug={politician.slug?.current || ""}
                 name={politician.name}
                 title={roleTitle}
                 size="small"
                 image={politician.image}
               />
-            </Link>
           );
         })}
       </div>

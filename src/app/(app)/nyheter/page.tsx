@@ -1,4 +1,4 @@
-import { NewsCard } from "@/lib/components/news/NewsCard";
+import { NewsCard, type SeriesRef } from "@/lib/components/news/NewsCard";
 import { Pagination } from "@/lib/components/news/Pagination";
 import { NewsFilters } from "@/lib/components/news/NewsFilters";
 import { sanityClient } from "@/lib/sanity/client";
@@ -33,6 +33,7 @@ type NewsListItem = Pick<
     name: string;
     slug?: { current: string } | null;
   }>;
+  series?: SeriesRef | null;
 };
 
 type NewsListPaginatedResult = {
@@ -164,6 +165,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                   excerpt={news.excerpt || ""}
                   variant={news.variant}
                   politicalAreas={news.politicalAreas}
+                  series={news.series}
                 />
               ))}
             </div>
