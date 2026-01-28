@@ -8,6 +8,8 @@ const interDisplay = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter-display",
+  preload: true,
+  fallback: ["system-ui", "arial"],
 });
 
 export default function RootLayout({
