@@ -66,9 +66,9 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
       {globalSettings?.handlingsprogram?.url && (
         <Button 
           asChild
-          className="mt-6 bg-blue-600 hover:bg-blue-700 text-white"
+          className="mt-6 bg-brand-primary hover:bg-brand-primary/90 text-white"
         >
-          <Link href={globalSettings.handlingsprogram.url} target="_blank" rel="noopener noreferrer">
+          <Link href={globalSettings.handlingsprogram.url} target="_blank" rel="noopener noreferrer" className="no-underline">
             Läs vårt handlingsprogram
             <ExternalLink className="w-4 h-4 ml-2" />
           </Link>
@@ -79,7 +79,7 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
 
   const sidebarContent = (
     <>
-      <PolicyList title="Moderaterna vill" policies={data.politicalIssues} />
+      <PolicyList title="Våra kärnfrågor" policies={data.politicalIssues} />
       {data.politicians.length > 0 && (
       <div className="grid gap-4 mt-8 bg-card border border-border rounded-lg p-6">
         <h2 className="text-2xl font-bold text-foreground mb-6">Företrädare</h2>
