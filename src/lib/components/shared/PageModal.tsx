@@ -137,7 +137,7 @@ export function PageModal({
             ) : null}
             {modal.primaryButton?.label && modal.primaryButton?.href ? (
               <Button asChild onClick={() => setOpen(false)}>
-                <Link href={modal.primaryButton.href}>
+                <Link href={modal.primaryButton.href} target="_blank" rel="noopener noreferrer">
                   {modal.primaryButton.label}
                 </Link>
               </Button>

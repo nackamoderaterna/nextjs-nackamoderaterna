@@ -73,6 +73,61 @@ The contact form has built-in rate limiting:
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## On-demand revalidation (Sanity webhooks)
+
+Content from Sanity is revalidated on a 5-minute schedule. To refresh pages immediately when content is created, updated, or deleted, use Sanity webhooks and on-demand revalidation.
+
+### 1. Create a webhook secret
+
+Generate a random string (e.g. `openssl rand -hex 24`) and add it to your environment:
+
+```bash
+# .env.local (or your hosting env)
+SANITY_REVALIDATE_SECRET=your-secret-here
+```
+
+**Important:** Do not use `NEXT_PUBLIC_*` for this variable. Keep it server-only.
+
+### 2. Add the webhook in Sanity
+
+1. Open [sanity.io/manage](https://sanity.io/manage) → your project → **API** → **Webhooks** → **Create webhook**.
+2. **URL:** `https://YOUR_DEPLOYMENT_URL/api/revalidate` (e.g. `https://yoursite.vercel.app/api/revalidate`).
+3. **Trigger on:** Create, Update, Delete.
+4. **Projection** (GROQ; paste into the webhook form):
+
+```
+{
+  _type,
+  _id,
+  "slug": slug.current,
+  key
+}
+```
+
+5. **HTTP method:** POST.
+6. **Secret:** Use the same value as `SANITY_REVALIDATE_SECRET`. Save it in the webhook form.
+7. Enable the webhook and save.
+
+### 3. Local development
+
+The webhook must POST to a reachable URL. For local testing, use a tunnel (e.g. [ngrok](https://ngrok.com)) and point the webhook at `https://your-ngrok-url/api/revalidate`.
+
+### Document types → paths
+
+The handler revalidates paths based on `_type`, `slug`, and `key`:
+
+| Type | Paths revalidated |
+|------|-------------------|
+| `navigationHeader`, `navigationFooter`, `globalSettings` | `/` (layout; header/footer) |
+| `page` | `/` when slug is `hem`, else `/[slug]` |
+| `news` | `/nyheter`, `/nyheter/[slug]` |
+| `politician` | `/politiker`, `/politiker/[slug]` |
+| `event` | `/event`, `/event/[slug]` |
+| `politicalArea` | `/politik`, `/politik/[slug]` |
+| `geographicalArea` | `/politik`, `/omrade/[slug]` |
+| `politicalIssue` | `/politik` |
+| `listingPage` | `/politiker`, `/politik`, `/nyheter`, `/event`, or `/kontakt` (by `key`) |
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
