@@ -1,15 +1,23 @@
-"use client";
-
 import { IconMail, IconMapPin, IconPhone } from "@tabler/icons-react";
 import Link from "next/link";
 import { GlobalSettings } from "~/sanity.types";
 import { ContactForm } from "@/lib/components/shared/ContactForm";
+import { ListingHeader } from "@/lib/components/shared/ListingHeader";
+
+type ListingPage = {
+  title?: string;
+  intro?: string;
+};
 
 interface ContactPageClientProps {
   settings: GlobalSettings;
+  listing?: ListingPage;
 }
 
-export function ContactPageClient({ settings }: ContactPageClientProps) {
+export function ContactPageClient({
+  settings,
+  listing,
+}: ContactPageClientProps) {
   const formatAddress = (address: {
     street?: string;
     zip?: string;
@@ -30,11 +38,12 @@ export function ContactPageClient({ settings }: ContactPageClientProps) {
   return (
     <main className="container mx-auto px-4 py-12">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold mb-4">Kontakta oss</h1>
-        <p className="text-muted-foreground text-lg mb-12">
-          Har du frågor eller vill komma i kontakt med oss? Fyll i formuläret
-          nedan så återkommer vi så snart som möjligt.
-        </p>
+        <ListingHeader
+          title={listing?.title}
+          intro={listing?.intro}
+          fallbackTitle="Kontakta oss"
+          fallbackIntro="Har du frågor eller vill komma i kontakt med oss? Fyll i formuläret nedan så återkommer vi så snart som möjligt."
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Contact Form */}

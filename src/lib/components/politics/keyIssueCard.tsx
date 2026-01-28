@@ -11,7 +11,7 @@ export function KeyIssueCard({ title, relatedArea, slug }: KeyIssueCardProps) {
   return (
     <Link
       href={`politik/${slug}`}
-      className="group flex flex-col gap-3 rounded-lg border border-border bg-card p-5 transition-all hover:border-blue-300 hover:shadow-sm"
+      className="group flex flex-col gap-3 rounded-lg border border-border bg-card p-5 transition-all hover:border-brand-primary/50 hover:shadow-sm"
     >
       <p className="text-sm leading-relaxed text-foreground">{title}</p>
       <Badge

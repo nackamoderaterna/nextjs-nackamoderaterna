@@ -13,6 +13,7 @@ import { getLucideIcon } from "@/lib/utils/iconUtils";
 import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ROUTE_BASE } from "@/lib/routes";
+import { ListingHeader } from "@/lib/components/shared/ListingHeader";
 
 type ListingPage = {
   title?: string;
@@ -101,16 +102,11 @@ export default async function PoliticsPage() {
     <div className="min-h-screen bg-background">
       <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         {/* Header Section */}
-        <div className="mb-12">
-          <h1 className="mb-4 text-4xl font-bold text-foreground">
-            {listing?.title || "Vår politik"}
-          </h1>
-          {listing?.intro && (
-            <p className="max-w-3xl text-base leading-relaxed text-muted-foreground whitespace-pre-line">
-              {listing.intro}
-            </p>
-          )}
-        </div>
+        <ListingHeader
+          title={listing?.title}
+          intro={listing?.intro}
+          fallbackTitle="Vår politik"
+        />
 
         {/* Political Areas Grid */}
         <section className="mb-16">

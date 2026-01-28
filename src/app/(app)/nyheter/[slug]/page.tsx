@@ -91,7 +91,7 @@ export default async function NewsArticlePage({
           <div className="flex flex-wrap items-center gap-2 mb-4">
             {news.politicalAreas.map((area) => (
               <Link href={`${ROUTE_BASE.POLITICS}/${area.slug?.current}`} key={area._id}>
-              <span className="inline-block text-sm rounded-full px-3 py-1 bg-blue-100 text-blue-800 hover:bg-blue-200 hover:text-blue-900 transition-colors">
+              <span className="inline-block text-sm rounded-full px-3 py-1 bg-brand-primary/10 text-brand-primary/90 hover:bg-brand-primary/20 hover:text-brand-primary transition-colors">
                 {area.name}
               </span>
               </Link>

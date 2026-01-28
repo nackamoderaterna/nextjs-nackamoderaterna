@@ -8,6 +8,7 @@ import { getMonth } from "@/lib/utils/dateUtils";
 import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { Event } from "~/sanity.types";
+import { ListingHeader } from "@/lib/components/shared/ListingHeader";
 
 type ListingPage = {
   title?: string;
@@ -61,14 +62,11 @@ export default async function EventsPage() {
       {/* Hero Section */}
       <section className="py-12 md:py-16">
         <div className="max-w-7xl">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            {listing?.title || "Evenemang"}
-          </h1>
-          {listing?.intro && (
-            <p className="text-muted-foreground max-w-2xl whitespace-pre-line">
-              {listing.intro}
-            </p>
-          )}
+          <ListingHeader
+            title={listing?.title}
+            intro={listing?.intro}
+            fallbackTitle="Evenemang"
+          />
         </div>
       </section>
 

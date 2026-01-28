@@ -19,8 +19,8 @@ export function NewsVariantBadge({ variant, className }: NewsVariantBadgeProps) 
       variant="outline"
       className={cn(
         "text-xs font-medium",
-        variant === "debate" && "border-green-500/50 text-green-700 dark:text-green-400",
-        variant === "pressrelease" && "border-blue-500/50 text-blue-700 dark:text-blue-400",
+        variant === "debate" && "border-green-500/50 text-green-700",
+        variant === "pressrelease" && "border-brand-primary/10 text-brand-primary",
         className
       )}
     >

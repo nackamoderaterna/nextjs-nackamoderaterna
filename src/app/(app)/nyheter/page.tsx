@@ -11,6 +11,7 @@ import { News } from "~/sanity.types";
 import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import type { NewsVariant } from "@/types/news";
+import { ListingHeader } from "@/lib/components/shared/ListingHeader";
 
 type NewsListItem = Pick<
   News,
@@ -121,14 +122,11 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
     return (
       <div className="min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            {listing?.title || "Nyheter"}
-          </h1>
-          {listing?.intro && (
-            <p className="text-muted-foreground max-w-2xl whitespace-pre-line mb-8">
-              {listing.intro}
-            </p>
-          )}
+          <ListingHeader
+            title={listing?.title}
+            intro={listing?.intro}
+            fallbackTitle="Nyheter"
+          />
           <p className="text-muted-foreground text-center py-12">
             Sidan kunde inte hittas.
           </p>
@@ -140,14 +138,11 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
   return (
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          {listing?.title || "Nyheter"}
-        </h1>
-        {listing?.intro && (
-          <p className="text-muted-foreground max-w-2xl whitespace-pre-line mb-8">
-            {listing.intro}
-          </p>
-        )}
+        <ListingHeader
+          title={listing?.title}
+          intro={listing?.intro}
+          fallbackTitle="Nyheter"
+        />
 
         <NewsFilters politicalAreas={politicalAreas || []} />
 

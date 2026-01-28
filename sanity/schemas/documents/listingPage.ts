@@ -16,6 +16,7 @@ export const listingPage = defineType({
           { title: "Vår politik", value: "politics" },
           { title: "Nyheter", value: "news" },
           { title: "Evenemang", value: "events" },
+          { title: "Kontakt", value: "contact" },
         ],
         layout: "radio",
       },
