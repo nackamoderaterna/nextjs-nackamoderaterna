@@ -20,7 +20,7 @@ export function PolicyList({
     <div className="bg-card border border-border rounded-lg p-6">
       <h2 className="text-xl font-semibold text-foreground mb-6">{title}</h2>
 
-      <ul className="space-y-4 mb-6">
+      <ul className="space-y-4">
         {policies.map((policy, index) => (
           <li key={index} className="flex gap-3">
             <CheckCircle2 className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
