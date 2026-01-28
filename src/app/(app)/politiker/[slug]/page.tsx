@@ -126,9 +126,9 @@ export default async function PoliticianPage({
               </h2>
               <Link
                 href={ROUTE_BASE.NEWS}
-                className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                className="text-sm font-medium flex items-center gap-1"
               >
-                Se alla nyheter
+                Alla nyheter
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>

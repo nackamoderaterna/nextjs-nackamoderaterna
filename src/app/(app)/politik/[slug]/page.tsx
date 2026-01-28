@@ -82,14 +82,14 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
       <PolicyList title="Våra kärnfrågor" policies={data.politicalIssues} />
       {data.politicians.length > 0 && (
       <div className="grid gap-4 mt-8 bg-card border border-border rounded-lg p-6">
-        <h2 className="text-2xl font-bold text-foreground mb-6">Företrädare</h2>
+        <h2 className="text-xl font-bold text-foreground">Företrädare</h2>
         {
           data.politicians.map((politician) => (
             <PeopleCard
               key={politician._id}
               slug={politician.slug?.current || ""}
               image={politician.image}
-              title={politician.name || ""}
+              name={politician.name || ""}
               size={"small"}
             />
           ))
@@ -129,36 +129,8 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
               ))}
             </div>
           </section>
-
-          {/* People Section */}
-          <section></section>
         </div>
       </main>
     </div>
   );
 }
-
-// <PeopleCard
-//   size="large"
-//   image="/professional-woman-headshot.png"
-//   name="Disa Påhlman Nilsson"
-//   title="Biträdande kommunalråd"
-// />
-// <PeopleCard
-//   size="large"
-//   image="/professional-woman-headshot.png"
-//   name="Disa Påhlman Nilsson"
-//   title="Biträdande kommunalråd"
-// />
-// <PeopleCard
-//   size="large"
-//   image="/professional-woman-headshot.png"
-//   name="Disa Påhlman Nilsson"
-//   title="Biträdande kommunalråd"
-// />
-// <PeopleCard
-//   size="large"
-//   image="/professional-woman-headshot.png"
-//   name="Disa Påhlman Nilsson"
-//   title="Biträdande kommunalråd"
-// />
