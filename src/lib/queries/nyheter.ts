@@ -34,7 +34,31 @@ export const newsQuery = groq`
     image
   },
 
-  "relatedNews": related[]->{
+  "series": articleSeries->{
+    _id,
+    title,
+    slug,
+    description
+  },
+  "seriesNews": *[
+    _type == "news"
+    && defined(^.articleSeries._ref)
+    && references(^.articleSeries._ref)
+  ] | order(coalesce(dateOverride, _createdAt) desc) {
+    _id,
+    title,
+    slug,
+    excerpt,
+    mainImage,
+    "effectiveDate": coalesce(dateOverride, _createdAt)
+  },
+
+  "relatedByPoliticalArea": *[
+    _type == "news"
+    && defined(^.politicalAreas[0]._ref)
+    && references(^.politicalAreas[0]._ref)
+    && slug.current != ^.slug.current
+  ] | order(coalesce(dateOverride, _createdAt) desc)[0...4] {
     _id,
     title,
     slug,

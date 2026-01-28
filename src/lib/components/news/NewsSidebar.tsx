@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SanityImage } from "@/lib/components/shared/SanityImage";
-import { PeopleCard } from "@/lib/components/politician/PoliticianCardLarge";
+import { PeopleCard } from "@/lib/components/politician/PeopleCard";
 import { NewsWithReferences } from "@/types/news";
 import { FileDown } from "lucide-react";
 import { formatDate } from "@/lib/utils/dateUtils";
@@ -8,9 +8,10 @@ import { ROUTE_BASE } from "@/lib/routes";
 
 interface NewsSidebarProps {
   news: NewsWithReferences;
+  currentSlug: string;
 }
 
-export function NewsSidebar({ news }: NewsSidebarProps) {
+export function NewsSidebar({ news, currentSlug }: NewsSidebarProps) {
   const documentUrl = news.document?.url;
 
   return (
@@ -106,38 +107,59 @@ export function NewsSidebar({ news }: NewsSidebarProps) {
         </aside>
       )}
 
-      {news.relatedNews && news.relatedNews.length > 0 && (
+      {news.seriesNews && news.seriesNews.length > 0 && (
         <aside aria-label="Artikelserie">
           <div className="space-y-4 rounded bg-muted grid p-4">
-            <h2 className="text-muted-foreground mb-4">Artikelserie</h2>
+            <h2 className="text-muted-foreground mb-4">
+              {news.series?.title ? news.series.title : "Artikelserie"}
+            </h2>
             <nav aria-label="Artikelserie">
-              <ul className="grid gap-4">
-                {news.relatedNews.map((related) => (
-                       <Link
-                       key={related._id}
-                       href={`${ROUTE_BASE.NEWS}/${related.slug?.current ?? ""}`}
-                       className="block text-sm font-medium text-foreground hover:text-primary transition-colors hover:bg-background/80 rounded p-2 -m-2"
-                     >
-                  <li key={related._id}>
-               
-                      {related.title}
-                   
-                    {related.effectiveDate && (
-                      <time
-                        dateTime={related.effectiveDate}
-                        className="text-xs text-muted-foreground mt-0.5 block"
-                      >
-                        {formatDate(related.effectiveDate)}
-                      </time>
-                    )}
-                  </li>
-                  </Link>
-                ))}
+              <ul className="grid gap-6">
+                {news.seriesNews.map((item) => {
+                  const itemSlug = item.slug?.current ?? "";
+                  const isCurrent = itemSlug === currentSlug;
+                  return (
+                    <li key={item._id}>
+                      {isCurrent ? (
+                        <div
+                          aria-current="page"
+                          className="block rounded p-2 -m-2 bg-muted text-muted-foreground"
+                        >
+                          <div className="text-sm font-medium">{item.title}</div>
+                          {item.effectiveDate && (
+                            <time
+                              dateTime={item.effectiveDate}
+                              className="text-xs text-muted-foreground mt-0.5 block"
+                            >
+                              {formatDate(item.effectiveDate)}
+                            </time>
+                          )}
+                        </div>
+                      ) : (
+                        <Link
+                          href={`${ROUTE_BASE.NEWS}/${itemSlug}`}
+                          className="block rounded p-2 -m-2 transition-colors text-foreground hover:text-primary hover:bg-background/80"
+                        >
+                          <div className="text-sm font-medium">{item.title}</div>
+                          {item.effectiveDate && (
+                            <time
+                              dateTime={item.effectiveDate}
+                              className="text-xs text-muted-foreground mt-0.5 block"
+                            >
+                              {formatDate(item.effectiveDate)}
+                            </time>
+                          )}
+                        </Link>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </nav>
           </div>
         </aside>
       )}
+
     </div>
   );
 }

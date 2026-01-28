@@ -73,7 +73,7 @@ export function NewsFilters({ politicalAreas }: NewsFiltersProps) {
     <div className="flex flex-wrap items-center gap-4 mb-8">
       <div className="flex items-center gap-2">
         <label htmlFor="area-filter" className="text-sm font-medium">
-          Filtrera på område:
+          Filtrera på kategori:
         </label>
         <Select value={selectedArea || "all"} onValueChange={handleAreaChange}>
           <SelectTrigger id="area-filter" className="w-[200px]">

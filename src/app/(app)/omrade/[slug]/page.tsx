@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { NewsCard } from "@/lib/components/news/NewsCard";
 import { PoliticianCardSmall } from "@/lib/components/politician/PoliticianCardSmall";
 import { PoliticalAreaHero } from "@/lib/components/politics/politicalAreaHero";
+import { PolicyList } from "@/lib/components/politics/policyList";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { geographicalAreaPageQuery, allGeographicalAreaSlugsQuery } from "@/lib/queries/politik";
 import { sanityClient } from "@/lib/sanity/client";
@@ -9,11 +10,12 @@ import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { PortableText } from "next-sanity";
 import Link from "next/link";
-import { News, GeographicalArea, Politician } from "~/sanity.types";
+import { News, GeographicalArea, Politician, PoliticalIssue } from "~/sanity.types";
 import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
 import { cleanPoliticianData, PoliticianWithNamnd } from "@/lib/politicians";
 import { ROUTE_BASE } from "@/lib/routes";
 import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
+import { PeopleCard } from "@/lib/components/politician/PeopleCard";
 
 // Generate static params for all geographical areas at build time
 export async function generateStaticParams() {
@@ -28,6 +30,7 @@ export async function generateStaticParams() {
 
 export type GeographicalAreaPage = Omit<GeographicalArea, never> & {
   latestNews: News[];
+  politicalIssues: PoliticalIssue[];
   politicians: Politician[];
 };
 
@@ -91,6 +94,11 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
     </div>
   );
 
+  const sidebarContent =
+    data.politicalIssues?.length > 0 ? (
+      <PolicyList title="Våra kärnfrågor" policies={data.politicalIssues} />
+    ) : null;
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <main className="flex-1">
@@ -99,7 +107,7 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
 
           <ContentWithSidebar
             mainContent={mainContent}
-            sidebarContent={null}
+            sidebarContent={sidebarContent}
           />
 
           {/* Current News Section */}
@@ -136,10 +144,11 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
                     href={`${ROUTE_BASE.POLITICIANS}/${politician.slug?.current || ""}`}
                     className="block"
                   >
-                    <PoliticianCardSmall
+                    <PeopleCard
                       name={politician.name}
                       image={politician.image}
-                      subtitle=""
+                      slug={politician.slug?.current || ""}
+                      size="large"
                     />
                   </Link>
                 ))}

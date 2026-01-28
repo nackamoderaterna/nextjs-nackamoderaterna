@@ -108,11 +108,12 @@ export const news = defineType({
       of: [{ type: "reference", to: [{ type: "geographicalArea" }] }],
     },
     {
-      name: "related",
-      title: "Nyhetsserie",
-      description: "Andra nyheter som är relaterade till denna. Används för att visa relaterade artiklar.",
-      type: "array",
-      of: [{ type: "reference", to: [{ type: "news" }] }],
+      name: "articleSeries",
+      title: "Artikelserie",
+      description:
+        "Koppla artikeln till en artikelserie. Alla artiklar i samma serie visas automatiskt i sidofältet.",
+      type: "reference",
+      to: [{ type: "articleSeries" }],
     },
     {
       name: "dateOverride",

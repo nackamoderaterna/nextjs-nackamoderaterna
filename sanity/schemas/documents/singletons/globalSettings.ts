@@ -50,6 +50,28 @@ export default defineType({
         }),
       ],
     }),
+    defineField({
+      name: 'pressContactInfo',
+      title: 'Presskontakt',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'phone',
+          title: 'Telefonnummer',
+          type: 'string',
+        }),
+        defineField({
+          name: 'email',
+          title: 'E-postadress',
+          type: 'string',
+        }),
+        defineField({
+          name: 'contactPerson',
+          title: 'Kontaktperson',
+          type: 'string',
+        }),
+      ],
+    }),
 
     //
     // ─────────────────────────
@@ -142,25 +164,9 @@ export default defineType({
     defineField({
       name: 'seo',
       title: 'SEO (Standard)',
-      type: 'object',
-      fields: [
-        defineField({
-          name: 'metaTitle',
-          title: 'Meta Titel (Standard)',
-          type: 'string',
-        }),
-        defineField({
-          name: 'metaDescription',
-          title: 'Meta Beskrivning (Standard)',
-          type: 'text',
-        }),
-        defineField({
-          name: 'openGraphImage',
-          title: 'OG-bild (Standard)',
-          type: 'image',
-          options: {hotspot: true},
-        }),
-      ],
+      description:
+        'Standard SEO-inställningar (titel, beskrivning, nyckelord och bild) som kan användas som fallback.',
+      type: 'seo',
     }),
     //
     // ─────────────────────────

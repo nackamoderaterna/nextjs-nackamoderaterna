@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { PeopleCard } from "./PoliticianCardLarge";
-import { PoliticianCardSmall } from "./PoliticianCardSmall";
+import { PeopleCard } from "./PeopleCard";
 import { PoliticianWithNamnd } from "@/lib/politicians";
 import { ROUTE_BASE } from "@/lib/routes";
 
@@ -54,10 +53,12 @@ export function PoliticianSection({
               href={`${ROUTE_BASE.POLITICIANS}/${politician.slug?.current || ""}`}
               className="block"
             >
-              <PoliticianCardSmall
+              <PeopleCard
+                slug={politician.slug?.current || ""}
                 name={politician.name}
+                title={roleTitle}
+                size="small"
                 image={politician.image}
-                subtitle={roleTitle || ""}
               />
             </Link>
           );

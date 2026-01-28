@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { IconHeart } from "@tabler/icons-react";
 import { ROUTE_BASE } from "@/lib/routes";
 
 interface PoliticalArea {
@@ -39,12 +40,14 @@ export function PoliticalAreasSidebar({
               {href ? (
                 <Link
                   href={href}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
+                  <IconHeart className="h-4 w-4 shrink-0 text-primary/70" />
                   {areaRef.politicalArea.name}
                 </Link>
               ) : (
-                <p className="text-sm text-muted-foreground">
+                <p className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <IconHeart className="h-4 w-4 shrink-0 text-primary/70" />
                   {areaRef.politicalArea.name}
                 </p>
               )}

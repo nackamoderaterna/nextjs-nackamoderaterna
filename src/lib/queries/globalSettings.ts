@@ -5,10 +5,19 @@ export const globalSettingsQuery = groq`
     companyName,
     logo,
     contactInfo,
+    pressContactInfo,
     postAddress,
     visitingAddress,
     socialLinks,
-    seo,
+    seo{
+      title,
+      description,
+      keywords,
+      image{
+        ...,
+        "url": asset->url
+      }
+    },
     "handlingsprogram": handlingsprogram {
       ...,
       "url": asset->url,

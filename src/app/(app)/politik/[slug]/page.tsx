@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { NewsCard } from "@/lib/components/news/NewsCard";
-import { PeopleCard } from "@/lib/components/politician/PoliticianCardLarge";
+import { PeopleCard } from "@/lib/components/politician/PeopleCard";
 import { PolicyList } from "@/lib/components/politics/policyList";
 import { PoliticalAreaHero } from "@/lib/components/politics/politicalAreaHero";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";

@@ -51,6 +51,7 @@ export type PoliticalIssueWithAreas = Omit<
   PoliticalIssue,
   "politicalAreas" | "geographicalAreas"
 > & {
+  fulfilled?: boolean;
   politicalAreas: Array<{
     _id: string;
     name: string;
@@ -71,6 +72,7 @@ export type PoliticalIssueWithAreas = Omit<
 
 export type PoliticalIssuesPageData = {
   featuredPoliticalIssues: PoliticalIssueWithAreas[];
+  fulfilledPoliticalIssues: PoliticalIssueWithAreas[];
   politicalAreas: Array<
     Omit<PoliticalArea, "icon"> & {
       icon?: {
@@ -108,8 +110,28 @@ export default async function PoliticsPage() {
           fallbackTitle="Vår politik"
         />
 
+          {/* Key Issues Section */}
+          <section className="mb-16">
+          <h2 className="mb-6 text-3xl font-bold text-foreground">
+            Våra kärnfrågor
+          </h2>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {data.featuredPoliticalIssues.map((issue) => (
+              <KeyIssueCard
+                title={issue.question || ""}
+                key={issue._id}
+                relatedArea={issue.politicalAreas[0].name}
+                slug={issue.politicalAreas[0].slug.current}
+              />
+            ))}
+          </div>
+        </section>
+
         {/* Political Areas Grid */}
         <section className="mb-16">
+        <h2 className="mb-6 text-3xl font-bold text-foreground">
+            Politik per politikområde
+          </h2>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {data.politicalAreas.map((area) => {
               const Icon = getLucideIcon(area.icon?.name);
@@ -142,22 +164,27 @@ export default async function PoliticsPage() {
           </div>
         </section>
 
-        {/* Key Issues Section */}
-        <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold text-foreground">
-            Våra kärnfrågor
-          </h2>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {data.featuredPoliticalIssues.map((issue) => (
-              <KeyIssueCard
-                title={issue.question || ""}
-                key={issue._id}
-                relatedArea={issue.politicalAreas[0].name}
-                slug={issue.politicalAreas[0].slug.current}
-              />
-            ))}
-          </div>
-        </section>
+      
+
+        {/* Fulfilled Promises Section */}
+        {data.fulfilledPoliticalIssues.length > 0 && (
+          <section className="mb-16">
+            <h2 className="mb-6 text-3xl font-bold text-foreground">
+              Uppfyllda vallöften
+            </h2>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {data.fulfilledPoliticalIssues.map((issue) => (
+                <KeyIssueCard
+                  key={issue._id}
+                  title={issue.question || ""}
+                  relatedArea={issue.politicalAreas?.[0]?.name || ""}
+                  slug={issue.politicalAreas?.[0]?.slug?.current || ""}
+                  fulfilled
+                />
+              ))}
+            </div>
+          </section>
+        )}
       </main>
     </div>
   );

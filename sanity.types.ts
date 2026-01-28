@@ -424,6 +424,11 @@ export type GlobalSettings = {
     email?: string;
     contactPerson?: string;
   };
+  pressContactInfo?: {
+    phone?: string;
+    email?: string;
+    contactPerson?: string;
+  };
   postAddress?: {
     street?: string;
     zip?: string;
@@ -443,15 +448,17 @@ export type GlobalSettings = {
     _key: string;
   }>;
   seo?: {
-    metaTitle?: string;
-    metaDescription?: string;
-    openGraphImage?: {
+    title?: string;
+    description?: string;
+    keywords?: Array<string>;
+    image?: {
       asset?: {
         _ref: string;
         _type: "reference";
         _weak?: boolean;
         [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
       };
+      url?: string;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
@@ -1247,6 +1254,11 @@ export type GlobalSettingsQueryResult = {
     email?: string;
     contactPerson?: string;
   } | null;
+  pressContactInfo: {
+    phone?: string;
+    email?: string;
+    contactPerson?: string;
+  } | null;
   postAddress: {
     street?: string;
     zip?: string;
@@ -1266,20 +1278,33 @@ export type GlobalSettingsQueryResult = {
     _key: string;
   }> | null;
   seo: {
-    metaTitle?: string;
-    metaDescription?: string;
-    openGraphImage?: {
+    title?: string;
+    description?: string;
+    keywords?: Array<string>;
+    image?: {
       asset?: {
         _ref: string;
         _type: "reference";
         _weak?: boolean;
         [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
       };
+      url?: string;
       media?: unknown;
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
       _type: "image";
     };
+  } | null;
+  handlingsprogram: {
+    url?: string;
+    originalFilename?: string;
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+    };
+    _type: "file";
   } | null;
 } | null;
 

@@ -9,6 +9,29 @@ export const politikPageQuery = groq`
     _id,
     question,
     featured,
+    fulfilled,
+
+    "politicalAreas": politicalAreas[]->{
+      _id,
+      name,
+      slug
+    },
+
+    "geographicalAreas": geographicalAreas[]->{
+      _id,
+      name,
+      slug
+    }
+  },
+
+  "fulfilledPoliticalIssues": *[
+    _type == "politicalIssue" &&
+    fulfilled == true
+  ] | order(_updatedAt desc) {
+    _id,
+    question,
+    featured,
+    fulfilled,
 
     "politicalAreas": politicalAreas[]->{
       _id,
@@ -126,6 +149,16 @@ export const geographicalAreaPageQuery = groq`
       mainImage,
       dateOverride,
       _createdAt
+    },
+
+    "politicalIssues": *[
+      _type == "politicalIssue" &&
+      references(^._id)
+    ] {
+      _id,
+      question,
+      featured,
+      fulfilled
     },
 
     "politicians": *[

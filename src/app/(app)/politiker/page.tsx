@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   cleanPoliticianData,
   groupPoliticiansByRole,
@@ -7,11 +6,10 @@ import {
   positionTitles,
   sectionTitles,
 } from "@/lib/politicians";
-import { ROUTE_BASE } from "@/lib/routes";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
 import { PoliticianSection } from "@/lib/components/politician/PoliticianSection";
-import { PoliticianCardSmall } from "@/lib/components/politician/PoliticianCardSmall";
+import { PeopleCard } from "@/lib/components/politician/PeopleCard";
 import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ListingHeader } from "@/lib/components/shared/ListingHeader";
@@ -142,22 +140,18 @@ export default async function PoliticiansPage() {
 
         {/* 2. Nämnd leaders (no header, namnd name as subtitle) */}
         {grouped.namndLeaders.length > 0 && (
-         
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">Gruppledare</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {grouped.namndLeaders.map(({ politician, namndTitle, positionTitle }) => (
-                <Link
+              {grouped.namndLeaders.map(({ politician, namndTitle }) => (
+                <PeopleCard
                   key={politician._id}
-                  href={`${ROUTE_BASE.POLITICIANS}/${politician.slug?.current || ""}`}
-                  className="block"
-                >
-                  <PoliticianCardSmall
-                    name={politician.name}
-                    image={politician.image}
-                    subtitle={namndTitle}
-                  />
-                </Link>
+                  slug={politician.slug?.current || ""}
+                  image={politician.image}
+                  name={politician.name}
+                  title={namndTitle}
+                  size="medium"
+                />
               ))}
             </div>
           </section>

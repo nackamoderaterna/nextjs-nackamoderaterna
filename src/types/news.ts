@@ -15,6 +15,13 @@ export type RelatedNewsItem = News & { effectiveDate: string };
 
 export type NewsVariant = "default" | "debate" | "pressrelease";
 
+export type ArticleSeriesInfo = {
+  _id: string;
+  title?: string;
+  slug?: { current?: string };
+  description?: string;
+};
+
 export type NewsWithReferences = Omit<
   News,
   | "referencedPolitician"
@@ -30,5 +37,11 @@ export type NewsWithReferences = Omit<
   referencedPoliticians?: Dereferenced<Politician>;
   politicalAreas?: Dereferenced<PoliticalArea>;
   geographicalAreas?: Dereferenced<GeographicalArea>;
-  relatedNews?: Array<RelatedNewsItem>;
+  /**
+   * Artikelserie-objekt (om artikeln tillhör en serie).
+   * OBS: Sanity TypeGen i repo kan ligga efter schemaändringar.
+   */
+  series?: ArticleSeriesInfo;
+  seriesNews?: Array<RelatedNewsItem>;
+  relatedByPoliticalArea?: Array<RelatedNewsItem>;
 };

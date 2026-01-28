@@ -8,8 +8,8 @@ interface PeopleCardProps {
   name?: string;
   title?: string;
   slug: string;
-  size: "small" | "large";
-  /** Optional class for the small variant container (e.g. to override hover in muted boxes) */
+  size: "small" | "medium" | "large";
+  /** Optional class for the small/medium variant container (e.g. to override hover in muted boxes) */
   className?: string;
 }
 
@@ -21,9 +21,11 @@ export function PeopleCard({
   size = "small",
   className,
 }: PeopleCardProps) {
-  const isSmall = size === "small";
+  const isHorizontal = size === "small" || size === "medium";
+  const imageSize = size === "medium" ? "w-20 h-20" : "w-12 h-12";
+  const imageSizes = size === "medium" ? "80px" : "48px";
 
-  if (isSmall) {
+  if (isHorizontal) {
     return (
       <Link
         href={`${ROUTE_BASE.POLITICIANS}/${slug}`}
@@ -35,18 +37,21 @@ export function PeopleCard({
             className
           )}
         >
-          {/* Small circular image on the left */}
-          <div className="relative w-12 h-12 flex-shrink-0 rounded overflow-hidden bg-muted">
+          <div
+            className={cn(
+              "relative flex-shrink-0 rounded overflow-hidden bg-muted",
+              imageSize
+            )}
+          >
             <SanityImage
               image={image}
               fill
               alt={name || ""}
-              sizes="48px"
+              sizes={imageSizes}
               loading="lazy"
             />
           </div>
 
-          {/* Text on the right */}
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-foreground text-sm leading-tight">
               {name}

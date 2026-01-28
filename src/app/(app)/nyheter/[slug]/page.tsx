@@ -13,6 +13,7 @@ import { buildImageUrl } from "@/lib/sanity/image";
 import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
 import { ROUTE_BASE } from "@/lib/routes";
 import Link from "next/link";
+import { NewsCard } from "@/lib/components/news/NewsCard";
 
 // Generate static params for all news articles at build time
 export async function generateStaticParams() {
@@ -116,11 +117,35 @@ export default async function NewsArticlePage({
     </div>
   );
 
-  const sidebar = <NewsSidebar news={news} />;
+  const sidebar = <NewsSidebar news={news} currentSlug={slug} />;
 
   return (
     <div className="max-w-7xl mx-auto mt-8 px-4">
       <ContentWithSidebar mainContent={mainContent} sidebarContent={sidebar} />
+
+      {news.relatedByPoliticalArea && news.relatedByPoliticalArea.length > 0 && (
+        <section aria-label="Relaterade nyheter" className="mt-16">
+         
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8">
+              Relaterade nyheter
+            </h2>
+        
+          <div className="rounded-lg overflow-hidden">
+            <div className="grid">
+              {news.relatedByPoliticalArea.map((item, index) => (
+                <NewsCard
+                  key={item._id}
+                  title={item.title || ""}
+                  isLast={index === news.relatedByPoliticalArea!.length - 1}
+                  date={item.effectiveDate}
+                  slug={item.slug?.current || ""}
+                  excerpt={item.excerpt || ""}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

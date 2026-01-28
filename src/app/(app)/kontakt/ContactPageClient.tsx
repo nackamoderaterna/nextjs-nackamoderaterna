@@ -1,4 +1,4 @@
-import { IconMail, IconMapPin, IconPhone } from "@tabler/icons-react";
+import { IconMail, IconMapPin, IconPhone, IconUser } from "@tabler/icons-react";
 import Link from "next/link";
 import { GlobalSettings } from "~/sanity.types";
 import { ContactForm } from "@/lib/components/shared/ContactForm";
@@ -58,6 +58,17 @@ export function ContactPageClient({
             <div className="bg-muted p-6 rounded-lg">
               <h3 className="font-bold text-lg mb-4">Kontaktuppgifter</h3>
               <div className="space-y-4">
+                {settings.contactInfo?.contactPerson && (
+                  <div className="flex items-start gap-3">
+                    <IconUser className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                    <div>
+                      <p className="text-sm font-medium mb-1">Kontaktperson</p>
+                      <p className="text-sm text-muted-foreground">
+                        {settings.contactInfo.contactPerson}
+                      </p>
+                    </div>
+                  </div>
+                )}
                 {settings.contactInfo?.email && (
                   <div className="flex items-start gap-3">
                     <IconMail className="h-5 w-5 text-primary mt-0.5 shrink-0" />
@@ -126,6 +137,55 @@ export function ContactPageClient({
                 })()}
               </div>
             </div>
+
+            {(settings.pressContactInfo?.contactPerson ||
+              settings.pressContactInfo?.email ||
+              settings.pressContactInfo?.phone) && (
+              <div className="bg-muted p-6 rounded-lg">
+                <h3 className="font-bold text-lg mb-4">Presskontakt</h3>
+                <div className="space-y-4">
+                  {settings.pressContactInfo?.contactPerson && (
+                    <div className="flex items-start gap-3">
+                      <IconUser className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                      <div>
+                        <p className="text-sm font-medium mb-1">Kontaktperson</p>
+                        <p className="text-sm text-muted-foreground">
+                          {settings.pressContactInfo.contactPerson}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  {settings.pressContactInfo?.email && (
+                    <div className="flex items-start gap-3">
+                      <IconMail className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                      <div>
+                        <p className="text-sm font-medium mb-1">E-post</p>
+                        <Link
+                          href={`mailto:${settings.pressContactInfo.email}`}
+                          className="text-sm text-primary hover:underline"
+                        >
+                          {settings.pressContactInfo.email}
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+                  {settings.pressContactInfo?.phone && (
+                    <div className="flex items-start gap-3">
+                      <IconPhone className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                      <div>
+                        <p className="text-sm font-medium mb-1">Telefon</p>
+                        <Link
+                          href={`tel:${settings.pressContactInfo.phone.replace(/\s/g, "")}`}
+                          className="text-sm text-primary hover:underline"
+                        >
+                          {settings.pressContactInfo.phone}
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

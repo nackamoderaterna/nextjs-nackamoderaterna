@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { PeopleCard } from "../politician/PoliticianCardLarge";
+import { PeopleCard } from "../politician/PeopleCard";
 import Block from "./Block";
 import { Politician } from "~/sanity.types";
 import { cleanInvisibleUnicode } from "@/lib/politicians";

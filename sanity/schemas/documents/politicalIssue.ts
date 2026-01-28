@@ -21,6 +21,13 @@ export const politicalIssue = defineType({
       initialValue: false,
     },
     {
+      name: "fulfilled",
+      title: "Uppfyllt",
+      type: "boolean",
+      description: "Markera om detta vallöfte är uppfyllt",
+      initialValue: false,
+    },
+    {
       name: "politicalAreas",
       title: "Politiska områden",
       description: "Politiska områden som denna fråga tillhör. Minst ett område måste väljas.",
