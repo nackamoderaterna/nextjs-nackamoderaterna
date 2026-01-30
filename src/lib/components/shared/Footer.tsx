@@ -179,28 +179,32 @@ export async function Footer() {
               <h3 className="font-semibold text-foreground mb-4">
                 Kontaktuppgifter
               </h3>
-              <div className="not-italic text-sm text-muted-foreground space-y-1">
+              <div className="not-italic text-sm text-muted-foreground space-y-1 flex gap-4">
+                <div>
                 {settings?.visitingAddress && formatAddress(settings.visitingAddress) && (
-                  <>
+                  <div>
                     <p className="text-xs font-medium text-foreground/70 mb-1">Besöksadress</p>
                     {formatAddress(settings.visitingAddress)?.map((line, i) => (
                       <p key={i}>{line}</p>
                     ))}
-                  </>
+                  </div>
                 )}
                 {settings?.postAddress && formatAddress(settings.postAddress) && (
-                  <>
+                  <div>
                     <p className={`text-xs font-medium text-foreground/70 mb-1 ${settings?.visitingAddress ? 'mt-3' : ''}`}>
                       Postadress
                     </p>
                     {formatAddress(settings.postAddress)?.map((line, i) => (
                       <p key={i}>{line}</p>
                     ))}
-                  </>
+                  </div>
                 )}
+                </div>
+                <div>
+                
                 {settings?.contactInfo?.email && (
-                  <>
-                    <p className="text-xs font-medium text-foreground/70 mb-1 mt-3">E-post</p>
+                  <div>
+                    <p className="text-xs font-medium text-foreground/70 mb-1">E-post</p>
                     <p>
                       <a
                         href={`mailto:${settings.contactInfo.email}`}
@@ -209,7 +213,7 @@ export async function Footer() {
                         {settings.contactInfo.email}
                       </a>
                     </p>
-                  </>
+                  </div>
                 )}
                 {settings?.contactInfo?.phone && (
                   <>
@@ -224,7 +228,9 @@ export async function Footer() {
                     </p>
                   </>
                 )}
+                </div>
               </div>
+
             </div>
           )}
         </div>
