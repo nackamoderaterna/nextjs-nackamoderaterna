@@ -66,7 +66,7 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
       {globalSettings?.handlingsprogram?.url && (
         <Button 
           asChild
-          className="mt-6 bg-brand-primary hover:bg-brand-primary/90 text-white"
+          className="mt-6"
         >
           <Link href={globalSettings.handlingsprogram.url} target="_blank" rel="noopener noreferrer" className="no-underline">
             Läs vårt handlingsprogram
@@ -79,7 +79,7 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
 
   const sidebarContent = (
     <>
-      <PolicyList title="Våra kärnfrågor" policies={data.politicalIssues} />
+      <PolicyList title="Våra politiska mål" policies={data.politicalIssues} />
       {data.politicians.length > 0 && (
       <div className="grid gap-4 mt-8 bg-card border border-border rounded-lg p-6">
         <h2 className="text-xl font-bold text-foreground">Företrädare</h2>

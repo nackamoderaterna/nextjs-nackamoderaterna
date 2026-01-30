@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { CheckSquare } from "lucide-react";
+import { CheckCircle2, CheckSquare } from "lucide-react";
 
 interface KeyIssueCardProps {
   title: string;
@@ -25,10 +25,8 @@ export function KeyIssueCard({
       <div className="flex items-start justify-between gap-3">
         <p className="text-sm leading-relaxed text-foreground">{title}</p>
         {fulfilled && (
-          <CheckSquare
-            className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600"
-            aria-label="Uppfyllt"
-          />
+          <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" aria-label="uppfyllt" />
+          
         )}
       </div>
       <Badge

@@ -23,7 +23,7 @@ export function PolicyList({
       <ul className="space-y-4">
         {policies.map((policy, index) => (
           <li key={index} className="flex gap-3">
-            <CheckCircle2 className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <CheckCircle2 className="w-5 h-5 text-brand-primary flex-shrink-0 mt-0.5" />
             <span className="text-sm text-foreground leading-relaxed">
               {policy.question}
             </span>

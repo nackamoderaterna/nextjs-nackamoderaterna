@@ -82,7 +82,7 @@ export default async function EventsPage() {
               {events.map((event) => (
                 <EventCard
                   key={event._id}
-                  day={new Date(event.startDate || "").getDate().toString()}
+                  day={new Date(event.startDate || "").getDate().toString().padStart(2, "0")}
                   month={getMonth(event.startDate || "")}
                   title={event.title || ""}
                   time={""}

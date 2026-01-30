@@ -168,7 +168,6 @@ export default async function EventPage({ params }: Props) {
                 asChild
                 variant="default"
                 size="lg"
-                className="bg-blue-600 hover:bg-blue-700 text-white rounded-md"
               >
                 <a
                   href={event.registrationUrl}
