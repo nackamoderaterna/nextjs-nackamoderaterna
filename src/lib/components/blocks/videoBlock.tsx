@@ -42,7 +42,7 @@ export default function VideoBlock({ block }: VideoBlockProps) {
         )}
         <div className={`rounded bg-gray-100 aspect-16/9`}>{renderVideo()}</div>
 
-        {caption && <p className="mt-2 text-sm text-gray-600">{caption}</p>}
+        {caption && <p className="mt-2 text-sm text-center text-muted-foreground">{caption}</p>}
     </Block>
   );
 }
