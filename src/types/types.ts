@@ -87,6 +87,30 @@ type BlockContact = {
   showContactInfo?: boolean;
 };
 
+type BlockPoliticalAreas = {
+  _type: "block.politicalAreas";
+  heading?: string;
+  description?: string;
+  items?: Array<{
+    _id: string;
+    name?: string | null;
+    slug?: { current?: string | null } | null;
+    icon?: { name?: string | null } | null;
+  }>;
+};
+
+type BlockGeographicalAreas = {
+  _type: "block.geographicalAreas";
+  heading?: string;
+  description?: string;
+  items?: Array<{
+    _id: string;
+    name?: string | null;
+    slug?: { current?: string | null } | null;
+    image?: unknown;
+  }>;
+};
+
 export type PageBlock =
   | BlockHero
   | BlockText
@@ -100,7 +124,9 @@ export type PageBlock =
   | BlockAccordion
   | BlockQuote
   | BlockImageGallery
-  | BlockContact;
+  | BlockContact
+  | BlockPoliticalAreas
+  | BlockGeographicalAreas;
 
 type SanityDocumentBase = {
   _id: string;

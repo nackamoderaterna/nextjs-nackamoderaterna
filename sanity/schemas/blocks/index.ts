@@ -11,6 +11,8 @@ import {accordionBlock} from './accordion'
 import {quoteBlock} from './quote'
 import {imageGalleryBlock} from './imageGallery'
 import {contactBlock} from './contact'
+import {politicalAreasBlock} from './politicalAreas'
+import {geographicalAreasBlock} from './geographicalAreas'
 
 export const blocks = [
   text, 
@@ -26,4 +28,6 @@ export const blocks = [
   quoteBlock,
   imageGalleryBlock,
   contactBlock,
+  politicalAreasBlock,
+  geographicalAreasBlock,
 ]

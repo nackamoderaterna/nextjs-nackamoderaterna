@@ -178,6 +178,30 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
       }
     },
     // IMAGE GALLERY END
+    // POLITICAL AREAS START
+    _type == "block.politicalAreas" => {
+      heading,
+      description,
+      "items": items[]->{
+        _id,
+        name,
+        slug,
+        icon{ name }
+      }
+    },
+    // POLITICAL AREAS END
+    // GEOGRAPHICAL AREAS START
+    _type == "block.geographicalAreas" => {
+      heading,
+      description,
+      "items": items[]->{
+        _id,
+        name,
+        slug,
+        image
+      }
+    },
+    // GEOGRAPHICAL AREAS END
   }
 }`;
 

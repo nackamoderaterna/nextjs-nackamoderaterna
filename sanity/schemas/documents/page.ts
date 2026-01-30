@@ -48,6 +48,8 @@ export const page = defineType({
         {type: 'block.quote'},
         {type: 'block.imageGallery'},
         {type: 'block.contact'},
+        {type: 'block.politicalAreas'},
+        {type: 'block.geographicalAreas'},
       ],
     },
     {

@@ -14,6 +14,8 @@ import { QuoteBlock } from "./blocks/QuoteBlock";
 import { ImageGalleryBlock } from "./blocks/ImageGalleryBlock";
 import { CTABlock } from "./blocks/cta-block";
 import { ContactBlock } from "./blocks/ContactBlock";
+import { PoliticalAreasBlock } from "./blocks/PoliticalAreasBlock";
+import { GeographicalAreasBlock } from "./blocks/GeographicalAreasBlock";
 
 interface PageBuilderProps {
   blocks: PageBlock[];
@@ -56,6 +58,10 @@ export function PageBuilder({ blocks }: PageBuilderProps) {
             return <ImageGalleryBlock key={key} block={block as any} />;
           case "block.contact":
             return <ContactBlock key={key} block={block as any} />;
+          case "block.politicalAreas":
+            return <PoliticalAreasBlock key={key} block={block as any} />;
+          case "block.geographicalAreas":
+            return <GeographicalAreasBlock key={key} block={block as any} />;
           default:
             return null;
         }
