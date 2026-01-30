@@ -54,7 +54,6 @@ export function NewsCard({
             {variant && variant !== "default" && (
               <NewsVariantBadge variant={variant} />
             )}
-           
           </div>
 
           <div className="md:col-span-8 space-y-3">
@@ -63,27 +62,27 @@ export function NewsCard({
                 {title}
               </h2>
               {politicalAreas && politicalAreas.length > 0 && (
-              <p className="text-xs uppercase text-muted-foreground mt-4 flex flex-wrap gap-4">
-                {[...politicalAreas]
-                  .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
-                  .map((a) => (
-                    <span key={a._id}>{a.name}</span>
-                  ))}
-              </p>
-            )}
+                <p className="text-xs uppercase text-muted-foreground mt-4 flex flex-wrap gap-4">
+                  {[...politicalAreas]
+                    .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
+                    .map((a) => (
+                      <span key={a._id}>{a.name}</span>
+                    ))}
+                </p>
+              )}
             </div>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed text-pretty">
               {excerpt}
             </p>
             {series?.title && (
-              <p className="text-xs capitalize text-muted-foreground mt-4">{series.title}</p>
-              
+              <p className="text-xs capitalize text-muted-foreground mt-4">
+                {series.title}
+              </p>
             )}
-           
           </div>
 
           <div className="md:col-span-2 flex items-center justify-start md:justify-end mr-4">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full border border-border group-hover:border-muted-foreground group-hover:bg-muted-foreground group-hover:text-background transition-all">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full border border-border group-hover:border-muted-foreground group-hover:bg-brand-primary group-hover:text-background transition-all">
               <ArrowRight className="w-5 h-5" />
             </div>
           </div>
