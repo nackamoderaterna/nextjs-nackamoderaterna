@@ -4,7 +4,20 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
   _id,
   title,
   slug,
-  description,
+  pageHeader{
+    header,
+    description,
+    image{
+      ...,
+      "url": asset->url
+    },
+    imageHeight,
+    overlayOpacity,
+    ctaButton{
+      label,
+      href
+    }
+  },
   seo{
     title,
     description,

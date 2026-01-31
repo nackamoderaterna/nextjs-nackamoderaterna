@@ -15,8 +15,7 @@ type PageSEO = {
 type PageData = {
   title?: string;
   slug?: { current?: string };
-  description?: string;
-  hero?: { subheading?: string | null } | null;
+  pageHeader?: { description?: string } | null;
   seo?: PageSEO | null;
   blocks?: any[];
 };
@@ -78,15 +77,10 @@ export function generatePageMetadata(
   // Use SEO title if set, otherwise use page title with site suffix
   const seoTitle = page.seo?.title || `${pageTitle} | Nackamoderaterna`;
 
-  // Use SEO description if set, otherwise page description, otherwise page hero subheading, otherwise extract from blocks
+  // Use SEO description if set, otherwise page header description, otherwise extract from blocks
   const seoDescription =
     page.seo?.description ||
-    page.description ||
-    (page.hero?.subheading
-      ? page.hero.subheading.length > 160
-        ? page.hero.subheading.substring(0, 157) + "..."
-        : page.hero.subheading
-      : undefined) ||
+    page.pageHeader?.description ||
     extractDescriptionFromBlocks(page.blocks) ||
     `Läs mer om ${pageTitle} på Nackamoderaterna`;
 
