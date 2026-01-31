@@ -6,6 +6,7 @@ import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { Section } from "@/lib/components/shared/Section";
 import { geographicalAreaPageQuery, allGeographicalAreaSlugsQuery } from "@/lib/queries/politik";
 import { sanityClient } from "@/lib/sanity/client";
+import { buildImageUrl } from "@/lib/sanity/image";
 import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { PortableText } from "next-sanity";
@@ -56,11 +57,16 @@ export async function generateMetadata({
     });
   }
 
+  const imageUrl = data.image
+    ? buildImageUrl(data.image, { width: 1200, height: 630 })
+    : undefined;
+
   return generateSEOMetadata({
     title: `${data.name} | Nackamoderaterna`,
     description: data.description
       ? `${data.name} - ${data.description[0]?.children?.[0]?.text?.substring(0, 150)}...`
       : `Läs mer om ${data.name}`,
+    image: imageUrl,
     url: `/omrade/${slug}`,
   });
 }

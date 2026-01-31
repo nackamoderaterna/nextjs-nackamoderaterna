@@ -16,6 +16,7 @@ interface SearchResult {
   };
   excerpt?: string;
   searchText?: string;
+  icon?: { name?: string | null } | null;
   image?: {
     asset?: {
       _ref: string;

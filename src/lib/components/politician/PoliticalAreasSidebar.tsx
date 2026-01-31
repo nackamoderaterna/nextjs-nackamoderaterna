@@ -2,13 +2,13 @@ import Link from "next/link";
 import { IconHeart } from "@tabler/icons-react";
 import { ROUTE_BASE } from "@/lib/routes";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
+import { getLucideIcon } from "@/lib/utils/iconUtils";
 
 interface PoliticalArea {
   politicalArea?: {
     name?: string;
-    slug?: {
-      current?: string;
-    };
+    slug?: { current?: string };
+    icon?: { name?: string | null } | null;
   };
 }
 
@@ -33,19 +33,29 @@ export function PoliticalAreasSidebar({
             ? `${ROUTE_BASE.POLITICS}/${areaRef.politicalArea.slug.current}`
             : undefined;
 
+          const Icon =
+            areaRef.politicalArea?.icon?.name
+              ? getLucideIcon(areaRef.politicalArea.icon.name)
+              : null;
+          const AreaIcon = Icon ?? IconHeart;
+
           return (
             <div key={index}>
               {href ? (
                 <Link
                   href={href}
-                  className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+                  className="flex items-center gap-2 rounded-lg px-2 py-1.5 -mx-2 -my-1.5 text-muted-foreground hover:text-foreground hover:bg-brand-primary/10 transition-colors"
                 >
-                  <IconHeart className="h-4 w-4 shrink-0 text-primary/70" />
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-brand-primary/10">
+                    <AreaIcon className="h-4 w-4 text-brand-primary" />
+                  </span>
                   {areaRef.politicalArea.name}
                 </Link>
               ) : (
                 <p className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <IconHeart className="h-4 w-4 shrink-0 text-primary/70" />
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-brand-primary/10">
+                    <AreaIcon className="h-4 w-4 text-brand-primary" />
+                  </span>
                   {areaRef.politicalArea.name}
                 </p>
               )}

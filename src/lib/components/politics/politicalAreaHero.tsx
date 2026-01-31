@@ -1,22 +1,24 @@
-import Image from "next/image";
-import { SanityImage } from "../shared/SanityImage";
+import { getLucideIcon } from "@/lib/utils/iconUtils";
 
 interface AreaHeroProps {
-  image: any;
+  icon?: { name?: string | null } | null;
   title: string;
 }
 
-export function PoliticalAreaHero({ image, title }: AreaHeroProps) {
-  return (
-    <section className="mb-12">
-      <h1 className="text-4xl font-bold text-foreground mb-8">{title}</h1>
+export function PoliticalAreaHero({ icon, title, image }: AreaHeroProps) {
+  const Icon = icon?.name ? getLucideIcon(icon.name) : null;
 
-{image && (
-   <div className="relative h-64 md:h-80 w-full rounded-lg overflow-hidden mb-6">
-   <SanityImage image={image} fill />
- </div> 
-)}
-    
+  return (
+    <section className="mb-12 border-b border-border rounded-lg pb-12 flex flex-col md:flex-row gap-8 ">
+      <div className="flex items-center gap-4">
+        {Icon && (
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-brand-primary/10">
+            <Icon className="h-7 w-7 text-brand-primary" />
+          </div>
+        )}
+        <h1 className="text-4xl font-bold text-foreground">{title}</h1>
+      </div>
+      
     </section>
   );
 }

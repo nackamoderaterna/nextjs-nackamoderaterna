@@ -10,6 +10,7 @@ interface ImageGalleryBlockProps {
     asset?: any;
     alt?: string;
     caption?: string;
+    aspectRatio?: "default" | "portrait" | "square" | "landscape" | "auto";
   }>;
   columns?: 2 | 3 | 4;
   aspectRatio?: "square" | "landscape" | "portrait" | "auto";
@@ -25,10 +26,17 @@ const cleanString = (str?: string | null): string => {
     .trim();
 };
 
+const ASPECT_CLASSES: Record<string, string> = {
+  square: "aspect-square",
+  landscape: "aspect-video",
+  portrait: "aspect-[4/5]",
+  auto: "aspect-auto",
+};
+
 export function ImageGalleryBlock({ block }: { block: ImageGalleryBlockProps }) {
   const columns = block.columns || 3;
-  const rawAspectRatio = block.aspectRatio || "square";
-  const aspectRatio = cleanString(rawAspectRatio) as "square" | "landscape" | "portrait" | "auto" || "square";
+  const blockAspectRatio = cleanString(block.aspectRatio) as "square" | "landscape" | "portrait" | "auto" || "portrait";
+  const defaultAspect = blockAspectRatio || "portrait";
   const { title } = getBlockHeading(block);
   const headingTitle = cleanString(title);
 
@@ -38,15 +46,11 @@ export function ImageGalleryBlock({ block }: { block: ImageGalleryBlockProps }) 
     4: "md:grid-cols-4",
   };
 
-  const aspectClasses: Record<string, string> = {
-    square: "aspect-square",
-    landscape: "aspect-video",
-    portrait: "aspect-[4/5]",
-    auto: "aspect-auto",
+  const getAspectForImage = (image: (typeof block.images)[0]) => {
+    const imgRatio = cleanString(image?.aspectRatio);
+    if (!imgRatio || imgRatio === "default") return defaultAspect;
+    return imgRatio as keyof typeof ASPECT_CLASSES;
   };
-  
-  // Get the aspect ratio class, defaulting to square if invalid
-  const aspectClass = aspectClasses[aspectRatio] || aspectClasses.square;
 
   // Filter out images without assets
   const validImages = block.images?.filter((image) => {
@@ -70,14 +74,19 @@ export function ImageGalleryBlock({ block }: { block: ImageGalleryBlockProps }) 
     <Block>
         <BlockHeading title={headingTitle || undefined} />
         <div className={`grid grid-cols-1 ${gridCols[columns]} gap-4 md:gap-6`}>
-          {validImages.map((image, index) => (
+          {validImages.map((image, index) => {
+            const imageAspect = getAspectForImage(image);
+            const aspectClass = ASPECT_CLASSES[imageAspect] || ASPECT_CLASSES.portrait;
+            const useAuto = imageAspect === "auto";
+
+            return (
             <div key={image._key || index} className="space-y-2">
               <div
                 className={`relative w-full rounded-lg overflow-hidden ${
-                  aspectRatio !== "auto" ? aspectClass : ""
+                  !useAuto ? aspectClass : ""
                 }`}
               >
-                {aspectRatio === "auto" ? (
+                {useAuto ? (
                   <SanityImage
                     image={image}
                     alt={image.alt || ""}
@@ -115,7 +124,8 @@ export function ImageGalleryBlock({ block }: { block: ImageGalleryBlockProps }) 
                 </p>
               )}
             </div>
-          ))}
+          );
+          })}
         </div>
     </Block>
   );

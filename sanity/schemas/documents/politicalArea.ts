@@ -40,12 +40,12 @@ export const politicalArea = defineType({
     defineField({
       name: "image",
       title: "Huvudbild",
-      description: "Huvudbild som visas på områdets sida och i listningar.",
+      description: "Huvudbild som visas i områdets seo.",
       type: "image",
       group: "media",
       options: {
         hotspot: true,
-      },
+      }, 
     }),
     defineField({
       name: "icon",

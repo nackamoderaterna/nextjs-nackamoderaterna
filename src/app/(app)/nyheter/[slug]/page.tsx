@@ -15,6 +15,7 @@ import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
 import { ROUTE_BASE } from "@/lib/routes";
 import Link from "next/link";
 import { NewsCard } from "@/lib/components/news/NewsCard";
+import { getLucideIcon } from "@/lib/utils/iconUtils";
 
 // Generate static params for all news articles at build time
 export async function generateStaticParams() {
@@ -89,17 +90,22 @@ export default async function NewsArticlePage({
         {news.title}
       </h1>
       {news.politicalAreas && news.politicalAreas.length > 0 && (
-
-          <div className="flex flex-wrap items-center gap-2 mb-4">
-            {news.politicalAreas.map((area) => (
-              <Link href={`${ROUTE_BASE.POLITICS}/${area.slug?.current}`} key={area._id}>
-              <span className="inline-block text-sm rounded-full px-3 py-1 bg-brand-primary/10 text-brand-primary/90 hover:bg-brand-primary/20 hover:text-brand-primary transition-colors">
+        <div className="flex flex-wrap items-center gap-2 mb-4">
+          {news.politicalAreas.map((area) => {
+            const Icon = area.icon?.name ? getLucideIcon(area.icon.name) : null;
+            return (
+              <Link
+                href={`${ROUTE_BASE.POLITICS}/${area.slug?.current || ""}`}
+                key={area._id}
+                className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/20 transition-colors text-sm"
+              >
+                {Icon && <Icon className="h-4 w-4 shrink-0" />}
                 {area.name}
-              </span>
               </Link>
-            ))}
-            </div>
-        )}
+            );
+          })}
+        </div>
+      )}
       <time
         dateTime={news.effectiveDate}
         className="text-sm text-muted-foreground"

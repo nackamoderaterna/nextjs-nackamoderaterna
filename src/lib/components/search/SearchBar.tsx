@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Input } from "@/lib/components/ui/input";
 import { ROUTE_BASE } from "@/lib/routes";
 import { buildImageUrl } from "@/lib/sanity/image";
+import { getLucideIcon } from "@/lib/utils/iconUtils";
 
 interface SearchResult {
   _id: string;
@@ -19,6 +20,7 @@ interface SearchResult {
   excerpt?: string;
   category: string;
   url: string;
+  icon?: { name?: string | null } | null;
   image?: {
     asset?: {
       _ref: string;
@@ -139,7 +141,8 @@ export function SearchBar() {
           {results.length > 0 ? (
             <div className="p-2">
               {results.map((result) => {
-                const imageUrl = result.image ? buildImageUrl(result.image, { width:150, height:150 }) : null;
+                const Icon = result.icon?.name ? getLucideIcon(result.icon.name) : null;
+                const imageUrl = result.image ? buildImageUrl(result.image, { width: 150, height: 150 }) : null;
                 return (
                   <Link
                     key={result._id}
@@ -160,7 +163,11 @@ export function SearchBar() {
                         {result.category}
                       </div>
                     </div>
-                    {imageUrl && (
+                    {Icon ? (
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-brand-primary/10">
+                        <Icon className="h-6 w-6 text-brand-primary" />
+                      </div>
+                    ) : imageUrl ? (
                       <div className="flex-shrink-0">
                         <Image
                           src={imageUrl}
@@ -170,7 +177,7 @@ export function SearchBar() {
                           className="rounded object-cover"
                         />
                       </div>
-                    )}
+                    ) : null}
                   </Link>
                 );
               })}

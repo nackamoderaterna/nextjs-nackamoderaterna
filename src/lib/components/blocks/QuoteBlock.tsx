@@ -33,10 +33,10 @@ export function QuoteBlock({ block }: { block: QuoteBlockProps }) {
   const { title } = getBlockHeading(block);
 
   return (
-    <Block maxWidth="4xl">
+    <Block maxWidth="3xl">
         <BlockHeading title={title} />
         <div className={`${alignClass} flex flex-col ${flexAlignClass}`}>
-          <blockquote className="text-2xl md:text-3xl font-light italic mb-8 leading-relaxed">
+          <blockquote className="text-xl font-serif md:text-3xl font-light italic mb-8 leading-relaxed">
             "{block.quote}"
           </blockquote>
         {(block.author || block.authorImage) && (

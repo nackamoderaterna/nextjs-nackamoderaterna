@@ -187,7 +187,8 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
         _key,
         asset,
         alt,
-        caption
+        caption,
+        aspectRatio
       }
     },
     // IMAGE GALLERY END

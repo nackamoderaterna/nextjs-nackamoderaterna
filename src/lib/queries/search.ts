@@ -38,6 +38,7 @@ export const searchQuery = groq`
     name,
     slug,
     description,
+    icon{ name },
     "searchText": coalesce(name, "") + " " + coalesce(description, "")
   },
   "geographicalAreas": *[_type == "geographicalArea"] {

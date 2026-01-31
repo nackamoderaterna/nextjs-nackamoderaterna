@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/lib/utils/dateUtils";
@@ -41,6 +43,8 @@ export function NewsCard({
   politicalAreas,
   series,
 }: NewsCardProps) {
+  const router = useRouter();
+
   return (
     <article
       className={`group relative ${!isLast ? "border-b border-border" : ""}`}

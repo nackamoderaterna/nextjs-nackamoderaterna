@@ -84,6 +84,21 @@ export const news = defineType({
           description: "Beskrivning av bilden för tillgänglighet och SEO.",
           type: "string",
         },
+        defineField({
+          name: "aspectRatio",
+          title: "Bildförhållande (sidebar)",
+          description: "Förhållande i sidofältet. Porträtt (4:5) passar Instagram-inlägg. Kvadrat för kvadratiska bilder.",
+          type: "string",
+          options: {
+            list: [
+              { title: "Porträtt (4:5, Instagram)", value: "portrait" },
+              { title: "Kvadrat (1:1)", value: "square" },
+              { title: "Landskap (16:9)", value: "landscape" },
+              { title: "Auto (ursprungligt)", value: "auto" },
+            ],
+          },
+          initialValue: "portrait",
+        }),
       ],
     }),
     defineField({

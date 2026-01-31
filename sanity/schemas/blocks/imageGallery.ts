@@ -33,6 +33,22 @@ export const imageGalleryBlock = defineType({
               title: "Bildtext",
               type: "string",
             }),
+            defineField({
+              name: "aspectRatio",
+              title: "Bildförhållande",
+              description: "Valfritt. Överskrider galleriets standard. Lämna tom för standard (4:5).",
+              type: "string",
+              options: {
+                list: [
+                  { title: "Standard (galleri)", value: "default" },
+                  { title: "Porträtt (4:5, Instagram)", value: "portrait" },
+                  { title: "Kvadrat (1:1)", value: "square" },
+                  { title: "Landskap (16:9)", value: "landscape" },
+                  { title: "Auto (ursprungligt)", value: "auto" },
+                ],
+              },
+              initialValue: "default",
+            }),
           ],
         },
       ],
@@ -55,7 +71,7 @@ export const imageGalleryBlock = defineType({
     defineField({
       name: "aspectRatio",
       title: "Bildförhållande",
-      description: "Förhållandet mellan bildernas bredd och höjd. Auto använder bildernas ursprungliga förhållande.",
+      description: "Standard förhållande för bilderna. Porträtt (4:5) passar Instagram-inlägg. Varje bild kan överrida detta individuellt.",
       type: "string",
       options: {
         list: [
@@ -65,7 +81,7 @@ export const imageGalleryBlock = defineType({
           { title: "Auto", value: "auto" },
         ],
       },
-      initialValue: "square",
+      initialValue: "portrait",
     }),
   ],
   preview: {
