@@ -5,7 +5,7 @@ const IMAGE_HEIGHT_OPTIONS = [
   { title: "Medium (600px)", value: "medium" },
   { title: "Stor (800px)", value: "large" },
   { title: "Fullskärm (100vh)", value: "fullscreen" },
-] as const;
+];
 
 export default defineType({
   name: "pageHeader",

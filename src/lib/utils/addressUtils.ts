@@ -19,6 +19,6 @@ export function formatAddress(
       ? `${address.zip} ${address.city}`
       : address.zip || address.city,
     address.country,
-  ].filter(Boolean);
+  ].filter((p): p is string => Boolean(p));
   return parts.length > 0 ? parts : null;
 }

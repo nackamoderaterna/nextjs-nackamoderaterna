@@ -46,7 +46,7 @@ export function ImageGalleryBlock({ block }: { block: ImageGalleryBlockProps }) 
     4: "md:grid-cols-4",
   };
 
-  const getAspectForImage = (image: (typeof block.images)[0]) => {
+  const getAspectForImage = (image: NonNullable<typeof block.images>[number] | undefined) => {
     const imgRatio = cleanString(image?.aspectRatio);
     if (!imgRatio || imgRatio === "default") return defaultAspect;
     return imgRatio as keyof typeof ASPECT_CLASSES;

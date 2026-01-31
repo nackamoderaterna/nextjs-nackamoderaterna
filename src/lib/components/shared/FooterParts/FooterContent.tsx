@@ -1,8 +1,8 @@
-import { PortableText } from "next-sanity";
+import { PortableText, PortableTextBlock } from "next-sanity";
 import { portableTextComponents } from "../PortableTextComponents";
 
 interface FooterContentProps {
-  content: unknown[];
+  content: PortableTextBlock[];
 }
 
 export function FooterContent({ content }: FooterContentProps) {

@@ -118,14 +118,14 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
 
   const sidebar =
     data.politicalIssues?.length > 0 ? (
-      <PolicyList title="Våra kärnfrågor" policies={data.politicalIssues} />
+      <PolicyList policies={data.politicalIssues} />
     ) : null;
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <PoliticalAreaHero image={data.image} title={data.name || ""} />
+          <PoliticalAreaHero title={data.name || ""} />
 
           <ContentWithSidebar
             mainContent={main}

@@ -5,7 +5,7 @@ interface AreaHeroProps {
   title: string;
 }
 
-export function PoliticalAreaHero({ icon, title, image }: AreaHeroProps) {
+export function PoliticalAreaHero({ icon, title }: AreaHeroProps) {
   const Icon = icon?.name ? getLucideIcon(icon.name) : null;
 
   return (
