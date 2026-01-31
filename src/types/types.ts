@@ -1,7 +1,6 @@
 import { NewsBlock, NewsBlockProps } from "@/lib/components/blocks/NewsBlock";
 import { BlockPoliticianDereferenced } from "@/lib/components/blocks/PoliticianReference";
 import {
-  BlockHero,
   BlockImage,
   BlockPolitician,
   BlockText,
@@ -112,7 +111,6 @@ type BlockGeographicalAreas = {
 };
 
 export type PageBlock =
-  | BlockHero
   | BlockText
   | BlockImage
   | BlockVideo

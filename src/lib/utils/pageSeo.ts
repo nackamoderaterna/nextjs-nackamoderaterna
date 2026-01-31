@@ -16,13 +16,14 @@ type PageData = {
   title?: string;
   slug?: { current?: string };
   description?: string;
+  hero?: { subheading?: string | null } | null;
   seo?: PageSEO | null;
   blocks?: any[];
 };
 
 /**
  * Extracts a plain text description from page blocks for SEO fallback.
- * Looks for text content in the first text block or hero block.
+ * Looks for text content in the first text block.
  */
 function extractDescriptionFromBlocks(blocks: any[] = []): string | undefined {
   // Look for first text block with content
@@ -51,16 +52,6 @@ function extractDescriptionFromBlocks(blocks: any[] = []): string | undefined {
     }
   }
 
-  // Fallback: look for hero block subheading
-  const heroBlock = blocks.find(
-    (block) => block._type === "block.hero" && block.subheading
-  );
-  if (heroBlock?.subheading) {
-    return heroBlock.subheading.length > 160
-      ? heroBlock.subheading.substring(0, 157) + "..."
-      : heroBlock.subheading;
-  }
-
   return undefined;
 }
 
@@ -87,10 +78,15 @@ export function generatePageMetadata(
   // Use SEO title if set, otherwise use page title with site suffix
   const seoTitle = page.seo?.title || `${pageTitle} | Nackamoderaterna`;
 
-  // Use SEO description if set, otherwise use page description, otherwise extract from blocks, otherwise use default
+  // Use SEO description if set, otherwise page description, otherwise page hero subheading, otherwise extract from blocks
   const seoDescription =
     page.seo?.description ||
     page.description ||
+    (page.hero?.subheading
+      ? page.hero.subheading.length > 160
+        ? page.hero.subheading.substring(0, 157) + "..."
+        : page.hero.subheading
+      : undefined) ||
     extractDescriptionFromBlocks(page.blocks) ||
     `Läs mer om ${pageTitle} på Nackamoderaterna`;
 
