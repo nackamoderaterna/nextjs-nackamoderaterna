@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Search, X, Loader2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/lib/components/ui/input";
 import { ROUTE_BASE } from "@/lib/routes";
 import { buildImageUrl } from "@/lib/sanity/image";
 

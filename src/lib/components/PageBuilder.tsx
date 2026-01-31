@@ -1,8 +1,7 @@
 import { TextBlock } from "./blocks/textBlock";
-import { HeroBlock } from "./blocks/HeroBlock";
 import { ImageBlock } from "./blocks/imageBlock";
 import VideoBlock from "./blocks/videoBlock";
-import { PageBlock } from "@/types/types";
+import { PageBlock } from "@/lib/types/types";
 import {
   PoliticianReferenceBlock,
 } from "./blocks/PoliticianReference";
@@ -34,8 +33,6 @@ export function PageBuilder({ blocks }: PageBuilderProps) {
         switch (blockType) {
           case "block.text":
             return <TextBlock key={key} block={block as any} />;
-          case "block.hero":
-            return <HeroBlock key={key} block={block as any} />;
           case "block.image":
             return <ImageBlock key={key} block={block as any} />;
           case "block.video":

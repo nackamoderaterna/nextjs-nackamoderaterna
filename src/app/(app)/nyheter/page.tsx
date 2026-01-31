@@ -10,7 +10,7 @@ import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { News } from "~/sanity.types";
 import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
-import type { NewsVariant } from "@/types/news";
+import type { NewsVariant } from "@/lib/types/news";
 import { ListingHeader } from "@/lib/components/shared/ListingHeader";
 import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 

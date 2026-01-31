@@ -11,15 +11,15 @@ import {
   SheetContent,
   SheetHeader,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
+} from "@/lib/components/ui/sheet";
+import { Button } from "@/lib/components/ui/button";
 import { ChevronDown, Menu } from "lucide-react";
 import { SearchBar } from "../search/SearchBar";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+} from "@/lib/components/ui/collapsible";
 
 export function MobileNav({ items }: { items: MenuItemWithReference[] }) {
   const [open, setOpen] = useState(false);

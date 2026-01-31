@@ -16,7 +16,7 @@ import {
 import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/lib/components/ui/button";
 import { ROUTE_BASE } from "@/lib/routes";
 
 // Generate static params for all events at build time

@@ -1,9 +1,10 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/lib/components/ui/button";
 import { NewsCard } from "@/lib/components/news/NewsCard";
 import { PeopleCard } from "@/lib/components/politician/PeopleCard";
 import { PolicyList } from "@/lib/components/politics/policyList";
 import { PoliticalAreaHero } from "@/lib/components/politics/politicalAreaHero";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
+import { Section } from "@/lib/components/shared/Section";
 import { politicalAreaPageQuery, allPoliticalAreaSlugsQuery } from "@/lib/queries/politik";
 import { globalSettingsQuery } from "@/lib/queries/globalSettings";
 import { sanityClient } from "@/lib/sanity/client";
@@ -19,6 +20,8 @@ import {
 } from "~/sanity.types";
 import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
 import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
+import { ROUTE_BASE } from "@/lib/routes";
+import { Sidebar } from "@/lib/components/shared/Sidebar";
 
 // Generate static params for all political areas at build time
 export async function generateStaticParams() {
@@ -79,10 +82,13 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
 
   const sidebarContent = (
     <>
-      <PolicyList title="Våra politiska mål" policies={data.politicalIssues} />
+   
+      <Sidebar heading="Våra politiska mål">
+        <PolicyList title="Våra politiska mål" policies={data.politicalIssues} />
+      </Sidebar>
+     
       {data.politicians.length > 0 && (
-      <div className="grid gap-4 mt-8 bg-card border border-border rounded-lg p-6">
-        <h2 className="text-xl font-bold text-foreground">Företrädare</h2>
+        <Sidebar heading="Företrädare">
         {
           data.politicians.map((politician) => (
             <PeopleCard
@@ -94,7 +100,7 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
             />
           ))
         }
-      </div>
+        </Sidebar>
         )}
     </>
   );
@@ -111,23 +117,25 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
           />
 
           {/* Current News Section */}
-          <section className="mb-16">
-            <h2 className="text-2xl font-bold text-foreground mb-6">
-              Aktuellt inom {data.name}
-            </h2>
-            <div className="grid">
-              {data.latestNews.map((news, index) => (
-                <NewsCard
-                  key={news._id}
-                  date={getEffectiveDate(news)}
-                  slug={news.slug?.current || ""}
-                  title={news.title || ""}
-                  isLast={index === data.latestNews.length - 1}
-                  excerpt={news.excerpt || ""}
-                />
-              ))}
-            </div>
-          </section>
+          {data.latestNews.length > 0 && (
+            <Section 
+              title={`Aktuellt inom ${data.name}`} 
+              actions={<Link href={`${ROUTE_BASE.POLITICS}/${slug}`}>Alla nyheter</Link>}
+            >
+              <div className="grid">
+                {data.latestNews.map((news, index) => (
+                  <NewsCard
+                    key={news._id}
+                    date={getEffectiveDate(news)}
+                    slug={news.slug?.current || ""}
+                    title={news.title || ""}
+                    isLast={index === data.latestNews.length - 1}
+                    excerpt={news.excerpt || ""}
+                  />
+                ))}
+              </div>
+            </Section>
+          )}
         </div>
       </main>
     </div>

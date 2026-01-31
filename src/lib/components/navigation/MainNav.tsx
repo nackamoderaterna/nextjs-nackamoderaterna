@@ -4,7 +4,7 @@ import {
   getMenuItemHref,
   MenuItemWithReference,
 } from "@/lib/queries/navigation";
-import useIsMobile from "@/hooks/use-is-mobile";
+import useIsMobile from "@/lib/hooks/use-is-mobile";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -13,8 +13,8 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
+} from "@/lib/components/ui/navigation-menu";
+import { DropdownMenu } from "@/lib/components/ui/dropdown-menu";
 
 export function MainNav({ items }: { items: MenuItemWithReference[] }) {
   const { isMobile } = useIsMobile();

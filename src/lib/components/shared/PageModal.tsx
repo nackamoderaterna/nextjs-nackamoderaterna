@@ -12,8 +12,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+} from "@/lib/components/ui/dialog";
+import { Button } from "@/lib/components/ui/button";
 
 type PageModalData = {
   enabled?: boolean;

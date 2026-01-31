@@ -2,7 +2,7 @@ import Link from "next/link";
 import { formatDate } from "@/lib/utils/dateUtils";
 import { ArrowRight } from "lucide-react";
 import { NewsVariantBadge } from "./NewsVariantBadge";
-import type { NewsVariant } from "@/types/news";
+import type { NewsVariant } from "@/lib/types/news";
 import { ROUTE_BASE } from "@/lib/routes";
 
 export type PoliticalAreaRef = {

@@ -3,6 +3,6 @@
   "rsc": false,
   "tsx": true,
   "aliases": {
-    "hooks": "./src/hooks"
+    "hooks": "./src/lib/hooks"
   }
 }

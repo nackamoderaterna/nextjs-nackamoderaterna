@@ -3,16 +3,16 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/lib/components/ui/button";
+import { Textarea } from "@/lib/components/ui/textarea";
+import { Input } from "@/lib/components/ui/input";
 import {
   Field,
   FieldGroup,
   FieldLegend,
   FieldError,
   FieldLabel,
-} from "@/components/ui/field";
+} from "@/lib/components/ui/field";
 import { useState } from "react";
 import { ROUTE_BASE } from "@/lib/routes";
 

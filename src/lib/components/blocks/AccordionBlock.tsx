@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { PortableText } from "next-sanity";
 import Block from "./Block";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/lib/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
 import { portableTextComponents } from "../shared/PortableTextComponents";
 

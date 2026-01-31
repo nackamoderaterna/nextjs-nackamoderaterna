@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/lib/components/ui/badge";
 import { CheckCircle2, CheckSquare } from "lucide-react";
 
 interface KeyIssueCardProps {

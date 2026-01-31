@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 import { sanityClient } from "@/lib/sanity/client";
-import { NewsWithReferences } from "@/types/news";
+import { NewsWithReferences } from "@/lib/types/news";
 import { newsQuery, allNewsSlugsQuery } from "@/lib/queries/nyheter";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
+import { Section } from "@/lib/components/shared/Section";
 import { formatDate } from "@/lib/utils/dateUtils";
 import { PortableText } from "next-sanity";
 import { NewsSidebar } from "@/lib/components/news/NewsSidebar";
@@ -124,12 +125,11 @@ export default async function NewsArticlePage({
       <ContentWithSidebar mainContent={mainContent} sidebarContent={sidebar} />
 
       {news.relatedByPoliticalArea && news.relatedByPoliticalArea.length > 0 && (
-        <section aria-label="Relaterade nyheter" className="mt-16">
-         
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8">
-              Relaterade nyheter
-            </h2>
-        
+        <Section
+          title="Relaterade nyheter"
+          className="mt-16"
+          aria-label="Relaterade nyheter"
+        >
           <div className="rounded-lg overflow-hidden">
             <div className="grid">
               {news.relatedByPoliticalArea.map((item, index) => (
@@ -144,7 +144,7 @@ export default async function NewsArticlePage({
               ))}
             </div>
           </div>
-        </section>
+        </Section>
       )}
     </div>
   );
