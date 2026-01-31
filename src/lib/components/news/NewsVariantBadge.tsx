@@ -1,15 +1,14 @@
 import { Badge } from "@/lib/components/ui/badge";
 import { cn } from "@/lib/utils";
+import type { NewsVariant } from "@/lib/types/news";
 
-type NewsVariant = "debate" | "pressrelease";
-
-const LABELS: Record<NewsVariant, string> = {
+const LABELS: Record<Exclude<NewsVariant, "default">, string> = {
   debate: "Debattartikel",
   pressrelease: "Pressmeddelande",
 };
 
 interface NewsVariantBadgeProps {
-  variant: NewsVariant;
+  variant: Exclude<NewsVariant, "default">;
   className?: string;
 }
 
@@ -20,7 +19,8 @@ export function NewsVariantBadge({ variant, className }: NewsVariantBadgeProps) 
       className={cn(
         "text-xs font-medium",
         variant === "debate" && "border-green-500/50 text-green-700",
-        variant === "pressrelease" && "border-brand-primary/10 text-brand-primary",
+        variant === "pressrelease" &&
+          "border-brand-primary/10 text-brand-primary",
         className
       )}
     >

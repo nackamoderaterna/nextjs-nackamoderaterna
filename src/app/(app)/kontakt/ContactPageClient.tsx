@@ -3,11 +3,7 @@ import Link from "next/link";
 import { GlobalSettings } from "~/sanity.types";
 import { ContactForm } from "@/lib/components/shared/ContactForm";
 import { ListingHeader } from "@/lib/components/shared/ListingHeader";
-
-type ListingPage = {
-  title?: string;
-  intro?: string;
-};
+import type { ListingPage } from "@/lib/types/pages";
 
 interface ContactPageClientProps {
   settings: GlobalSettings;

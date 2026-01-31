@@ -3,13 +3,13 @@ import { SanityImage } from "@/lib/components/shared/SanityImage";
 import { PeopleCard } from "@/lib/components/politician/PeopleCard";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
 import { SidebarNewsItem } from "@/lib/components/shared/SidebarListItem";
-import { NewsWithReferences } from "@/lib/types/news";
+import { NewsExpanded } from "@/lib/types/news";
 import { FileDown } from "lucide-react";
 import { formatDate } from "@/lib/utils/dateUtils";
 import { ROUTE_BASE } from "@/lib/routes";
 
 interface NewsSidebarProps {
-  news: NewsWithReferences;
+  news: NewsExpanded;
   currentSlug: string;
 }
 

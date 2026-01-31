@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { sanityClient } from "@/lib/sanity/client";
-import { NewsWithReferences } from "@/lib/types/news";
+import { NewsExpanded } from "@/lib/types/news";
 import { newsQuery, allNewsSlugsQuery } from "@/lib/queries/nyheter";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { Section } from "@/lib/components/shared/Section";
@@ -33,7 +33,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const news = await sanityClient.fetch<NewsWithReferences>(newsQuery, { slug });
+  const news = await sanityClient.fetch<NewsExpanded>(newsQuery, { slug });
 
   if (!news) {
     return generateSEOMetadata({
@@ -65,7 +65,7 @@ export default async function NewsArticlePage({
 }) {
   const { slug } = await params;
 
-  const news = await sanityClient.fetch<NewsWithReferences>(
+  const news = await sanityClient.fetch<NewsExpanded>(
     newsQuery,
     { slug },
     {

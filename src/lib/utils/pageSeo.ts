@@ -1,24 +1,7 @@
 import { Metadata } from "next";
 import { generateMetadata as generateBaseMetadata } from "./seo";
 import { buildImageUrl } from "@/lib/sanity/image";
-
-type PageSEO = {
-  title?: string;
-  description?: string;
-  keywords?: string[];
-  image?: {
-    url?: string;
-    asset?: any;
-  };
-};
-
-type PageData = {
-  title?: string;
-  slug?: { current?: string };
-  pageHeader?: { description?: string } | null;
-  seo?: PageSEO | null;
-  blocks?: any[];
-};
+import type { PageData } from "@/lib/types/pages";
 
 /**
  * Extracts a plain text description from page blocks for SEO fallback.

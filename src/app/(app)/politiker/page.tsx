@@ -13,15 +13,7 @@ import { PeopleCard } from "@/lib/components/politician/PeopleCard";
 import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ListingHeader } from "@/lib/components/shared/ListingHeader";
-
-type ListingPage = {
-  title?: string;
-  intro?: string;
-  seo?: {
-    title?: string;
-    description?: string;
-  };
-};
+import type { ListingPage } from "@/lib/types/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
   const listing = await sanityClient.fetch<ListingPage>(

@@ -14,17 +14,7 @@ import {
   DialogTitle,
 } from "@/lib/components/ui/dialog";
 import { Button } from "@/lib/components/ui/button";
-
-type PageModalData = {
-  enabled?: boolean;
-  onLoadDelayMs?: number;
-  frequency?: "always" | "oncePerSession" | "oncePerDay";
-  storageKey?: string;
-  title?: string;
-  content?: any[];
-  primaryButton?: { label?: string; href?: string };
-  secondaryButton?: { label?: string; href?: string };
-};
+import type { PageModalData } from "@/lib/types/pages";
 
 function todayKey() {
   const d = new Date();

@@ -7,6 +7,7 @@ import { PageHeader } from "@/lib/components/shared/PageHeader";
 import { pageBySlugQuery, allPageSlugsQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
 import { generatePageMetadata } from "@/lib/utils/pageSeo";
+import type { PageData } from "@/lib/types/pages";
 
 export const revalidate = 300;
 
@@ -20,24 +21,6 @@ export async function generateStaticParams() {
     slug: page.slug,
   }));
 }
-
-type PageHeaderData = {
-  header?: string;
-  description?: string;
-  image?: unknown;
-  imageHeight?: "small" | "medium" | "large" | "fullscreen";
-  overlayOpacity?: number | null;
-  ctaButton?: { label: string; href: string } | null;
-};
-
-type PageData = {
-  title?: string;
-  slug?: { current?: string };
-  pageHeader?: PageHeaderData | null;
-  blocks?: any[];
-  pageModal?: any;
-  seo?: any;
-};
 
 export async function generateMetadata({
   params,

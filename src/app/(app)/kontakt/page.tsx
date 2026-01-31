@@ -6,15 +6,7 @@ import { GlobalSettings } from "~/sanity.types";
 import { ContactPageClient } from "./ContactPageClient";
 import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { ROUTE_BASE } from "@/lib/routes";
-
-type ListingPage = {
-  title?: string;
-  intro?: string;
-  seo?: {
-    title?: string;
-    description?: string;
-  };
-};
+import type { ListingPage } from "@/lib/types/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
   const listing = await sanityClient.fetch<ListingPage>(

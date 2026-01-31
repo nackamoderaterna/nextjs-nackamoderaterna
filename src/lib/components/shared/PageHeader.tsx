@@ -3,6 +3,7 @@ import Link from "next/link";
 import Block from "../blocks/Block";
 import { Button } from "@/lib/components/ui/button";
 import { SanityBackgroundImage } from "./SanityBackgroundImage";
+import type { PageHeaderData } from "@/lib/types/pages";
 
 const IMAGE_HEIGHT_CLASSES = {
   small: "h-[400px]",
@@ -13,14 +14,7 @@ const IMAGE_HEIGHT_CLASSES = {
 
 type ImageHeightKey = keyof typeof IMAGE_HEIGHT_CLASSES;
 
-export type PageHeaderData = {
-  header?: string;
-  description?: string;
-  image?: unknown;
-  imageHeight?: ImageHeightKey;
-  overlayOpacity?: number | null;
-  ctaButton?: { label: string; href: string } | null;
-};
+export type { PageHeaderData };
 
 interface PageHeaderProps {
   /** Page title – used for display when pageHeader.header is not set, and for slug generation. */

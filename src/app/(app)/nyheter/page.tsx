@@ -11,6 +11,7 @@ import { News } from "~/sanity.types";
 import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import type { NewsVariant } from "@/lib/types/news";
+import type { ListingPage } from "@/lib/types/pages";
 import { ListingHeader } from "@/lib/components/shared/ListingHeader";
 import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 
@@ -39,15 +40,6 @@ type NewsListItem = Pick<
 type NewsListPaginatedResult = {
   items: NewsListItem[];
   total: number;
-};
-
-type ListingPage = {
-  title?: string;
-  intro?: string;
-  seo?: {
-    title?: string;
-    description?: string;
-  };
 };
 
 const ITEMS_PER_PAGE = 10;

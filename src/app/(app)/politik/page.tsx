@@ -14,15 +14,8 @@ import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ROUTE_BASE } from "@/lib/routes";
 import { ListingHeader } from "@/lib/components/shared/ListingHeader";
-
-type ListingPage = {
-  title?: string;
-  intro?: string;
-  seo?: {
-    title?: string;
-    description?: string;
-  };
-};
+import { Section } from "@/lib/components/shared/Section";
+import type { ListingPage } from "@/lib/types/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
   const listing = await sanityClient.fetch<ListingPage>(
@@ -111,27 +104,21 @@ export default async function PoliticsPage() {
         />
 
           {/* Key Issues Section */}
-          <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold text-foreground">
-            Våra kärnfrågor
-          </h2>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {data.featuredPoliticalIssues.map((issue) => (
-              <KeyIssueCard
-                title={issue.question || ""}
-                key={issue._id}
-                relatedArea={issue.politicalAreas[0].name}
-                slug={issue.politicalAreas[0].slug.current}
-              />
-            ))}
-          </div>
-        </section>
+          <Section title="Våra kärnfrågor" titleSize="large">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {data.featuredPoliticalIssues.map((issue) => (
+                <KeyIssueCard
+                  title={issue.question || ""}
+                  key={issue._id}
+                  relatedArea={issue.politicalAreas[0].name}
+                  slug={issue.politicalAreas[0].slug.current}
+                />
+              ))}
+            </div>
+          </Section>
 
         {/* Political Areas Grid */}
-        <section className="mb-16">
-        <h2 className="mb-6 text-3xl font-bold text-foreground">
-            Politik per politikområde
-          </h2>
+        <Section title="Politik per politikområde" titleSize="large">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {data.politicalAreas.map((area) => {
               const Icon = getLucideIcon(area.icon?.name);
@@ -145,13 +132,10 @@ export default async function PoliticsPage() {
               );
             })}
           </div>
-        </section>
+        </Section>
 
         {/* Geographical Areas Section */}
-        <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-bold text-foreground">
-            Politik per område
-          </h2>
+        <Section title="Politik per område" titleSize="large">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {data.geographicalAreas.map((area) => (
               <GeographicalAreaCard
@@ -162,16 +146,11 @@ export default async function PoliticsPage() {
               />
             ))}
           </div>
-        </section>
-
-      
+        </Section>
 
         {/* Fulfilled Promises Section */}
         {data.fulfilledPoliticalIssues.length > 0 && (
-          <section className="mb-16">
-            <h2 className="mb-6 text-3xl font-bold text-foreground">
-              Uppfyllda vallöften
-            </h2>
+          <Section title="Uppfyllda vallöften" titleSize="large">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {data.fulfilledPoliticalIssues.map((issue) => (
                 <KeyIssueCard
@@ -183,7 +162,7 @@ export default async function PoliticsPage() {
                 />
               ))}
             </div>
-          </section>
+          </Section>
         )}
       </main>
     </div>

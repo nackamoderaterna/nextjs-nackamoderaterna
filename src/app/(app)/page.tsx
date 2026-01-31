@@ -2,21 +2,14 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 import { PageBuilder } from "@/lib/components/PageBuilder";
+import { PageHeader } from "@/lib/components/shared/PageHeader";
 import { PageModal } from "@/lib/components/shared/PageModal";
 import { pageBySlugQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
 import { generatePageMetadata } from "@/lib/utils/pageSeo";
+import type { PageData } from "@/lib/types/pages";
 
 export const revalidate = 300;
-
-type PageData = {
-  title?: string;
-  slug?: { current?: string };
-  description?: string;
-  blocks?: any[];
-  pageModal?: any;
-  seo?: any;
-};
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await sanityClient.fetch<PageData>(
@@ -44,6 +37,7 @@ export default async function Home() {
   return (
     <div className="w-full mx-auto">
       <PageModal modal={page.pageModal} pageSlug={page.slug?.current || "hem"} />
+      <PageHeader title={page.title ?? undefined} pageHeader={page.pageHeader ?? undefined} />
       <PageBuilder blocks={page.blocks || []} />
     </div>
   );
