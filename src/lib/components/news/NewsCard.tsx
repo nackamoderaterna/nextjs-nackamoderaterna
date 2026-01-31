@@ -1,14 +1,17 @@
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { formatDate } from "@/lib/utils/dateUtils";
 import { ArrowRight } from "lucide-react";
 import { NewsVariantBadge } from "./NewsVariantBadge";
 import type { NewsVariant } from "@/lib/types/news";
 import { ROUTE_BASE } from "@/lib/routes";
+import { getLucideIcon } from "@/lib/utils/iconUtils";
 
 export type PoliticalAreaRef = {
   _id: string;
   name: string;
   slug?: { current: string } | null;
+  icon?: { name?: string | null } | null;
 };
 
 export type SeriesRef = {
@@ -62,13 +65,37 @@ export function NewsCard({
                 {title}
               </h2>
               {politicalAreas && politicalAreas.length > 0 && (
-                <p className="text-xs uppercase text-muted-foreground mt-4 flex flex-wrap gap-4">
+                <div className="text-xs uppercase text-muted-foreground mt-4 flex flex-wrap gap-4">
                   {[...politicalAreas]
                     .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
-                    .map((a) => (
-                      <span key={a._id}>{a.name}</span>
-                    ))}
-                </p>
+                    .map((a) => {
+                      const Icon = a.icon?.name ? getLucideIcon(a.icon.name) : null;
+                      const href = `${ROUTE_BASE.POLITICS}/${a.slug?.current || ""}`;
+                      return (
+                        <span
+                          key={a._id}
+                          role="link"
+                          tabIndex={0}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            router.push(href);
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              router.push(href);
+                            }
+                          }}
+                          className="inline-flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/20 transition-colors"
+                        >
+                          {Icon && <Icon className="h-4 w-4 shrink-0" />}
+                          <span>{a.name}</span>
+                        </span>
+                      );
+                    })}
+                </div>
               )}
             </div>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed text-pretty">

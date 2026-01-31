@@ -35,7 +35,8 @@ export const politicianBySlugQuery = groq`*[_type == "politician" && slug.curren
     "politicalArea": politicalArea-> {
       _id,
       name,
-      slug
+      slug,
+      icon{ name }
     }
   },
   socialLinks,

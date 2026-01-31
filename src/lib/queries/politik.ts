@@ -14,7 +14,8 @@ export const politikPageQuery = groq`
     "politicalAreas": politicalAreas[]->{
       _id,
       name,
-      slug
+      slug,
+      icon{ name }
     },
 
     "geographicalAreas": geographicalAreas[]->{
@@ -36,7 +37,8 @@ export const politikPageQuery = groq`
     "politicalAreas": politicalAreas[]->{
       _id,
       name,
-      slug
+      slug,
+      icon{ name }
     },
 
     "geographicalAreas": geographicalAreas[]->{
@@ -85,6 +87,7 @@ export const politicalAreaPageQuery = groq`
     slug,
     description,
     image,
+    icon{ name },
 
     "latestNews": *[
       _type == "news" &&

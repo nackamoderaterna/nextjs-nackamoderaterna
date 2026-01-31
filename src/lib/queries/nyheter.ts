@@ -24,7 +24,8 @@ export const newsQuery = groq`
   "politicalAreas": politicalAreas[]->{
     _id,
     name,
-    slug
+    slug,
+    icon{ name }
   },
 
   "geographicalAreas": geographicalAreas[]->{
@@ -115,7 +116,8 @@ export const newsListPaginatedQuery = groq`{
     "politicalAreas": politicalAreas[]-> {
       _id,
       name,
-      slug
+      slug,
+      icon{ name }
     },
     "series": articleSeries->{
       _id,
