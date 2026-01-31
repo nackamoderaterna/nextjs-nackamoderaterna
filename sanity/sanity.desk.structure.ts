@@ -2,12 +2,12 @@ import { StructureResolver } from "sanity/structure";
 
 export const deskStructure: StructureResolver = (S) =>
   S.list()
-    .title("Core")
+    .title("Innehåll")
     .items([
       S.documentTypeListItem("page"),
       S.documentTypeListItem("news"),
       S.documentTypeListItem("event").title("Evenemang"),
-      S.documentTypeListItem("listingPage"),
+      
       S.documentTypeListItem("politician"),
 
       S.divider().title("Politik"),
@@ -19,7 +19,7 @@ export const deskStructure: StructureResolver = (S) =>
       S.documentTypeListItem("geographicalArea"),
       S.divider().title("Inställningar"),
       S.listItem()
-        .title("Huvudmeny")
+        .title("Header")
         .schemaType("navigationHeader")
         .child(
           S.document()
@@ -28,7 +28,7 @@ export const deskStructure: StructureResolver = (S) =>
             .title("Huvudmeny"),
         ),
         S.listItem()
-        .title("Footermeny")
+        .title("Footer")
         .schemaType("navigationFooter")
         .child(
           S.document()
@@ -44,4 +44,5 @@ export const deskStructure: StructureResolver = (S) =>
             .schemaType("globalSettings")
             .documentId("globalSettings"),
         ),
+        S.documentTypeListItem("listingPage").title("Statiska sidor"),
     ]);

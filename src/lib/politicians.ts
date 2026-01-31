@@ -46,7 +46,7 @@ export const politiciansDirectoryQuery = groq`*[_type == "politician"] | order(n
       slug
     }
   },
-  socialMedia
+  socialLinks
 }`;
 
 // Type for the query result with dereferenced namnd (overrides schema types for partyBoard, kommunfullmaktige, namndPositions, kommunalrad)
@@ -113,6 +113,13 @@ export type PoliticianWithNamnd = Omit<
     //   alt?: string;
     // };
   }>;
+  socialLinks?: {
+    facebook?: string | null;
+    twitter?: string | null;
+    instagram?: string | null;
+    linkedin?: string | null;
+    tiktok?: string | null;
+  } | null;
 };
 
 /**

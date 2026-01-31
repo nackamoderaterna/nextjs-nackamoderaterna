@@ -76,7 +76,7 @@ export const portableTextComponents: PortableTextComponents = {
         <div className="my-6">
           <div className="flex gap-6">
             {/* Blue vertical bar - thicker to match design */}
-            <div className="w-2 bg-blue-600 flex-shrink-0" />
+            <div className="w-2 bg-brand-primary flex-shrink-0" />
             {/* Quote content */}
             <div className="flex-1">
                 <p className="!mt-0 text-3xl md:text-4xl font-serif italic text-gray-900 leading-relaxed">
@@ -89,14 +89,14 @@ export const portableTextComponents: PortableTextComponents = {
                       href={value.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-gray-900 font-serif text-base hover:text-blue-600 transition-colors"
+                      className="text-foreground font-serif text-base hover:text-brand-primary transition-colors"
                     >
                       – {attribution}
                     </a>
                   ) : (
                     <Link
                       href={value.link}
-                      className="text-gray-900 font-serif text-base hover:text-blue-600 transition-colors"
+                      className="text-foreground font-serif text-base hover:text-brand-primary transition-colors"
                     >
                       – {attribution}
                     </Link>
@@ -117,14 +117,14 @@ export const portableTextComponents: PortableTextComponents = {
       if (!value) return null;
 
       return (
-        <div className="my-6 border border-gray-300 rounded-lg p-6 bg-white">
+        <div className="my-6 border border-border rounded p-6 bg-white">
           {value.title && (
-            <h3 className="!mt-0 text-xl font-bold text-gray-900 mb-3">
+            <h3 className="!mt-0 text-xl font-bold text-foreground mb-3">
               {value.title}
             </h3>
           )}
           {value.description && (
-            <p className="text-gray-700 mb-4 leading-relaxed text-base">
+            <p className="text-muted-foreground mb-4 leading-relaxed text-base">
               {value.description}
             </p>
           )}

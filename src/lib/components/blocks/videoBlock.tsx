@@ -1,6 +1,7 @@
 import React from "react";
 import { VideoBlockUtils } from "@/lib/utils/videoBlock";
 import Block from "./Block";
+import { BlockHeading, getBlockHeading } from "./BlockHeading";
 import { BlockVideo } from "~/sanity.types";
 import LiteVideoEmbed from "@/lib/components/media/LiteVideoEmbed";
 
@@ -10,7 +11,7 @@ interface VideoBlockProps {
 
 export default function VideoBlock({ block }: VideoBlockProps) {
   const { video, caption } = block;
-  const heading = (block as any).heading;
+  const { title } = getBlockHeading(block as Record<string, unknown>);
 
   if (!video) {
     return null;
@@ -35,11 +36,7 @@ export default function VideoBlock({ block }: VideoBlockProps) {
 
   return (
     <Block maxWidth="3xl">
-        {heading && (
-          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
-            {heading}
-          </h2>
-        )}
+        <BlockHeading title={title} />
         <div className={`rounded bg-gray-100 aspect-16/9`}>{renderVideo()}</div>
 
         {caption && <p className="mt-2 text-sm text-center text-muted-foreground">{caption}</p>}

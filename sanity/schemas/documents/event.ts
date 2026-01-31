@@ -1,17 +1,25 @@
-import { defineType } from "sanity";
+import { defineField, defineType } from "sanity";
 
 export const eventDocument = defineType({
   name: "event",
   title: "Evenemang",
   type: "document",
+  groups: [
+    { name: "content", title: "Innehåll", default: true },
+    { name: "when", title: "Tid" },
+    { name: "where", title: "Plats" },
+    { name: "settings", title: "Inställningar" },
+    { name: "relations", title: "Relationer" },
+  ],
   fields: [
-    {
+    defineField({
       name: "title",
       title: "Titel",
       type: "string",
+      group: "content",
       validation: (Rule) => Rule.required(),
-    },
-    {
+    }),
+    defineField({
       name: "slug",
       title: "Slug",
       description: "URL-vänlig identifierare för evenemanget. Genereras automatiskt från titeln.",
@@ -20,53 +28,60 @@ export const eventDocument = defineType({
         source: "title",
         maxLength: 96,
       },
+      group: "content",
       validation: (Rule) => Rule.required(),
-    },
-    {
-      name: "startDate",
-      title: "Startdatum",
-      description: "Datum och tid när evenemanget börjar.",
-      type: "datetime",
-      validation: (Rule) => Rule.required(),
-    },
-    {
-      name: "endDate",
-      title: "Slutdatum",
-      description: "Valfritt: datum och tid när evenemanget slutar. Om tomt är evenemanget en punkt i tiden.",
-      type: "datetime",
-    },
-    {
+    }),
+    defineField({
       name: "description",
       title: "Beskrivning",
       description: "Beskrivning av evenemanget. Visas på evenemangets sida.",
       type: "array",
+      group: "content",
       of: [{ type: "block" }],
-    },
-    {
+    }),
+    defineField({
       name: "image",
       title: "Bild",
       description: "Bild som visas i listningar och på evenemangets sida.",
       type: "image",
+      group: "content",
       options: {
         hotspot: true,
       },
-    },
-    {
+    }),
+    defineField({
+      name: "startDate",
+      title: "Startdatum",
+      description: "Datum och tid när evenemanget börjar.",
+      type: "datetime",
+      group: "when",
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "endDate",
+      title: "Slutdatum",
+      description: "Valfritt: datum och tid när evenemanget slutar. Om tomt är evenemanget en punkt i tiden.",
+      type: "datetime",
+      group: "when",
+    }),
+    defineField({
       name: "location",
       title: "Plats",
       description: "Var evenemanget äger rum.",
       type: "object",
+      group: "where",
       fields: [
         { name: "venue", title: "Lokal", type: "string", description: "Namn på lokalen eller platsen." },
         { name: "address", title: "Adress", type: "string", description: "Gatuadress." },
         { name: "city", title: "Stad", type: "string", description: "Stad där evenemanget äger rum." },
       ],
-    },
-    {
+    }),
+    defineField({
       name: "eventType",
       title: "Typ av evenemang",
       description: "Kategoriserar evenemanget för filtrering och visning.",
       type: "string",
+      group: "settings",
       options: {
         list: [
           { title: "Möte", value: "meeting" },
@@ -75,34 +90,39 @@ export const eventDocument = defineType({
           { title: "Övrigt", value: "other" },
         ],
       },
-    },
-    {
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
       name: "registrationUrl",
       title: "Anmälningslänk",
       description: "URL till anmälningssidan om anmälan krävs.",
       type: "url",
-    },
-    {
-      name: "geographicalArea",
-      title: "Geografiskt område",
-      description: "Valfritt: geografiskt område där evenemanget äger rum.",
-      type: "reference",
-      to: [{ type: "geographicalArea" }],
-    },
-    {
+      group: "settings",
+    }),
+    defineField({
       name: "isPublic",
       title: "Öppet för allmänheten",
       description: "Om markerat är evenemanget öppet för allmänheten. Annars är det endast för medlemmar.",
       type: "boolean",
+      group: "settings",
       initialValue: false,
-    },
-    {
+    }),
+    defineField({
+      name: "geographicalArea",
+      title: "Geografiskt område",
+      description: "Valfritt: geografiskt område där evenemanget äger rum.",
+      type: "reference",
+      group: "relations",
+      to: [{ type: "geographicalArea" }],
+    }),
+    defineField({
       name: "politicalAreas",
       title: "Politiska områden",
       description: "Politiska områden som evenemanget är relaterat till.",
       type: "array",
+      group: "relations",
       of: [{ type: "reference", to: [{ type: "politicalArea" }] }],
-    },
+    }),
   ],
   orderings: [
     {

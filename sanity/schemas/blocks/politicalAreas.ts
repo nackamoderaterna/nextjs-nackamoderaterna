@@ -8,12 +8,7 @@ export const politicalAreasBlock = defineType({
     defineField({
       name: "heading",
       title: "Rubrik",
-      type: "string",
-    }),
-    defineField({
-      name: "description",
-      title: "Beskrivning",
-      type: "text",
+      type: "blockHeading",
     }),
     defineField({
       name: "items",
@@ -31,13 +26,13 @@ export const politicalAreasBlock = defineType({
   ],
   preview: {
     select: {
-      heading: "heading",
+      "headingTitle": "heading.title",
       items: "items",
     },
-    prepare({ heading, items }: { heading?: string; items?: unknown[] }) {
+    prepare({ headingTitle, items }: { headingTitle?: string; items?: unknown[] }) {
       return {
         title: "Politiska områden",
-        subtitle: heading || `${items?.length ?? 0} områden`,
+        subtitle: headingTitle || `${items?.length ?? 0} områden`,
       };
     },
   },

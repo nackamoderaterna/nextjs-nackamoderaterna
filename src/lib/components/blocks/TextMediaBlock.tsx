@@ -1,12 +1,13 @@
 import { PortableText } from "next-sanity";
 import Block from "./Block";
+import { BlockHeading, getBlockHeading } from "./BlockHeading";
 import { SanityImage } from "../shared/SanityImage";
 import { portableTextComponents } from "../shared/PortableTextComponents";
 import { cleanInvisibleUnicode } from "@/lib/politicians";
 
 interface TwoColumnBlockProps {
   _type: "block.twoColumn";
-  heading?: string;
+  heading?: { title?: string | null; subtitle?: string | null } | string;
   image: any;
   content: any[];
   imagePosition?: "left" | "right";
@@ -40,13 +41,11 @@ export function TextMediaBlock({ block }: { block: TwoColumnBlockProps }) {
     </div>
   );
 
+  const { title } = getBlockHeading(block);
+
   return (
     <Block>
-        {block.heading && (
-          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
-            {block.heading}
-          </h2>
-        )}
+        <BlockHeading title={title} />
         <div
           className={`grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 ${alignClasses[cleanInvisibleUnicode(alignment) as "top" | "center" | "bottom"]}`}
         >

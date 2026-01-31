@@ -1,10 +1,10 @@
 import Block from "./Block";
+import { BlockHeading, getBlockHeading } from "./BlockHeading";
 import { GeographicalAreaCard } from "../politics/geographicalAreaCard";
 
 interface GeographicalAreasBlockProps {
   _type: "block.geographicalAreas";
-  heading?: string;
-  description?: string;
+  heading?: { title?: string | null; subtitle?: string | null };
   items?: Array<{
     _id: string;
     name?: string | null;
@@ -14,7 +14,8 @@ interface GeographicalAreasBlockProps {
 }
 
 export function GeographicalAreasBlock({ block }: { block: GeographicalAreasBlockProps }) {
-  const { heading, description, items } = block;
+  const { title, subtitle } = getBlockHeading(block);
+  const { items } = block;
 
   if (!items?.length) {
     return null;
@@ -22,18 +23,7 @@ export function GeographicalAreasBlock({ block }: { block: GeographicalAreasBloc
 
   return (
     <Block paddingY="large" maxWidth="6xl">
-      {(heading || description) && (
-        <div className="mb-8 text-center">
-          {heading && (
-            <h2 className="mb-4 text-3xl font-bold md:text-4xl">{heading}</h2>
-          )}
-          {description && (
-            <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-              {description}
-            </p>
-          )}
-        </div>
-      )}
+      <BlockHeading title={title} subtitle={subtitle} />
       <div className="flex flex-wrap justify-center gap-4">
         {items.map((area) => {
           const slug = area.slug?.current;

@@ -6,18 +6,31 @@ export const ctaBlock = defineType({
   type: "object",
   fields: [
     defineField({
+      name: "layout",
+      title: "Layout",
+      description: "Bredd på blocket. Full bredd (7xl) eller samma som textblock (3xl).",
+      type: "string",
+      options: {
+        list: [
+          { title: "Full bredd", value: "fullWidth" },
+          { title: "Med textbredd", value: "contained" },
+        ],
+      },
+      initialValue: "fullWidth",
+    }),
+    defineField({
       name: "heading",
       title: "Rubrik",
-      type: "string",
-      validation: (Rule) => Rule.required(),
+      type: "blockHeading",
+      validation: (Rule) =>
+        Rule.required().custom((heading: { title?: string } | undefined) => {
+          if (!heading || typeof heading !== "object" || !String(heading.title ?? "").trim())
+            return "Titel krävs";
+          return true;
+        }),
     }),
     defineField({
-      name: "description",
-      title: "Beskrivning",
-      type: "text",
-    }),
-    defineField({
-      name: "primaryButton",
+      name: "primaryAction",
       title: "Primär knapp",
       description: "Huvudknappen som ska fånga användarens uppmärksamhet.",
       type: "object",
@@ -29,7 +42,7 @@ export const ctaBlock = defineType({
           validation: (Rule) => Rule.required(),
         }),
         defineField({
-          name: "link",
+          name: "href",
           title: "Länk",
           type: "string",
           validation: (Rule) => Rule.required(),
@@ -37,7 +50,7 @@ export const ctaBlock = defineType({
       ],
     }),
     defineField({
-      name: "secondaryButton",
+      name: "secondaryAction",
       title: "Sekundär knapp",
       description: "Valfri sekundär knapp för alternativa åtgärder.",
       type: "object",
@@ -48,7 +61,7 @@ export const ctaBlock = defineType({
           type: "string",
         }),
         defineField({
-          name: "link",
+          name: "href",
           title: "Länk",
           type: "string",
         }),
@@ -71,12 +84,12 @@ export const ctaBlock = defineType({
   ],
   preview: {
     select: {
-      heading: "heading",
+      "headingTitle": "heading.title",
     },
     prepare(selection) {
       return {
         title: "Call-to-action",
-        subtitle: selection.heading,
+        subtitle: selection.headingTitle,
       };
     },
   },

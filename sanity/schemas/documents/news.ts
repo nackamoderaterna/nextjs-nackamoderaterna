@@ -1,17 +1,24 @@
-import { defineType } from "sanity";
+import { defineField, defineType } from "sanity";
 
 export const news = defineType({
   name: "news",
   title: "Nyheter",
   type: "document",
+  groups: [
+    { name: "content", title: "Innehåll", default: true },
+    { name: "media", title: "Media" },
+    { name: "relations", title: "Relationer" },
+    { name: "metadata", title: "Metadata" },
+  ],
   fields: [
-    {
+    defineField({
       name: "title",
       title: "Rubrik",
       type: "string",
+      group: "content",
       validation: (Rule) => Rule.required(),
-    },
-    {
+    }),
+    defineField({
       name: "slug",
       title: "Slug",
       description: "URL-vänlig identifierare för nyheten. Genereras automatiskt från rubriken.",
@@ -20,9 +27,10 @@ export const news = defineType({
         source: "title",
         maxLength: 96,
       },
+      group: "content",
       validation: (Rule) => Rule.required(),
-    },
-    {
+    }),
+    defineField({
       name: "variant",
       title: "Typ av nyhet",
       description: "Kategoriserar nyheten för att visa rätt layout och stil.",
@@ -35,20 +43,37 @@ export const news = defineType({
         ],
       },
       initialValue: "default",
+      group: "content",
       validation: (Rule) => Rule.required(),
-    },
-    {
+    }),
+    defineField({
       name: "excerpt",
       title: "Ingress",
       description: "Kort sammanfattning som visas i listningar och förhandsvisningar.",
       type: "text",
       rows: 3,
-    },
-    {
+      group: "content",
+    }),
+    defineField({
+      name: "body",
+      title: "Innehåll",
+      description: "Huvudinnehållet i nyheten. Kan innehålla text, bilder och annat innehåll.",
+      type: "array",
+      group: "content",
+      validation: (Rule) => Rule.required().min(1),
+      of: [
+        { type: "block" },
+        { type: "image" },
+        { type: "richTextQuote" },
+        { type: "richTextHighlightedLink" },
+      ],
+    }),
+    defineField({
       name: "mainImage",
       title: "Huvudbild",
       description: "Huvudbild som visas i listningar och på nyhetens sida.",
       type: "image",
+      group: "media",
       options: {
         hotspot: true,
       },
@@ -60,30 +85,20 @@ export const news = defineType({
           type: "string",
         },
       ],
-    },
-    {
-      name: "body",
-      title: "Innehåll",
-      description: "Huvudinnehållet i nyheten. Kan innehålla text, bilder och annat innehåll.",
-      type: "array",
-      of: [
-        { type: "block" },
-        { type: "image" },
-        { type: "richTextQuote" },
-        { type: "richTextHighlightedLink" },
-      ],
-    },
-    {
+    }),
+    defineField({
       name: "document",
       title: "Dokument",
       description: "Valfritt: bifoga ett dokument (PDF, Word, etc.) till nyheten.",
       type: "file",
-    },
-    {
+      group: "media",
+    }),
+    defineField({
       name: "referencedPolitician",
       title: "Omnämnda politiker",
       description: "Politiker som nämns eller är relaterade till nyheten.",
       type: "array",
+      group: "relations",
       of: [
         {
           name: "politician",
@@ -92,36 +107,40 @@ export const news = defineType({
           to: [{ type: "politician" }],
         },
       ],
-    },
-    {
+    }),
+    defineField({
       name: "politicalAreas",
       title: "Politiska områden",
       description: "Politiska områden som nyheten är relaterad till.",
       type: "array",
+      group: "relations",
       of: [{ type: "reference", to: [{ type: "politicalArea" }] }],
-    },
-    {
+    }),
+    defineField({
       name: "geographicalAreas",
       title: "Geografiska områden",
       description: "Geografiska områden som nyheten är relaterad till.",
       type: "array",
+      group: "relations",
       of: [{ type: "reference", to: [{ type: "geographicalArea" }] }],
-    },
-    {
+    }),
+    defineField({
       name: "articleSeries",
       title: "Artikelserie",
       description:
         "Koppla artikeln till en artikelserie. Alla artiklar i samma serie visas automatiskt i sidofältet.",
       type: "reference",
+      group: "relations",
       to: [{ type: "articleSeries" }],
-    },
-    {
+    }),
+    defineField({
       name: "dateOverride",
       title: "Överskriv publiceringsdatum",
       description:
         "Ange datumet då artikeln publicerades för att överskrida systemets publiceringsdatum. Användbart om artikeln publicerades tidigare eller ska publiceras i framtiden.",
       type: "date",
-    },
+      group: "metadata",
+    }),
   ],
   orderings: [
     {

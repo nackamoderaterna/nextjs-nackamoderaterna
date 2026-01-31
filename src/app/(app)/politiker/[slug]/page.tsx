@@ -7,6 +7,8 @@ import { portableTextComponents } from "@/lib/components/shared/PortableTextComp
 import { PoliticianHero } from "@/lib/components/politician/PoliticianHero";
 import { RoleSidebar } from "@/lib/components/politician/roleSidebar";
 import { PoliticalAreasSidebar } from "@/lib/components/politician/PoliticalAreasSidebar";
+import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
+import { Section } from "@/lib/components/shared/Section";
 import { mapPoliticianRoles } from "@/lib/utils/mapPoliticianRoles";
 import { ArrowRight } from "lucide-react";
 import { NewsCard } from "@/lib/components/news/NewsCard";
@@ -93,38 +95,37 @@ export default async function PoliticianPage({
         email={politician.email}
         phone={politician.phone}
         image={politician.image}
-        socialLinks={{
-          facebook: politician.socialMedia?.facebook,
-          tiktok: politician.socialMedia?.tiktok,
-          instagram: politician.socialMedia?.instagram,
-        }}
+        socialLinks={politician.socialLinks}
       />
-      {/* Content Grid */}
-      <div className="grid md:grid-cols-3 gap-8 mt-8">
-        {/* Main Content */}
-        {politician.bio && (
-          <div className="md:col-span-2 prose md:prose-lg">
-            <PortableText value={politician.bio} components={portableTextComponents} />
+      <div className="mt-8">
+        <ContentWithSidebar
+          mainContent={
+          politician.bio ? (
+            <div className="prose md:prose-lg">
+              <PortableText value={politician.bio} components={portableTextComponents} />
+            </div>
+          ) : null
+          }
+          sidebarContent={
+          <div className="space-y-6">
+            <RoleSidebar
+              heading="Uppdrag"
+              roles={mapPoliticianRoles({ politician })}
+            />
+            <PoliticalAreasSidebar
+              politicalAreas={politician.politicalAreas}
+            />
           </div>
-        )}
-        <div className="space-y-6">
-          <RoleSidebar
-            heading={"Uppdrag"}
-            roles={mapPoliticianRoles({ politician })}
-          />
-          <PoliticalAreasSidebar
-            politicalAreas={politician.politicalAreas}
-          />
-        </div>
+          }
+        />
       </div>
 
       {politician.referencedInNews &&
         politician.referencedInNews.length > 0 && (
-          <>
-            <div className="mt-8 flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-foreground">
-                Artiklar som omnämner {politician.name}
-              </h2>
+          <Section
+            className="mt-8"
+            title={`Artiklar som omnämner ${politician.name}`}
+            actions={
               <Link
                 href={ROUTE_BASE.NEWS}
                 className="text-sm font-medium flex items-center gap-1"
@@ -132,7 +133,8 @@ export default async function PoliticianPage({
                 Alla nyheter
                 <ArrowRight className="w-4 h-4" />
               </Link>
-            </div>
+            }
+          >
             <div className="grid">
               {politician.referencedInNews?.map((news) => (
                 <NewsCard
@@ -145,7 +147,7 @@ export default async function PoliticianPage({
                 />
               ))}
             </div>
-          </>
+          </Section>
         )}
     </main>
   );

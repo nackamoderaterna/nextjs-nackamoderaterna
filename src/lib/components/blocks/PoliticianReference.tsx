@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { PeopleCard } from "../politician/PeopleCard";
 import Block from "./Block";
+import { BlockHeading, getBlockHeading } from "./BlockHeading";
 import { Politician } from "~/sanity.types";
 import { cleanInvisibleUnicode } from "@/lib/politicians";
 
@@ -25,7 +26,7 @@ type ManualItem = { politician: Politician; titleOverride?: string };
 
 export interface BlockPoliticianDereferenced {
   _type: "block.politician";
-  heading?: string;
+  heading?: { title?: string | null; subtitle?: string | null } | string;
   mode: "manual" | "kommunalrad";
   items: Politician[] | ManualItem[];
 }
@@ -80,13 +81,11 @@ export const PoliticianReferenceBlock = ({
     return <p>Inga politiker att visa.</p>;
   }
 
+  const { title } = getBlockHeading(block);
+
   return (
     <Block>
-        {block.heading && (
-          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
-            {block.heading}
-          </h2>
-        )}
+        <BlockHeading title={title} />
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           {entries.map(({ politician: p, title }) => (
             <PeopleCard

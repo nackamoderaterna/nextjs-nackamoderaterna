@@ -9,7 +9,7 @@ export const imageBlock = defineType({
     defineField({
       name: "heading",
       title: "Rubrik",
-      type: "string",
+      type: "blockHeading",
     }),
     defineField({
       name: "image",

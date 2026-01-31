@@ -51,10 +51,6 @@ export const footerQuery = groq`*[_id == "navigationFooter"][0] {
     }
   },
   footerText,
-  socialLinks[] {
-    platform,
-    url
-  },
   legalText
 }`;
 
@@ -116,9 +112,5 @@ export interface FooterData {
   _id: string;
   columns?: FooterColumn[];
   footerText?: any[];
-  socialLinks?: Array<{
-    platform?: string;
-    url?: string;
-  }>;
   legalText?: string;
 }

@@ -8,7 +8,7 @@ export const twoColumnBlock = defineType({
     defineField({
       name: "heading",
       title: "Rubrik",
-      type: "string",
+      type: "blockHeading",
       description: "Valfri rubrik som visas ovanför blocket",
     }),
     defineField({
@@ -57,12 +57,12 @@ export const twoColumnBlock = defineType({
   ],
   preview: {
     select: {
-      heading: "heading",
+      "headingTitle": "heading.title",
       imagePosition: "imagePosition",
     },
-    prepare({ heading, imagePosition }) {
+    prepare({ headingTitle, imagePosition }) {
       return {
-        title: heading || "Text och bild",
+        title: headingTitle || "Text och bild",
         subtitle: `Bild ${imagePosition === "right" ? "höger" : "vänster"}`,
       };
     },

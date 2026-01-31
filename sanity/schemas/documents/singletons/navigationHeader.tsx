@@ -1,23 +1,28 @@
-import {defineType} from 'sanity'
+import { defineField, defineType } from "sanity";
 
 export default defineType({
-  name: 'navigationHeader',
-  title: 'Header Navigation',
-  type: 'document',
+  name: "navigationHeader",
+  title: "Header Navigation",
+  type: "document",
+  groups: [
+    { name: "menu", title: "Meny", default: true },
+  ],
   fields: [
-    {
-      name: 'title',
-      title: 'title',
-      type: 'string',
+    defineField({
+      name: "title",
+      title: "title",
+      type: "string",
+      group: "menu",
       hidden: true,
       readOnly: true,
-    },
-    {
-      name: 'items',
-      title: 'Menu Items',
-      type: 'array',
-      of: [{type: 'menuItem'}],
+    }),
+    defineField({
+      name: "items",
+      title: "Menu Items",
+      type: "array",
+      group: "menu",
+      of: [{ type: "menuItem" }],
       validation: (Rule) => Rule.required().min(1),
-    },
+    }),
   ],
-})
+});

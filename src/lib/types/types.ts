@@ -6,29 +6,33 @@ import {
   BlockText,
   BlockVideo,
 } from "~/sanity.types";
+import type { Dereferenced, WithEffectiveDate } from "./shared";
+
+export type { Dereferenced, WithEffectiveDate } from "./shared";
 
 export type BlockAlignment = "left" | "center" | "right";
+
+/** Block heading object (title + subtitle) used across all blocks */
+export type BlockHeadingData = {
+  title?: string | null;
+  subtitle?: string | null;
+};
 
 // Inline types for new blocks (until Sanity types are regenerated)
 type BlockCta = {
   _type: "block.cta";
-  heading: string;
-  description?: string;
-  primaryButton?: {
-    label: string;
-    link: string;
-  };
-  secondaryButton?: {
-    label: string;
-    link: string;
-  };
+  layout?: "fullWidth" | "contained";
+  heading?: BlockHeadingData;
+  primaryAction?: { label: string; href: string };
+  secondaryAction?: { label: string; href: string };
   alignment?: "left" | "center" | "right";
+  primaryButton?: { label: string; link: string };
+  secondaryButton?: { label: string; link: string };
 };
 
 type BlockStats = {
   _type: "block.stats";
-  heading?: string;
-  description?: string;
+  heading?: BlockHeadingData;
   stats: Array<{
     value: string;
     label: string;
@@ -39,7 +43,7 @@ type BlockStats = {
 
 type BlockTwoColumn = {
   _type: "block.twoColumn";
-  heading?: string;
+  heading?: BlockHeadingData;
   image: any;
   content: any[];
   imagePosition?: "left" | "right";
@@ -48,8 +52,7 @@ type BlockTwoColumn = {
 
 type BlockAccordion = {
   _type: "block.accordion";
-  heading?: string;
-  description?: string;
+  heading?: BlockHeadingData;
   items: Array<{
     title: string;
     content: any[];
@@ -68,7 +71,7 @@ type BlockQuote = {
 
 type BlockImageGallery = {
   _type: "block.imageGallery";
-  heading?: string;
+  heading?: BlockHeadingData;
   images?: Array<{
     _key?: string;
     asset?: any;
@@ -81,15 +84,13 @@ type BlockImageGallery = {
 
 type BlockContact = {
   _type: "block.contact";
-  heading?: string;
-  description?: string;
+  heading?: BlockHeadingData;
   showContactInfo?: boolean;
 };
 
 type BlockPoliticalAreas = {
   _type: "block.politicalAreas";
-  heading?: string;
-  description?: string;
+  heading?: BlockHeadingData;
   items?: Array<{
     _id: string;
     name?: string | null;
@@ -100,8 +101,7 @@ type BlockPoliticalAreas = {
 
 type BlockGeographicalAreas = {
   _type: "block.geographicalAreas";
-  heading?: string;
-  description?: string;
+  heading?: BlockHeadingData;
   items?: Array<{
     _id: string;
     name?: string | null;
@@ -126,15 +126,3 @@ export type PageBlock =
   | BlockPoliticalAreas
   | BlockGeographicalAreas;
 
-type SanityDocumentBase = {
-  _id: string;
-  _type: string;
-};
-
-export type WithEffectiveDate<T> = T & {
-  effectiveDate: string;
-};
-
-export type Dereferenced<T extends SanityDocumentBase> = Array<
-  Pick<T, "_id"> & Omit<T, "_type">
->;

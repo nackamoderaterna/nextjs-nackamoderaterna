@@ -8,12 +8,7 @@ export const accordionBlock = defineType({
     defineField({
       name: "heading",
       title: "Rubrik",
-      type: "string",
-    }),
-    defineField({
-      name: "description",
-      title: "Beskrivning",
-      type: "text",
+      type: "blockHeading",
     }),
     defineField({
       name: "items",
@@ -62,13 +57,13 @@ export const accordionBlock = defineType({
   ],
   preview: {
     select: {
-      heading: "heading",
+      "headingTitle": "heading.title",
       items: "items",
     },
-    prepare({ heading, items }) {
+    prepare({ headingTitle, items }) {
       return {
         title: "Accordion",
-        subtitle: heading || `${items?.length || 0} objekt`,
+        subtitle: headingTitle || `${items?.length || 0} objekt`,
       };
     },
   },

@@ -1,4 +1,5 @@
 import Block from "./Block";
+import { BlockHeading, getBlockHeading } from "./BlockHeading";
 
 interface Stat {
   value: string;
@@ -8,7 +9,7 @@ interface Stat {
 
 interface StatsBlockProps {
   _type: "block.stats";
-  heading?: string;
+  heading?: { title?: string | null; subtitle?: string | null } | string;
   description?: string;
   stats: Stat[];
   columns?: 1 | 2 | 3 | 4; // Allow 1 column for single stat
@@ -39,26 +40,15 @@ export function StatsBlock({ block }: { block: StatsBlockProps }) {
     4: "md:grid-cols-4",
   };
 
+  const { title, subtitle } = getBlockHeading(block);
+
   return (
     <Block maxWidth="6xl">
-        {(block.heading || block.description) && (
-          <div className="text-center mb-12">
-            {block.heading && (
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                {block.heading}
-              </h2>
-            )}
-            {block.description && (
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                {block.description}
-              </p>
-            )}
-          </div>
-        )}
+        <BlockHeading title={title} subtitle={subtitle} className="mb-12" />
         <div className={`grid grid-cols-1 ${gridCols[columns] || gridCols[4]} gap-8`}>
           {block.stats?.map((stat, index) => (
             <div key={index} className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
+              <div className="text-4xl md:text-5xl font-bold mb-2">
                 {stat.value}
               </div>
               <div className="text-lg font-semibold mb-2">{stat.label}</div>

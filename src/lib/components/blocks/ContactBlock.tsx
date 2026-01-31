@@ -8,10 +8,11 @@ import { sanityClient } from "@/lib/sanity/client";
 import { globalSettingsQuery } from "@/lib/queries/globalSettings";
 import { GlobalSettings } from "~/sanity.types";
 import { ContactForm } from "../shared/ContactForm";
+import { getBlockHeading } from "./BlockHeading";
 
 interface ContactBlockProps {
   _type: "block.contact";
-  heading?: string;
+  heading?: { title?: string | null; subtitle?: string | null } | string;
   description?: string;
   showContactInfo?: boolean;
 }
@@ -67,8 +68,8 @@ export function ContactBlock({ block }: { block: ContactBlockProps }) {
         >
           <div className="bg-card p-8 rounded-lg border border-border">
             <ContactForm
-              heading={block.heading}
-              description={block.description}
+              heading={getBlockHeading(block).title ?? undefined}
+              description={getBlockHeading(block).subtitle ?? undefined}
             />
           </div>
         </div>

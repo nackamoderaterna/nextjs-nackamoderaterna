@@ -4,18 +4,15 @@ import { Sidebar } from "@/lib/components/shared/Sidebar";
 import { PoliticalIssue } from "~/sanity.types";
 
 interface PolicyList {
-  title: string;
   policies: PoliticalIssue[];
 }
 
 export function PolicyList({
-  title,
   policies,
 }: PolicyList) {
   const fulfilledPolicies = policies.filter((policy) => policy.fulfilled);
   const unfulfilledPolicies = policies.filter((policy) => !policy.fulfilled);
   return (
-    <Sidebar heading={title}>
       <ul className="space-y-4 mb-6">
         {fulfilledPolicies.map((policy, index) => (
           <li key={index} className="flex gap-3">
@@ -35,6 +32,5 @@ export function PolicyList({
           </li>
         ))}
       </ul> 
-    </Sidebar>
   );
 }

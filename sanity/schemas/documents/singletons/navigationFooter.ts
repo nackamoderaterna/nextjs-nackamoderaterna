@@ -1,17 +1,19 @@
-import {defineType, defineField} from 'sanity'
+import { defineField, defineType } from "sanity";
 
 export default defineType({
-  name: 'navigationFooter',
-  title: 'Footer Navigation',
-  type: 'document',
+  name: "navigationFooter",
+  title: "Footer Navigation",
+  type: "document",
+  groups: [
+    { name: "structure", title: "Struktur", default: true },
+    { name: "content", title: "Innehåll" },
+  ],
   fields: [
-    //
-    // Footer Columns
-    //
     defineField({
-      name: 'columns',
-      title: 'Footer Columns',
-      type: 'array',
+      name: "columns",
+      title: "Footer Columns",
+      type: "array",
+      group: "structure",
       of: [
         {
           type: 'object',
@@ -34,65 +36,18 @@ export default defineType({
       ],
     }),
 
-    //
-    // Extra Footer Content
-    //
     defineField({
-      name: 'footerText',
-      title: 'Footer Text',
-      type: 'array',
-      of: [{type: 'block'}],
+      name: "footerText",
+      title: "Footer Text",
+      type: "array",
+      group: "content",
+      of: [{ type: "block" }],
     }),
-
     defineField({
-      name: 'socialLinks',
-      title: 'Social Links',
-      type: 'array',
-      of: [
-        {
-          type: 'object',
-          name: 'social',
-          fields: [
-            defineField({
-              name: 'platform',
-              type: 'string',
-              title: 'Platform',
-              options: {
-                list: [
-                  {title: 'Facebook', value: 'facebook'},
-                  {title: 'Instagram', value: 'instagram'},
-                  {title: 'LinkedIn', value: 'linkedin'},
-                  {title: 'Twitter/X', value: 'twitter'},
-                ],
-              },
-            }),
-            defineField({
-              name: 'url',
-              type: 'url',
-              title: 'URL',
-              validation: (Rule) => Rule.required(),
-            }),
-          ],
-          preview: {
-            select: {
-              platform: 'platform',
-              url: 'url',
-            },
-            prepare({platform, url}) {
-              return {
-                title: platform || 'Social Link',
-                subtitle: url,
-              };
-            },
-          },
-        },
-      ],
-    }),
-
-    defineField({
-      name: 'legalText',
-      title: 'Legal Text',
-      type: 'string',
+      name: "legalText",
+      title: "Legal Text",
+      type: "string",
+      group: "content",
     }),
   ],
-})
+});

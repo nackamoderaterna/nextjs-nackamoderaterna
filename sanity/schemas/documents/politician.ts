@@ -1,12 +1,13 @@
-import { defineType } from "sanity";
+import { defineField, defineType } from "sanity";
 
 export const politician = defineType({
   name: "politician",
   title: "Politiker",
   type: "document",
   groups: [
-    { name: "base", title: "Bas" },
+    { name: "base", title: "Bas", default: true },
     { name: "uppdrag", title: "Uppdrag" },
+    { name: "relations", title: "Relationer" },
   ],
   fields: [
     {
@@ -198,17 +199,19 @@ export const politician = defineType({
       ],
       group: "uppdrag",
     },
-    {
+    defineField({
       name: "livingArea",
       title: "Bor i",
       description: "Geografiskt område där politikern bor.",
       type: "reference",
+      group: "relations",
       to: { type: "geographicalArea" },
-    },
-    {
+    }),
+    defineField({
       name: "politicalAreas",
       title: "Hjärtefrågor",
       type: "array",
+      group: "relations",
       of: [
         {
           name: "politicalAreaReference",
@@ -243,20 +246,13 @@ export const politician = defineType({
           },
         },
       ],
-    },
-    {
-      name: "socialMedia",
+    }),
+    defineField({
+      name: "socialLinks",
       title: "Sociala medier",
-      type: "object",
-      fields: [
-        { name: "facebook", title: "Facebook", type: "url" },
-        { name: "twitter", title: "Twitter/X", type: "url" },
-        { name: "instagram", title: "Instagram", type: "url" },
-        { name: "linkedin", title: "LinkedIn", type: "url" },
-        { name: "tiktok", title: "TikTok", type: "url" },
-      ],
+      type: "socialLinks",
       group: "base",
-    },
+    }),
   ],
   preview: {
     select: {

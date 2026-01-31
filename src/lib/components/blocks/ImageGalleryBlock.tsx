@@ -1,9 +1,10 @@
 import Block from "./Block";
+import { BlockHeading, getBlockHeading } from "./BlockHeading";
 import { SanityImage } from "../shared/SanityImage";
 
 interface ImageGalleryBlockProps {
   _type: "block.imageGallery";
-  heading?: string;
+  heading?: { title?: string | null; subtitle?: string | null } | string;
   images?: Array<{
     _key?: string;
     asset?: any;
@@ -28,7 +29,8 @@ export function ImageGalleryBlock({ block }: { block: ImageGalleryBlockProps }) 
   const columns = block.columns || 3;
   const rawAspectRatio = block.aspectRatio || "square";
   const aspectRatio = cleanString(rawAspectRatio) as "square" | "landscape" | "portrait" | "auto" || "square";
-  const heading = cleanString(block.heading);
+  const { title } = getBlockHeading(block);
+  const headingTitle = cleanString(title);
 
   const gridCols = {
     2: "md:grid-cols-2",
@@ -66,11 +68,7 @@ export function ImageGalleryBlock({ block }: { block: ImageGalleryBlockProps }) 
 
   return (
     <Block>
-        {heading && (
-          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
-            {heading}
-          </h2>
-        )}
+        <BlockHeading title={headingTitle || undefined} />
         <div className={`grid grid-cols-1 ${gridCols[columns]} gap-4 md:gap-6`}>
           {validImages.map((image, index) => (
             <div key={image._key || index} className="space-y-2">

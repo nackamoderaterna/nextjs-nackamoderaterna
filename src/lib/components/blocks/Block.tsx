@@ -29,6 +29,10 @@ export type BlockProps = {
    */
   fullWidth?: boolean;
   /**
+   * Additional className for the container
+   */
+  containerClassName?: string;
+  /**
    * Additional className for custom styling
    */
   className?: string;
@@ -86,6 +90,7 @@ export default function Block({
   maxWidth = "7xl",
   background = "default",
   fullWidth = false,
+  containerClassName,
   className,
   asSection = true,
 }: BlockProps) {
@@ -104,7 +109,8 @@ export default function Block({
         className={cn(
           "w-full mx-auto",
           !fullWidth && maxWidthClasses[maxWidth],
-          paddingXClasses[paddingX]
+          paddingXClasses[paddingX],
+          containerClassName
         )}
       >
         {children}

@@ -3,6 +3,7 @@ import { NewsCard } from "@/lib/components/news/NewsCard";
 import { PoliticalAreaHero } from "@/lib/components/politics/politicalAreaHero";
 import { PolicyList } from "@/lib/components/politics/policyList";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
+import { Section } from "@/lib/components/shared/Section";
 import { geographicalAreaPageQuery, allGeographicalAreaSlugsQuery } from "@/lib/queries/politik";
 import { sanityClient } from "@/lib/sanity/client";
 import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
@@ -85,7 +86,23 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
     data.politicians as unknown as PoliticianWithNamnd[]
   ).map(cleanPoliticianData);
 
-  const mainContent = (
+  // Sort politicians: 1) Kommunalråd, 2) Nämnd leaders, 3) Party board, 4) The rest
+  // Within each group, sort alphabetically by name
+  const sortedPoliticians = [...cleanedPoliticians].sort((a, b) => {
+    const getPriority = (p: typeof a) => {
+      if (p.kommunalrad?.active) return 1;
+      if (p.namndPositions?.some((n) => n.isLeader === true)) return 2;
+      if (p.partyBoard?.active) return 3;
+      return 4;
+    };
+
+    const priorityA = getPriority(a);
+    const priorityB = getPriority(b);
+    if (priorityA !== priorityB) return priorityA - priorityB;
+    return (a.name || "").localeCompare(b.name || "", "sv");
+  });
+
+  const main = (
     <div className="space-y-8 prose md:prose-lg">
       <div className="prose md:prose-lg">
         {data.description && <PortableText value={data.description} components={portableTextComponents} />}
@@ -93,7 +110,7 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
     </div>
   );
 
-  const sidebarContent =
+  const sidebar =
     data.politicalIssues?.length > 0 ? (
       <PolicyList title="Våra kärnfrågor" policies={data.politicalIssues} />
     ) : null;
@@ -105,16 +122,13 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
           <PoliticalAreaHero image={data.image} title={data.name || ""} />
 
           <ContentWithSidebar
-            mainContent={mainContent}
-            sidebarContent={sidebarContent}
+            mainContent={main}
+            sidebarContent={sidebar}
           />
 
           {/* Current News Section */}
           {data.latestNews.length > 0 && (
-            <section className="mb-16">
-              <h2 className="text-2xl font-bold text-foreground mb-6">
-                Aktuellt inom {data.name}
-              </h2>
+            <Section title={`Aktuellt inom ${data.name}`}>
               <div className="grid">
                 {data.latestNews.map((news, index) => (
                   <NewsCard
@@ -127,28 +141,24 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
                   />
                 ))}
               </div>
-            </section>
+            </Section>
           )}
 
           {/* Local Politicians Section */}
-          {cleanedPoliticians.length > 0 && (
-            <section className="mb-16">
-              <h2 className="text-2xl font-bold text-foreground mb-6">
-                Dina lokala politiker
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {cleanedPoliticians.map((politician) => (
-                 
-                    <PeopleCard
-                      key={politician._id}
-                      name={politician.name}
-                      image={politician.image}
-                      slug={politician.slug?.current || ""}
-                      size="large"
-                    />
+          {sortedPoliticians.length > 0 && (
+            <Section title="Dina lokala politiker">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {sortedPoliticians.map((politician) => (
+                  <PeopleCard
+                    key={politician._id}
+                    name={politician.name}
+                    image={politician.image}
+                    slug={politician.slug?.current || ""}
+                    size="large"
+                  />
                 ))}
               </div>
-            </section>
+            </Section>
           )}
         </div>
       </main>

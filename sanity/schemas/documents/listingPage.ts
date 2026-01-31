@@ -4,12 +4,17 @@ export const listingPage = defineType({
   name: "listingPage",
   title: "Listingsidor",
   type: "document",
+  groups: [
+    { name: "content", title: "Innehåll", default: true },
+    { name: "seo", title: "SEO" },
+  ],
   fields: [
     defineField({
       name: "key",
       title: "Sida",
       type: "string",
       description: "Vilken katalogsida dessa texter gäller.",
+      group: "content",
       options: {
         list: [
           { title: "Politiker", value: "politicians" },
@@ -27,6 +32,7 @@ export const listingPage = defineType({
       title: "Sidrubrik",
       type: "string",
       description: "Rubriken som visas högst upp på sidan.",
+      group: "content",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -34,6 +40,7 @@ export const listingPage = defineType({
       title: "Ingress / introduktion",
       type: "text",
       rows: 4,
+      group: "content",
       description:
         "En kort text som visas överst på sidan. Endast enkel text, inga bilder eller länkar.",
     }),
@@ -41,6 +48,7 @@ export const listingPage = defineType({
       name: "seo",
       title: "SEO",
       type: "seo",
+      group: "seo",
       description:
         "Sökmotoroptimering för sidan. Om fält lämnas tomma används standardvärden.",
     }),

@@ -8,7 +8,7 @@ export const imageGalleryBlock = defineType({
     defineField({
       name: "heading",
       title: "Rubrik",
-      type: "string",
+      type: "blockHeading",
     }),
     defineField({
       name: "images",
@@ -70,13 +70,13 @@ export const imageGalleryBlock = defineType({
   ],
   preview: {
     select: {
-      heading: "heading",
+      "headingTitle": "heading.title",
       images: "images",
     },
-    prepare({ heading, images }) {
+    prepare({ headingTitle, images }) {
       return {
         title: "Bildgalleri",
-        subtitle: heading || `${images?.length || 0} bilder`,
+        subtitle: headingTitle || `${images?.length || 0} bilder`,
       };
     },
   },

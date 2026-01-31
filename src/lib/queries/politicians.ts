@@ -38,7 +38,7 @@ export const politicianBySlugQuery = groq`*[_type == "politician" && slug.curren
       slug
     }
   },
-  socialMedia,
+  socialLinks,
   "referencedInNews": *[_type == "news" && references(^._id)]
     | order(coalesce(dateOverride, _createdAt) desc)[0...10] {
     _id,

@@ -1,8 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
-import { Facebook, Instagram } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { SanityImage } from "../shared/SanityImage";
+import { SocialLinks, type SocialLinksData } from "../shared/SocialLinks";
 
 interface PoliticianHeroProps {
   name: string;
@@ -10,11 +8,7 @@ interface PoliticianHeroProps {
   email?: string;
   phone?: string;
   image: any;
-  socialLinks?: {
-    tiktok?: string;
-    facebook?: string;
-    instagram?: string;
-  };
+  socialLinks?: SocialLinksData | null;
 }
 
 export function PoliticianHero({
@@ -64,39 +58,11 @@ export function PoliticianHero({
           </div>
 
           {/* Social Media */}
-          {socialLinks && (socialLinks.tiktok || socialLinks.facebook || socialLinks.instagram) && (
-            <div>
-              <p className="text-xs text-muted-foreground uppercase mb-3">
-                Sociala media
-              </p>
-              <div className="flex gap-3">
-                {socialLinks?.tiktok && (
-                  <Button variant="outline" size="sm" asChild>
-                    <Link href={socialLinks.tiktok}>
-                      <span className="mr-2">🎵</span>
-                      TikTok
-                    </Link>
-                  </Button>
-                )}
-                {socialLinks?.facebook && (
-                  <Button variant="outline" size="sm" asChild>
-                    <Link href={socialLinks.facebook}>
-                      <Facebook className="w-4 h-4 mr-2" />
-                      Facebook
-                    </Link>
-                  </Button>
-                )}
-                {socialLinks?.instagram && (
-                  <Button variant="outline" size="sm" asChild>
-                    <Link href={socialLinks.instagram}>
-                      <Instagram className="w-4 h-4 mr-2" />
-                      Instagram
-                    </Link>
-                  </Button>
-                )}
-              </div>
-            </div>
-          )}
+          <SocialLinks
+            links={socialLinks}
+            variant="default"
+            heading="Sociala media"
+          />
         </div>
 
         {/* Right column - Image */}

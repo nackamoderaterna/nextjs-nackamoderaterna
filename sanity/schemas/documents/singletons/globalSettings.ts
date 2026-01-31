@@ -1,37 +1,36 @@
-import {defineType, defineField} from 'sanity'
+import { defineField, defineType } from "sanity";
 
 export default defineType({
-  name: 'globalSettings',
-  title: 'Globala Inställningar',
-  type: 'document',
+  name: "globalSettings",
+  title: "Globala Inställningar",
+  type: "document",
+  groups: [
+    { name: "company", title: "Företag", default: true },
+    { name: "contact", title: "Kontakt" },
+    { name: "address", title: "Adress" },
+    { name: "social", title: "Sociala medier" },
+    { name: "seo", title: "SEO" },
+    { name: "documents", title: "Dokument" },
+  ],
   fields: [
-    //
-    // ─────────────────────────
-    // Company Information
-    // ─────────────────────────
-    //
     defineField({
-      name: 'companyName',
-      title: 'Företagsnamn',
-      type: 'string',
+      name: "companyName",
+      title: "Företagsnamn",
+      type: "string",
+      group: "company",
     }),
-
     defineField({
-      name: 'logo',
-      title: 'Logotyp',
-      type: 'image',
-      options: {hotspot: true},
+      name: "logo",
+      title: "Logotyp",
+      type: "image",
+      group: "company",
+      options: { hotspot: true },
     }),
-
-    //
-    // ─────────────────────────
-    // Contact Information
-    // ─────────────────────────
-    //
     defineField({
-      name: 'contactInfo',
-      title: 'Kontaktuppgifter',
-      type: 'object',
+      name: "contactInfo",
+      title: "Kontaktuppgifter",
+      type: "object",
+      group: "contact",
       fields: [
         defineField({
           name: 'phone',
@@ -51,9 +50,10 @@ export default defineType({
       ],
     }),
     defineField({
-      name: 'pressContactInfo',
-      title: 'Presskontakt',
-      type: 'object',
+      name: "pressContactInfo",
+      title: "Presskontakt",
+      type: "object",
+      group: "contact",
       fields: [
         defineField({
           name: 'phone',
@@ -79,9 +79,10 @@ export default defineType({
     // ─────────────────────────
     //
     defineField({
-      name: 'postAddress',
-      title: 'Postadress',
-      type: 'object',
+      name: "postAddress",
+      title: "Postadress",
+      type: "object",
+      group: "address",
       fields: [
         defineField({
           name: 'street',
@@ -106,9 +107,10 @@ export default defineType({
       ],
     }),
     defineField({
-      name: 'visitingAddress',
-      title: 'Besöksadress',
-      type: 'object',
+      name: "visitingAddress",
+      title: "Besöksadress",
+      type: "object",
+      group: "address",
       fields: [
         defineField({
           name: 'street',
@@ -139,48 +141,29 @@ export default defineType({
     // ─────────────────────────
     //
     defineField({
-      name: 'socialLinks',
-      title: 'Sociala Medier',
-      type: 'array',
-      of: [
-        {
-          type: 'object',
-          name: 'social',
-          fields: [
-            defineField({
-              name: 'platform',
-              title: 'Plattform',
-              type: 'string',
-            }),
-            defineField({
-              name: 'url',
-              title: 'URL',
-              type: 'url',
-            }),
-          ],
-        },
-      ],
+      name: "socialLinks",
+      title: "Sociala medier",
+      description: "Länkar till sociala medier. Visas i sidfoten på webbplatsen.",
+      type: "socialLinks",
+      group: "social",
     }),
     defineField({
-      name: 'seo',
-      title: 'SEO (Standard)',
+      name: "seo",
+      title: "SEO (Standard)",
       description:
-        'Standard SEO-inställningar (titel, beskrivning, nyckelord och bild) som kan användas som fallback.',
-      type: 'seo',
+        "Standard SEO-inställningar (titel, beskrivning, nyckelord och bild) som kan användas som fallback.",
+      type: "seo",
+      group: "seo",
     }),
-    //
-    // ─────────────────────────
-    // Handlingsprogram
-    // ─────────────────────────
-    //
     defineField({
-      name: 'handlingsprogram',
-      title: 'Handlingsprogram',
-      description: 'Ladda upp handlingsprogrammet som PDF',
-      type: 'file',
+      name: "handlingsprogram",
+      title: "Handlingsprogram",
+      description: "Ladda upp handlingsprogrammet som PDF",
+      type: "file",
+      group: "documents",
       options: {
-        accept: '.pdf',
+        accept: ".pdf",
       },
     }),
   ],
-})
+});

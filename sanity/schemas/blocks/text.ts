@@ -8,7 +8,7 @@ export const text = defineType({
     defineField({
       name: "heading",
       title: "Rubrik",
-      type: "string",
+      type: "blockHeading",
     }),
     defineField({
       name: "content",
@@ -34,12 +34,13 @@ export const text = defineType({
   preview: {
     select: {
       columns: "columns",
-      heading: "heading",
+      "headingTitle": "heading.title",
     },
     prepare(selection) {
+      const cols = `${selection.columns} kolumner`;
       return {
         title: "Text",
-        subtitle: `${selection.heading} - ${selection.columns} kolumner`,
+        subtitle: selection.headingTitle ? `${selection.headingTitle} - ${cols}` : cols,
       };
     },
   },

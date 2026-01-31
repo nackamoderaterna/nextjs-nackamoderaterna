@@ -1,4 +1,3 @@
-import {heroBlock} from './hero'
 import {text} from './text'
 import {imageBlock} from './image'
 import {videoBlock} from './video'
@@ -15,8 +14,7 @@ import {politicalAreasBlock} from './politicalAreas'
 import {geographicalAreasBlock} from './geographicalAreas'
 
 export const blocks = [
-  text, 
-  heroBlock, 
+  text,
   imageBlock, 
   videoBlock, 
   politicianBlock, 

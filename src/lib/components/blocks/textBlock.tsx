@@ -1,11 +1,13 @@
 import { PortableText } from "next-sanity";
 import Block from "./Block";
+import { BlockHeading, getBlockHeading } from "./BlockHeading";
 import { BlockText } from "~/sanity.types";
 import { portableTextComponents } from "../shared/PortableTextComponents";
 
-type BlockTextWithColumns = BlockText & { 
+type BlockTextWithColumns = BlockText & {
   columns?: number;
-  heading?: string;
+  heading?: { title?: string | null; subtitle?: string | null } | string;
+  description?: string;
 };
 
 export interface TextBlockProps {
@@ -14,13 +16,13 @@ export interface TextBlockProps {
 export function TextBlock({ block }: TextBlockProps) {
   const blockWithColumns = block as BlockTextWithColumns;
   const columns = blockWithColumns.columns ?? 1;
-  const heading = blockWithColumns.heading;
+  const { title } = getBlockHeading(blockWithColumns);
 
   return (
     <Block maxWidth="3xl">
-      {heading && (
+      {title && (
         <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
-          {heading}
+          {title}
         </h2>
       )}
       <div 

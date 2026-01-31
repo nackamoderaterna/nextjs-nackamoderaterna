@@ -81,10 +81,10 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
   );
 
   const sidebarContent = (
-    <>
+    <div className="grid gap-4">
    
       <Sidebar heading="Våra politiska mål">
-        <PolicyList title="Våra politiska mål" policies={data.politicalIssues} />
+        <PolicyList policies={data.politicalIssues} />
       </Sidebar>
      
       {data.politicians.length > 0 && (
@@ -102,7 +102,7 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
         }
         </Sidebar>
         )}
-    </>
+    </div>
   );
 
   return (

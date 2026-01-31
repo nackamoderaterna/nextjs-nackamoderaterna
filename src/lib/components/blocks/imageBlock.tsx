@@ -1,4 +1,5 @@
 import Block from "./Block";
+import { BlockHeading, getBlockHeading } from "./BlockHeading";
 import { BlockImage } from "~/sanity.types";
 import { SanityImage } from "../shared/SanityImage";
 
@@ -7,15 +8,11 @@ interface ImageBlockProps {
 }
 
 export function ImageBlock({ block }: ImageBlockProps) {
-  const heading = (block as any).heading;
-  
+  const { title } = getBlockHeading(block as Record<string, unknown>);
+
   return (
     <Block>
-        {heading && (
-          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
-            {heading}
-          </h2>
-        )}
+        <BlockHeading title={title} />
         <SanityImage image={block.image} />
     </Block>
   );

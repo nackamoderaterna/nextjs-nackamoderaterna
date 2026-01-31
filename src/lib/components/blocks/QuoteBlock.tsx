@@ -1,9 +1,10 @@
 import Block from "./Block";
+import { BlockHeading, getBlockHeading } from "./BlockHeading";
 import { SanityImage } from "../shared/SanityImage";
 
 interface QuoteBlockProps {
   _type: "block.quote";
-  heading?: string;
+  heading?: { title?: string | null; subtitle?: string | null } | string;
   quote: string;
   author?: string;
   authorTitle?: string;
@@ -29,13 +30,11 @@ export function QuoteBlock({ block }: { block: QuoteBlockProps }) {
   const alignClass = alignmentClasses[alignment];
   const flexAlignClass = flexAlignmentClasses[alignment];
 
+  const { title } = getBlockHeading(block);
+
   return (
     <Block maxWidth="4xl">
-        {block.heading && (
-          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
-            {block.heading}
-          </h2>
-        )}
+        <BlockHeading title={title} />
         <div className={`${alignClass} flex flex-col ${flexAlignClass}`}>
           <blockquote className="text-2xl md:text-3xl font-light italic mb-8 leading-relaxed">
             "{block.quote}"

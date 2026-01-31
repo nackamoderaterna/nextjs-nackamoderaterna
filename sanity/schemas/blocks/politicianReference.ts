@@ -9,7 +9,7 @@ export const politicianBlock = defineType({
     defineField({
       name: 'heading',
       title: 'Rubrik',
-      type: 'string',
+      type: 'blockHeading',
     }),
     defineField({
       name: 'mode',

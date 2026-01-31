@@ -2,6 +2,7 @@ import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { deskStructure } from "./sanity/sanity.desk.structure";
 import { schemas } from "./sanity/schemas";
+import { createProtectHemDeleteAction } from "./sanity/sanity.documentActions";
 
 export default defineConfig({
   name: "default",
@@ -14,5 +15,13 @@ export default defineConfig({
   plugins: [structureTool({ structure: deskStructure })],
   schema: {
     types: schemas,
+  },
+  document: {
+    actions: (prev) =>
+      prev.map((action) =>
+        action.action === "delete"
+          ? createProtectHemDeleteAction(action)
+          : action
+      ),
   },
 });

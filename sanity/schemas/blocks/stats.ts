@@ -8,12 +8,7 @@ export const statsBlock = defineType({
     defineField({
       name: "heading",
       title: "Rubrik",
-      type: "string",
-    }),
-    defineField({
-      name: "description",
-      title: "Beskrivning",
-      type: "text",
+      type: "blockHeading",
     }),
     defineField({
       name: "stats",
@@ -61,13 +56,13 @@ export const statsBlock = defineType({
   ],
   preview: {
     select: {
-      heading: "heading",
+      "headingTitle": "heading.title",
       stats: "stats",
     },
-    prepare({ heading, stats }) {
+    prepare({ headingTitle, stats }) {
       return {
         title: "Statistik",
-        subtitle: heading || `${stats?.length || 0} statistik`,
+        subtitle: headingTitle || `${stats?.length || 0} statistik`,
       };
     },
   },

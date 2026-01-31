@@ -8,14 +8,8 @@ export const contactBlock = defineType({
     defineField({
       name: "heading",
       title: "Rubrik",
-      type: "string",
-      description: "Valfri rubrik för kontaktformuläret",
-    }),
-    defineField({
-      name: "description",
-      title: "Beskrivning",
-      type: "text",
-      description: "Valfri beskrivning som visas ovanför formuläret",
+      type: "blockHeading",
+      description: "Valfri rubrik och beskrivning som visas ovanför formuläret",
     }),
     defineField({
       name: "showContactInfo",
@@ -27,12 +21,12 @@ export const contactBlock = defineType({
   ],
   preview: {
     select: {
-      heading: "heading",
+      "headingTitle": "heading.title",
     },
     prepare(selection) {
       return {
         title: "Kontaktformulär",
-        subtitle: selection.heading || "Ingen rubrik",
+        subtitle: selection.headingTitle || "Ingen rubrik",
       };
     },
   },

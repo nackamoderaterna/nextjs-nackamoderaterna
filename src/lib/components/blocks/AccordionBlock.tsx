@@ -6,6 +6,7 @@ import Block from "./Block";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/lib/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
 import { portableTextComponents } from "../shared/PortableTextComponents";
+import { BlockHeading, getBlockHeading } from "./BlockHeading";
 
 interface AccordionItem {
   title: string;
@@ -14,7 +15,7 @@ interface AccordionItem {
 
 interface AccordionBlockProps {
   _type: "block.accordion";
-  heading?: string;
+  heading?: { title?: string | null; subtitle?: string | null } | string;
   description?: string;
   items: AccordionItem[];
   allowMultiple?: boolean;
@@ -37,23 +38,11 @@ export function AccordionBlock({ block }: { block: AccordionBlockProps }) {
     setOpenItems(newOpenItems);
   };
 
+  const { title, subtitle } = getBlockHeading(block);
+
   return (
     <Block maxWidth="4xl">
-      
-        {(block.heading || block.description) && (
-          <div className="mb-12 text-center">
-            {block.heading && (
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                {block.heading}
-              </h2>
-            )}
-            {block.description && (
-              <p className="text-lg text-muted-foreground">
-                {block.description}
-              </p>
-            )}
-          </div>
-        )}
+        <BlockHeading title={title} subtitle={subtitle} subtitleMaxWidth="none" className="mb-12" />
         <div className="space-y-4">
           {block.items?.map((item, index) => {
             const isOpen = openItems.has(index);
