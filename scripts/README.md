@@ -107,3 +107,31 @@ SANITY_API_TOKEN="your-token" npx tsx scripts/set-news-variant-default.ts
 - Fetches all news documents
 - Updates those where `variant` is missing, `null`, or not one of `default` / `debate` / `pressrelease`
 - Leaves documents that already have a valid variant unchanged
+
+## migrate-politician-social-links
+
+Moves politician social media from the old field `socialMedia` to the new shared field `socialLinks` (same URL shape: facebook, twitter, instagram, linkedin, tiktok). After migration, the old `socialMedia` field is removed.
+
+### What it does
+
+- Finds all politicians that have `socialMedia` with at least one URL
+- Sets `socialLinks` to that object (with `_type: "socialLinks"`) and unsets `socialMedia`
+- Skips politicians that have no URLs in `socialMedia`
+
+### Usage
+
+```bash
+SANITY_API_TOKEN="your-token" npm run migrate:politician-social-links
+```
+
+Or directly:
+
+```bash
+SANITY_API_TOKEN="your-token" npx tsx scripts/migrate-politician-social-links.ts
+```
+
+### Prerequisites
+
+- `SANITY_API_TOKEN` with write access
+- `NEXT_PUBLIC_SANITY_PROJECT_ID` (or `SANITY_PROJECT_ID`)
+- `NEXT_PUBLIC_SANITY_DATASET` (or `SANITY_DATASET`, default: production)

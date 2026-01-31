@@ -9,7 +9,8 @@
     "lint": "eslint",
     "typegen": "dir=($pwd) cd ../studio-nackamoderaterna && sanity schema extract && sanity typegen generate && cp sanity.types.ts ../nextjs-nackamoderaterna/src/lib/sanity/sanity.types.ts",
     "migrate:political-areas": "node scripts/migrate-political-areas.js",
-    "migrate:news-variant": "npx tsx scripts/set-news-variant-default.ts"
+    "migrate:news-variant": "npx tsx scripts/set-news-variant-default.ts",
+    "migrate:politician-social-links": "npx tsx scripts/migrate-politician-social-links.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
