@@ -7,7 +7,7 @@ export const newsBlock = defineType({
   fields: [
     defineField({
       name: 'heading',
-      type: 'string',
+      type: 'blockHeading',
       title: 'Rubrik',
     }),
 
@@ -49,6 +49,13 @@ export const newsBlock = defineType({
       hidden: ({parent}) => parent?.mode != 'area',
     }),
 
+    defineField({
+      name: 'viewAllLink',
+      title: '"Alla nyheter"-länk',
+      description: 'Länk som visas till höger om rubriken. Lämna tom för standard (/nyheter).',
+      type: 'string',
+    }),
+
     // Manual overrides
     defineField({
       name: 'items',
@@ -58,13 +65,6 @@ export const newsBlock = defineType({
       of: [{type: 'reference', to: [{type: 'news'}]}],
       hidden: ({parent}) => parent?.mode != 'manual',
     }),
-    {
-      name: 'limit',
-      title: 'Antal nyheter',
-      description: 'Maximalt antal nyheter som ska visas.',
-      type: 'number',
-      initialValue: 4,
-    },
   ],
 
   // Validation rules
@@ -77,11 +77,11 @@ export const newsBlock = defineType({
     }),
 
   preview: {
-    select: {heading: 'heading', mode: 'mode'},
-    prepare: ({heading, mode}) => {
+    select: {'headingTitle': 'heading.title', mode: 'mode'},
+    prepare: ({headingTitle, mode}) => {
       return {
         title: 'Nyheter',
-        subtitle: heading || mode,
+        subtitle: headingTitle || mode,
       }
     },
   },

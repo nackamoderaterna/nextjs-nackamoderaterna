@@ -72,9 +72,9 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
     // POLITICIAN END
     // NEWS START
     _type == "block.news" => {
-    heading,
+    heading{ title, subtitle },
+    viewAllLink,
     mode,
-    limit,
     politicalArea,
     geographicArea,
     items[]->{
@@ -89,10 +89,10 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
       }
     },
 
-    // Resolved items depending on mode
+    // Resolved items depending on mode (limit: 10)
     "resolvedItems": select(
       // MANUAL
-      mode == "manual" => items[]->{
+      mode == "manual" => (items[]->{
         _id,
         _publishedAt,
         title,
@@ -106,12 +106,12 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
           ...,
           "url": asset->url
         }
-      },
+      })[0...10],
 
       // LATEST
       mode == "latest" => *[_type == "news"] 
         | order(coalesce(dateOverride, publishedAt) desc)
-        [0...4]{
+        [0...10]{
           _id,
           _createdAt,
           title,
@@ -129,7 +129,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
       // BY POLITICAL AREA
       mode == "byPoliticalArea" && defined(politicalArea) => *[_type == "news" && references(^.politicalArea._ref)]
         | order(coalesce(dateOverride, publishedAt) desc)
-        [0...4]{
+        [0...10]{
           _id,
           _createdAt,
           title,
@@ -147,7 +147,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
       // BY GEOGRAPHIC AREA
       mode == "byGeographicArea" && defined(geographicArea) => *[_type == "news" && references(^.geographicArea._ref)]
         | order(coalesce(dateOverride, publishedAt) desc)
-        [0...4]{
+        [0...10]{
           _id,
           _createdAt,
           title,
@@ -165,7 +165,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
       // DEFAULT → empty array
        *[_type == "news"] 
         | order(coalesce(dateOverride, publishedAt) desc)
-        [0...4]{
+        [0...10]{
           _id,
           _createdAt,
           title,
@@ -180,7 +180,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
   },
     // IMAGE GALLERY START
     _type == "block.imageGallery" => {
-      heading,
+      heading{ title, subtitle },
       columns,
       aspectRatio,
       images[]{
@@ -193,8 +193,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
     // IMAGE GALLERY END
     // POLITICAL AREAS START
     _type == "block.politicalAreas" => {
-      heading,
-      description,
+      heading{ title, subtitle },
       "items": items[]->{
         _id,
         name,
@@ -205,8 +204,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
     // POLITICAL AREAS END
     // GEOGRAPHICAL AREAS START
     _type == "block.geographicalAreas" => {
-      heading,
-      description,
+      heading{ title, subtitle },
       "items": items[]->{
         _id,
         name,
