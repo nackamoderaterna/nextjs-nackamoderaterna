@@ -29,6 +29,38 @@ export const allEventsQuery = groq`
   }
 `;
 
+export const upcomingEventsPaginatedQuery = groq`{
+  "items": *[_type == "event" && startDate >= now()]
+  | order(startDate asc)[$start...$end] {
+    _id,
+    title,
+    slug,
+    startDate,
+    endDate,
+    image,
+    location,
+    eventType,
+    isPublic
+  },
+  "total": count(*[_type == "event" && startDate >= now()])
+}`;
+
+export const pastEventsPaginatedQuery = groq`{
+  "items": *[_type == "event" && startDate < now()]
+  | order(startDate desc)[$start...$end] {
+    _id,
+    title,
+    slug,
+    startDate,
+    endDate,
+    image,
+    location,
+    eventType,
+    isPublic
+  },
+  "total": count(*[_type == "event" && startDate < now()])
+}`;
+
 // Query to get all event slugs for static generation
 export const allEventSlugsQuery = groq`*[_type == "event" && defined(slug.current)] {
   "slug": slug.current

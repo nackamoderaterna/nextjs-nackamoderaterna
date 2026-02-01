@@ -4,7 +4,6 @@ import { sanityClient } from "@/lib/sanity/client";
 import { singleEventQuery, allEventSlugsQuery } from "@/lib/queries/events";
 import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
 import { Event } from "~/sanity.types";
-import { SanityImage } from "@/lib/components/shared/SanityImage";
 import { cleanInvisibleUnicode } from "@/lib/politicians";
 import {
   formatEventDate,
@@ -18,13 +17,16 @@ import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
 import { Button } from "@/lib/components/ui/button";
 import { ROUTE_BASE } from "@/lib/routes";
+import { ContentHero } from "@/lib/components/shared/ContentHero";
+import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
+import { Sidebar } from "@/lib/components/shared/Sidebar";
 
 // Generate static params for all events at build time
 export async function generateStaticParams() {
   const events = await sanityClient.fetch<{ slug: string }[]>(
     allEventSlugsQuery
   );
-  
+
   return events.map((event) => ({
     slug: event.slug,
   }));
@@ -106,90 +108,92 @@ export default async function EventPage({ params }: Props) {
     address || undefined
   );
 
-  return (
-    <main className="w-full py-8 md:py-12">
-      <div className="max-w-3xl mx-auto px-4 rounded">
-        {/* Hero Image */}
-        {event.image && (
-          <div className="w-full mb-8">
-            <SanityImage
-              image={event.image}
-              alt={event.title || "Evenemang"}
-              className="w-full h-auto rounded"
-              sizes="(max-width: 768px) 100vw, 1200px"
-              priority
-            />
-          </div>
-        )}
+  const mainContent =
+    event.description && event.description.length > 0 ? (
+      <div className="prose md:prose-lg max-w-none">
+        <PortableText
+          value={event.description}
+          components={portableTextComponents}
+        />
+      </div>
+    ) : null;
 
-        {/* Event Title */}
-        <h1 className="text-3xl md:text-4xl font-bold text-center mb-8">
-        
-          {event.title}
-        </h1>
-
-        <div className="max-w-2xl mx-auto space-y-6">
-          {/* Date and Time */}
-          {(eventDate || eventTime) && (
-            <div>
-              <p className="text-sm text-gray-500 mb-2">Datum och tid</p>
-              <div className="flex justify-between items-baseline">
-                <span className="text-base font-medium">{eventDate}</span>
-                {eventTime && (
-                  <span className="text-base font-medium">{eventTime}</span>
-                )}
+  const hasMetadata = eventDate || eventTime || address;
+  const sidebarContent = (
+    <div className="grid gap-4">
+      {hasMetadata && (
+        <Sidebar heading="Information">
+          <div className="space-y-4 text-sm">
+            {(eventDate || eventTime) && (
+              <div>
+                <p className="text-xs font-medium text-muted-foreground mb-1">
+                  Datum och tid
+                </p>
+                <div className="flex flex-wrap justify-between gap-x-4 gap-y-1">
+                  {eventDate && (
+                    <span className="font-medium text-foreground">
+                      {eventDate}
+                    </span>
+                  )}
+                  {eventTime && (
+                    <span className="font-medium text-foreground">
+                      {eventTime}
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
-
-          {/* Address */}
-          {address && (
-            <div>
-              <p className="text-sm text-gray-500 mb-2">Adress</p>
-              <p className="text-base">{address}</p>
-            </div>
-          )}
-
-          {/* Separator */}
-          {(event.description || event.registrationUrl) && (
-            <div className="border-t border-gray-300"></div>
-          )}
-
-          {/* Event Description */}
-          {event.description && (
-            <div className="prose prose-neutral max-w-none">
-              <PortableText value={event.description} components={portableTextComponents} />
-            </div>
-          )}
-
-          {/* Action Buttons */}
-          <div className="flex gap-4 items-center pt-4">
-            {event.registrationUrl && (
-              <Button
-                asChild
-                variant="default"
-                size="lg"
-              >
-                <a
-                  href={event.registrationUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Reservera plats
-                </a>
-              </Button>
             )}
+            {address && (
+              <div>
+                <p className="text-xs font-medium text-muted-foreground mb-1">
+                  Adress
+                </p>
+                <p className="text-foreground">{address}</p>
+              </div>
+            )}
+          </div>
+        </Sidebar>
+      )}
+      <div className="flex flex-col gap-2">
+        {event.registrationUrl && (
+          <Button asChild variant="default" className="w-full" size="lg">
             <a
-              href={calendarLink}
-              download={calendarFilename(cleanInvisibleUnicode(event.title) ?? "evenemang")}
+              href={event.registrationUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-500 hover:text-gray-700 transition-colors text-sm"
             >
-              Lägg till i kalender
+              Reservera plats
             </a>
-          </div>
-        </div>
+          </Button>
+        )}
+        <Button asChild variant="secondary" className="w-full" size="lg">
+          <a
+            href={calendarLink}
+            download={calendarFilename(
+              cleanInvisibleUnicode(event.title) ?? "evenemang"
+            )}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Lägg till i kalender
+          </a>
+        </Button>
+      </div>
+    </div>
+  );
+
+  return (
+    <main className="w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <ContentHero
+          pageType="Evenemang"
+          title={event.title ?? "Evenemang"}
+          image={event.image ?? undefined}
+        />
+        <ContentWithSidebar
+          mainContent={mainContent}
+          sidebarContent={sidebarContent}
+        />
       </div>
     </main>
   );

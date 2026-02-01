@@ -185,7 +185,7 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
     <div className="min-h-screen bg-background flex flex-col">
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <ContentHero title={data.question || ""} />
+          <ContentHero pageType="Sakfråga" title={data.question || ""} />
 
           <ContentWithSidebar
             mainContent={main}

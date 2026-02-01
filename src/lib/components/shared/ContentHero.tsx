@@ -4,6 +4,8 @@ import { getLucideIcon } from "@/lib/utils/iconUtils";
 
 interface ContentHeroProps {
   title: string;
+  /** Small label above the title (e.g. "OMRÅDE", "EVENEMANG") */
+  pageType?: string | null;
   image?: unknown;
   icon?: { name?: string | null } | null;
   subtitle?: string;
@@ -12,6 +14,7 @@ interface ContentHeroProps {
 
 export function ContentHero({
   title,
+  pageType,
   image,
   icon,
   subtitle,
@@ -40,6 +43,11 @@ export function ContentHero({
           </div>
         ) : null}
         <div className="flex flex-col gap-2">
+          {pageType ? (
+            <p className="text-sm text-muted-foreground uppercase tracking-wider">
+              {pageType}
+            </p>
+          ) : null}
           <h1 className="text-4xl font-bold text-foreground">{title}</h1>
           {subtitle && subtitleHref ? (
             <Link

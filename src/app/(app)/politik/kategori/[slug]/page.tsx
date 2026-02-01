@@ -176,7 +176,7 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
     <div className="min-h-screen bg-background flex flex-col">
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <ContentHero icon={data.icon} title={data.name || ""} />
+          <ContentHero pageType="Kategori" icon={data.icon} title={data.name || ""} />
 
           <ContentWithSidebar
             mainContent={mainContent}
