@@ -56,7 +56,7 @@ export const footerQuery = groq`*[_id == "navigationFooter"][0] {
 
 export type MenuItemWithReference = Omit<
   MenuItem,
-  "internalLink" | "children"
+  "internalLink" | "children" | "staticRoute"
 > & {
   internalLink?: {
     _type: string;
@@ -64,6 +64,7 @@ export type MenuItemWithReference = Omit<
     title?: string;
     name?: string;
   };
+  /** Any route path (wider than Sanity menu options, e.g. /omrade) */
   staticRoute?: string;
   children?: MenuItemWithReference[];
   /** Icon for navigation items (e.g. political categories) */
