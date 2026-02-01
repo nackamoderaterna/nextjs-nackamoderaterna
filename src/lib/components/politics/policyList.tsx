@@ -23,7 +23,7 @@ function PolicyItem({
   );
 
   return (
-    <li className="flex gap-3">
+    <li className="group flex gap-3 rounded-md px-4 py-2 transition-colors hover:bg-accent">
       <CheckCircle2
         className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
           fulfilled ? "text-green-600" : "text-brand-primary"
@@ -32,7 +32,7 @@ function PolicyItem({
       {issueSlug ? (
         <Link
           href={`${ROUTE_BASE.POLITICS_ISSUES}/${issueSlug}`}
-          className="hover:underline"
+          className="transition-colors hover:text-accent-foreground group-hover:text-accent-foreground"
         >
           {content}
         </Link>

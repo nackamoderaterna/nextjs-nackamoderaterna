@@ -101,7 +101,7 @@ export function ExpandableNewsList({
               onClick={() => setIsExpanded(!isExpanded)}
               className="gap-2"
             >
-              {isExpanded ? "Visa mindre" : "Läs mer"}
+              {isExpanded ? "Visa färre" : "Visa fler"}
               <ChevronDown
                 className={`h-4 w-4 transition-transform duration-200 ${
                   isExpanded ? "rotate-180" : ""

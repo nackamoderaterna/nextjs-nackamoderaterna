@@ -31,7 +31,7 @@ export function ContentHero({
               alt=""
               fill
               className="object-cover rounded"
-              sizes="96px"
+              sizes="(max-width: 1023px) 128px, 512px"
             />
           </div>
         ) : showIcon ? (
@@ -40,20 +40,19 @@ export function ContentHero({
           </div>
         ) : null}
         <div className="flex flex-col gap-2">
-        <h1 className="text-4xl font-bold text-foreground">{title}</h1>
-        {subtitle && subtitleHref ? (
-        <Link
-          href={subtitleHref}
-          className="text-base text-muted-foreground hover:text-primary transition-colors"
-        >
-          {subtitle}
-        </Link>
-      ) : subtitle ? (
-        <p className="text-base text-muted-foreground">{subtitle}</p>
-      ) : null}
+          <h1 className="text-4xl font-bold text-foreground">{title}</h1>
+          {subtitle && subtitleHref ? (
+            <Link
+              href={subtitleHref}
+              className="text-base text-muted-foreground hover:text-primary transition-colors"
+            >
+              {subtitle}
+            </Link>
+          ) : subtitle ? (
+            <p className="text-base text-muted-foreground">{subtitle}</p>
+          ) : null}
+        </div>
       </div>
-      </div>
-     
     </section>
   );
 }

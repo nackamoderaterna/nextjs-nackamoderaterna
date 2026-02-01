@@ -1,5 +1,6 @@
 import { FooterColumn } from "./FooterColumn";
 import type { FooterColumn as FooterColumnType } from "@/lib/queries/navigation";
+import { ROUTE_BASE } from "@/lib/routes";
 
 const DEFAULT_COLUMNS: { title: string; items: { title: string; href: string }[] }[] = [
   {
@@ -14,7 +15,7 @@ const DEFAULT_COLUMNS: { title: string; items: { title: string; href: string }[]
   {
     title: "Övrigt",
     items: [
-      { title: "Evenemang", href: "/event" },
+      { title: "Evenemang", href: ROUTE_BASE.EVENTS },
       { title: "Kontakt", href: "/kontakt" },
     ],
   },

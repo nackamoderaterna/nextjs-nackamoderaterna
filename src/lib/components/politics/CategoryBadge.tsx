@@ -12,7 +12,7 @@ interface CategoryBadgeProps {
 }
 
 const sizeClasses: Record<CategoryBadgeSize, string> = {
-  sm: "gap-1 px-2 py-0.5 text-[11px] [&_svg]:size-3",
+  sm: "gap-1 px-2 py-0.5 text-xs [&_svg]:size-3",
   default: "gap-2 px-3 py-1.5 text-xs [&_svg]:size-4",
 };
 
@@ -33,7 +33,7 @@ export function CategoryBadge({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full uppercase tracking-wider",
+        "inline-flex w-fit shrink-0 items-center justify-center whitespace-nowrap rounded-full capitalize tracking-wider",
         sizeClasses[size],
         variantClasses[variant]
       )}

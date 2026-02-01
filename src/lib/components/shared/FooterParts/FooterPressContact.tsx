@@ -39,10 +39,10 @@ export function FooterPressContact({
             >
               E-post
             </p>
-            <p>
-              <a
+<p className="min-w-0">
+            <a
                 href={`mailto:${pressContactInfo.email}`}
-                className="hover:text-foreground transition-colors underline"
+                className="hover:text-foreground transition-colors underline break-all"
               >
                 {pressContactInfo.email}
               </a>

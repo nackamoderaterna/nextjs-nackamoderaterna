@@ -10,6 +10,7 @@ import { Metadata } from "next";
 import { Event } from "~/sanity.types";
 import { ListingHeader } from "@/lib/components/shared/ListingHeader";
 import type { ListingPage } from "@/lib/types/pages";
+import { ROUTE_BASE } from "@/lib/routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const listing = await sanityClient.fetch<ListingPage>(
@@ -25,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title,
     description,
-    url: "/event",
+    url: ROUTE_BASE.EVENTS,
   });
 }
 

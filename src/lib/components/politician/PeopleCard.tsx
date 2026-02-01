@@ -39,7 +39,7 @@ export function PeopleCard({
         >
           <div
             className={cn(
-              "relative flex-shrink-0 rounded overflow-hidden bg-muted",
+              "relative flex-shrink-0 rounded overflow-hidden bg-muted transition-transform duration-300 group-hover:scale-105",
               imageSize
             )}
           >
@@ -73,7 +73,7 @@ export function PeopleCard({
     >
       <div className="group bg-card border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
         {/* Image */}
-        <div className={`relative h-64 w-full overflow-hidden bg-muted`}>
+        <div className="relative h-64 w-full overflow-hidden bg-muted transition-transform duration-300 group-hover:scale-105">
           <SanityImage
             fill
             image={image}

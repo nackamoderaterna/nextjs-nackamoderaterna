@@ -122,7 +122,7 @@ export default async function PoliticianPage({
         <ContentWithSidebar
           mainContent={
             <div className="space-y-8">
-              {tocEntries.length > 0 && (
+              {tocEntries.length > 1 && (
                 <nav aria-label="Innehåll" className="text-sm">
                   <h2 className="text-lg font-semibold text-foreground mb-2">
                     Innehåll

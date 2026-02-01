@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/lib/components/ui/badge";
+import { ROUTE_BASE } from "@/lib/routes";
 
 interface EventCardProps {
   day: string;
@@ -28,7 +29,7 @@ export function EventCard({
 }: EventCardProps) {
   return (
     <Link
-      href={`event/${href}`}
+      href={`${ROUTE_BASE.EVENTS}/${href}`}
       className={cn(
         "block bg-brand-primary/5 rounded-lg p-6 hover:bg-brand-primary/10 transition-colors group relative",
         className,
@@ -37,9 +38,9 @@ export function EventCard({
       {isPublic && (
         <Badge
           className={cn(
-            "absolute top-4 right-4",
+            "absolute top-4 right-4 bg-muted-background",
             muted
-              ? "bg-muted text-muted-foreground hover:bg-muted/90"
+              ? "text-muted-foreground bg-muted-background hover:bg-muted/90"
               : "bg-brand-primary hover:bg-blue-700 text-white"
           )}
         >

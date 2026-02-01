@@ -168,7 +168,7 @@ export type MenuItem = {
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "politicalIssue";
   };
-  staticRoute?: "/" | "/politiker" | "/nyheter" | "/event" | "/politik" | "/kontakt";
+  staticRoute?: "/" | "/politiker" | "/nyheter" | "/evenemang" | "/politik" | "/kontakt";
   url?: string;
   children?: Array<{
     _key: string;
@@ -1341,7 +1341,7 @@ export type NavigationQueryResult = {
   items: Array<{
     title: string | null;
     linkType: "external" | "internal" | "static" | null;
-    staticRoute: "/" | "/event" | "/kontakt" | "/nyheter" | "/politik" | "/politiker" | null;
+    staticRoute: "/" | "/evenemang" | "/kontakt" | "/nyheter" | "/politik" | "/politiker" | null;
     internalLink: {
       _id: string;
       _type: "event";
@@ -1984,7 +1984,7 @@ export type NavigationQueryResult = {
         socialLinks?: SocialLinks;
         title: null;
       } | null;
-      staticRoute: "/" | "/event" | "/kontakt" | "/nyheter" | "/politik" | "/politiker" | null;
+      staticRoute: "/" | "/evenemang" | "/kontakt" | "/nyheter" | "/politik" | "/politiker" | null;
       url?: string;
       children?: Array<{
         _key: string;
@@ -2006,7 +2006,7 @@ export type FooterQueryResult = {
     items: Array<{
       title: string | null;
       linkType: "external" | "internal" | "static" | null;
-      staticRoute: "/" | "/event" | "/kontakt" | "/nyheter" | "/politik" | "/politiker" | null;
+      staticRoute: "/" | "/evenemang" | "/kontakt" | "/nyheter" | "/politik" | "/politiker" | null;
       internalLink: {
         _id: string;
         _type: "event";

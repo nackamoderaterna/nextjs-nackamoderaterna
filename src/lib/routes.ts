@@ -7,7 +7,7 @@ export const ROUTE_BASE = {
   POLITICS_AREA: "/omrade",
   POLITICS_ISSUES: "/politik/sakfragor",
   NEWS: "/nyheter",
-  EVENTS: "/event",
+  EVENTS: "/evenemang",
   API_CONTACT: "/api/contact",
   API_SEARCH: "/api/search",
 } as const;

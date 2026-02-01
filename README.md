@@ -122,11 +122,11 @@ The handler revalidates paths based on `_type`, `slug`, and `key`:
 | `page` | `/` when slug is `hem`, else `/[slug]` |
 | `news` | `/nyheter`, `/nyheter/[slug]` |
 | `politician` | `/politiker`, `/politiker/[slug]` |
-| `event` | `/event`, `/event/[slug]` |
+| `event` | `/evenemang`, `/evenemang/[slug]` |
 | `politicalArea` | `/politik`, `/politik/[slug]` |
 | `geographicalArea` | `/omrade`, `/omrade/[slug]` |
 | `politicalIssue` | `/politik` |
-| `listingPage` | `/politiker`, `/politik`, `/omrade`, `/nyheter`, `/event`, or `/kontakt` (by `key`) |
+| `listingPage` | `/politiker`, `/politik`, `/omrade`, `/nyheter`, `/evenemang`, or `/kontakt` (by `key`) |
 
 ## Learn More
 

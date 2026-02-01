@@ -34,7 +34,7 @@ export function NewsSidebar({ news, currentSlug }: NewsSidebarProps) {
     <div className="grid gap-4">
       {news.mainImage && (
           <div
-            className={`relative w-full h-full overflow-hidden rounded-lg bg-muted ${aspectClass}`}
+            className={`relative w-full h-full overflow-hidden rounded-lg bg-muted ${aspectClass} hidden lg:block`}
           >
             {useAuto ? (
               <SanityImage

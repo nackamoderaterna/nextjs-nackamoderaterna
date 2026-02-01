@@ -47,7 +47,7 @@ export const staticNavItems: MenuItemWithReference[] = [
   },
   {
     _type: "menuItem",
-    title: "Event",
+    title: "Evenemang",
     linkType: "static",
     staticRoute: ROUTE_BASE.EVENTS,
   },

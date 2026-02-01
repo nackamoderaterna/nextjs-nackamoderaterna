@@ -16,6 +16,7 @@ import { ROUTE_BASE } from "@/lib/routes";
 import Link from "next/link";
 import { NewsCard } from "@/lib/components/news/NewsCard";
 import { getLucideIcon } from "@/lib/utils/iconUtils";
+import { SanityImage } from "@/lib/components/shared/SanityImage";
 
 // Generate static params for all news articles at build time
 export async function generateStaticParams() {
@@ -115,6 +116,17 @@ export default async function NewsArticlePage({
       >
         {formatDate(news.effectiveDate)}
       </time>
+
+      {news.mainImage && (
+        <div className="relative w-full max-w-sm aspect-[4/5] rounded-lg overflow-hidden bg-muted my-6 lg:hidden">
+          <SanityImage
+            image={news.mainImage}
+            fill
+            className="object-cover"
+            alt={(news.mainImage as { alt?: string }).alt || news.title || ""}
+          />
+        </div>
+      )}
 
       <h2 className="text-xl font-medium text-foreground mt-8">
         {news.excerpt}

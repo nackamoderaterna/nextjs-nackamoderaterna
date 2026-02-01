@@ -60,20 +60,20 @@ export function KeyIssueCard({
         )}
       </div>
       {(politicalAreaItems.length > 0 || geographicalAreaItems.length > 0) && (
-        <div className="mt-1 flex flex-wrap gap-1.5">
+        <div className="mt-1 flex flex-wrap items-center gap-2">
           {[...politicalAreaItems]
             .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
             .map((a) => (
-              <CategoryBadge
-                key={a._id || a.name || ""}
-                name={a.name ?? ""}
-                icon={a.icon}
-              />
+              <span key={a._id || a.name || ""} className="flex-none w-fit">
+                <CategoryBadge name={a.name ?? ""} icon={a.icon} />
+              </span>
             ))}
           {geographicalAreaItems
             .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
             .map((a) => (
-              <CategoryBadge key={a._id || a.name || ""} name={a.name ?? ""} />
+              <span key={a._id || a.name || ""} className="flex-none w-fit">
+                <CategoryBadge name={a.name ?? ""} />
+              </span>
             ))}
         </div>
       )}

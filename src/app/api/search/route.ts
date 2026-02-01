@@ -89,21 +89,21 @@ export async function GET(request: NextRequest) {
       });
     });
 
-    // Add political areas
+    // Add political areas (categories under /politik/kategori)
     data.politicalAreas.forEach((item) => {
       allItems.push({
         ...item,
         category: "Politiskt område",
-        url: `${ROUTE_BASE.POLITICS}/${item.slug?.current || ""}`,
+        url: `${ROUTE_BASE.POLITICS_CATEGORY}/${item.slug?.current || ""}`,
       });
     });
 
-    // Add geographical areas
+    // Add geographical areas (under /omrade)
     data.geographicalAreas.forEach((item) => {
       allItems.push({
         ...item,
         category: "Geografiskt område",
-        url: `${ROUTE_BASE.POLITICS}/${item.slug?.current || ""}`,
+        url: `${ROUTE_BASE.AREAS}/${item.slug?.current || ""}`,
       });
     });
 

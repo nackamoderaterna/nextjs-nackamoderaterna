@@ -136,7 +136,7 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
     <div className="grid gap-4">
      
       {data.politicalIssues.length > 0 && (
-        <Sidebar heading="Våra politiska mål">
+        <Sidebar heading="Politiska mål">
           <PolicyList policies={data.politicalIssues} />
         </Sidebar>
       )}
@@ -156,13 +156,16 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
        {globalSettings?.handlingsprogram?.url && (
         <Button
           asChild
-          variant="default"
+          variant="outline"
           className="w-full"
           size="lg"
         >
+          <div className="flex items-center gap-2">
           <Link href={globalSettings.handlingsprogram.url} target="_blank" rel="noopener noreferrer">
             Läs vårt handlingsprogram
           </Link>
+          <ExternalLink className="h-4 w-4" />
+          </div>
         </Button>
        
       )}

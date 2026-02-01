@@ -1,6 +1,7 @@
 import { revalidatePath } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 import { parseBody } from "next-sanity/webhook";
+import { ROUTE_BASE } from "@/lib/routes";
 
 type WebhookPayload = {
   _type: string;
@@ -53,8 +54,8 @@ function pathsForPayload(body: WebhookPayload): string[] {
       break;
     }
     case "event": {
-      paths.push("/event");
-      if (slug) paths.push(`/event/${slug}`);
+      paths.push(ROUTE_BASE.EVENTS);
+      if (slug) paths.push(`${ROUTE_BASE.EVENTS}/${slug}`);
       break;
     }
     case "politicalArea": {

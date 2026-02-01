@@ -40,8 +40,10 @@ export function ContentWithSidebar({
           )}
         </>
       ) : (
-        /* No main content: sidebar aligned to the left */
-        <aside className="w-full max-w-sm">{sidebarContent}</aside>
+        /* No main content: sidebar spans full width, grid 2 cols on md / 4 on lg, left aligned */
+        <aside className="w-full [&>div]:grid [&>div]:grid-cols-2 [&>div]:md:grid-cols-3 [&>div]:gap-8 [&>div]:w-full [&>div]:justify-items-start">
+          {sidebarContent}
+        </aside>
       )}
     </div>
   );

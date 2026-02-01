@@ -61,7 +61,7 @@ export default defineType({
           {title: 'Våra sakfrågor', value: '/politik/sakfragor'},
           {title: 'Politiker', value: '/politiker'},
           {title: 'Nyheter', value: '/nyheter'},
-          {title: 'Evenemang', value: '/event'},
+          {title: 'Evenemang', value: '/evenemang'},
           {title: 'Kontakt', value: '/kontakt'},
         ],
       },

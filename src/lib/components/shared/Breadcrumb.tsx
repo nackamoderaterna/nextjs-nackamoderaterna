@@ -11,7 +11,7 @@ const SEGMENT_LABELS: Record<string, string> = {
   sakfragor: "Sakfrågor",
   politiker: "Politiker",
   nyheter: "Nyheter",
-  event: "Event",
+  evenemang: "Evenemang",
   kontakt: "Kontakt",
 };
 
