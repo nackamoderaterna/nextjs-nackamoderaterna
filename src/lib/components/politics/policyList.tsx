@@ -47,12 +47,16 @@ export function PolicyList({ policies }: PolicyList) {
   const fulfilledPolicies = policies.filter((policy) => policy.fulfilled);
   const unfulfilledPolicies = policies.filter((policy) => !policy.fulfilled);
   return (
-    <ul className="space-y-4">
+    <ul className="">
       {fulfilledPolicies.map((policy, index) => (
         <PolicyItem key={policy._id ?? index} policy={policy} fulfilled />
       ))}
       {unfulfilledPolicies.map((policy, index) => (
-        <PolicyItem key={policy._id ?? index} policy={policy} fulfilled={false} />
+        <PolicyItem
+          key={policy._id ?? index}
+          policy={policy}
+          fulfilled={false}
+        />
       ))}
     </ul>
   );

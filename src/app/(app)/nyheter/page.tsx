@@ -74,7 +74,7 @@ const VALID_VARIANTS = ["default", "debate", "pressrelease"] as const;
 export default async function NewsPage({ searchParams }: NewsPageProps) {
   const params = await searchParams;
   const currentPage = Math.max(1, parseInt(params.page || "1", 10));
-  const politicalAreaId = params.area || undefined;
+  const areaSlug = params.area || undefined;
   const typeParam = params.type;
   const variantFilter =
     typeParam && VALID_VARIANTS.includes(typeParam as (typeof VALID_VARIANTS)[number])
@@ -89,7 +89,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
       {
         start,
         end,
-        politicalArea: politicalAreaId || null,
+        areaSlug: areaSlug || null,
         variant: variantFilter,
       },
       {
@@ -167,7 +167,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
               totalPages={totalPages}
               basePath="/nyheter"
               preserveParams={{
-                ...(politicalAreaId && { area: politicalAreaId }),
+                ...(areaSlug && { area: areaSlug }),
                 ...(typeParam && { type: typeParam }),
               }}
             />

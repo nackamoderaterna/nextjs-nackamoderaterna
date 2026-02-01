@@ -120,7 +120,7 @@ export default async function EventsPage({
 
     return (
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <section className="py-12 md:py-16">
+        <section className="pb-12 md:py-16">
           <div className="max-w-7xl">
             <ListingHeader
               title={listing?.title}

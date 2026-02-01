@@ -62,14 +62,16 @@ export function NewsCard({
 
           <div className="md:col-span-8 space-y-3">
             <div className="space-y-2">
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight text-balance group-hover:text-primary transition-colors min-w-0">
-                  {title}
-                </h2>
-                {variant && variant !== "default" && (
-                  <NewsVariantBadge variant={variant} className="shrink-0" />
-                )}
-              </div>
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight text-balance group-hover:text-primary transition-colors min-w-0">
+                {title}
+              </h2>
+              {variant && variant !== "default" && (
+                <NewsVariantBadge
+                  variant={variant}
+                  className="shrink-0"
+                  linkToFilter={false}
+                />
+              )}
               {politicalAreas && politicalAreas.length > 0 && (
                 <div className="text-xs uppercase text-muted-foreground mt-4 flex flex-wrap gap-4">
                   {[...politicalAreas]

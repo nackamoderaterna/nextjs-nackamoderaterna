@@ -150,7 +150,7 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
 
           {/* Local Politicians Section */}
           {sortedPoliticians.length > 0 && (
-            <Section title="Dina lokala politiker">
+            <Section title="Lokala politiker">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {sortedPoliticians.map((politician) => (
                   <PeopleCard

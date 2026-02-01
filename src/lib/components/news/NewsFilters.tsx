@@ -81,11 +81,13 @@ export function NewsFilters({ politicalAreas }: NewsFiltersProps) {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Alla områden</SelectItem>
-            {politicalAreas.map((area) => (
-              <SelectItem key={area._id} value={area._id}>
-                {area.name || area.title}
-              </SelectItem>
-            ))}
+            {politicalAreas
+              .filter((area) => area.slug?.current)
+              .map((area) => (
+                <SelectItem key={area._id} value={area.slug!.current}>
+                  {area.name || area.title}
+                </SelectItem>
+              ))}
           </SelectContent>
         </Select>
       </div>

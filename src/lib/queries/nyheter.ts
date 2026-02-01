@@ -106,7 +106,7 @@ export const allNewsSlugsQuery = groq`*[_type == "news" && defined(slug.current)
 export const newsListPaginatedQuery = groq`{
   "items": *[
     _type == "news"
-    && ($politicalArea == null || references($politicalArea))
+    && ($areaSlug == null || $areaSlug == "" || $areaSlug in politicalAreas[]->slug.current)
     && ($variant == null || variant == $variant)
   ] | order(
     coalesce(dateOverride, _createdAt) desc
@@ -136,7 +136,7 @@ export const newsListPaginatedQuery = groq`{
   },
   "total": count(*[
     _type == "news"
-    && ($politicalArea == null || references($politicalArea))
+    && ($areaSlug == null || $areaSlug == "" || $areaSlug in politicalAreas[]->slug.current)
     && ($variant == null || variant == $variant)
   ])
 }`;

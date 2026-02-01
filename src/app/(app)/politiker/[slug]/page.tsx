@@ -110,7 +110,7 @@ export default async function PoliticianPage({
         title={politician.name ?? ""}
         subtitle={
           politician.livingArea?.name
-            ? `Bor i ${politician.livingArea.name}`
+            ? `${politician.livingArea.name}`
             : undefined
         }
         subtitleHref={
