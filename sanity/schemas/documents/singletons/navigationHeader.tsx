@@ -18,11 +18,22 @@ export default defineType({
     }),
     defineField({
       name: "items",
-      title: "Menu Items",
+      title: "Menu Items (deprecated)",
       type: "array",
       group: "menu",
       of: [{ type: "menuItem" }],
-      validation: (Rule) => Rule.required().min(1),
+      description:
+        "Deprecated. Core navigation comes from the app. Use Extra menu items below to add custom links.",
+      hidden: true,
+    }),
+    defineField({
+      name: "customMenuItems",
+      title: "Extra menypunkter",
+      type: "array",
+      group: "menu",
+      of: [{ type: "menuItem" }],
+      description:
+        "Lägg till extra länkar som visas efter de vanliga menyobjekten (Hem, Politik, Politiker, etc.).",
     }),
   ],
 });

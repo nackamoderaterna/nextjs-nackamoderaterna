@@ -55,10 +55,13 @@ export default defineType({
       options: {
         list: [
           {title: 'Hem', value: '/'},
+          {title: 'Politik', value: '/politik'},
+          {title: 'Politiska kategorier', value: '/politik/kategori'},
+          {title: 'Geografiska områden', value: '/politik/omrade'},
+          {title: 'Våra sakfrågor', value: '/politik/sakfragor'},
           {title: 'Politiker', value: '/politiker'},
           {title: 'Nyheter', value: '/nyheter'},
           {title: 'Evenemang', value: '/event'},
-          {title: 'Politik', value: '/politik'},
           {title: 'Kontakt', value: '/kontakt'},
         ],
       },

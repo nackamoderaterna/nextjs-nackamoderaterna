@@ -19,6 +19,9 @@ export const listingPage = defineType({
         list: [
           { title: "Politiker", value: "politicians" },
           { title: "Vår politik", value: "politics" },
+          { title: "Politiska kategorier", value: "politikKategori" },
+          { title: "Geografiska områden", value: "politikOmrade" },
+          { title: "Våra sakfrågor", value: "politikSakfragor" },
           { title: "Nyheter", value: "news" },
           { title: "Evenemang", value: "events" },
           { title: "Kontakt", value: "contact" },

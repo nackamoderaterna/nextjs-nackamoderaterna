@@ -11,7 +11,7 @@ import { NewsVariantBadge } from "@/lib/components/news/NewsVariantBadge";
 import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
 import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
-import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
+import { generateMetadata as generateSEOMetadata, getDefaultOgImage } from "@/lib/utils/seo";
 import { ROUTE_BASE } from "@/lib/routes";
 import Link from "next/link";
 import { NewsCard } from "@/lib/components/news/NewsCard";
@@ -34,7 +34,10 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const news = await sanityClient.fetch<NewsExpanded>(newsQuery, { slug });
+  const [news, fallbackImage] = await Promise.all([
+    sanityClient.fetch<NewsExpanded>(newsQuery, { slug }),
+    getDefaultOgImage(),
+  ]);
 
   if (!news) {
     return generateSEOMetadata({
@@ -45,7 +48,7 @@ export async function generateMetadata({
 
   const imageUrl = news.mainImage
     ? buildImageUrl(news.mainImage, { width: 1200, height: 630 })
-    : undefined;
+    : fallbackImage;
 
   return generateSEOMetadata({
     title: `${news.title} | Nackamoderaterna`,

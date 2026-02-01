@@ -2,16 +2,29 @@ import Link from "next/link";
 import { Navigation } from "../navigation/Navigation";
 import { SearchBar } from "../search/SearchBar";
 import { sanityClient } from "@/lib/sanity/client";
-import { navigationQuery, NavigationData } from "@/lib/queries/navigation";
+import {
+  navigationQuery,
+  NavigationData,
+  navigationGeographicalAreasQuery,
+  navigationPoliticalAreasQuery,
+  NavigationAreaItem,
+} from "@/lib/queries/navigation";
+import { staticNavItems } from "@/lib/navigation/staticNav";
+import { buildNavigation } from "@/lib/navigation/buildNavigation";
 import { globalSettingsQuery } from "@/lib/queries/globalSettings";
 import { SanityImage } from "./SanityImage";
 import { ROUTE_BASE } from "@/lib/routes";
 
 export default async function Header() {
-  const [navigation, globalSettings] = await Promise.all([
-    sanityClient.fetch<NavigationData>(navigationQuery),
-    sanityClient.fetch<{ companyName?: string; logo?: any }>(globalSettingsQuery),
-  ]);
+  const [navigation, globalSettings, geographicalAreas, politicalAreas] =
+    await Promise.all([
+      sanityClient.fetch<NavigationData>(navigationQuery),
+      sanityClient.fetch<{ companyName?: string; logo?: any }>(
+        globalSettingsQuery
+      ),
+      sanityClient.fetch<NavigationAreaItem[]>(navigationGeographicalAreasQuery),
+      sanityClient.fetch<NavigationAreaItem[]>(navigationPoliticalAreasQuery),
+    ]);
 
   const companyName = globalSettings?.companyName || "Nackamoderaterna";
   const logo = globalSettings?.logo;
@@ -44,7 +57,16 @@ export default async function Header() {
           <SearchBar />
         </div>
         <div className="flex-shrink-0">
-          <Navigation items={navigation?.items || []} />
+          <Navigation
+            items={[
+              ...buildNavigation(
+                staticNavItems,
+                geographicalAreas ?? [],
+                politicalAreas ?? []
+              ),
+              ...(navigation?.customMenuItems ?? []),
+            ]}
+          />
         </div>
       </div>
     </header>

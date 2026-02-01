@@ -95,7 +95,7 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
   const globalSettings = await sanityClient.fetch(globalSettingsQuery);
 
 
-  const newsSection = data.latestNews.length > 0 && (
+  const newsSection = data.latestNews?.length > 0 && (
     <Section title={`Aktuellt inom ${data.name}`} actions={
       <Link
           href={`${ROUTE_BASE.NEWS}?area=${data._id}`}

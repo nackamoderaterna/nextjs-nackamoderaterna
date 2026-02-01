@@ -10,7 +10,7 @@ import {
 } from "@/lib/queries/politik";
 import { sanityClient } from "@/lib/sanity/client";
 import { buildImageUrl } from "@/lib/sanity/image";
-import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
+import { generateMetadata as generateSEOMetadata, getDefaultOgImage } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { PortableText } from "next-sanity";
 import {
@@ -23,6 +23,7 @@ import { portableTextComponents } from "@/lib/components/shared/PortableTextComp
 import { ROUTE_BASE } from "@/lib/routes";
 import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
+import { AreaList } from "@/lib/components/politics/AreaList";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import { ReactNode } from "react";
@@ -72,10 +73,10 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const data = await sanityClient.fetch<PoliticalIssuePage>(
-    politicalIssuePageQuery,
-    { slug }
-  );
+  const [data, fallbackImage] = await Promise.all([
+    sanityClient.fetch<PoliticalIssuePage>(politicalIssuePageQuery, { slug }),
+    getDefaultOgImage(),
+  ]);
 
   if (!data) {
     return generateSEOMetadata({
@@ -91,7 +92,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           width: 1200,
           height: 630,
         })
-      : undefined;
+      : fallbackImage;
 
   const contentBlock = data.content?.[0] as { children?: Array<{ text?: string }> } | undefined;
   const description = contentBlock?.children?.[0]?.text
@@ -101,7 +102,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return generateSEOMetadata({
     title: `${data.question} | Nackamoderaterna`,
     description,
-    image: imageUrl,
+    image: imageUrl ?? undefined,
     url: `${ROUTE_BASE.POLITICS_ISSUES}/${slug}`,
   });
 }
@@ -122,8 +123,6 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
     notFound();
   }
 
-  const firstPoliticalArea = data.politicalAreas?.[0];
-  const heroIcon = firstPoliticalArea?.icon;
 
   const main = (
     <div className="space-y-8 prose md:prose-lg">
@@ -141,6 +140,32 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
   );
 
   const sidebarItems: ReactNode[] = [];
+
+  if (data.politicalAreas && data.politicalAreas.length > 0) {
+    sidebarItems.push(
+      <Sidebar key="category" heading="Tillhör kategori">
+        <AreaList
+          areas={data.politicalAreas}
+          getHref={(slug) => `${ROUTE_BASE.POLITICS_CATEGORY}/${slug}`}
+        />
+      </Sidebar>
+    );
+  }
+
+  if (data.geographicalAreas && data.geographicalAreas.length > 0) {
+    sidebarItems.push(
+      <Sidebar key="geographical" heading="Relaterade områden">
+        <AreaList
+          areas={data.geographicalAreas.map((a) => ({
+            _id: a._id,
+            name: a.name,
+            slug: a.slug,
+          }))}
+          getHref={(slug) => `${ROUTE_BASE.POLITICS_AREA}/${slug}`}
+        />
+      </Sidebar>
+    );
+  }
 
   if (data.fulfilled && data.fulfilledAt) {
     sidebarItems.push(
@@ -163,10 +188,7 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
     <div className="min-h-screen bg-background flex flex-col">
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <PoliticalAreaHero
-            icon={heroIcon}
-            title={data.question || ""}
-          />
+          <PoliticalAreaHero title={data.question || ""} />
 
           <ContentWithSidebar
             mainContent={main}

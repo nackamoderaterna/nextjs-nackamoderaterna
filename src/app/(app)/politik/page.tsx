@@ -1,11 +1,6 @@
 import { PoliticalAreaCard } from "@/lib/components/politics/politicalAreaCard";
-import { GeographicalAreaCard } from "@/lib/components/politics/geographicalAreaCard";
 import { KeyIssueCard } from "@/lib/components/politics/keyIssueCard";
-import {
-  GeographicalArea,
-  PoliticalArea,
-  PoliticalIssue,
-} from "~/sanity.types";
+import { PoliticalArea, PoliticalIssue } from "~/sanity.types";
 import { politikPageQuery } from "@/lib/queries/politik";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
@@ -45,21 +40,16 @@ export type PoliticalIssueWithAreas = Omit<
   "politicalAreas" | "geographicalAreas"
 > & {
   fulfilled?: boolean;
+  slug?: { current?: string } | null;
   politicalAreas: Array<{
     _id: string;
     name: string;
-    slug: {
-      current: string;
-    };
+    slug: { current: string };
   }>;
-
   geographicalAreas?: Array<{
     _id: string;
     name: string;
-    image: any;
-    slug: {
-      current: string;
-    };
+    slug: { current: string };
   }>;
 };
 
@@ -73,7 +63,6 @@ export type PoliticalIssuesPageData = {
       };
     }
   >;
-  geographicalAreas: GeographicalArea[];
 };
 
 export default async function PoliticsPage() {
@@ -108,11 +97,11 @@ export default async function PoliticsPage() {
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {data.featuredPoliticalIssues.map((issue) => (
                 <KeyIssueCard
-                  title={issue.question || ""}
                   key={issue._id}
-                  relatedArea={issue.politicalAreas[0].name}
-                  slug={issue.politicalAreas[0].slug.current}
-                  issueSlug={(issue as { slug?: { current?: string } }).slug?.current}
+                  title={issue.question || ""}
+                  politicalAreas={issue.politicalAreas}
+                  geographicalAreas={issue.geographicalAreas ?? []}
+                  issueSlug={issue.slug?.current}
                 />
               ))}
             </div>
@@ -135,20 +124,6 @@ export default async function PoliticsPage() {
           </div>
         </Section>
 
-        {/* Geographical Areas Section */}
-        <Section title="Områden" titleSize="large">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {data.geographicalAreas.map((area) => (
-              <GeographicalAreaCard
-                key={area._id}
-                title={area.name || ""}
-                image={area.image}
-                slug={area.slug?.current || ""}
-              />
-            ))}
-          </div>
-        </Section>
-
         {/* Fulfilled Promises Section */}
         {data.fulfilledPoliticalIssues.length > 0 && (
           <Section title="Uppfyllda vallöften" titleSize="large">
@@ -157,9 +132,9 @@ export default async function PoliticsPage() {
                 <KeyIssueCard
                   key={issue._id}
                   title={issue.question || ""}
-                  relatedArea={issue.politicalAreas?.[0]?.name || ""}
-                  slug={issue.politicalAreas?.[0]?.slug?.current || ""}
-                  issueSlug={(issue as { slug?: { current?: string } }).slug?.current}
+                  politicalAreas={issue.politicalAreas}
+                  geographicalAreas={issue.geographicalAreas ?? []}
+                  issueSlug={issue.slug?.current}
                   fulfilled
                 />
               ))}

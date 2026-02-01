@@ -13,7 +13,7 @@ import {
   generateCalendarLink,
   calendarFilename,
 } from "@/lib/utils/dateUtils";
-import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
+import { generateMetadata as generateSEOMetadata, getDefaultOgImage } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
 import { Button } from "@/lib/components/ui/button";
@@ -40,9 +40,10 @@ export async function generateMetadata({
   params,
 }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const event: Event | null = await sanityClient.fetch(singleEventQuery, {
-    slug,
-  });
+  const [event, fallbackImage] = await Promise.all([
+    sanityClient.fetch<Event | null>(singleEventQuery, { slug }),
+    getDefaultOgImage(),
+  ]);
 
   if (!event) {
     return generateSEOMetadata({
@@ -53,7 +54,7 @@ export async function generateMetadata({
 
   const imageUrl = event.image
     ? buildImageUrl(event.image, { width: 1200, height: 630 })
-    : undefined;
+    : fallbackImage;
 
   return generateSEOMetadata({
     title: `${event.title} | Nackamoderaterna`,

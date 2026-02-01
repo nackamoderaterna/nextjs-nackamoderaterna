@@ -2,8 +2,8 @@ import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 interface SectionProps {
-  /** Section heading (e.g. "Aktuellt inom Nacka") */
-  title: ReactNode;
+  /** Optional section heading (e.g. "Aktuellt inom Nacka") */
+  title?: ReactNode;
   /** Section body content */
   children: ReactNode;
   /** Optional actions shown next to the title (e.g. "Alla nyheter" link) */
@@ -36,13 +36,11 @@ export function Section({
       className={cn("mb-16", className)}
       aria-label={ariaLabel}
     >
-      {actions ? (
+      {(title || actions) && (
         <div className="flex items-center justify-between mb-6">
-          <h2 className={cn(titleClasses, "mb-0")}>{title}</h2>
+          {title && <h2 className={cn(titleClasses, actions ? "mb-0" : "")}>{title}</h2>}
           {actions}
         </div>
-      ) : (
-        <h2 className={titleClasses}>{title}</h2>
       )}
       {children}
     </section>

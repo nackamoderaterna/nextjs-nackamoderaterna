@@ -32,12 +32,13 @@ export function MobileNav({ items }: { items: MenuItemWithReference[] }) {
           <span className="sr-only">Toggle menu</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-full sm:w-md">
+      <SheetContent side="right" className="flex h-full w-full flex-col overflow-hidden sm:w-md">
         <SheetHeader>Meny</SheetHeader>
-      <div className="px-4">
-      <SearchBar />
-      </div>
-        <nav className="flex flex-col gap-4 mt-8 px-4">
+        <div className="px-4">
+          <SearchBar />
+        </div>
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          <nav className="flex flex-col gap-4 px-4 pb-8 pt-4">
           {items.map((item) => {
             if (item.children) {
               return (
@@ -47,16 +48,44 @@ export function MobileNav({ items }: { items: MenuItemWithReference[] }) {
                     <ChevronDown className="w-5 h-5" />
                   </CollapsibleTrigger>
                   <CollapsibleContent className="pl-4 pt-2 flex flex-col gap-2">
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.title}
-                        href={getMenuItemHref(child)}
-                        onClick={() => setOpen(false)}
-                        className="py-2 text-muted-foreground hover:text-primary transition-colors"
-                      >
-                        {child.title}
-                      </Link>
-                    ))}
+                    {item.children.map((child) =>
+                      child.children && child.children.length > 0 ? (
+                        <Collapsible key={child.title}>
+                          <CollapsibleTrigger className="flex items-center justify-between w-full py-2 text-muted-foreground hover:text-primary transition-colors">
+                            {child.title}
+                            <ChevronDown className="w-5 h-5 shrink-0" />
+                          </CollapsibleTrigger>
+                          <CollapsibleContent className="pl-4 flex flex-col gap-1">
+                            <Link
+                              href={getMenuItemHref(child)}
+                              onClick={() => setOpen(false)}
+                              className="py-1.5 text-sm text-muted-foreground hover:text-primary"
+                            >
+                              Alla kategorier
+                            </Link>
+                            {child.children.map((grandchild) => (
+                              <Link
+                                key={grandchild.title}
+                                href={getMenuItemHref(grandchild)}
+                                onClick={() => setOpen(false)}
+                                className="py-1.5 text-sm text-muted-foreground hover:text-primary pl-2"
+                              >
+                                {grandchild.title}
+                              </Link>
+                            ))}
+                          </CollapsibleContent>
+                        </Collapsible>
+                      ) : (
+                        <Link
+                          key={child.title}
+                          href={getMenuItemHref(child)}
+                          onClick={() => setOpen(false)}
+                          className="py-2 text-muted-foreground hover:text-primary transition-colors"
+                        >
+                          {child.title}
+                        </Link>
+                      )
+                    )}
                   </CollapsibleContent>
                 </Collapsible>
               );
@@ -72,7 +101,8 @@ export function MobileNav({ items }: { items: MenuItemWithReference[] }) {
               </Link>
             );
           })}
-        </nav>
+          </nav>
+        </div>
       </SheetContent>
     </Sheet>
   );

@@ -13,7 +13,7 @@ import { mapPoliticianRoles } from "@/lib/utils/mapPoliticianRoles";
 import { ArrowRight } from "lucide-react";
 import { NewsCard } from "@/lib/components/news/NewsCard";
 import { politicianBySlugQuery, allPoliticianSlugsQuery } from "@/lib/queries/politicians";
-import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
+import { generateMetadata as generateSEOMetadata, getDefaultOgImage } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
 import { ROUTE_BASE } from "@/lib/routes";
@@ -36,10 +36,10 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const politicianRaw = await sanityClient.fetch<PoliticianWithNamnd>(
-    politicianBySlugQuery,
-    { slug }
-  );
+  const [politicianRaw, fallbackImage] = await Promise.all([
+    sanityClient.fetch<PoliticianWithNamnd>(politicianBySlugQuery, { slug }),
+    getDefaultOgImage(),
+  ]);
 
   if (!politicianRaw) {
     return generateSEOMetadata({
@@ -52,7 +52,7 @@ export async function generateMetadata({
 
   const imageUrl = politician.image
     ? buildImageUrl(politician.image, { width: 1200, height: 630 })
-    : undefined;
+    : fallbackImage;
 
   return generateSEOMetadata({
     title: `${politician.name} | Nackamoderaterna`,

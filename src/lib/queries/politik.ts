@@ -50,7 +50,7 @@ export const politikPageQuery = groq`
     }
   },
 
-  "politicalAreas": *[_type == "politicalArea"]{
+  "politicalAreas": *[_type == "politicalArea"] | order(name asc) {
     _id,
     name,
     slug,
@@ -70,6 +70,28 @@ export const politikPageQuery = groq`
   }
 }
 `;
+
+// Query to fetch all political issues (for sakfragor listing page)
+export const allPoliticalIssuesQuery = groq`*[_type == "politicalIssue"] | order(featured desc, _updatedAt desc) {
+  _id,
+  question,
+  slug,
+  featured,
+  fulfilled,
+
+  "politicalAreas": politicalAreas[]->{
+    _id,
+    name,
+    slug,
+    icon{ name }
+  },
+
+  "geographicalAreas": geographicalAreas[]->{
+    _id,
+    name,
+    slug
+  }
+}`;
 
 // Query to get all political area slugs for static generation
 export const allPoliticalAreaSlugsQuery = groq`*[_type == "politicalArea" && defined(slug.current)] {

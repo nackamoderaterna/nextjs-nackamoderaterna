@@ -15,7 +15,7 @@ export function ListingHeader({
   const displayIntro = intro || fallbackIntro;
 
   return (
-    <div className="mb-12">
+    <div className="mb-12 border-b border-border pb-6  lg:pb-12">
       <h1 className="mb-4 text-4xl font-bold text-foreground">
         {displayTitle}
       </h1>
