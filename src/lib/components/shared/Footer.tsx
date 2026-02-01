@@ -5,6 +5,7 @@ import { SocialLinks, type SocialLinksData } from "./SocialLinks";
 import {
   FooterNav,
   FooterContactInfo,
+  FooterPressContact,
   FooterContent,
   FooterLegal,
 } from "./FooterParts";
@@ -50,6 +51,15 @@ export async function Footer() {
               contactInfo={settings?.contactInfo}
             />
           )}
+
+          {settings?.pressContactInfo &&
+            (settings.pressContactInfo.contactPerson ||
+              settings.pressContactInfo.email ||
+              settings.pressContactInfo.phone) && (
+              <FooterPressContact
+                pressContactInfo={settings.pressContactInfo}
+              />
+            )}
         </div>
 
         {footer.footerText && (

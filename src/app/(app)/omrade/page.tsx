@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title,
     description,
-    url: ROUTE_BASE.POLITICS_AREA,
+    url: ROUTE_BASE.AREAS,
   });
 }
 
@@ -37,7 +37,7 @@ type PoliticsPageData = {
   geographicalAreas: GeographicalArea[];
 };
 
-export default async function PolitikOmradePage() {
+export default async function OmradePage() {
   const [data, listing] = await Promise.all([
     sanityClient.fetch<PoliticsPageData>(politikPageQuery, {}, {
       next: { revalidate: 300 },

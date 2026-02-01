@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { NewsCard } from "@/lib/components/news/NewsCard";
 import { PeopleCard } from "@/lib/components/politician/PeopleCard";
-import { PoliticalAreaHero } from "@/lib/components/politics/politicalAreaHero";
+import { ContentHero } from "@/lib/components/shared/ContentHero";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { Section } from "@/lib/components/shared/Section";
 import {
@@ -188,7 +188,7 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
     <div className="min-h-screen bg-background flex flex-col">
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <PoliticalAreaHero title={data.question || ""} />
+          <ContentHero title={data.question || ""} />
 
           <ContentWithSidebar
             mainContent={main}

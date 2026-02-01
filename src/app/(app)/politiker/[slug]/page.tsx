@@ -4,20 +4,20 @@ import Link from "next/link";
 import { sanityClient } from "@/lib/sanity/client";
 import { cleanPoliticianData, PoliticianWithNamnd } from "@/lib/politicians";
 import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
-import { PoliticianHero } from "@/lib/components/politician/PoliticianHero";
+import { ContentHero } from "@/lib/components/shared/ContentHero";
 import { RoleCard } from "@/lib/components/politician/RoleCard";
-import { PoliticalAreasSidebar } from "@/lib/components/politician/PoliticalAreasSidebar";
+import { PoliticianSidebar } from "@/lib/components/politician/PoliticianSidebar";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { Section } from "@/lib/components/shared/Section";
 import { mapPoliticianRoles } from "@/lib/utils/mapPoliticianRoles";
 import { ArrowRight } from "lucide-react";
-import { NewsCard } from "@/lib/components/news/NewsCard";
+import { ExpandableNewsList } from "@/lib/components/news/ExpandableNewsList";
+import { PressGallery } from "@/lib/components/politician/PressGallery";
 import { politicianBySlugQuery, allPoliticianSlugsQuery } from "@/lib/queries/politicians";
 import { generateMetadata as generateSEOMetadata, getDefaultOgImage } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
 import { ROUTE_BASE } from "@/lib/routes";
-import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 
 // Generate static params for all politicians at build time
 export async function generateStaticParams() {
@@ -88,29 +88,69 @@ export default async function PoliticianPage({
   const politician = cleanPoliticianData(politicianRaw);
   const roles = mapPoliticianRoles({ politician });
 
+  const hasSidebar =
+    politician.email ||
+    politician.phone ||
+    politician.socialLinks ||
+    (politician.politicalAreas?.length ?? 0) > 0;
+
+  const tocEntries: { id: string; label: string }[] = [];
+  if (politician.bio) tocEntries.push({ id: "biografi", label: "Biografi" });
+  if (roles.length > 0) tocEntries.push({ id: "uppdrag", label: "Uppdrag" });
+  if (politician.referencedInNews?.length)
+    tocEntries.push({ id: "nyheter", label: "Artiklar" });
+  if (politician.pressbilder?.length)
+    tocEntries.push({ id: "pressbilder", label: "Pressbilder" });
+
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <PoliticianHero
-        name={politician.name || ""}
-        location={politician.livingArea?.name || ""}
-        locationSlug={politician.livingArea?.slug.current || ""}
-        email={politician.email}
-        phone={politician.phone}
+      <ContentHero
         image={politician.image}
-        socialLinks={politician.socialLinks}
+        title={politician.name ?? ""}
+        subtitle={
+          politician.livingArea?.name
+            ? `Bor i ${politician.livingArea.name}`
+            : undefined
+        }
+        subtitleHref={
+          politician.livingArea?.slug?.current
+            ? `${ROUTE_BASE.AREAS}/${politician.livingArea.slug.current}`
+            : undefined
+        }
       />
-      <div className="mt-8">
+      <div className="mt-8 pb-8 border-b border-border">
         <ContentWithSidebar
           mainContent={
             <div className="space-y-8">
+              {tocEntries.length > 0 && (
+                <nav aria-label="Innehåll" className="text-sm">
+                  <h2 className="text-lg font-semibold text-foreground mb-2">
+                    Innehåll
+                  </h2>
+                  <ul className="flex flex-wrap gap-x-4 gap-y-1 text-muted-foreground">
+                    {tocEntries.map(({ id, label }) => (
+                      <li key={id}>
+                        <a
+                          href={`#${id}`}
+                          className="hover:text-primary transition-colors underline"
+                        >
+                          {label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              )}
               {politician.bio && (
-                <div className="prose md:prose-lg">
+                <div id="biografi" className="prose md:prose-lg scroll-mt-24">
                   <PortableText value={politician.bio} components={portableTextComponents} />
                 </div>
               )}
               {roles.length > 0 && (
-                <section>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">Uppdrag</h2>
+                <section id="uppdrag" className="scroll-mt-24">
+                  <h2 className="text-2xl font-bold text-foreground mb-4">
+                    Uppdrag
+                  </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {roles.map((role, index) => (
                       <RoleCard key={index} role={role} />
@@ -121,18 +161,24 @@ export default async function PoliticianPage({
             </div>
           }
           sidebarContent={
-            (politician.politicalAreas?.length ?? 0) > 0 ? (
-              <PoliticalAreasSidebar politicalAreas={politician.politicalAreas} />
+            hasSidebar ? (
+              <PoliticianSidebar
+                email={politician.email}
+                phone={politician.phone}
+                socialLinks={politician.socialLinks}
+                politicalAreas={politician.politicalAreas}
+              />
             ) : null
-            }
+          }
         />
       </div>
 
       {politician.referencedInNews &&
         politician.referencedInNews.length > 0 && (
           <Section
-            className="mt-8"
-            title={`Artiklar som omnämner ${politician.name}`}
+            id="nyheter"
+            className="mt-8 scroll-mt-24"
+            title={`${politician.name} omnämns i nyheter`}
             actions={
               <Link
                 href={ROUTE_BASE.NEWS}
@@ -143,20 +189,22 @@ export default async function PoliticianPage({
               </Link>
             }
           >
-            <div className="grid">
-              {politician.referencedInNews?.map((news) => (
-                <NewsCard
-                  key={news._id}
-                  date={getEffectiveDate(news)}
-                  slug={news.slug.current}
-                  title={news.title}
-                  isLast={false}
-                  excerpt={news.excerpt || ""}
-                />
-              ))}
-            </div>
+            <ExpandableNewsList
+              items={politician.referencedInNews}
+              initialVisible={3}
+            />
           </Section>
         )}
+
+      {politician.pressbilder && politician.pressbilder.length > 0 && (
+        <Section
+          id="pressbilder"
+          className="mt-8 scroll-mt-24"
+          title="Pressbilder"
+        >
+          <PressGallery images={politician.pressbilder} />
+        </Section>
+      )}
     </main>
   );
 }

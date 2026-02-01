@@ -57,7 +57,7 @@ export default defineType({
           {title: 'Hem', value: '/'},
           {title: 'Politik', value: '/politik'},
           {title: 'Politiska kategorier', value: '/politik/kategori'},
-          {title: 'Geografiska områden', value: '/politik/omrade'},
+          {title: 'Geografiska områden', value: '/omrade'},
           {title: 'Våra sakfrågor', value: '/politik/sakfragor'},
           {title: 'Politiker', value: '/politiker'},
           {title: 'Nyheter', value: '/nyheter'},

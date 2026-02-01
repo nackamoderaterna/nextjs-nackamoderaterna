@@ -26,10 +26,18 @@ export function ContentWithSidebar({
     >
       {hasMainContent ? (
         <>
-          {/* Main Content - Takes 2 columns on large screens */}
-          <div className="lg:col-span-2">{mainContent}</div>
-          {/* Sidebar - Takes 1 column on large screens */}
-          <aside className="lg:col-span-1">{sidebarContent}</aside>
+          {/* Main Content - Takes 2 columns on large screens, or full width when no sidebar */}
+          <div
+            className={
+              sidebarContent ? "lg:col-span-2" : "lg:col-span-3"
+            }
+          >
+            {mainContent}
+          </div>
+          {/* Sidebar - Takes 1 column on large screens when present */}
+          {sidebarContent && (
+            <aside className="lg:col-span-1">{sidebarContent}</aside>
+          )}
         </>
       ) : (
         /* No main content: sidebar aligned to the left */

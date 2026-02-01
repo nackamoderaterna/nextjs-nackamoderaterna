@@ -14,6 +14,21 @@ export const upcomingEventsQuery = groq`
   }
 `;
 
+export const allEventsQuery = groq`
+  *[_type == "event"]
+  | order(startDate asc) {
+    _id,
+    title,
+    slug,
+    startDate,
+    endDate,
+    image,
+    location,
+    eventType,
+    isPublic
+  }
+`;
+
 // Query to get all event slugs for static generation
 export const allEventSlugsQuery = groq`*[_type == "event" && defined(slug.current)] {
   "slug": slug.current

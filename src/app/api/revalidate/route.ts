@@ -18,6 +18,7 @@ const LAYOUT_SINGLETONS = new Set([
 const LISTING_KEY_TO_PATH: Record<string, string> = {
   politicians: "/politiker",
   politics: "/politik",
+  politikOmrade: "/omrade",
   news: "/nyheter",
   events: "/event",
   contact: "/kontakt",
@@ -62,8 +63,8 @@ function pathsForPayload(body: WebhookPayload): string[] {
       break;
     }
     case "geographicalArea": {
-      paths.push("/politik", "/politik/omrade");
-      if (slug) paths.push(`/politik/omrade/${slug}`);
+      paths.push("/omrade");
+      if (slug) paths.push(`/omrade/${slug}`);
       break;
     }
     case "politicalIssue": {

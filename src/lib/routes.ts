@@ -1,10 +1,10 @@
 export const ROUTE_BASE = {
   HOME: "/",
   POLITICIANS: "/politiker",
-  AREAS: "/politik/omrade",
+  AREAS: "/omrade",
   POLITICS: "/politik",
   POLITICS_CATEGORY: "/politik/kategori",
-  POLITICS_AREA: "/politik/omrade",
+  POLITICS_AREA: "/omrade",
   POLITICS_ISSUES: "/politik/sakfragor",
   NEWS: "/nyheter",
   EVENTS: "/event",

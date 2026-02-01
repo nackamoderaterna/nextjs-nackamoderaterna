@@ -248,6 +248,34 @@ export const politician = defineType({
       ],
     }),
     defineField({
+      name: "pressbilder",
+      title: "Pressbilder",
+      description: "Bilder för press och medier. Varje bild kan ha en bildtext och visas med nedladdningslänk.",
+      type: "array",
+      group: "base",
+      of: [
+        {
+          type: "image",
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            defineField({
+              name: "alt",
+              title: "Alt-text",
+              type: "string",
+              description: "Beskrivning av bilden för tillgänglighet.",
+            }),
+            defineField({
+              name: "caption",
+              title: "Bildtext",
+              type: "string",
+            }),
+          ],
+        },
+      ],
+    }),
+    defineField({
       name: "socialLinks",
       title: "Sociala medier",
       type: "socialLinks",

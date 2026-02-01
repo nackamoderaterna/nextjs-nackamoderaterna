@@ -1,0 +1,59 @@
+import Link from "next/link";
+import { SanityImage } from "@/lib/components/shared/SanityImage";
+import { getLucideIcon } from "@/lib/utils/iconUtils";
+
+interface ContentHeroProps {
+  title: string;
+  image?: unknown;
+  icon?: { name?: string | null } | null;
+  subtitle?: string;
+  subtitleHref?: string;
+}
+
+export function ContentHero({
+  title,
+  image,
+  icon,
+  subtitle,
+  subtitleHref,
+}: ContentHeroProps) {
+  const Icon = icon?.name ? getLucideIcon(icon.name) : null;
+  const showImage = !!image;
+  const showIcon = !showImage && !!Icon;
+
+  return (
+    <section className="mb-12 border-b border-border rounded-lg pb-12 flex flex-col gap-4">
+      <div className="flex items-center gap-4">
+        {showImage ? (
+          <div className="relative w-full h-auto aspect-square lg:w-64 lg:h-64 rounded overflow-hidden shrink-0">
+            <SanityImage
+              image={image}
+              alt=""
+              fill
+              className="object-cover rounded"
+              sizes="96px"
+            />
+          </div>
+        ) : showIcon ? (
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-brand-primary/10">
+            <Icon className="h-7 w-7 text-brand-primary" />
+          </div>
+        ) : null}
+        <div className="flex flex-col gap-2">
+        <h1 className="text-4xl font-bold text-foreground">{title}</h1>
+        {subtitle && subtitleHref ? (
+        <Link
+          href={subtitleHref}
+          className="text-base text-muted-foreground hover:text-primary transition-colors"
+        >
+          {subtitle}
+        </Link>
+      ) : subtitle ? (
+        <p className="text-base text-muted-foreground">{subtitle}</p>
+      ) : null}
+      </div>
+      </div>
+     
+    </section>
+  );
+}

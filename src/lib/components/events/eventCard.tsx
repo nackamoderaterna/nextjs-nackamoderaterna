@@ -10,6 +10,8 @@ interface EventCardProps {
   location: string;
   href: string;
   isPublic?: boolean;
+  /** When true, card and badge use muted styling (e.g. past events). */
+  muted?: boolean;
   className?: string;
 }
 
@@ -21,18 +23,26 @@ export function EventCard({
   location,
   href,
   isPublic = false,
+  muted = false,
   className,
 }: EventCardProps) {
   return (
     <Link
       href={`event/${href}`}
       className={cn(
-        "block bg-brand-primary/10 rounded-lg p-6 hover:bg-brand-primary/20 transition-colors group relative",
+        "block bg-brand-primary/5 rounded-lg p-6 hover:bg-brand-primary/10 transition-colors group relative",
         className,
       )}
     >
       {isPublic && (
-        <Badge className="absolute top-4 right-4 bg-brand-primary hover:bg-blue-700 text-white">
+        <Badge
+          className={cn(
+            "absolute top-4 right-4",
+            muted
+              ? "bg-muted text-muted-foreground hover:bg-muted/90"
+              : "bg-brand-primary hover:bg-blue-700 text-white"
+          )}
+        >
           Öppet event
         </Badge>
       )}
@@ -49,11 +59,15 @@ export function EventCard({
 
       {/* Event Info */}
       <div>
-        <h3 className="font-semibold text-foreground group-hover:text-brand-primary transition-colors mb-1">
+        <h3 className="font-semibold text-brand-primary group-hover:text-brand-primary transition-colors mb-1">
           {title}
         </h3>
-        <p className="text-sm text-brand-primary">{time}</p>
-        <p className="text-sm text-brand-primary">@ {location}</p>
+        {time ? (
+          <p className="text-sm text-brand-primary">{time}</p>
+        ) : null}
+        {location?.trim() ? (
+          <p className="text-sm text-brand-primary">@ {location.trim()}</p>
+        ) : null}
       </div>
     </Link>
   );

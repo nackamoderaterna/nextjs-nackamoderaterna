@@ -75,7 +75,7 @@ export default async function PolitikSakfragorPage() {
           fallbackTitle="Våra sakfrågor"
         />
         {featuredIssues.length > 0 && (
-          <Section title="Våra kärnfrågor" titleSize="large">
+          <Section title="Kärnfrågor" titleSize="large">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {featuredIssues.map((issue) => (
                 <KeyIssueCard
@@ -108,7 +108,7 @@ export default async function PolitikSakfragorPage() {
         )}
 
         {otherIssues.length > 0 && (
-          <Section title="Övriga sakfrågor" titleSize="large">
+          <Section title="Övriga" titleSize="large">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {otherIssues.map((issue) => (
                 <KeyIssueCard

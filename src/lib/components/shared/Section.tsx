@@ -12,6 +12,8 @@ interface SectionProps {
   className?: string;
   /** Title size: default (text-2xl) or large (text-3xl) for hero-style sections */
   titleSize?: "default" | "large";
+  /** Optional id for anchor links (e.g. table of contents) */
+  id?: string;
   /** Accessible label for the section when title is not descriptive enough */
   "aria-label"?: string;
 }
@@ -27,12 +29,14 @@ export function Section({
   actions,
   className,
   titleSize = "default",
+  id,
   "aria-label": ariaLabel,
 }: SectionProps) {
   const titleClasses = titleSizeClasses[titleSize];
 
   return (
     <section
+      id={id}
       className={cn("mb-16", className)}
       aria-label={ariaLabel}
     >

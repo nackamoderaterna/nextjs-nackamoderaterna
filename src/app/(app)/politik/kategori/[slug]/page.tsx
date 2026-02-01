@@ -1,7 +1,7 @@
 import { NewsCard } from "@/lib/components/news/NewsCard";
 import { PeopleCard } from "@/lib/components/politician/PeopleCard";
 import { PolicyList } from "@/lib/components/politics/policyList";
-import { PoliticalAreaHero } from "@/lib/components/politics/politicalAreaHero";
+import { ContentHero } from "@/lib/components/shared/ContentHero";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { politicalAreaPageQuery, allPoliticalAreaSlugsQuery } from "@/lib/queries/politik";
 import { globalSettingsQuery } from "@/lib/queries/globalSettings";
@@ -173,7 +173,7 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
     <div className="min-h-screen bg-background flex flex-col">
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <PoliticalAreaHero icon={data.icon} title={data.name || ""} />
+          <ContentHero icon={data.icon} title={data.name || ""} />
 
           <ContentWithSidebar
             mainContent={mainContent}

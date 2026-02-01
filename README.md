@@ -124,9 +124,9 @@ The handler revalidates paths based on `_type`, `slug`, and `key`:
 | `politician` | `/politiker`, `/politiker/[slug]` |
 | `event` | `/event`, `/event/[slug]` |
 | `politicalArea` | `/politik`, `/politik/[slug]` |
-| `geographicalArea` | `/politik`, `/omrade/[slug]` |
+| `geographicalArea` | `/omrade`, `/omrade/[slug]` |
 | `politicalIssue` | `/politik` |
-| `listingPage` | `/politiker`, `/politik`, `/nyheter`, `/event`, or `/kontakt` (by `key`) |
+| `listingPage` | `/politiker`, `/politik`, `/omrade`, `/nyheter`, `/event`, or `/kontakt` (by `key`) |
 
 ## Learn More
 

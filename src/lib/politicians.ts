@@ -49,11 +49,20 @@ export const politiciansDirectoryQuery = groq`*[_type == "politician"] | order(n
   socialLinks
 }`;
 
+// Sanity image with optional alt/caption (e.g. pressbilder items)
+export type PressbildItem = {
+  _key?: string;
+  asset?: { _ref?: string; _id?: string; url?: string };
+  alt?: string | null;
+  caption?: string | null;
+};
+
 // Type for the query result with dereferenced namnd (overrides schema types for partyBoard, kommunfullmaktige, namndPositions, kommunalrad)
 export type PoliticianWithNamnd = Omit<
   Politician,
   "namndPositions" | "livingArea" | "politicalAreas" | "partyBoard" | "kommunfullmaktige" | "kommunalrad"
 > & {
+  pressbilder?: PressbildItem[] | null;
   kommunalrad?: {
     active?: boolean;
     role?: "president" | "ordinary";

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { NewsCard } from "@/lib/components/news/NewsCard";
-import { PoliticalAreaHero } from "@/lib/components/politics/politicalAreaHero";
+import { ContentHero } from "@/lib/components/shared/ContentHero";
 import { PolicyList } from "@/lib/components/politics/policyList";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { Section } from "@/lib/components/shared/Section";
@@ -23,7 +23,7 @@ export async function generateStaticParams() {
   const areas = await sanityClient.fetch<{ slug: string }[]>(
     allGeographicalAreaSlugsQuery
   );
-  
+
   return areas.map((area) => ({
     slug: area.slug,
   }));
@@ -67,7 +67,7 @@ export async function generateMetadata({
       ? `${data.name} - ${data.description[0]?.children?.[0]?.text?.substring(0, 150)}...`
       : `Läs mer om ${data.name}`,
     image: imageUrl,
-    url: `${ROUTE_BASE.POLITICS_AREA}/${slug}`,
+    url: `${ROUTE_BASE.AREAS}/${slug}`,
   });
 }
 
@@ -123,7 +123,7 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
     <div className="min-h-screen bg-background flex flex-col">
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <PoliticalAreaHero image={data.image} title={data.name || ""} />
+          <ContentHero image={data.image} title={data.name || ""} />
 
           <ContentWithSidebar
             mainContent={main}
