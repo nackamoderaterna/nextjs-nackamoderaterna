@@ -108,13 +108,17 @@ export function NewsSidebar({ news, currentSlug }: NewsSidebarProps) {
           <nav aria-label="Lista över omnämnda företrädare">
             <div className="grid gap-4">
               {news.referencedPoliticians.map((politician) => (
-                <PeopleCard
+                <div
                   key={politician._id}
-                  image={politician.image}
-                  name={politician.name}
-                  slug={politician.slug?.current || ""}
-                  size="small"
-                />
+                  className="rounded p-2 -m-2"
+                >
+                  <PeopleCard
+                    image={politician.image}
+                    name={politician.name}
+                    slug={politician.slug?.current || ""}
+                    size="small"
+                  />
+                </div>
               ))}
             </div>
           </nav>

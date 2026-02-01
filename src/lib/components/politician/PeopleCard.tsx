@@ -33,7 +33,7 @@ export function PeopleCard({
       >
         <div
           className={cn(
-            "flex items-center gap-3 group hover:bg-muted rounded hover:cursor-pointer transition-colors duration-300",
+            "flex items-center gap-3 group hover:bg-muted rounded hover:cursor-pointer transition-colors duration-300 p-2",
             className
           )}
         >
