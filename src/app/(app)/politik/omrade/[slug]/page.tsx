@@ -108,13 +108,9 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
     return (a.name || "").localeCompare(b.name || "", "sv");
   });
 
-  const main = (
-    <div className="space-y-8 prose md:prose-lg">
-      <div className="prose md:prose-lg">
-        {data.description && <PortableText value={data.description} components={portableTextComponents} />}
-      </div>
-    </div>
-  );
+  const main = data.description  ? (<div className="prose md:prose-lg">
+    <PortableText value={data.description} components={portableTextComponents} />
+  </div>) : null;
 
   const sidebar =
     data.politicalIssues?.length > 0 ? (
@@ -136,7 +132,7 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
 
           {/* Current News Section */}
           {data.latestNews.length > 0 && (
-            <Section title={`Aktuellt inom ${data.name}`}>
+            <Section title={`Senaste nytt om ${data.name}`}>
               <div className="grid">
                 {data.latestNews.map((news, index) => (
                   <NewsCard
