@@ -20,6 +20,7 @@ import { ROUTE_BASE } from "@/lib/routes";
 import { ContentHero } from "@/lib/components/shared/ContentHero";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
+import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleContext";
 
 // Generate static params for all events at build time
 export async function generateStaticParams() {
@@ -185,6 +186,7 @@ export default async function EventPage({ params }: Props) {
   return (
     <main className="w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <SetBreadcrumbTitle title={event.title ?? "Evenemang"} />
         <ContentHero
           pageType="Evenemang"
           title={event.title ?? "Evenemang"}

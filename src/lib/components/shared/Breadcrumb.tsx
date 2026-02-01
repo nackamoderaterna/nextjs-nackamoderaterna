@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronRight } from "lucide-react";
+import { useBreadcrumbTitle } from "./BreadcrumbTitleContext";
 
 const SEGMENT_LABELS: Record<string, string> = {
   politik: "Politik",
@@ -24,6 +25,7 @@ function humanizeSlug(slug: string): string {
 
 export function Breadcrumb() {
   const pathname = usePathname();
+  const breadcrumbTitle = useBreadcrumbTitle();
 
   if (pathname === "/") {
     return null;
@@ -38,7 +40,10 @@ export function Breadcrumb() {
   segments.forEach((segment, index) => {
     currentPath += `/${segment}`;
     const isLast = index === segments.length - 1;
-    const label = SEGMENT_LABELS[segment] ?? humanizeSlug(segment);
+    const label =
+      isLast && breadcrumbTitle?.title
+        ? breadcrumbTitle.title
+        : SEGMENT_LABELS[segment] ?? humanizeSlug(segment);
     items.push({ href: currentPath, label, isLast });
   });
 

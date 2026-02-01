@@ -17,6 +17,7 @@ import { ROUTE_BASE } from "@/lib/routes";
 import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 import { PeopleCard } from "@/lib/components/politician/PeopleCard";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
+import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleContext";
 
 // Generate static params for all geographical areas at build time
 export async function generateStaticParams() {
@@ -123,6 +124,7 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
     <div className="min-h-screen bg-background flex flex-col">
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <SetBreadcrumbTitle title={data.name || ""} />
           <ContentHero pageType="Område" image={data.image} title={data.name || ""} />
 
           <ContentWithSidebar

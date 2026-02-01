@@ -23,6 +23,7 @@ import { portableTextComponents } from "@/lib/components/shared/PortableTextComp
 import { ROUTE_BASE } from "@/lib/routes";
 import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
+import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleContext";
 import { AreaList } from "@/lib/components/politics/AreaList";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
@@ -185,6 +186,7 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
     <div className="min-h-screen bg-background flex flex-col">
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <SetBreadcrumbTitle title={data.question || ""} />
           <ContentHero pageType="Sakfråga" title={data.question || ""} />
 
           <ContentWithSidebar

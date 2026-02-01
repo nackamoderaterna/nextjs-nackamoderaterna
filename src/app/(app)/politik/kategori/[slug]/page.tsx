@@ -24,6 +24,7 @@ import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 import { ROUTE_BASE } from "@/lib/routes";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
 import { Section } from "@/lib/components/shared/Section";
+import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleContext";
 import { Button } from "@/lib/components/ui/button";
 
 // Generate static params for all political areas at build time
@@ -176,6 +177,7 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
     <div className="min-h-screen bg-background flex flex-col">
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <SetBreadcrumbTitle title={data.name || ""} />
           <ContentHero pageType="Kategori" icon={data.icon} title={data.name || ""} />
 
           <ContentWithSidebar

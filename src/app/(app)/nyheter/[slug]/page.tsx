@@ -4,6 +4,7 @@ import { NewsExpanded } from "@/lib/types/news";
 import { newsQuery, allNewsSlugsQuery } from "@/lib/queries/nyheter";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { Section } from "@/lib/components/shared/Section";
+import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleContext";
 import { formatDate } from "@/lib/utils/dateUtils";
 import { PortableText } from "next-sanity";
 import { NewsSidebar } from "@/lib/components/news/NewsSidebar";
@@ -85,7 +86,6 @@ export default async function NewsArticlePage({
   const mainContent = (
     <div className="px-4">
       <div className="mb-4 flex flex-wrap items-center gap-4">
-       
         {news.variant && news.variant !== "default" && (
           <NewsVariantBadge variant={news.variant} />
         )}
@@ -143,6 +143,7 @@ export default async function NewsArticlePage({
 
   return (
     <div className="max-w-7xl mx-auto mt-8 px-4">
+      <SetBreadcrumbTitle title={news.title ?? ""} />
       <ContentWithSidebar mainContent={mainContent} sidebarContent={sidebar} />
 
       {news.relatedByPoliticalArea && news.relatedByPoliticalArea.length > 0 && (

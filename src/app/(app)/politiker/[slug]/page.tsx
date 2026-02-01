@@ -9,6 +9,7 @@ import { RoleCard } from "@/lib/components/politician/RoleCard";
 import { PoliticianSidebar } from "@/lib/components/politician/PoliticianSidebar";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { Section } from "@/lib/components/shared/Section";
+import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleContext";
 import { mapPoliticianRoles } from "@/lib/utils/mapPoliticianRoles";
 import { ArrowRight } from "lucide-react";
 import { ExpandableNewsList } from "@/lib/components/news/ExpandableNewsList";
@@ -104,6 +105,7 @@ export default async function PoliticianPage({
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <SetBreadcrumbTitle title={politician.name ?? ""} />
       <ContentHero
         pageType="Politiker"
         image={politician.image}

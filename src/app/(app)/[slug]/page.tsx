@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { PageBuilder } from "@/lib/components/PageBuilder";
 import { PageModal } from "@/lib/components/shared/PageModal";
 import { PageHeader } from "@/lib/components/shared/PageHeader";
+import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleContext";
 import { pageBySlugQuery, allPageSlugsQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
 import { generatePageMetadata } from "@/lib/utils/pageSeo";
@@ -58,6 +59,7 @@ export default async function SanityPage({
 
   return (
     <div className="w-full mx-auto">
+      <SetBreadcrumbTitle title={page.title ?? ""} />
       <PageModal modal={page.pageModal} pageSlug={page.slug?.current || slug} />
       <PageHeader
         title={page.title ?? undefined}
