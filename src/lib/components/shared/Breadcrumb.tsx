@@ -54,18 +54,25 @@ export function Breadcrumb() {
     >
       <div className="max-w-7xl mx-auto flex items-center gap-2 text-sm text-muted-foreground">
         {items.map((item, index) => (
-          <span key={item.href} className="flex items-center gap-2">
+          <span
+            key={item.href}
+            className={`flex items-center gap-2 ${item.isLast ? "min-w-0 flex-1" : "shrink-0"}`}
+          >
             {index > 0 && (
               <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground/60" />
             )}
             {item.isLast ? (
-              <span className="font-medium text-foreground" aria-current="page">
+              <span
+                className="font-medium text-foreground block truncate"
+                aria-current="page"
+                title={item.label}
+              >
                 {item.label}
               </span>
             ) : (
               <Link
                 href={item.href}
-                className="hover:text-foreground hover:underline transition-colors"
+                className="hover:text-foreground hover:underline transition-colors shrink-0"
               >
                 {item.label}
               </Link>

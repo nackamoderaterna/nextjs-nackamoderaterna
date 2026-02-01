@@ -84,13 +84,13 @@ export default async function NewsArticlePage({
   }
 
   const mainContent = (
-    <div className="px-4">
+    <div>
       <div className="mb-4 flex flex-wrap items-center gap-4">
         {news.variant && news.variant !== "default" && (
           <NewsVariantBadge variant={news.variant} />
         )}
       </div>
-      <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4 text-balance">
+      <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4 text-balance break-words">
         {news.title}
       </h1>
       {news.politicalAreas && news.politicalAreas.length > 0 && (

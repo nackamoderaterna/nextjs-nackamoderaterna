@@ -181,7 +181,7 @@ export default async function PoliticianPage({
           <Section
             id="nyheter"
             className="mt-8 scroll-mt-24"
-            title={`${politician.name} omnämns i nyheter`}
+            title="Artiklar"
             actions={
               <Link
                 href={ROUTE_BASE.NEWS}

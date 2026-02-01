@@ -1,5 +1,4 @@
 import { IconMail, IconMapPin, IconPhone, IconUser } from "@tabler/icons-react";
-import Link from "next/link";
 import { GlobalSettings } from "~/sanity.types";
 import { ContactForm } from "@/lib/components/shared/ContactForm";
 import { ContactInfoItem } from "@/lib/components/shared/ContactInfoItem";
@@ -43,7 +42,7 @@ export function ContactPageClient({
     <div className="grid gap-6">
       {hasContactInfo && (
         <Sidebar heading="Kontaktuppgifter">
-          <div className="space-y-4">
+          <div className="grid gap-4">
                 {settings.contactInfo?.contactPerson && (
                   <ContactInfoItem
                     icon={<IconUser className="h-5 w-5 shrink-0" />}
@@ -56,22 +55,18 @@ export function ContactPageClient({
                   <ContactInfoItem
                     icon={<IconMail className="h-5 w-5 shrink-0" />}
                     label="E-post"
+                    href={`mailto:${settings.contactInfo.email}`}
                   >
-                    <Link href={`mailto:${settings.contactInfo.email}`}>
-                      {settings.contactInfo.email}
-                    </Link>
+                    {settings.contactInfo.email}
                   </ContactInfoItem>
                 )}
                 {settings.contactInfo?.phone && (
                   <ContactInfoItem
                     icon={<IconPhone className="h-5 w-5 shrink-0" />}
                     label="Telefon"
+                    href={`tel:${settings.contactInfo.phone.replace(/\D/g, "")}`}
                   >
-                    <Link
-                      href={`tel:${settings.contactInfo.phone.replace(/\D/g, "")}`}
-                    >
-                      {formatPhoneNumber(settings.contactInfo.phone)}
-                    </Link>
+                    {formatPhoneNumber(settings.contactInfo.phone)}
                   </ContactInfoItem>
                 )}
                 {(() => {
@@ -84,20 +79,15 @@ export function ContactPageClient({
                 <ContactInfoItem
                   icon={<IconMapPin className="h-5 w-5 shrink-0" />}
                   label="Besöksadress"
+                  href={mapsUrl}
+                  external
                 >
-                  <Link
-                    href={mapsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="transition-colors"
-                  >
-                    {visitingAddr.map((line, i) => (
-                      <span key={i}>
-                        {line}
-                        {i < visitingAddr.length - 1 && <br />}
-                      </span>
-                    ))}
-                  </Link>
+                  {visitingAddr.map((line, i) => (
+                    <span key={i}>
+                      {line}
+                      {i < visitingAddr.length - 1 && <br />}
+                    </span>
+                  ))}
                 </ContactInfoItem>
               );
             })()}
@@ -126,27 +116,23 @@ export function ContactPageClient({
         settings.pressContactInfo?.email ||
         settings.pressContactInfo?.phone) && (
         <Sidebar heading="Presskontakt">
-          <div className="space-y-4">
+          <div className="grid gap-4">
             {settings.pressContactInfo?.email && (
               <ContactInfoItem
                 icon={<IconMail className="h-5 w-5 shrink-0" />}
                 label="E-post"
+                href={`mailto:${settings.pressContactInfo.email}`}
               >
-                <Link href={`mailto:${settings.pressContactInfo.email}`}>
-                  {settings.pressContactInfo.email}
-                </Link>
+                {settings.pressContactInfo.email}
               </ContactInfoItem>
             )}
             {settings.pressContactInfo?.phone && (
               <ContactInfoItem
                 icon={<IconPhone className="h-5 w-5 shrink-0" />}
                 label="Telefon"
+                href={`tel:${settings.pressContactInfo.phone.replace(/\D/g, "")}`}
               >
-                <Link
-                  href={`tel:${settings.pressContactInfo.phone.replace(/\D/g, "")}`}
-                >
-                  {formatPhoneNumber(settings.pressContactInfo.phone)}
-                </Link>
+                {formatPhoneNumber(settings.pressContactInfo.phone)}
               </ContactInfoItem>
             )}
             {settings.pressContactInfo?.contactPerson && (
