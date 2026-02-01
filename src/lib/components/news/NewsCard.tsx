@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { formatDate } from "@/lib/utils/dateUtils";
 import { ArrowRight } from "lucide-react";
 import { NewsVariantBadge } from "./NewsVariantBadge";
+import { CategoryBadge } from "@/lib/components/politics/CategoryBadge";
 import type { NewsVariant } from "@/lib/types/news";
 import { ROUTE_BASE } from "@/lib/routes";
-import { getLucideIcon } from "@/lib/utils/iconUtils";
 
 export type PoliticalAreaRef = {
   _id: string;
@@ -73,8 +73,7 @@ export function NewsCard({
                   {[...politicalAreas]
                     .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
                     .map((a) => {
-                      const Icon = a.icon?.name ? getLucideIcon(a.icon.name) : null;
-                      const href = `${ROUTE_BASE.POLITICS}/${a.slug?.current || ""}`;
+                      const href = `${ROUTE_BASE.POLITICS_CATEGORY}/${a.slug?.current || ""}`;
                       return (
                         <span
                           key={a._id}
@@ -83,19 +82,26 @@ export function NewsCard({
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            router.push(href);
+                            if (a.slug?.current) router.push(href);
                           }}
                           onKeyDown={(e) => {
-                            if (e.key === "Enter" || e.key === " ") {
+                            if (
+                              (e.key === "Enter" || e.key === " ") &&
+                              a.slug?.current
+                            ) {
                               e.preventDefault();
                               e.stopPropagation();
                               router.push(href);
                             }
                           }}
-                          className="inline-flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/20 transition-colors"
+                          className="cursor-pointer"
                         >
-                          {Icon && <Icon className="h-4 w-4 shrink-0" />}
-                          <span>{a.name}</span>
+                          <CategoryBadge
+                            name={a.name ?? ""}
+                            icon={a.icon}
+                            size="default"
+                            variant="brand"
+                          />
                         </span>
                       );
                     })}

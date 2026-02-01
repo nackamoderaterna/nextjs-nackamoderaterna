@@ -1,12 +1,13 @@
 import Link from "next/link";
-import { Badge } from "@/lib/components/ui/badge";
 import { CheckCircle2 } from "lucide-react";
 import { ROUTE_BASE } from "@/lib/routes";
+import { CategoryBadge } from "./CategoryBadge";
 
 interface AreaRef {
   _id?: string;
   name?: string | null;
   slug?: { current?: string } | null;
+  icon?: { name?: string | null } | null;
 }
 
 interface KeyIssueCardProps {
@@ -40,13 +41,12 @@ export function KeyIssueCard({
     fulfilled ? "hover:border-green-600/60" : "hover:border-brand-primary/50"
   }`;
 
-  const areaLabels = politicalAreas.length > 0
-    ? politicalAreas.map((a) => a.name).filter(Boolean)
+  const politicalAreaItems = politicalAreas.length > 0
+    ? politicalAreas.filter((a) => a.name)
     : relatedArea
-      ? [relatedArea]
+      ? [{ _id: "legacy", name: relatedArea, slug: { current: firstCategorySlug } }]
       : [];
-  const geoLabels = geographicalAreas.map((a) => a.name).filter(Boolean);
-  const allLabels = [...areaLabels, ...geoLabels];
+  const geographicalAreaItems = geographicalAreas.filter((a) => a.name);
 
   return (
     <Link href={href} className={cardClass}>
@@ -59,17 +59,22 @@ export function KeyIssueCard({
           />
         )}
       </div>
-      {allLabels.length > 0 && (
-        <div className="flex flex-wrap gap-1.5">
-          {allLabels.map((label) => (
-            <Badge
-              key={label}
-              variant="secondary"
-              className="text-xs text-muted-foreground"
-            >
-              {label}
-            </Badge>
-          ))}
+      {(politicalAreaItems.length > 0 || geographicalAreaItems.length > 0) && (
+        <div className="mt-1 flex flex-wrap gap-1.5">
+          {[...politicalAreaItems]
+            .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
+            .map((a) => (
+              <CategoryBadge
+                key={a._id || a.name || ""}
+                name={a.name ?? ""}
+                icon={a.icon}
+              />
+            ))}
+          {geographicalAreaItems
+            .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
+            .map((a) => (
+              <CategoryBadge key={a._id || a.name || ""} name={a.name ?? ""} />
+            ))}
         </div>
       )}
     </Link>
