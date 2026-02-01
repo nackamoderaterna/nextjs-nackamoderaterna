@@ -10,13 +10,13 @@ import { buildImageUrl } from "@/lib/sanity/image";
 import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { PortableText } from "next-sanity";
-import Link from "next/link";
 import { News, GeographicalArea, Politician, PoliticalIssue } from "~/sanity.types";
 import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
 import { cleanPoliticianData, PoliticianWithNamnd } from "@/lib/politicians";
 import { ROUTE_BASE } from "@/lib/routes";
 import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 import { PeopleCard } from "@/lib/components/politician/PeopleCard";
+import { Sidebar } from "@/lib/components/shared/Sidebar";
 
 // Generate static params for all geographical areas at build time
 export async function generateStaticParams() {
@@ -67,7 +67,7 @@ export async function generateMetadata({
       ? `${data.name} - ${data.description[0]?.children?.[0]?.text?.substring(0, 150)}...`
       : `Läs mer om ${data.name}`,
     image: imageUrl,
-    url: `/omrade/${slug}`,
+    url: `${ROUTE_BASE.POLITICS_AREA}/${slug}`,
   });
 }
 
@@ -118,14 +118,16 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
 
   const sidebar =
     data.politicalIssues?.length > 0 ? (
+      <Sidebar heading="Våra politikiska mål">
       <PolicyList policies={data.politicalIssues} />
+      </Sidebar>
     ) : null;
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <PoliticalAreaHero title={data.name || ""} />
+          <PoliticalAreaHero image={data.image} title={data.name || ""} />
 
           <ContentWithSidebar
             mainContent={main}

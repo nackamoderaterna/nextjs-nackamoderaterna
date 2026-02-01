@@ -1,11 +1,4 @@
-import { formatAddress } from "@/lib/utils/addressUtils";
-
-interface Address {
-  street?: string;
-  zip?: string;
-  city?: string;
-  country?: string;
-}
+import { formatAddress, type Address } from "@/lib/utils/addressUtils";
 
 interface ContactInfo {
   email?: string;
@@ -39,7 +32,7 @@ export function FooterContactInfo({
           {visitingLines && (
             <div>
               <p className="text-xs font-medium text-foreground/70 mb-1">Besöksadress</p>
-              {visitingLines.map((line, i) => (
+              {visitingLines.map((line: string, i: number) => (
                 <p key={i}>{line}</p>
               ))}
             </div>
@@ -53,7 +46,7 @@ export function FooterContactInfo({
               >
                 Postadress
               </p>
-              {postLines.map((line, i) => (
+              {postLines.map((line: string, i: number) => (
                 <p key={i}>{line}</p>
               ))}
             </div>

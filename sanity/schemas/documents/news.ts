@@ -102,10 +102,18 @@ export const news = defineType({
       ],
     }),
     defineField({
-      name: "document",
-      title: "Dokument",
-      description: "Valfritt: bifoga ett dokument (PDF, Word, etc.) till nyheten.",
-      type: "file",
+      name: "documents",
+      title: "Bifogade dokument",
+      description: "Valfria dokument (PDF, Word, etc.) som bifogas till nyheten.",
+      type: "array",
+      group: "media",
+      of: [{ type: "file" }],
+    }),
+    defineField({
+      name: "instagramUrl",
+      title: "Instagram-länk",
+      description: "Länk till diskussionen på Instagram. Visar en knapp under bilden för att delta i diskussionen.",
+      type: "url",
       group: "media",
     }),
     defineField({
@@ -138,6 +146,14 @@ export const news = defineType({
       type: "array",
       group: "relations",
       of: [{ type: "reference", to: [{ type: "geographicalArea" }] }],
+    }),
+    defineField({
+      name: "politicalIssues",
+      title: "Politiska frågor",
+      description: "Politiska frågor som nyheten är relaterad till.",
+      type: "array",
+      group: "relations",
+      of: [{ type: "reference", to: [{ type: "politicalIssue" }] }],
     }),
     defineField({
       name: "articleSeries",

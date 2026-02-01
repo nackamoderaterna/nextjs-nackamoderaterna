@@ -4,7 +4,8 @@ import { PeopleCard } from "@/lib/components/politician/PeopleCard";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
 import { SidebarNewsItem } from "@/lib/components/shared/SidebarListItem";
 import { NewsExpanded } from "@/lib/types/news";
-import { FileDown } from "lucide-react";
+import { Button } from "@/lib/components/ui/button";
+import { FileDown, Instagram } from "lucide-react";
 import { formatDate } from "@/lib/utils/dateUtils";
 import { ROUTE_BASE } from "@/lib/routes";
 
@@ -21,7 +22,7 @@ const SIDEBAR_ASPECT_CLASSES: Record<string, string> = {
 };
 
 export function NewsSidebar({ news, currentSlug }: NewsSidebarProps) {
-  const documentUrl = news.document?.url;
+  const documents = news.documents ?? [];
   const mainImage = news.mainImage as { aspectRatio?: string } | undefined;
   const aspectRatio = mainImage?.aspectRatio && SIDEBAR_ASPECT_CLASSES[mainImage.aspectRatio]
     ? mainImage.aspectRatio
@@ -32,50 +33,78 @@ export function NewsSidebar({ news, currentSlug }: NewsSidebarProps) {
   return (
     <div className="grid gap-4">
       {news.mainImage && (
-        <div
-          className={`relative w-full overflow-hidden rounded-lg bg-muted ${aspectClass}`}
-        >
-          {useAuto ? (
-            <SanityImage
-              image={news.mainImage}
-              fill={false}
-              width={800}
-              height={600}
-              className="w-full h-auto object-contain"
-              alt={news.mainImage.alt || news.title || ""}
-            />
-          ) : (
-            <SanityImage
-              image={news.mainImage}
-              fill
-              className="object-contain"
-              alt={news.mainImage.alt || news.title || ""}
-            />
-          )}
-        </div>
+          <div
+            className={`relative w-full h-full overflow-hidden rounded-lg bg-muted ${aspectClass}`}
+          >
+            {useAuto ? (
+              <SanityImage
+                image={news.mainImage}
+                fill={false}
+                width={800}
+                height={600}
+                className="w-full h-full object-cover"
+                alt={news.mainImage.alt || news.title || ""}
+              />
+            ) : (
+              <SanityImage
+                image={news.mainImage}
+                fill
+                className="object-cover"
+                alt={news.mainImage.alt || news.title || ""}
+              />
+            )}
+          </div>
+         
+        
       )}
 
-      {documentUrl && (
-        <Sidebar heading="Bifogat dokument">
-          <a
-            href={documentUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            download={news.document?.originalFilename}
-            className="flex items-center gap-3 group hover:bg-muted rounded p-2 -m-2 transition-colors"
+{news.instagramUrl && (
+          <Button
+            asChild
+            variant="outline"
+            className="w-full"
+            size="lg"
           >
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-muted-foreground/10 text-muted-foreground group-hover:text-foreground">
-                <FileDown className="h-5 w-5" />
-              </span>
-              <span className="text-sm font-medium text-foreground">
-                {news.document?.originalFilename ?? "Ladda ner dokument"}
-              </span>
-            </a>
+            <Link
+              href={news.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              
+              className="flex items-center justify-center gap-2"
+            >
+              <Instagram className="h-4 w-4" />
+              Delta i diskussionen på Instagram
+            </Link>
+          </Button>
+          
+        )}
+      {documents.length > 0 && (
+        <Sidebar heading="Dokument">
+         <ul className="grid gap-4"> {documents
+            .filter((doc) => doc?.url)
+            .map((doc, index) => (
+              <Link
+                key={index}
+                href={doc.url!}
+                target="_blank"
+                rel="noopener noreferrer"
+                download={doc.originalFilename}
+                className="flex items-center gap-3 group hover:bg-muted rounded p-2 -m-2 transition-colors"
+              >
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-muted-foreground/10 text-muted-foreground group-hover:text-foreground">
+                  <FileDown className="h-5 w-5" />
+                </span>
+                <span className="text-sm font-medium text-foreground">
+                  {doc.originalFilename ?? "Ladda ner dokument"}
+                </span>
+              </Link>
+            ))}
+            </ul>
         </Sidebar>
       )}
 
       {news.referencedPoliticians && news.referencedPoliticians.length > 0 && (
-        <Sidebar heading="Omnämnda företrädare">
+        <Sidebar heading="Omnämnda">
           <nav aria-label="Lista över omnämnda företrädare">
             <div className="grid gap-4">
               {news.referencedPoliticians.map((politician) => (
@@ -92,6 +121,42 @@ export function NewsSidebar({ news, currentSlug }: NewsSidebarProps) {
         </Sidebar>
       )}
 
+      {news.politicalIssues && news.politicalIssues.length > 0 && (
+        <Sidebar heading="Politiska frågor">
+          <nav aria-label="Lista över politiska frågor">
+            <div className="grid gap-4">
+              {news.politicalIssues.map((issue: { _id: string; question?: string | null; slug?: { current?: string } | null }) => {
+                const issueSlug = (issue as { slug?: { current?: string } }).slug?.current;
+                return issueSlug ? (
+                  <Link
+                    key={issue._id}
+                    href={`${ROUTE_BASE.POLITICS_ISSUES}/${issueSlug}`}
+                    className="flex items-center gap-3 group hover:bg-muted rounded p-2 -m-2 transition-colors"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-foreground text-sm leading-tight">
+                        {issue.question}
+                      </h3>
+                    </div>
+                  </Link>
+                ) : (
+                  <div
+                    key={issue._id}
+                    className="flex items-center gap-3 rounded p-2"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-foreground text-sm leading-tight">
+                        {issue.question}
+                      </h3>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </nav>
+        </Sidebar>
+      )}
+
       {news.geographicalAreas && news.geographicalAreas.length > 0 && (
         <Sidebar heading="Geografiska områden">
           <nav aria-label="Lista över geografiska områden">
@@ -99,7 +164,7 @@ export function NewsSidebar({ news, currentSlug }: NewsSidebarProps) {
               {news.geographicalAreas.map((area) => (
                 <Link
                   key={area._id}
-                  href={`/omrade/${area.slug?.current || ""}`}
+                  href={`${ROUTE_BASE.POLITICS_AREA}/${area.slug?.current || ""}`}
                   className="flex items-center gap-3 group hover:bg-muted rounded p-2 -m-2 transition-colors"
                 >
                   {area.image && (

@@ -2,6 +2,7 @@ import {
   GeographicalArea,
   News,
   PoliticalArea,
+  PoliticalIssue,
   Politician,
 } from "~/sanity.types";
 import { Dereferenced, WithDereferencedFields, WithEffectiveDate } from "./shared";
@@ -35,6 +36,7 @@ type NewsBase = Omit<
   | "referencedPolitician"
   | "politicalAreas"
   | "geographicalAreas"
+  | "politicalIssues"
   | "related"
   | "dateOverride"
 >;
@@ -45,11 +47,17 @@ type NewsBase = Omit<
  */
 export type NewsExpanded = WithDereferencedFields<NewsBase, NewsRefs> & {
   effectiveDate: string;
-  document?: NewsDocumentWithUrl;
+  documents?: NewsDocumentWithUrl[];
+  instagramUrl?: string | null;
   variant?: NewsVariant;
   series?: ArticleSeriesInfo;
   seriesNews?: RelatedNewsItem[];
   relatedByPoliticalArea?: RelatedNewsItem[];
+  politicalIssues?: Array<{
+    _id: string;
+    question?: string | null;
+    slug?: { current?: string } | null;
+  }>;
 };
 
 /** @deprecated Use NewsExpanded. */

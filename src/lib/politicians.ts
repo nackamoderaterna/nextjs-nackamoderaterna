@@ -82,7 +82,9 @@ export type PoliticianWithNamnd = Omit<
   livingArea?: {
     _id: string;
     name: string;
-    slug: string;
+    slug: {
+      current: string;
+    };
   };
   politicalAreas?: Array<{
     showOnPoliticalAreaPage?: boolean;

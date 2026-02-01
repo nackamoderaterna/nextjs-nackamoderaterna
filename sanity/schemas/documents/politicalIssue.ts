@@ -18,6 +18,26 @@ export const politicalIssue = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: "slug",
+      title: "Slug",
+      description: "URL-vänlig identifierare. Genereras automatiskt från frågan.",
+      type: "slug",
+      options: {
+        source: "question",
+        maxLength: 96,
+      },
+      group: "content",
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "content",
+      title: "Innehåll",
+      description: "Huvudinnehållet för frågans sida.",
+      type: "array",
+      group: "content",
+      of: [{ type: "block" }],
+    }),
+    defineField({
       name: "featured",
       title: "Framhävd",
       type: "boolean",
@@ -32,6 +52,14 @@ export const politicalIssue = defineType({
       description: "Markera om detta vallöfte är uppfyllt",
       group: "content",
       initialValue: false,
+    }),
+    defineField({
+      name: "fulfilledAt",
+      title: "Uppfylld datum",
+      type: "date",
+      description: "När vallöftet uppfylldes. Visas i sidofältet när uppfyllt är markerat.",
+      group: "content",
+      hidden: ({ parent }) => !parent?.fulfilled,
     }),
     defineField({
       name: "politicalAreas",

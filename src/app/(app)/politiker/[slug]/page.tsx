@@ -5,7 +5,7 @@ import { sanityClient } from "@/lib/sanity/client";
 import { cleanPoliticianData, PoliticianWithNamnd } from "@/lib/politicians";
 import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
 import { PoliticianHero } from "@/lib/components/politician/PoliticianHero";
-import { RoleSidebar } from "@/lib/components/politician/roleSidebar";
+import { RoleCard } from "@/lib/components/politician/RoleCard";
 import { PoliticalAreasSidebar } from "@/lib/components/politician/PoliticalAreasSidebar";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { Section } from "@/lib/components/shared/Section";
@@ -86,12 +86,14 @@ export default async function PoliticianPage({
   
   // Clean all invisible Unicode characters from politician data
   const politician = cleanPoliticianData(politicianRaw);
+  const roles = mapPoliticianRoles({ politician });
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <PoliticianHero
         name={politician.name || ""}
         location={politician.livingArea?.name || ""}
+        locationSlug={politician.livingArea?.slug.current || ""}
         email={politician.email}
         phone={politician.phone}
         image={politician.image}
@@ -100,23 +102,29 @@ export default async function PoliticianPage({
       <div className="mt-8">
         <ContentWithSidebar
           mainContent={
-          politician.bio ? (
-            <div className="prose md:prose-lg">
-              <PortableText value={politician.bio} components={portableTextComponents} />
+            <div className="space-y-8">
+              {politician.bio && (
+                <div className="prose md:prose-lg">
+                  <PortableText value={politician.bio} components={portableTextComponents} />
+                </div>
+              )}
+              {roles.length > 0 && (
+                <section>
+                  <h2 className="text-2xl font-bold text-foreground mb-4">Uppdrag</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {roles.map((role, index) => (
+                      <RoleCard key={index} role={role} />
+                    ))}
+                  </div>
+                </section>
+              )}
             </div>
-          ) : null
           }
           sidebarContent={
-          <div className="space-y-6">
-            <RoleSidebar
-              heading="Uppdrag"
-              roles={mapPoliticianRoles({ politician })}
-            />
-            <PoliticalAreasSidebar
-              politicalAreas={politician.politicalAreas}
-            />
-          </div>
-          }
+            (politician.politicalAreas?.length ?? 0) > 0 ? (
+              <PoliticalAreasSidebar politicalAreas={politician.politicalAreas} />
+            ) : null
+            }
         />
       </div>
 

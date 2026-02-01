@@ -1,8 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
-import React from "react";
 import { SanityImage } from "../shared/SanityImage";
-import { buildImageUrl } from "@/lib/sanity/image";
+import { ROUTE_BASE } from "@/lib/routes";
 
 interface GeographicalAreaCardProps {
   title: string;
@@ -19,7 +17,7 @@ export function GeographicalAreaCard({
 }: GeographicalAreaCardProps) {
   return (
     <Link
-      href={`omrade/${slug}`}
+      href={`${ROUTE_BASE.POLITICS_AREA}/${slug}`}
       className={`group relative block overflow-hidden rounded-lg ${className || ""}`}
     >
       <div className="aspect-[16/9] w-full">

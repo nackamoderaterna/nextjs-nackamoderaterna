@@ -23,6 +23,8 @@ import { portableTextComponents } from "@/lib/components/shared/PortableTextComp
 import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 import { ROUTE_BASE } from "@/lib/routes";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
+import { Section } from "@/lib/components/shared/Section";
+import { Button } from "@/lib/components/ui/button";
 
 // Generate static params for all political areas at build time
 export async function generateStaticParams() {
@@ -73,7 +75,7 @@ export async function generateMetadata({
       ? `${data.name} - ${data.description[0]?.children?.[0]?.text?.substring(0, 150)}...`
       : `Läs mer om ${data.name}`,
     image: imageUrl,
-    url: `/politik/${slug}`,
+    url: `${ROUTE_BASE.POLITICS_CATEGORY}/${slug}`,
   });
 }
 
@@ -94,19 +96,16 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
 
 
   const newsSection = data.latestNews.length > 0 && (
-    <div className="mt-12">
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-3xl font-bold text-foreground">
-          Aktuellt inom {data.name}
-        </h2>
-        <Link
+    <Section title={`Aktuellt inom ${data.name}`} actions={
+      <Link
           href={`${ROUTE_BASE.NEWS}?area=${data._id}`}
           className="shrink-0 text-sm font-medium text-primary hover:underline flex items-center gap-1"
         >
           Alla nyheter
           <ExternalLink className="h-4 w-4" />
         </Link>
-      </div>
+    }>
+  
       <div className="grid">
         {data.latestNews.map((news, index) => (
           <NewsCard
@@ -119,7 +118,7 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
           />
         ))}
       </div>
-    </div>
+      </Section>
   );
 
   const mainContent = (
@@ -155,21 +154,17 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
         </Sidebar>
       )}
        {globalSettings?.handlingsprogram?.url && (
-        <Sidebar heading="Handlingsprogram">
-          <a
-            href={globalSettings.handlingsprogram.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-3 group hover:bg-muted rounded p-2 -m-2 transition-colors"
-          >
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-muted-foreground/10 text-muted-foreground group-hover:text-foreground">
-              <ExternalLink className="h-5 w-5" />
-            </span>
-            <span className="text-sm font-medium text-foreground">
-              Läs vårt handlingsprogram
-            </span>
-          </a>
-        </Sidebar>
+        <Button
+          asChild
+          variant="default"
+          className="w-full"
+          size="lg"
+        >
+          <Link href={globalSettings.handlingsprogram.url} target="_blank" rel="noopener noreferrer">
+            Läs vårt handlingsprogram
+          </Link>
+        </Button>
+       
       )}
     </div>
   );

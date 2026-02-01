@@ -112,13 +112,14 @@ export default async function PoliticsPage() {
                   key={issue._id}
                   relatedArea={issue.politicalAreas[0].name}
                   slug={issue.politicalAreas[0].slug.current}
+                  issueSlug={(issue as { slug?: { current?: string } }).slug?.current}
                 />
               ))}
             </div>
           </Section>
 
         {/* Political Areas Grid */}
-        <Section title="Politik per politikområde" titleSize="large">
+        <Section title="Kategorier" titleSize="large">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {data.politicalAreas.map((area) => {
               const Icon = getLucideIcon(area.icon?.name);
@@ -126,7 +127,7 @@ export default async function PoliticsPage() {
                 <PoliticalAreaCard
                   key={area._id}
                   title={area.name || ""}
-                  href={`${ROUTE_BASE.POLITICS}/${area.slug?.current}`}
+                  href={`${ROUTE_BASE.POLITICS_CATEGORY}/${area.slug?.current}`}
                   icon={Icon || undefined}
                 />
               );
@@ -135,7 +136,7 @@ export default async function PoliticsPage() {
         </Section>
 
         {/* Geographical Areas Section */}
-        <Section title="Politik per område" titleSize="large">
+        <Section title="Områden" titleSize="large">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {data.geographicalAreas.map((area) => (
               <GeographicalAreaCard
@@ -158,6 +159,7 @@ export default async function PoliticsPage() {
                   title={issue.question || ""}
                   relatedArea={issue.politicalAreas?.[0]?.name || ""}
                   slug={issue.politicalAreas?.[0]?.slug?.current || ""}
+                  issueSlug={(issue as { slug?: { current?: string } }).slug?.current}
                   fulfilled
                 />
               ))}

@@ -14,13 +14,13 @@ export function mapPoliticianRoles({ politician }: MapRolesArgs): Role[] {
       description:
         politician.kommunalrad.role === "president"
           ? "Kommunstyrelsens ordförande"
-          : "Kommunalråd",
+          : "",
     });
   }
 
   if (politician.partyBoard?.active) {
     roles.push({
-      title: "Styrelseuppdrag",
+      title: "Föreningsstyrelsen",
       description:
         politician.partyBoard.title ||
         (politician.partyBoard.isLeader ? "Ordförande" : "Ledamot"),

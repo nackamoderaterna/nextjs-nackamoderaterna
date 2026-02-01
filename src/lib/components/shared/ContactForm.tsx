@@ -96,7 +96,7 @@ export function ContactForm({ heading, description, className = "" }: ContactFor
   return (
     <div className={className}>
       {heading && (
-        <h2 className="text-2xl md:text-3xl font-bold mb-4">{heading}</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-8">{heading}</h2>
       )}
 
       {description && (

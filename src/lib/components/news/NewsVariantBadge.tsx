@@ -17,10 +17,10 @@ export function NewsVariantBadge({ variant, className }: NewsVariantBadgeProps) 
     <Badge
       variant="outline"
       className={cn(
-        "text-xs font-medium",
+        "text-sm font-medium",
         variant === "debate" && "border-green-500/50 text-green-700",
         variant === "pressrelease" &&
-          "border-brand-primary/10 text-brand-primary",
+          "border-brand-primary/50 text-brand-primary",
         className
       )}
     >

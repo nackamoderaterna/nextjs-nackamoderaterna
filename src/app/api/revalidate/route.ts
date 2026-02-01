@@ -57,17 +57,18 @@ function pathsForPayload(body: WebhookPayload): string[] {
       break;
     }
     case "politicalArea": {
-      paths.push("/politik");
-      if (slug) paths.push(`/politik/${slug}`);
+      paths.push("/politik", "/politik/kategori");
+      if (slug) paths.push(`/politik/kategori/${slug}`);
       break;
     }
     case "geographicalArea": {
-      paths.push("/politik");
-      if (slug) paths.push(`/omrade/${slug}`);
+      paths.push("/politik", "/politik/omrade");
+      if (slug) paths.push(`/politik/omrade/${slug}`);
       break;
     }
     case "politicalIssue": {
-      paths.push("/politik");
+      paths.push("/politik", "/politik/sakfragor");
+      if (slug) paths.push(`/politik/sakfragor/${slug}`);
       break;
     }
     case "listingPage": {

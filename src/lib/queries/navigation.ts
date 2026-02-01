@@ -93,7 +93,7 @@ export function getMenuItemHref(item: MenuItemWithReference): string {
       news: ROUTE_BASE.NEWS.slice(1),
       event: ROUTE_BASE.EVENTS.slice(1),
       politician: ROUTE_BASE.POLITICIANS.slice(1),
-      politicalIssue: "fragor",
+      politicalIssue: ROUTE_BASE.POLITICS_ISSUES.slice(1), // "politik/sakfragor"
     };
 
     const baseRoute = routeMap[_type] ?? _type;

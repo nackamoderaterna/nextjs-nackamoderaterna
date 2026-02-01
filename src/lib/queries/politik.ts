@@ -8,6 +8,7 @@ export const politikPageQuery = groq`
   ]{
     _id,
     question,
+    slug,
     featured,
     fulfilled,
 
@@ -31,6 +32,7 @@ export const politikPageQuery = groq`
   ] | order(_updatedAt desc) {
     _id,
     question,
+    slug,
     featured,
     fulfilled,
 
@@ -79,6 +81,60 @@ export const allGeographicalAreaSlugsQuery = groq`*[_type == "geographicalArea" 
   "slug": slug.current
 }`;
 
+// Query to get all political issue slugs for static generation
+export const allPoliticalIssueSlugsQuery = groq`*[_type == "politicalIssue" && defined(slug.current)] {
+  "slug": slug.current
+}`;
+
+export const politicalIssuePageQuery = groq`
+  *[_type == "politicalIssue" && slug.current == $slug][0] {
+    _id,
+    _type,
+    question,
+    slug,
+    content,
+    featured,
+    fulfilled,
+    fulfilledAt,
+
+    "politicalAreas": politicalAreas[]->{
+      _id,
+      name,
+      slug,
+      icon{ name }
+    },
+
+    "geographicalAreas": geographicalAreas[]->{
+      _id,
+      name,
+      slug,
+      image
+    },
+
+    "responsiblePoliticians": responsiblePoliticians[]->{
+      _id,
+      name,
+      slug,
+      image
+    },
+
+    "latestNews": *[
+      _type == "news" &&
+      references(^._id)
+    ] | order(
+      coalesce(dateOverride, _createdAt) desc
+    )[0...4] {
+      _id,
+      title,
+      slug,
+      excerpt,
+      mainImage,
+      dateOverride,
+      _createdAt
+    }
+  }
+`;
+
 export const politicalAreaPageQuery = groq`
   *[_type == "politicalArea" && slug.current == $slug][0] {
     _id,
@@ -110,6 +166,7 @@ export const politicalAreaPageQuery = groq`
     ] {
       _id,
       question,
+      slug,
       featured
     },
     "politicians": *[
@@ -160,6 +217,7 @@ export const geographicalAreaPageQuery = groq`
     ] {
       _id,
       question,
+      slug,
       featured,
       fulfilled
     },
