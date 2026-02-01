@@ -95,7 +95,7 @@ export function formatTimeRange(startDate: string | Date, endDate?: string | Dat
 }
 
 /**
- * Formats an address from location object
+ * Formats a full address from location object (venue, address, city).
  */
 export function formatAddress(location?: {
   address?: string | null;
@@ -103,12 +103,13 @@ export function formatAddress(location?: {
   venue?: string | null;
 }): string {
   if (!location) return "";
-  
+
   const parts = [
+    location.venue,
     location.address,
     location.city,
   ].filter(Boolean);
-  
+
   return parts.join(", ");
 }
 

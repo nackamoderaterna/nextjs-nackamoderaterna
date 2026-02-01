@@ -149,7 +149,14 @@ export default async function EventPage({ params }: Props) {
                 <p className="text-xs font-medium text-muted-foreground mb-1">
                   Adress
                 </p>
-                <p className="text-foreground">{address}</p>
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cleanInvisibleUnicode(address))}}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-foreground hover:text-primary hover:underline transition-colors"
+                >
+                  {address}
+                </a>
               </div>
             )}
           </div>
@@ -191,6 +198,7 @@ export default async function EventPage({ params }: Props) {
           pageType="Evenemang"
           title={event.title ?? "Evenemang"}
           image={event.image ?? undefined}
+          subtitle={event.isPublic ? "Publikt" : undefined}
         />
         <ContentWithSidebar
           mainContent={mainContent}

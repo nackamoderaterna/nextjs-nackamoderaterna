@@ -12,7 +12,7 @@ import {
 } from "@/lib/queries/events";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
-import { getMonth } from "@/lib/utils/dateUtils";
+import { formatAddress, getMonth } from "@/lib/utils/dateUtils";
 import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { Event } from "~/sanity.types";
@@ -47,11 +47,7 @@ function renderEventCard(
   className?: string,
   muted?: boolean
 ) {
-  const locationParts = [
-    event.location?.venue,
-    event.location?.address,
-  ].filter((s): s is string => typeof s === "string" && s.trim() !== "");
-  const location = locationParts.join(", ");
+  const location = formatAddress(event.location ?? undefined);
 
   return (
     <EventCard

@@ -44,7 +44,7 @@ export function EventCard({
               : "bg-brand-primary hover:bg-blue-700 text-white"
           )}
         >
-          Öppet event
+          Publikt
         </Badge>
       )}
 

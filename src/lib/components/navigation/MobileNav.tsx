@@ -3,8 +3,8 @@ import {
   getMenuItemHref,
   MenuItemWithReference,
 } from "@/lib/queries/navigation";
+import { getLucideIcon } from "@/lib/utils/iconUtils";
 import { useState } from "react";
-import { IconChevronDown, IconMenu2, IconX } from "@tabler/icons-react";
 import Link from "next/link";
 import {
   Sheet,
@@ -63,16 +63,22 @@ export function MobileNav({ items }: { items: MenuItemWithReference[] }) {
                             >
                               Alla kategorier
                             </Link>
-                            {child.children.map((grandchild) => (
-                              <Link
-                                key={grandchild.title}
-                                href={getMenuItemHref(grandchild)}
-                                onClick={() => setOpen(false)}
-                                className="py-1.5 text-sm text-muted-foreground hover:text-primary pl-2"
-                              >
-                                {grandchild.title}
-                              </Link>
-                            ))}
+                            {child.children.map((grandchild) => {
+                              const Icon = getLucideIcon(grandchild.icon?.name);
+                              return (
+                                <Link
+                                  key={grandchild.title}
+                                  href={getMenuItemHref(grandchild)}
+                                  onClick={() => setOpen(false)}
+                                  className="flex items-center gap-2 py-1.5 text-sm text-muted-foreground hover:text-primary pl-2"
+                                >
+                                  {Icon && (
+                                    <Icon className="size-4 shrink-0 text-muted-foreground" />
+                                  )}
+                                  {grandchild.title}
+                                </Link>
+                              );
+                            })}
                           </CollapsibleContent>
                         </Collapsible>
                       ) : (
