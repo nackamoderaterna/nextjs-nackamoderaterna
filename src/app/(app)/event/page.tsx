@@ -29,7 +29,10 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export const revalidate = 300;
+// Time-based split (upcoming vs past) uses request-time "now"; Sanity data is cached 24h via fetch revalidate
+export const dynamic = "force-dynamic";
+
+const EVENTS_CACHE_SECONDS = 86400; // 24 hours
 
 function renderEventCard(
   event: Event,
@@ -61,13 +64,13 @@ function renderEventCard(
 export default async function EventsPage() {
   const [events, listing] = await Promise.all([
     sanityClient.fetch<Event[]>(allEventsQuery, {}, {
-      next: { revalidate: 300 },
+      next: { revalidate: EVENTS_CACHE_SECONDS },
     }),
     sanityClient.fetch<ListingPage>(
       listingPageByKeyQuery,
       { key: "events" },
       {
-        next: { revalidate: 300 },
+        next: { revalidate: EVENTS_CACHE_SECONDS },
       }
     ),
   ]);
