@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   getMenuItemHref,
   MenuItemWithReference,
@@ -15,8 +16,39 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/lib/components/ui/dropdown-menu";
-import { navigationMenuTriggerStyle } from "@/lib/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+
+function isItemActive(pathname: string, href: string): boolean {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(href + "/");
+}
+
+function itemOrDescendantActive(
+  pathname: string,
+  item: MenuItemWithReference
+): boolean {
+  const href = getMenuItemHref(item);
+  if (isItemActive(pathname, href)) return true;
+  if (item.children) {
+    return item.children.some((child) => {
+      const childHref = getMenuItemHref(child);
+      if (isItemActive(pathname, childHref)) return true;
+      if (child.children) {
+        return child.children.some((grandchild) =>
+          isItemActive(pathname, getMenuItemHref(grandchild))
+        );
+      }
+      return false;
+    });
+  }
+  return false;
+}
+
+const navLinkBase =
+  "inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors focus-visible:ring-ring/50 focus-visible:ring-[3px] focus-visible:outline-1 outline-none";
+const navLinkDefault =
+  "text-muted-foreground hover:bg-muted/60 hover:text-foreground";
+const navLinkActive = "bg-muted/70 text-foreground";
 
 export function MainNav({
   items,
@@ -25,16 +57,23 @@ export function MainNav({
   items: MenuItemWithReference[];
   align?: "left" | "center";
 }) {
+  const pathname = usePathname();
+
   return (
     <nav
       className={cn(
-        "hidden lg:flex items-center gap-1",
+        "hidden sm:flex items-center gap-1",
         align === "center" && "flex-1 justify-center",
         align === "left" && "justify-start"
       )}
     >
       {items.map((item) => (
-        <DesktopNavItem item={item} key={item.title} />
+        <DesktopNavItem
+          item={item}
+          key={item.title}
+          pathname={pathname}
+          isActive={itemOrDescendantActive(pathname, item)}
+        />
       ))}
     </nav>
   );
@@ -73,17 +112,27 @@ function NavLink({
   );
 }
 
-function DesktopNavItem({ item }: { item: MenuItemWithReference }) {
+interface DesktopNavItemProps {
+  item: MenuItemWithReference;
+  pathname: string;
+  isActive: boolean;
+}
+
+function DesktopNavItem({ item, pathname, isActive }: DesktopNavItemProps) {
   const hasChildren = item.children && item.children.length > 0;
   const href = getMenuItemHref(item);
   const isExternal = item.linkType === "external";
+  const linkActive = isItemActive(pathname, href);
 
   if (!hasChildren) {
     return (
       <NavLink
         href={href}
         isExternal={isExternal}
-        className={cn(navigationMenuTriggerStyle())}
+        className={cn(
+          navLinkBase,
+          linkActive ? navLinkActive : navLinkDefault
+        )}
       >
         {item.title}
       </NavLink>
@@ -94,8 +143,9 @@ function DesktopNavItem({ item }: { item: MenuItemWithReference }) {
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          navigationMenuTriggerStyle(),
-          "data-[state=open]:bg-accent/50"
+          navLinkBase,
+          isActive ? navLinkActive : navLinkDefault,
+          "data-[state=open]:bg-muted/70 data-[state=open]:text-foreground"
         )}
       >
         {item.title}

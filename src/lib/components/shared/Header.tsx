@@ -37,7 +37,7 @@ export default async function Header() {
   return (
     <header className="w-full border-b border-gray-200 bg-white">
       {/* Top row: logo, (search + Bli medlem) left, mobile menu right */}
-      <div className="max-w-7xl mx-auto w-full h-16 px-4 lg:px-8 flex items-center justify-between  gap-4">
+      <div className="max-w-7xl mx-auto w-full h-16 px-4 sm:px-8 flex items-center justify-between  gap-4">
         <div className="font-bold flex-shrink-0 flex items-center gap-3">
           {logo && (
             <Link href="/" className="flex items-center w-10">
@@ -57,7 +57,7 @@ export default async function Header() {
         </div>
         <div className="flex-1 min-w-0" />
         <div className="flex items-center justify-end gap-2  w-full max-w-lg">
-          <div className="hidden lg:flex items-center gap-2 w-full justify-end">
+          <div className="hidden sm:flex items-center gap-2 w-full justify-end">
             <SearchBar />
             {bliMedlemUrl && (
               <Button asChild variant="secondary" size="sm" className="shrink-0">
@@ -76,8 +76,8 @@ export default async function Header() {
           <MobileNav items={navItems} bliMedlemUrl={bliMedlemUrl} />
         </div>
       </div>
-      {/* Desktop: nav links in a second row, left aligned */}
-      <div className="hidden lg:block border-t border-gray-200">
+      {/* Full nav: links in a second row (hidden only on small screens) */}
+      <div className="hidden sm:block border-t border-gray-200">
         <div className="max-w-7xl mx-auto w-full px-4 py-2 flex justify-start">
           <MainNav items={navItems} align="left" />
         </div>
