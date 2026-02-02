@@ -75,7 +75,7 @@ export function NewsCard({
               {politicalAreas && politicalAreas.length > 0 && (
                 <div className="text-xs uppercase text-muted-foreground mt-4 flex flex-wrap gap-4">
                   {[...politicalAreas]
-                    .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
+                    .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "", "sv"))
                     .map((a) => {
                       const href = `${ROUTE_BASE.POLITICS_CATEGORY}/${a.slug?.current || ""}`;
                       return (

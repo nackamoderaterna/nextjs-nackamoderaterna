@@ -77,10 +77,10 @@ export function NewsFilters({ politicalAreas }: NewsFiltersProps) {
         </label>
         <Select value={selectedArea || "all"} onValueChange={handleAreaChange}>
           <SelectTrigger id="area-filter" className="w-[200px]">
-            <SelectValue placeholder="Alla områden" />
+            <SelectValue placeholder="Alla kategorier" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Alla områden</SelectItem>
+            <SelectItem value="all">Alla kategorier</SelectItem>
             {politicalAreas
               .filter((area) => area.slug?.current)
               .map((area) => (

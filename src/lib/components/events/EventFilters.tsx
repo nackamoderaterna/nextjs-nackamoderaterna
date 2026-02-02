@@ -1,13 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/lib/components/ui/select";
+import { Tabs, TabsList, TabsTrigger } from "@/lib/components/ui/tabs";
 import { ROUTE_BASE } from "@/lib/routes";
 
 const EVENT_VIEW_OPTIONS = [
@@ -41,24 +35,19 @@ export function EventFilters() {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-4 mb-8">
-      <div className="flex items-center gap-2">
-        <label htmlFor="event-view-filter" className="text-sm font-medium">
-          Visa:
-        </label>
-        <Select value={value} onValueChange={handleChange}>
-          <SelectTrigger id="event-view-filter" className="w-[200px]">
-            <SelectValue placeholder="Välj vy" />
-          </SelectTrigger>
-          <SelectContent>
-            {EVENT_VIEW_OPTIONS.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+    <div className="mb-8">
+      <Tabs value={value} onValueChange={handleChange}>
+        <TabsList variant="line" className="h-auto p-0 bg-transparent">
+          {EVENT_VIEW_OPTIONS.map((opt) => (
+            <TabsTrigger
+              key={opt.value}
+              value={opt.value}
+            >
+              {opt.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
     </div>
   );
 }

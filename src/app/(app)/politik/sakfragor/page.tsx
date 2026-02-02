@@ -6,7 +6,6 @@ import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ROUTE_BASE } from "@/lib/routes";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
-import { Section } from "@/lib/components/shared/Section";
 import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
 import { PoliticalIssue } from "~/sanity.types";
 import type { ListingPage } from "@/lib/types/pages";
@@ -64,9 +63,11 @@ export default async function PolitikSakfragorPage() {
     }),
   ]);
 
-  const featuredIssues = allIssues.filter((i) => i.featured);
-  const fulfilledIssues = allIssues.filter((i) => i.fulfilled && !i.featured);
-  const otherIssues = allIssues.filter((i) => !i.featured && !i.fulfilled);
+  const orderedIssues = [
+    ...allIssues.filter((i) => i.featured),
+    ...allIssues.filter((i) => i.fulfilled && !i.featured),
+    ...allIssues.filter((i) => !i.featured && !i.fulfilled),
+  ];
 
   return (
     <div className="bg-background">
@@ -75,57 +76,22 @@ export default async function PolitikSakfragorPage() {
         intro={listing?.intro}
         fallbackTitle="Våra sakfrågor"
       >
-        {featuredIssues.length > 0 && (
-          <Section title="Kärnfrågor" titleSize="large">
-            <ResponsiveGrid cols={2}>
-              {featuredIssues.map((issue) => (
-                <PoliticalIssueItem
-                  key={issue._id}
-                  title={issue.question || ""}
-                  description={issue.description}
-                  politicalAreas={issue.politicalAreas}
-                  geographicalAreas={issue.geographicalAreas ?? []}
-                  issueSlug={issue.slug?.current}
-                />
-              ))}
-            </ResponsiveGrid>
-          </Section>
-        )}
-
-        {fulfilledIssues.length > 0 && (
-          <Section title="Uppfyllda vallöften" titleSize="large">
-            <ResponsiveGrid cols={2}>
-              {fulfilledIssues.map((issue) => (
-                <PoliticalIssueItem
-                  key={issue._id}
-                  title={issue.question || ""}
-                  description={issue.description}
-                  politicalAreas={issue.politicalAreas}
-                  geographicalAreas={issue.geographicalAreas ?? []}
-                  issueSlug={issue.slug?.current}
-                  fulfilled
-                />
-              ))}
-            </ResponsiveGrid>
-          </Section>
-        )}
-
-        {otherIssues.length > 0 && (
-          <Section title="Övriga" titleSize="large">
-            <ResponsiveGrid cols={2}>
-              {otherIssues.map((issue) => (
-                <PoliticalIssueItem
-                  key={issue._id}
-                  title={issue.question || ""}
-                  description={issue.description}
-                  politicalAreas={issue.politicalAreas}
-                  geographicalAreas={issue.geographicalAreas ?? []}
-                  issueSlug={issue.slug?.current}
-                />
-              ))}
-            </ResponsiveGrid>
-          </Section>
-        )}
+        {orderedIssues.length > 0 ? (
+          <ResponsiveGrid cols={3}>
+            {orderedIssues.map((issue) => (
+              <PoliticalIssueItem
+                key={issue._id}
+                title={issue.question || ""}
+                description={issue.description}
+                politicalAreas={issue.politicalAreas}
+                geographicalAreas={issue.geographicalAreas ?? []}
+                issueSlug={issue.slug?.current}
+                fulfilled={!!issue.fulfilled}
+                featured={!!issue.featured}
+              />
+            ))}
+          </ResponsiveGrid>
+        ) : null}
       </ListingPageLayout>
     </div>
   );

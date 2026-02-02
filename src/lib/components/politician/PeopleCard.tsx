@@ -8,8 +8,8 @@ interface PeopleCardProps {
   name?: string;
   title?: string;
   slug: string;
-  size: "small" | "medium" | "large";
-  /** Optional class for the small/medium variant container (e.g. to override hover in muted boxes) */
+  size: "small" | "large";
+  /** Optional class for the small variant container (e.g. to override hover in muted boxes) */
   className?: string;
 }
 
@@ -21,9 +21,9 @@ export function PeopleCard({
   size = "small",
   className,
 }: PeopleCardProps) {
-  const isHorizontal = size === "small" || size === "medium";
-  const imageSize = size === "medium" ? "w-20 h-20" : "w-12 h-12";
-  const imageSizes = size === "medium" ? "80px" : "48px";
+  const isHorizontal = size === "small";
+  const imageSize = "w-20 h-20";
+  const imageSizes = "80px";
 
   if (isHorizontal) {
     return (

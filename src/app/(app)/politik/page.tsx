@@ -13,6 +13,8 @@ import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { Section } from "@/lib/components/shared/Section";
 import type { ListingPage } from "@/lib/types/pages";
+import { Button } from "@/lib/components/ui/button";
+import Link from "next/link";
 
 export async function generateMetadata(): Promise<Metadata> {
   const listing = await sanityClient.fetch<ListingPage>(
@@ -94,8 +96,8 @@ export default async function PoliticsPage() {
         fallbackTitle="Vår politik"
       >
           {/* Key Issues Section */}
-          <Section title="Våra kärnfrågor" titleSize="large">
-            <ResponsiveGrid cols={2}>
+          <Section title="Kärnfrågor" titleSize="large"   actions={<Button asChild variant="link" size="sm"><Link href={`${ROUTE_BASE.POLITICS_ISSUES}`}>Se alla</Link></Button>}>
+            <ResponsiveGrid cols={3}>
               {data.featuredPoliticalIssues.map((issue) => (
                 <PoliticalIssueItem
                   key={issue._id}
@@ -104,6 +106,7 @@ export default async function PoliticsPage() {
                   politicalAreas={issue.politicalAreas}
                   geographicalAreas={issue.geographicalAreas ?? []}
                   issueSlug={issue.slug?.current}
+                
                 />
               ))}
             </ResponsiveGrid>
@@ -112,7 +115,7 @@ export default async function PoliticsPage() {
         {/* Political Areas Grid */}
         <Section title="Kategorier" titleSize="large">
           <ResponsiveGrid cols={4} colsBase={2}>
-            {data.politicalAreas.map((area) => {
+            {data.politicalAreas.sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "", "sv")).map((area) => {
               const Icon = getLucideIcon(area.icon?.name);
               return (
                 <PoliticalAreaCard
@@ -129,9 +132,10 @@ export default async function PoliticsPage() {
         {/* Geographical Areas (Områden) */}
         {data.geographicalAreas?.length > 0 && (
           <Section title="Områden" titleSize="large">
-            <ResponsiveGrid cols={2}>
+            <ResponsiveGrid cols={3}>
               {data.geographicalAreas
                 .filter((area) => area.slug?.current)
+                .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "", "sv"))
                 .map((area) => (
                   <GeographicalAreaCard
                     key={area._id}
@@ -147,7 +151,7 @@ export default async function PoliticsPage() {
         {/* Fulfilled Promises Section */}
         {data.fulfilledPoliticalIssues.length > 0 && (
           <Section title="Uppfyllda vallöften" titleSize="large">
-            <ResponsiveGrid cols={2}>
+            <ResponsiveGrid cols={3}>
               {data.fulfilledPoliticalIssues.map((issue) => (
                 <PoliticalIssueItem
                   key={issue._id}

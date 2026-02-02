@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Star } from "lucide-react";
 import { ROUTE_BASE } from "@/lib/routes";
 import { CategoryBadge } from "./CategoryBadge";
 import {
   Item,
   ItemContent,
   ItemDescription,
-  ItemFooter,
+  ItemHeader,
   ItemMedia,
   ItemTitle,
 } from "@/lib/components/ui/item";
@@ -25,6 +25,7 @@ interface PoliticalIssueItemProps {
   geographicalAreas?: AreaRef[];
   issueSlug?: string | null;
   fulfilled?: boolean;
+  featured?: boolean;
 }
 
 export function PoliticalIssueItem({
@@ -34,6 +35,7 @@ export function PoliticalIssueItem({
   geographicalAreas = [],
   issueSlug,
   fulfilled,
+  featured,
 }: PoliticalIssueItemProps) {
   const firstCategorySlug = politicalAreas[0]?.slug?.current ?? "";
   const href = issueSlug
@@ -62,14 +64,22 @@ export function PoliticalIssueItem({
         </ItemMedia>
       )}
       <ItemContent>
-        <ItemTitle>{title}</ItemTitle>
+        <ItemHeader>
+          <ItemTitle>{title}</ItemTitle>
+          {featured && !fulfilled && (
+            <Star
+              className="size-3.5 shrink-0 text-amber-500"
+              aria-label="kärnfråga"
+            />
+          )}
+        </ItemHeader>
         {description && <ItemDescription>{description}</ItemDescription>}
       </ItemContent>
       {hasBadges && (
         <ItemDescription>
           <div className="flex flex-wrap items-center gap-2">
             {[...politicalAreaItems]
-              .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
+              .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "", "sv"))
               .map((a) => (
                 <CategoryBadge
                   key={a._id || a.name || ""}
@@ -78,7 +88,7 @@ export function PoliticalIssueItem({
                 />
               ))}
             {[...geographicalAreaItems]
-              .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
+              .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "", "sv"))
               .map((a) => (
                 <CategoryBadge key={a._id || a.name || ""} name={a.name ?? ""} />
               ))}

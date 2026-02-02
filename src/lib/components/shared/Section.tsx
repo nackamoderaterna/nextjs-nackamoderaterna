@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { Separator } from "../ui/separator";
 
 interface SectionProps {
   /** Optional section heading (e.g. "Aktuellt inom Nacka") */
@@ -40,9 +41,11 @@ export function Section({
       className={cn("mb-12", className)}
       aria-label={ariaLabel}
     >
+
       {(title || actions) && (
         <div className="flex items-center justify-between mb-6 text-muted-foreground">
           {title && <h2 className={cn(titleClasses)}>{title}</h2>}
+          
           {actions}
         </div>
       )}

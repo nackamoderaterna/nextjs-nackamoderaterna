@@ -114,7 +114,7 @@ export default async function PoliticiansPage() {
                   image={politician.image}
                   name={politician.name}
                   title={namndTitle}
-                  size="medium"
+                  size="small"
                 />
               ))}
             </ResponsiveGrid>
