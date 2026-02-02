@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { Mail, Phone } from "lucide-react";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
+import { ContactInfoItem } from "@/lib/components/shared/ContactInfoItem";
 import { SocialLinks, type SocialLinksData } from "@/lib/components/shared/SocialLinks";
 import { PoliticalAreasSidebar } from "@/lib/components/politician/PoliticalAreasSidebar";
 import { formatPhoneNumber } from "@/lib/utils/phoneUtils";
@@ -38,34 +38,24 @@ export function PoliticianSidebar({
     <div className="space-y-6">
       {hasContact && (
         <Sidebar heading="Kontakt">
-          <div className="space-y-4">
+          <div className="grid gap-4">
             {email && (
-              <div>
-                <p className="text-xs text-muted-foreground uppercase mb-1">
-                  E-post
-                </p>
-                <Link
-                  href={`mailto:${email}`}
-                  className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
-                >
-                  <Mail className="h-4 w-4 shrink-0" />
-                  {email}
-                </Link>
-              </div>
+              <ContactInfoItem
+                icon={<Mail className="h-4 w-4 shrink-0" />}
+                label="E-post"
+                href={`mailto:${email}`}
+              >
+                {email}
+              </ContactInfoItem>
             )}
             {phone && (
-              <div>
-                <p className="text-xs text-muted-foreground uppercase mb-1">
-                  Telefon
-                </p>
-                <Link
-                  href={`tel:${phone}`}
-                  className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
-                >
-                  <Phone className="h-4 w-4 shrink-0" />
-                  {formatPhoneNumber(phone)}
-                </Link>
-              </div>
+              <ContactInfoItem
+                icon={<Phone className="h-4 w-4 shrink-0" />}
+                label="Telefon"
+                href={`tel:${phone.replace(/\D/g, "")}`}
+              >
+                {formatPhoneNumber(phone)}
+              </ContactInfoItem>
             )}
             <SocialLinks
               links={socialLinks}

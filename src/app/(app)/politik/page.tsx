@@ -1,5 +1,5 @@
 import { PoliticalAreaCard } from "@/lib/components/politics/politicalAreaCard";
-import { ContentCard } from "@/lib/components/politics/contentCard";
+import { PoliticalIssueItem } from "@/lib/components/politics/PoliticalIssueItem";
 import { PoliticalArea, PoliticalIssue } from "~/sanity.types";
 import { politikPageQuery } from "@/lib/queries/politik";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
@@ -95,7 +95,7 @@ export default async function PoliticsPage() {
           <Section title="Våra kärnfrågor" titleSize="large">
             <ResponsiveGrid cols={2}>
               {data.featuredPoliticalIssues.map((issue) => (
-                <ContentCard
+                <PoliticalIssueItem
                   key={issue._id}
                   title={issue.question || ""}
                   description={issue.description}
@@ -129,7 +129,7 @@ export default async function PoliticsPage() {
           <Section title="Uppfyllda vallöften" titleSize="large">
             <ResponsiveGrid cols={2}>
               {data.fulfilledPoliticalIssues.map((issue) => (
-                <ContentCard
+                <PoliticalIssueItem
                   key={issue._id}
                   title={issue.question || ""}
                   description={issue.description}

@@ -5,7 +5,18 @@ import { sanityClient } from "@/lib/sanity/client";
 import { cleanPoliticianData, PoliticianWithNamnd } from "@/lib/politicians";
 import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
 import { ContentHero } from "@/lib/components/shared/ContentHero";
-import { ContentCard } from "@/lib/components/politics/contentCard";
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemTitle,
+} from "@/lib/components/ui/item";
+import {
+  Menubar,
+  MenubarLabel,
+  MenubarMenu,
+  MenubarTrigger,
+} from "@/lib/components/ui/menubar";
 import { PoliticianSidebar } from "@/lib/components/politician/PoliticianSidebar";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
@@ -109,25 +120,23 @@ export default async function PoliticianPage({
     <div className="space-y-8">
     {tocEntries.length > 1 && (
   
-      <Section id="innehall" title="Innehåll" className="scroll-mt-24 pb-2 border-b border-border">
-        <nav aria-label="Innehåll" className="text-sm mb-6">
-         
-          <ul className="flex flex-wrap gap-x-4 gap-y-1 text-muted-foreground">
+      
+          <Menubar className="w-full mx-auto">
+            <MenubarLabel>Innehåll</MenubarLabel>
             {tocEntries.map(({ id, label }) => (
-              <li key={id}>
-                <Link
-                  href={`#${id}`}
-                
-                  className="hover:text-primary transition-colors underline"
-                  scroll={true}
-                >
-                  {label}
-                </Link>
-              </li>
+              <MenubarMenu key={id}>
+                <MenubarTrigger asChild>
+                  <Link
+                    href={`#${id}`}
+                    scroll={true}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {label}
+                  </Link>
+                </MenubarTrigger>
+              </MenubarMenu>
             ))}
-          </ul>
-        </nav>
-      </Section>
+          </Menubar>
       )}
       {politician.bio && (
         <Section id="biografi" title="Biografi" className="scroll-mt-24">
@@ -142,14 +151,38 @@ export default async function PoliticianPage({
       {roles.length > 0 && (
         <Section id="uppdrag" title="Uppdrag" className="scroll-mt-24">
           <ResponsiveGrid cols={3}>
-            {roles.map((role, index) => (
-              <ContentCard
-                key={index}
-                title={role.title}
-                description={role.description}
-                href={role.href}
-              />
-            ))}
+            {roles.map((role, index) =>
+              role.href ? (
+                <Item
+                  key={index}
+                  asChild
+                  variant="outline"
+                  className="h-full flex-col items-stretch rounded-lg"
+                >
+                  <Link href={role.href}>
+                    <ItemContent>
+                      <ItemTitle>{role.title}</ItemTitle>
+                      {role.description && (
+                        <ItemDescription>{role.description}</ItemDescription>
+                      )}
+                    </ItemContent>
+                  </Link>
+                </Item>
+              ) : (
+                <Item
+                  key={index}
+                  variant="outline"
+                  className="h-full flex-col items-stretch rounded-lg"
+                >
+                  <ItemContent>
+                    <ItemTitle>{role.title}</ItemTitle>
+                    {role.description && (
+                      <ItemDescription>{role.description}</ItemDescription>
+                    )}
+                  </ItemContent>
+                </Item>
+              )
+            )}
           </ResponsiveGrid>
         </Section>
       )} 

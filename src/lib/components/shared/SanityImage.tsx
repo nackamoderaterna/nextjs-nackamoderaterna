@@ -8,6 +8,9 @@ type SanityImageProps = {
   alt?: string;
   width?: number;
   height?: number;
+  /** When fill=true, pass source dimensions to avoid loading full-size images. Improves LCP. */
+  sourceWidth?: number;
+  sourceHeight?: number;
   sizes?: string;
   className?: string;
   priority?: boolean;
@@ -20,6 +23,8 @@ export function SanityImage({
   alt = "",
   width = 700,
   height,
+  sourceWidth,
+  sourceHeight,
   sizes = "(max-width: 768px) 100vw, 1200px",
   className = "",
   priority = false,
@@ -31,8 +36,8 @@ export function SanityImage({
   }
 
   const imageUrl = buildImageUrl(image, {
-    width: fill ? undefined : width,
-    height: fill ? undefined : height,
+    width: fill ? (sourceWidth ?? 1200) : width,
+    height: fill ? sourceHeight : height,
     quality: 85,
   });
 

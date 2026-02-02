@@ -48,6 +48,8 @@ export function NewsArticleImage({ news }: NewsArticleImageProps) {
           image={mainImage}
           fill
           priority
+          sourceWidth={800}
+          sourceHeight={1000}
           className="object-cover"
           alt={alt}
           sizes="(max-width: 1023px) 100vw, (min-width: 1024px) 400px, 384px"

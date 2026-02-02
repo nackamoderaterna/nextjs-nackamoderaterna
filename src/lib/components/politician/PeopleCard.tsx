@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { ROUTE_BASE } from "@/lib/routes";
 
 interface PeopleCardProps {
-  image: any;
+  image: unknown;
   name?: string;
   title?: string;
   slug: string;
@@ -87,8 +87,6 @@ export function PeopleCard({
         <div className="p-6">
           <h3 className={`font-semibold text-foreground text-xl`}>{name}</h3>
           <p className={`text-muted-foreground text-base mt-1`}>{title}</p>
-
-          {/* Contact Icons - Only for Large Size */}
         </div>
       </div>
     </Link>

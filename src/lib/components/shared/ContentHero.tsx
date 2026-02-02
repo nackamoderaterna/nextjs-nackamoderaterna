@@ -33,8 +33,11 @@ export function ContentHero({
               image={image}
               alt=""
               fill
+              priority
+              sourceWidth={512}
+              sourceHeight={512}
               className="object-cover rounded"
-              sizes="(max-width: 1023px) 128px, 512px"
+              sizes="(max-width: 1023px) 384px, 256px"
             />
           </div>
         ) : showIcon ? (
