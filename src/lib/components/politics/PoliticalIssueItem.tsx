@@ -66,7 +66,7 @@ export function PoliticalIssueItem({
         {description && <ItemDescription>{description}</ItemDescription>}
       </ItemContent>
       {hasBadges && (
-        <ItemFooter>
+        <ItemDescription>
           <div className="flex flex-wrap items-center gap-2">
             {[...politicalAreaItems]
               .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""))
@@ -83,7 +83,7 @@ export function PoliticalIssueItem({
                 <CategoryBadge key={a._id || a.name || ""} name={a.name ?? ""} />
               ))}
           </div>
-        </ItemFooter>
+        </ItemDescription>
       )}
     </>
   );

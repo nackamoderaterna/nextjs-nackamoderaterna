@@ -11,27 +11,12 @@ export const staticNavItems: MenuItemWithReference[] = [
     title: "Politik",
     linkType: "static",
     staticRoute: ROUTE_BASE.POLITICS,
-    children: [
-      {
-        _type: "menuItem",
-        title: "Översikt",
-        linkType: "static",
-        staticRoute: "/politik",
-      },
-      {
-        _type: "menuItem",
-        title: "Sakfrågor",
-        linkType: "static",
-        staticRoute: ROUTE_BASE.POLITICS_ISSUES,
-      },
-      {
-        _type: "menuItem",
-        title: "Kategori",
-        linkType: "static",
-        staticRoute: ROUTE_BASE.POLITICS_CATEGORY,
-        // Children will be dynamically injected by buildNavigation
-      },
-    ] as unknown as MenuItemWithReference[],
+  },
+  {
+    _type: "menuItem",
+    title: "Sakfrågor",
+    linkType: "static",
+    staticRoute: ROUTE_BASE.POLITICS_ISSUES,
   },
   {
     _type: "menuItem",

@@ -27,6 +27,14 @@ export default defineType({
       options: { hotspot: true },
     }),
     defineField({
+      name: "bliMedlemUrl",
+      title: "Bli medlem URL",
+      type: "url",
+      group: "company",
+      description:
+        "URL för Bli medlem-knappen i header. Lämna tom för att dölja knappen.",
+    }),
+    defineField({
       name: "contactInfo",
       title: "Kontaktuppgifter",
       type: "object",

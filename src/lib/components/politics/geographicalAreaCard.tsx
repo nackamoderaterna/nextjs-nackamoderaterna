@@ -1,4 +1,10 @@
 import Link from "next/link";
+import {
+  Item,
+  ItemContent,
+  ItemMedia,
+  ItemTitle,
+} from "@/lib/components/ui/item";
 import { SanityImage } from "../shared/SanityImage";
 import { ROUTE_BASE } from "@/lib/routes";
 
@@ -16,21 +22,29 @@ export function GeographicalAreaCard({
   className,
 }: GeographicalAreaCardProps) {
   return (
-    <Link
-      href={`${ROUTE_BASE.POLITICS_AREA}/${slug}`}
-      className={`group relative block overflow-hidden rounded-lg ${className || ""}`}
+    <Item
+      asChild
+      variant="outline"
+      className={`h-full rounded-lg hover:border-brand-primary/50 ${className || ""}`}
     >
-      <div className="aspect-[16/9] w-full">
-        <SanityImage
-          image={image}
-          fill
-          className="transition-transform duration-300 group-hover:scale-105"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-transparent" />
-        <h3 className="absolute left-5 top-5 text-xl font-bold text-white">
-          {title}
-        </h3>
-      </div>
-    </Link>
+      <Link href={`${ROUTE_BASE.POLITICS_AREA}/${slug}`} className="flex items-center gap-4">
+        <ItemMedia variant="image" className="relative aspect-square size-16 shrink-0 overflow-hidden">
+          {image ? (
+            <SanityImage
+              image={image}
+              fill
+              className="object-cover"
+            />
+          ) : (
+            <div className="size-full bg-muted" />
+          )}
+        </ItemMedia>
+        <ItemContent>
+          <ItemTitle className="text-foreground group-hover/item:text-brand-primary">
+            {title}
+          </ItemTitle>
+        </ItemContent>
+      </Link>
+    </Item>
   );
 }

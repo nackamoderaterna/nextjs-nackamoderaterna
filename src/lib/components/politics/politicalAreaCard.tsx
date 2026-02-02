@@ -1,5 +1,11 @@
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
+import {
+  Item,
+  ItemContent,
+  ItemMedia,
+  ItemTitle,
+} from "@/lib/components/ui/item";
 
 interface PoliticalAreaCardProps {
   title: string;
@@ -13,16 +19,23 @@ export function PoliticalAreaCard({
   href,
 }: PoliticalAreaCardProps) {
   return (
-    <Link
-      href={href}
-      className="group flex flex-col items-center justify-center gap-2 rounded-lg bg-brand-primary/10 px-6 py-4 transition-all hover:bg-brand-primary/15 hover:shadow-sm"
+    <Item
+      asChild
+      variant="outline"
+      className="h-full items-center justify-center rounded-lg hover:border-brand-primary/50 group"
     >
-      {Icon && (
-        <Icon className="h-8 w-8 text-brand-primary transition-transform group-hover:scale-110" />
-      )}
-      <span className="text-center text-sm font-semibold text-brand-primary">
-        {title}
-      </span>
-    </Link>
+      <Link href={href} className="flex items-center gap-2 py-4">
+        {Icon && (
+          <ItemMedia variant="icon">
+            <Icon className="size-5 text-foreground group-hover:text-brand-primary" />
+          </ItemMedia>
+        )}
+        <ItemContent>
+          <ItemTitle className="text-center text-foreground group-hover:text-brand-primary">
+            {title}
+          </ItemTitle>
+        </ItemContent>
+      </Link>
+    </Item>
   );
 }

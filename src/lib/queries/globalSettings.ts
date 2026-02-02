@@ -4,6 +4,7 @@ export const globalSettingsQuery = groq`
   *[_type == "globalSettings"][0] {
     companyName,
     logo,
+    bliMedlemUrl,
     contactInfo,
     pressContactInfo,
     postAddress,

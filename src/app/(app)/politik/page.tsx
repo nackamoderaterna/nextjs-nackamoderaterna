@@ -1,6 +1,7 @@
+import { GeographicalAreaCard } from "@/lib/components/politics/geographicalAreaCard";
 import { PoliticalAreaCard } from "@/lib/components/politics/politicalAreaCard";
 import { PoliticalIssueItem } from "@/lib/components/politics/PoliticalIssueItem";
-import { PoliticalArea, PoliticalIssue } from "~/sanity.types";
+import { PoliticalArea, PoliticalIssue, GeographicalArea } from "~/sanity.types";
 import { politikPageQuery } from "@/lib/queries/politik";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
@@ -65,6 +66,7 @@ export type PoliticalIssuesPageData = {
       };
     }
   >;
+  geographicalAreas: GeographicalArea[];
 };
 
 export default async function PoliticsPage() {
@@ -123,6 +125,24 @@ export default async function PoliticsPage() {
             })}
           </ResponsiveGrid>
         </Section>
+
+        {/* Geographical Areas (Områden) */}
+        {data.geographicalAreas?.length > 0 && (
+          <Section title="Områden" titleSize="large">
+            <ResponsiveGrid cols={2}>
+              {data.geographicalAreas
+                .filter((area) => area.slug?.current)
+                .map((area) => (
+                  <GeographicalAreaCard
+                    key={area._id}
+                    title={area.name || ""}
+                    image={area.image}
+                    slug={area.slug!.current!}
+                  />
+                ))}
+            </ResponsiveGrid>
+          </Section>
+        )}
 
         {/* Fulfilled Promises Section */}
         {data.fulfilledPoliticalIssues.length > 0 && (
