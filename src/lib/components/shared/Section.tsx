@@ -38,7 +38,7 @@ export function Section({
   return (
     <section
       id={id}
-      className={cn("mb-12", className)}
+      className={cn("mb-16", className)}
       aria-label={ariaLabel}
     >
 

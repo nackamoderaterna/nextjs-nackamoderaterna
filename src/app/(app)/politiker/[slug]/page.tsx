@@ -126,44 +126,7 @@ export default async function PoliticianPage({
           </div>
         </Section>
       )}
-      {roles.length > 0 && (
-        <Section id="uppdrag" title="Uppdrag" className="scroll-mt-24">
-          <ResponsiveGrid cols={3}>
-            {roles.map((role, index) =>
-              role.href ? (
-                <Item
-                  key={index}
-                  asChild
-                  variant="outline"
-                  className="h-full flex-col items-stretch rounded-lg"
-                >
-                  <Link href={role.href}>
-                    <ItemContent>
-                      <ItemTitle>{role.title}</ItemTitle>
-                      {role.description && (
-                        <ItemDescription>{role.description}</ItemDescription>
-                      )}
-                    </ItemContent>
-                  </Link>
-                </Item>
-              ) : (
-                <Item
-                  key={index}
-                  variant="outline"
-                  className="h-full flex-col items-stretch rounded-lg"
-                >
-                  <ItemContent>
-                    <ItemTitle>{role.title}</ItemTitle>
-                    {role.description && (
-                      <ItemDescription>{role.description}</ItemDescription>
-                    )}
-                  </ItemContent>
-                </Item>
-              )
-            )}
-          </ResponsiveGrid>
-        </Section>
-      )} 
+     
       </div>
     )
 
@@ -200,6 +163,44 @@ export default async function PoliticianPage({
           }
         />
       </div>
+      {roles.length > 0 && (
+        <Section id="uppdrag" title="Uppdrag" className="scroll-mt-24">
+          <ResponsiveGrid cols={4}>
+            {roles.map((role, index) =>
+              role.href ? (
+                <Item
+                  key={index}
+                  asChild
+                  variant="outline"
+                  className="h-full flex-col items-stretch rounded-lg"
+                >
+                  <Link href={role.href}>
+                    <ItemContent>
+                      <ItemTitle>{role.title}</ItemTitle>
+                      {role.description && (
+                        <ItemDescription>{role.description}</ItemDescription>
+                      )}
+                    </ItemContent>
+                  </Link>
+                </Item>
+              ) : (
+                <Item
+                  key={index}
+                  variant="outline"
+                  className="h-full flex-col items-stretch rounded-lg"
+                >
+                  <ItemContent>
+                    <ItemTitle>{role.title}</ItemTitle>
+                    {role.description && (
+                      <ItemDescription>{role.description}</ItemDescription>
+                    )}
+                  </ItemContent>
+                </Item>
+              )
+            )}
+          </ResponsiveGrid>
+        </Section>
+      )} 
 
       {politician.referencedInNews &&
         politician.referencedInNews.length > 0 && (
