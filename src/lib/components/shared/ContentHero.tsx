@@ -26,7 +26,7 @@ export function ContentHero({
 
   return (
     <section className="mb-12 border-b border-border rounded-lg pb-6 lg:pb-12 flex flex-col gap-4">
-      <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4">
+      <div className="flex flex-col md:flex-row items-start justify-start md:justify-center md:items-center gap-4">
         {showImage ? (
           <div className="relative w-full h-auto aspect-square lg:w-64 lg:h-64 rounded overflow-hidden shrink-0">
             <SanityImage
@@ -39,7 +39,7 @@ export function ContentHero({
           </div>
         ) : showIcon ? (
 
-          <div className="flex  lg:h-24 lg:w-24 h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-brand-primary/10">
+          <div className="flex md:h-24 md:w-24 h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-brand-primary/10">
             <Icon className="h-7 w-7 text-brand-primary" />
           </div>
         ) : null}
