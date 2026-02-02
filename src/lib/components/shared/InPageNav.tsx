@@ -8,22 +8,22 @@ import { Section } from "./Section";
 type InPageNavProps = {
   entries: { id: string; label: string }[];
   label?: string;
+  showLabel?: boolean;
 };
 
-export function InPageNav({ entries, label = "Innehåll" }: InPageNavProps) {
+export function InPageNav({ entries, label = "Innehåll", showLabel = true }: InPageNavProps) {
   if (entries.length === 0) return null;
 
   return (
-    <Section id="innehåll" title="Innehåll" className="scroll-mt-24">
-    <nav aria-label={label} className="w-full pb-8 border-b border-border
-    ">
+    <Section id={label.toLowerCase()} title={showLabel ? label : undefined} className="scroll-mt-24 " >
+    <nav aria-label={label} className="w-full">
       <ButtonGroup
         aria-label={label}
         orientation="horizontal"
         
       >
         {entries.map(({ id, label: entryLabel }) => (
-          <Button key={id} variant="ghost" size="default" asChild>
+          <Button key={id} variant="outline" size="default" asChild>
             <Link href={`#${id}`} scroll className="no-underline">
               {entryLabel}
             </Link>

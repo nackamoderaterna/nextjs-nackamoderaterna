@@ -114,7 +114,7 @@ export default async function PoliticianPage({
   const mainContent = (
     <div className="space-y-8">
     {tocEntries.length > 1 && (
-        <InPageNav entries={tocEntries} label="Meny" />
+        <InPageNav entries={tocEntries} showLabel={false} />
       )}
       {politician.bio && (
         <Section id="biografi" title="Biografi" className="scroll-mt-24">
