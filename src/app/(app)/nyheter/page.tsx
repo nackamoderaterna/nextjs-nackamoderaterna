@@ -12,7 +12,8 @@ import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import type { NewsVariant } from "@/lib/types/news";
 import type { ListingPage } from "@/lib/types/pages";
-import { ListingHeader } from "@/lib/components/shared/ListingHeader";
+import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
+import { EmptyState } from "@/lib/components/shared/EmptyState";
 import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 
 type NewsListItem = Pick<
@@ -114,36 +115,26 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
   // Redirect to last page if page number is too high
   if (currentPage > totalPages && totalPages > 0) {
     return (
-      <div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <ListingHeader
-            title={listing?.title}
-            intro={listing?.intro}
-            fallbackTitle="Nyheter"
-          />
-          <p className="text-muted-foreground text-center py-12">
-            Sidan kunde inte hittas.
-          </p>
-        </div>
-      </div>
+      <ListingPageLayout
+        title={listing?.title}
+        intro={listing?.intro}
+        fallbackTitle="Nyheter"
+      >
+        <EmptyState message="Sidan kunde inte hittas." />
+      </ListingPageLayout>
     );
   }
 
   return (
-    <div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <ListingHeader
-          title={listing?.title}
-          intro={listing?.intro}
-          fallbackTitle="Nyheter"
-        />
-
-        <NewsFilters politicalAreas={politicalAreas || []} />
+    <ListingPageLayout
+      title={listing?.title}
+      intro={listing?.intro}
+      fallbackTitle="Nyheter"
+    >
+      <NewsFilters politicalAreas={politicalAreas || []} />
 
         {newsList.length === 0 ? (
-          <p className="text-muted-foreground text-center py-12">
-            Inga nyheter tillgängliga för tillfället.
-          </p>
+          <EmptyState message="Inga nyheter tillgängliga för tillfället." />
         ) : (
           <>
             <div className="grid">
@@ -173,7 +164,6 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
             />
           </>
         )}
-      </div>
-    </div>
+    </ListingPageLayout>
   );
 }

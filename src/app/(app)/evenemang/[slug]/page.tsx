@@ -19,6 +19,7 @@ import { Button } from "@/lib/components/ui/button";
 import { ROUTE_BASE } from "@/lib/routes";
 import { ContentHero } from "@/lib/components/shared/ContentHero";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
+import { PageContainer } from "@/lib/components/shared/PageContainer";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
 import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleContext";
 
@@ -191,8 +192,7 @@ export default async function EventPage({ params }: Props) {
   );
 
   return (
-    <main className="w-full">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <PageContainer as="main" paddingY="default">
         <SetBreadcrumbTitle title={event.title ?? "Evenemang"} />
         <ContentHero
           pageType="Evenemang"
@@ -204,7 +204,6 @@ export default async function EventPage({ params }: Props) {
           mainContent={mainContent}
           sidebarContent={sidebarContent}
         />
-      </div>
-    </main>
+    </PageContainer>
   );
 }

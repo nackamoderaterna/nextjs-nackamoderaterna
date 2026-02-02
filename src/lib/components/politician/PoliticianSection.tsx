@@ -30,7 +30,7 @@ export function PoliticianSection({
   return (
     <section className="mb-10">
       {title && (
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">{title}</h2>
+        <h2 className="text-2xl font-semibold text-foreground mb-4">{title}</h2>
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {politicians.map((politician) => {

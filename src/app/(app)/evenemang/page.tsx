@@ -2,7 +2,8 @@ import Block from "@/lib/components/blocks/Block";
 import { EventCard } from "@/lib/components/events/eventCard";
 import { EventFilters } from "@/lib/components/events/EventFilters";
 import { ContactForm } from "@/lib/components/shared/ContactForm";
-import { ListingHeader } from "@/lib/components/shared/ListingHeader";
+import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
+import { EmptyState } from "@/lib/components/shared/EmptyState";
 import { Pagination } from "@/lib/components/news/Pagination";
 import Link from "next/link";
 import {
@@ -101,35 +102,31 @@ export default async function EventsPage({
 
     if (currentPage > totalPages && totalPages > 0) {
       return (
-        <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
-          <ListingHeader
-            title={listing?.title}
-            intro={listing?.intro}
-            fallbackTitle="Evenemang"
-          />
+        <ListingPageLayout
+          title={listing?.title}
+          intro={listing?.intro}
+          fallbackTitle="Evenemang"
+          paddingY="top"
+          as="main"
+        >
           <EventFilters />
-          <p className="text-muted-foreground text-center py-12">
-            Sidan kunde inte hittas.
-          </p>
-        </main>
+          <EmptyState message="Sidan kunde inte hittas." />
+        </ListingPageLayout>
       );
     }
 
     return (
-      
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
-        
-            <ListingHeader
-              title={listing?.title}
-              intro={listing?.intro}
-              fallbackTitle="Evenemang"
-            />
+      <ListingPageLayout
+        title={listing?.title}
+        intro={listing?.intro}
+        fallbackTitle="Evenemang"
+        paddingY="top"
+        as="main"
+      >
         <EventFilters />
         <Section title="Kommande">
         {items.length === 0 ? (
-              <p className="text-muted-foreground text-center py-12">
-                Inga kommande evenemang för tillfället.
-              </p>
+              <EmptyState message="Inga kommande evenemang för tillfället." />
             ) : (
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -151,7 +148,7 @@ export default async function EventsPage({
             description="Har du frågor eller vill engagera dig? Fyll i formuläret nedan så återkommer vi så snart som möjligt."
           />
         </Block>
-      </main>
+      </ListingPageLayout>
     );
   }
 
@@ -166,17 +163,16 @@ export default async function EventsPage({
 
     if (currentPage > totalPages && totalPages > 0) {
       return (
-        <main>
-          <ListingHeader
-            title={listing?.title}
-            intro={listing?.intro}
-            fallbackTitle="Evenemang"
-          />
+        <ListingPageLayout
+          title={listing?.title}
+          intro={listing?.intro}
+          fallbackTitle="Evenemang"
+          paddingY="top"
+          as="main"
+        >
           <EventFilters />
-          <p className="text-muted-foreground text-center py-12">
-            Sidan kunde inte hittas.
-          </p>
-        </main>
+          <EmptyState message="Sidan kunde inte hittas." />
+        </ListingPageLayout>
       );
     }
 
@@ -184,18 +180,17 @@ export default async function EventsPage({
       "bg-muted hover:bg-muted/50 text-muted-foreground [&_.text-brand-primary]:text-muted-foreground";
 
     return (
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
-            <ListingHeader
-              title={listing?.title}
-              intro={listing?.intro}
-              fallbackTitle="Evenemang"
-            />
+      <ListingPageLayout
+        title={listing?.title}
+        intro={listing?.intro}
+        fallbackTitle="Evenemang"
+        paddingY="top"
+        as="main"
+      >
         <EventFilters />
         <Section title="Tidigare">
           {items.length === 0 ? (
-              <p className="text-muted-foreground text-center py-12">
-                Inga tidigare evenemang.
-              </p>
+              <EmptyState message="Inga tidigare evenemang." />
             ) : (
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -216,7 +211,7 @@ export default async function EventsPage({
             description="Har du frågor eller vill engagera dig? Fyll i formuläret nedan så återkommer vi så snart som möjligt."
           />
         </Block>
-      </main>
+      </ListingPageLayout>
     );
   }
 
@@ -237,21 +232,17 @@ export default async function EventsPage({
   const pastDisplay = past.slice(0, 4);
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
-     
-          <ListingHeader
-            title={listing?.title}
-            intro={listing?.intro}
-            fallbackTitle="Evenemang"
-          />
-      
-
+    <ListingPageLayout
+      title={listing?.title}
+      intro={listing?.intro}
+      fallbackTitle="Evenemang"
+      paddingY="top"
+      as="main"
+    >
       <EventFilters />
       <Section title="Kommande">
       {upcomingDisplay.length === 0 ? (
-            <p className="text-muted-foreground text-center py-12">
-              Inga kommande evenemang för tillfället.
-            </p>
+            <EmptyState message="Inga kommande evenemang för tillfället." />
           ) : (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -302,6 +293,6 @@ export default async function EventsPage({
           description="Har du frågor eller vill engagera dig? Fyll i formuläret nedan så återkommer vi så snart som möjligt."
         />
       </Block>
-    </main>
+    </ListingPageLayout>
   );
 }

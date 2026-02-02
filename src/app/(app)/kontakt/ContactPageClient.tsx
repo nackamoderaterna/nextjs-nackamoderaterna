@@ -3,7 +3,7 @@ import { GlobalSettings } from "~/sanity.types";
 import { ContactForm } from "@/lib/components/shared/ContactForm";
 import { ContactInfoItem } from "@/lib/components/shared/ContactInfoItem";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
-import { ListingHeader } from "@/lib/components/shared/ListingHeader";
+import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
 import type { ListingPage } from "@/lib/types/pages";
 import { formatAddress, formatAddressForUrl } from "@/lib/utils/addressUtils";
@@ -150,19 +150,17 @@ export function ContactPageClient({
   ) : null;
 
   return (
-    <main className="container mx-auto px-4 py-12">
-      <div className="max-w-7xl mx-auto">
-        <ListingHeader
-          title={listing?.title}
-          intro={listing?.intro}
-          fallbackTitle="Kontakta oss"
-          fallbackIntro="Har du frågor eller vill komma i kontakt med oss? Fyll i formuläret nedan så återkommer vi så snart som möjligt."
-        />
-        <ContentWithSidebar
-          mainContent={mainContent}
-          sidebarContent={sidebarContent}
-        />
-      </div>
-    </main>
+    <ListingPageLayout
+      title={listing?.title}
+      intro={listing?.intro}
+      fallbackTitle="Kontakta oss"
+      fallbackIntro="Har du frågor eller vill komma i kontakt med oss? Fyll i formuläret nedan så återkommer vi så snart som möjligt."
+      as="main"
+    >
+      <ContentWithSidebar
+        mainContent={mainContent}
+        sidebarContent={sidebarContent}
+      />
+    </ListingPageLayout>
   );
 }

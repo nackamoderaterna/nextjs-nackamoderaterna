@@ -6,7 +6,7 @@ import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ROUTE_BASE } from "@/lib/routes";
 import { Section } from "@/lib/components/shared/Section";
-import { ListingHeader } from "@/lib/components/shared/ListingHeader";
+import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
 import { PoliticalIssue } from "~/sanity.types";
 import type { ListingPage } from "@/lib/types/pages";
 
@@ -69,12 +69,11 @@ export default async function PolitikSakfragorPage() {
 
   return (
     <div className="bg-background">
-      <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <ListingHeader
-          title={listing?.title}
-          intro={listing?.intro}
-          fallbackTitle="Våra sakfrågor"
-        />
+      <ListingPageLayout
+        title={listing?.title}
+        intro={listing?.intro}
+        fallbackTitle="Våra sakfrågor"
+      >
         {featuredIssues.length > 0 && (
           <Section title="Kärnfrågor" titleSize="large">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -126,7 +125,7 @@ export default async function PolitikSakfragorPage() {
             </div>
           </Section>
         )}
-      </main>
+      </ListingPageLayout>
     </div>
   );
 }

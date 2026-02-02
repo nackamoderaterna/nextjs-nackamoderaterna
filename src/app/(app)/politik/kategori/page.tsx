@@ -7,7 +7,7 @@ import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ROUTE_BASE } from "@/lib/routes";
 import { Section } from "@/lib/components/shared/Section";
-import { ListingHeader } from "@/lib/components/shared/ListingHeader";
+import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
 import { PoliticalArea } from "~/sanity.types";
 import type { ListingPage } from "@/lib/types/pages";
 
@@ -56,12 +56,11 @@ export default async function PolitikKategoriPage() {
 
   return (
     <div className="bg-background">
-      <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <ListingHeader
-          title={listing?.title}
-          intro={listing?.intro}
-          fallbackTitle="Politiska kategorier"
-        />
+      <ListingPageLayout
+        title={listing?.title}
+        intro={listing?.intro}
+        fallbackTitle="Politiska kategorier"
+      >
         <Section>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {data.politicalAreas.map((area) => {
@@ -77,7 +76,7 @@ export default async function PolitikKategoriPage() {
             })}
           </div>
         </Section>
-      </main>
+      </ListingPageLayout>
     </div>
   );
 }

@@ -12,7 +12,8 @@ import { PoliticianSection } from "@/lib/components/politician/PoliticianSection
 import { PeopleCard } from "@/lib/components/politician/PeopleCard";
 import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
-import { ListingHeader } from "@/lib/components/shared/ListingHeader";
+import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
+import { EmptyState } from "@/lib/components/shared/EmptyState";
 import type { ListingPage } from "@/lib/types/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -75,14 +76,13 @@ export default async function PoliticiansPage() {
   const kommunfullmaktigeSubstitute = sortByName(grouped.kommunfullmaktige.substitute);
 
   return (
-    <div >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <ListingHeader
-          title={listing?.title}
-          intro={listing?.intro}
-          fallbackTitle="Våra politiker"
-        />
-
+    <div>
+      <ListingPageLayout
+        title={listing?.title}
+        intro={listing?.intro}
+        fallbackTitle="Våra politiker"
+        paddingY="compact"
+      >
         {/* 1. Kommunalråd */}
         {(grouped.kommunalrad.president.length > 0 ||
           grouped.kommunalrad.ordinary.length > 0) && (
@@ -104,7 +104,7 @@ export default async function PoliticiansPage() {
         {/* 2. Nämnd leaders (no header, namnd name as subtitle) */}
         {grouped.namndLeaders.length > 0 && (
           <section className="mb-10">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Gruppledare</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-4">Gruppledare</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {grouped.namndLeaders.map(({ politician, namndTitle }) => (
                 <PeopleCard
@@ -166,12 +166,10 @@ export default async function PoliticiansPage() {
             )}
           </>
         )}
-      </div>
-      {politicians.length === 0 && (
-        <p className="text-muted-foreground text-center py-12">
-          Inga politiker tillgängliga för tillfället.
-        </p>
-      )}
+        {politicians.length === 0 && (
+          <EmptyState message="Inga politiker tillgängliga för tillfället." />
+        )}
+      </ListingPageLayout>
     </div>
   );
 }

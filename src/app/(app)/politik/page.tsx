@@ -8,7 +8,7 @@ import { getLucideIcon } from "@/lib/utils/iconUtils";
 import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ROUTE_BASE } from "@/lib/routes";
-import { ListingHeader } from "@/lib/components/shared/ListingHeader";
+import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
 import { Section } from "@/lib/components/shared/Section";
 import type { ListingPage } from "@/lib/types/pages";
 
@@ -84,15 +84,12 @@ export default async function PoliticsPage() {
     ),
   ]);
   return (
-    <div className=" bg-background">
-      <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        {/* Header Section */}
-        <ListingHeader
-          title={listing?.title}
-          intro={listing?.intro}
-          fallbackTitle="Vår politik"
-        />
-
+    <div className="bg-background">
+      <ListingPageLayout
+        title={listing?.title}
+        intro={listing?.intro}
+        fallbackTitle="Vår politik"
+      >
           {/* Key Issues Section */}
           <Section title="Våra kärnfrågor" titleSize="large">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -144,7 +141,7 @@ export default async function PoliticsPage() {
             </div>
           </Section>
         )}
-      </main>
+      </ListingPageLayout>
     </div>
   );
 }

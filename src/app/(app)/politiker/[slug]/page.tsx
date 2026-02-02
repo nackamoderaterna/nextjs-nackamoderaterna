@@ -8,6 +8,7 @@ import { ContentHero } from "@/lib/components/shared/ContentHero";
 import { ContentCard } from "@/lib/components/politics/contentCard";
 import { PoliticianSidebar } from "@/lib/components/politician/PoliticianSidebar";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
+import { PageContainer } from "@/lib/components/shared/PageContainer";
 import { Section } from "@/lib/components/shared/Section";
 import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleContext";
 import { mapPoliticianRoles } from "@/lib/utils/mapPoliticianRoles";
@@ -104,7 +105,7 @@ export default async function PoliticianPage({
     tocEntries.push({ id: "pressbilder", label: "Pressbilder" });
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-4 lg:px-6 py-8">
+    <PageContainer as="main" paddingY="compact">
       <SetBreadcrumbTitle title={politician.name ?? ""} />
       <ContentHero
         pageType="Politiker"
@@ -213,6 +214,6 @@ export default async function PoliticianPage({
           <PressGallery images={politician.pressbilder} />
         </Section>
       )}
-    </main>
+    </PageContainer>
   );
 }

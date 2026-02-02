@@ -56,7 +56,7 @@ export function CTABlock({ block }: { block: CTABlockProps }) {
   };
 
   return (
-    <Block paddingY="xlarge" maxWidth={maxWidth} className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8" containerClassName={`rounded-xl p-12 md:p-16 border border-border bg-card shadow-sm`}>
+    <Block paddingY="xlarge" maxWidth={maxWidth} containerClassName="rounded-xl p-12 md:p-16 border border-border bg-card shadow-sm">
       <div className="mx-auto max-w-3xl">
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-balance mb-6">
           {title ?? ""}

@@ -6,7 +6,7 @@ import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ROUTE_BASE } from "@/lib/routes";
 import { Section } from "@/lib/components/shared/Section";
-import { ListingHeader } from "@/lib/components/shared/ListingHeader";
+import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
 import { GeographicalArea } from "~/sanity.types";
 import type { ListingPage } from "@/lib/types/pages";
 
@@ -49,12 +49,11 @@ export default async function OmradePage() {
 
   return (
     <div className="bg-background">
-      <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <ListingHeader
-          title={listing?.title}
-          intro={listing?.intro}
-          fallbackTitle="Geografiska områden"
-        />
+      <ListingPageLayout
+        title={listing?.title}
+        intro={listing?.intro}
+        fallbackTitle="Geografiska områden"
+      >
         <Section>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {data.geographicalAreas.map((area) => (
@@ -67,7 +66,7 @@ export default async function OmradePage() {
             ))}
           </div>
         </Section>
-      </main>
+      </ListingPageLayout>
     </div>
   );
 }

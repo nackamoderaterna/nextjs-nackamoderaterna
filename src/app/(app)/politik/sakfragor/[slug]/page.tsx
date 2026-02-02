@@ -4,6 +4,7 @@ import { PeopleCard } from "@/lib/components/politician/PeopleCard";
 import { ContentHero } from "@/lib/components/shared/ContentHero";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { Section } from "@/lib/components/shared/Section";
+import { PageContainer } from "@/lib/components/shared/PageContainer";
 import {
   politicalIssuePageQuery,
   allPoliticalIssueSlugsQuery,
@@ -185,7 +186,7 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
   return (
     <div className="bg-background flex flex-col">
       <main className="flex-1">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <PageContainer paddingY="default">
           <SetBreadcrumbTitle title={data.question || ""} />
           <ContentHero pageType="Sakfråga" title={data.question || ""} />
 
@@ -229,7 +230,7 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
                 </div>
               </Section>
             )}
-        </div>
+        </PageContainer>
       </main>
     </div>
   );

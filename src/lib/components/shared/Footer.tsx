@@ -9,6 +9,7 @@ import {
   FooterContent,
   FooterLegal,
 } from "./FooterParts";
+import { PageContainer } from "./PageContainer";
 import { GlobalSettings } from "~/sanity.types";
 
 export async function Footer() {
@@ -32,7 +33,7 @@ export async function Footer() {
 
   return (
     <footer className="border-t border-border bg-muted/30 mt-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <PageContainer as="div" paddingY="default">
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
           <FooterNav columns={footer.columns} />
 
@@ -67,7 +68,7 @@ export async function Footer() {
         )}
 
         {footer.legalText && <FooterLegal text={footer.legalText} />}
-      </div>
+      </PageContainer>
     </footer>
   );
 }
