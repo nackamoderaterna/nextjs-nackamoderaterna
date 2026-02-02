@@ -36,6 +36,7 @@ export function PoliticalAreasBlock({ block }: { block: PoliticalAreasBlockProps
           return (
               <PoliticalAreaCard
                 title={area.name}
+                key={area._id}
                 href={`${ROUTE_BASE.POLITICS}/${slug}`}
                 icon={Icon ?? undefined}
               />

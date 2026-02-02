@@ -1,6 +1,7 @@
 import Block from "./Block";
 import { BlockHeading, getBlockHeading } from "./BlockHeading";
 import { GeographicalAreaCard } from "../politics/geographicalAreaCard";
+import { ResponsiveGrid } from "../shared/ResponsiveGrid";
 
 interface GeographicalAreasBlockProps {
   _type: "block.geographicalAreas";
@@ -24,24 +25,21 @@ export function GeographicalAreasBlock({ block }: { block: GeographicalAreasBloc
   return (
     <Block paddingY="large" maxWidth="7xl">
       <BlockHeading title={title} subtitle={subtitle} />
-      <div className="flex flex-wrap justify-center gap-4">
+      <ResponsiveGrid cols={3}>
         {items.map((area) => {
           const slug = area.slug?.current;
           if (!slug || !area.name) return null;
           return (
-            <div
-              key={area._id}
-              className="w-full shrink-0 md:w-[calc(50%-0.5rem)]"
-            >
+            
               <GeographicalAreaCard
                 title={area.name}
                 image={area.image}
                 slug={slug}
+                key={area._id}
               />
-            </div>
           );
         })}
-      </div>
+      </ResponsiveGrid>
     </Block>
   );
 }
