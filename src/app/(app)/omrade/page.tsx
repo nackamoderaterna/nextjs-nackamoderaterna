@@ -5,6 +5,7 @@ import { sanityClient } from "@/lib/sanity/client";
 import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ROUTE_BASE } from "@/lib/routes";
+import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { Section } from "@/lib/components/shared/Section";
 import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
 import { GeographicalArea } from "~/sanity.types";
@@ -55,7 +56,7 @@ export default async function OmradePage() {
         fallbackTitle="Geografiska områden"
       >
         <Section>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <ResponsiveGrid cols={2}>
             {data.geographicalAreas.map((area) => (
               <GeographicalAreaCard
                 key={area._id}
@@ -64,7 +65,7 @@ export default async function OmradePage() {
                 slug={area.slug?.current || ""}
               />
             ))}
-          </div>
+          </ResponsiveGrid>
         </Section>
       </ListingPageLayout>
     </div>

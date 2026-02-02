@@ -3,6 +3,7 @@ import { NewsCard } from "@/lib/components/news/NewsCard";
 import { ContentHero } from "@/lib/components/shared/ContentHero";
 import { PolicyList } from "@/lib/components/politics/policyList";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
+import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { Section } from "@/lib/components/shared/Section";
 import { geographicalAreaPageQuery, allGeographicalAreaSlugsQuery } from "@/lib/queries/politik";
 import { sanityClient } from "@/lib/sanity/client";
@@ -154,7 +155,7 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
           {/* Local Politicians Section */}
           {sortedPoliticians.length > 0 && (
             <Section title="Lokala politiker">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <ResponsiveGrid cols={4}>
                 {sortedPoliticians.map((politician) => (
                   <PeopleCard
                     key={politician._id}
@@ -164,7 +165,7 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
                     size="large"
                   />
                 ))}
-              </div>
+              </ResponsiveGrid>
             </Section>
           )}
         </PageContainer>

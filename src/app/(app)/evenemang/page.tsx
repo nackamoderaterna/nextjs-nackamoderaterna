@@ -19,6 +19,7 @@ import { Metadata } from "next";
 import { Event } from "~/sanity.types";
 import type { ListingPage } from "@/lib/types/pages";
 import { ROUTE_BASE } from "@/lib/routes";
+import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { Section } from "@/lib/components/shared/Section";
 
 const ITEMS_PER_PAGE = 10;
@@ -129,9 +130,9 @@ export default async function EventsPage({
               <EmptyState message="Inga kommande evenemang för tillfället." />
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <ResponsiveGrid cols={3} gap="large">
                   {items.map((event) => renderEventCard(event))}
-                </div>
+                </ResponsiveGrid>
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}
@@ -193,9 +194,9 @@ export default async function EventsPage({
               <EmptyState message="Inga tidigare evenemang." />
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <ResponsiveGrid cols={3} gap="large">
                   {items.map((event) => renderEventCard(event, mutedClass, true))}
-                </div>
+                </ResponsiveGrid>
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}
@@ -245,9 +246,9 @@ export default async function EventsPage({
             <EmptyState message="Inga kommande evenemang för tillfället." />
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <ResponsiveGrid cols={3} gap="large">
                 {upcomingDisplay.map((event) => renderEventCard(event))}
-              </div>
+              </ResponsiveGrid>
               {upcoming.length > 4 && (
                 <p className="mt-6">
                   <Link
@@ -265,7 +266,7 @@ export default async function EventsPage({
 
       {pastDisplay.length > 0 && (
         <Section title="Tidigare">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <ResponsiveGrid cols={3} gap="large">
               {pastDisplay.map((event) =>
                 renderEventCard(
                   event,
@@ -273,7 +274,7 @@ export default async function EventsPage({
                   true
                 )
               )}
-            </div>
+            </ResponsiveGrid>
             {past.length > 4 && (
               <p className="mt-6">
                 <Link

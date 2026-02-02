@@ -9,6 +9,7 @@ import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ROUTE_BASE } from "@/lib/routes";
 import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
+import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { Section } from "@/lib/components/shared/Section";
 import type { ListingPage } from "@/lib/types/pages";
 
@@ -92,7 +93,7 @@ export default async function PoliticsPage() {
       >
           {/* Key Issues Section */}
           <Section title="Våra kärnfrågor" titleSize="large">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <ResponsiveGrid cols={2}>
               {data.featuredPoliticalIssues.map((issue) => (
                 <ContentCard
                   key={issue._id}
@@ -103,12 +104,12 @@ export default async function PoliticsPage() {
                   issueSlug={issue.slug?.current}
                 />
               ))}
-            </div>
+            </ResponsiveGrid>
           </Section>
 
         {/* Political Areas Grid */}
         <Section title="Kategorier" titleSize="large">
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <ResponsiveGrid cols={4} colsBase={2}>
             {data.politicalAreas.map((area) => {
               const Icon = getLucideIcon(area.icon?.name);
               return (
@@ -120,13 +121,13 @@ export default async function PoliticsPage() {
                 />
               );
             })}
-          </div>
+          </ResponsiveGrid>
         </Section>
 
         {/* Fulfilled Promises Section */}
         {data.fulfilledPoliticalIssues.length > 0 && (
           <Section title="Uppfyllda vallöften" titleSize="large">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <ResponsiveGrid cols={2}>
               {data.fulfilledPoliticalIssues.map((issue) => (
                 <ContentCard
                   key={issue._id}
@@ -138,7 +139,7 @@ export default async function PoliticsPage() {
                   fulfilled
                 />
               ))}
-            </div>
+            </ResponsiveGrid>
           </Section>
         )}
       </ListingPageLayout>

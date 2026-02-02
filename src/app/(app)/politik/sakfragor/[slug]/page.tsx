@@ -26,6 +26,7 @@ import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
 import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleContext";
 import { AreaList } from "@/lib/components/politics/AreaList";
+import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 import { ReactNode } from "react";
@@ -217,7 +218,7 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
           {data.responsiblePoliticians &&
             data.responsiblePoliticians.length > 0 && (
               <Section title="Ansvariga politiker">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <ResponsiveGrid cols={4}>
                   {(data.responsiblePoliticians as Array<{ _id: string; name?: string | null; slug?: { current?: string } | null; image?: unknown }>).map((politician) => (
                     <PeopleCard
                       key={politician._id}
@@ -227,7 +228,7 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
                       size="large"
                     />
                   ))}
-                </div>
+                </ResponsiveGrid>
               </Section>
             )}
         </PageContainer>

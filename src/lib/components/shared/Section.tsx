@@ -19,8 +19,8 @@ interface SectionProps {
 }
 
 const titleSizeClasses = {
-  default: "text-2xl font-bold text-foreground mb-6",
-  large: "text-3xl font-bold text-foreground mb-6",
+  default: "text-2xl font-bold text-foreground",
+  large: "text-3xl font-bold text-foreground",
 };
 
 export function Section({
@@ -37,12 +37,12 @@ export function Section({
   return (
     <section
       id={id}
-      className={cn("mb-16", className)}
+      className={cn("mb-12", className)}
       aria-label={ariaLabel}
     >
       {(title || actions) && (
-        <div className="flex items-center justify-between mb-6">
-          {title && <h2 className={cn(titleClasses, actions ? "mb-0" : "")}>{title}</h2>}
+        <div className="flex items-center justify-between mb-6 text-muted-foreground">
+          {title && <h2 className={cn(titleClasses)}>{title}</h2>}
           {actions}
         </div>
       )}

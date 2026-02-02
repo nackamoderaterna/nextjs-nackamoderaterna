@@ -5,6 +5,7 @@ import { sanityClient } from "@/lib/sanity/client";
 import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ROUTE_BASE } from "@/lib/routes";
+import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { Section } from "@/lib/components/shared/Section";
 import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
 import { PoliticalIssue } from "~/sanity.types";
@@ -76,7 +77,7 @@ export default async function PolitikSakfragorPage() {
       >
         {featuredIssues.length > 0 && (
           <Section title="Kärnfrågor" titleSize="large">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <ResponsiveGrid cols={2}>
               {featuredIssues.map((issue) => (
                 <ContentCard
                   key={issue._id}
@@ -87,13 +88,13 @@ export default async function PolitikSakfragorPage() {
                   issueSlug={issue.slug?.current}
                 />
               ))}
-            </div>
+            </ResponsiveGrid>
           </Section>
         )}
 
         {fulfilledIssues.length > 0 && (
           <Section title="Uppfyllda vallöften" titleSize="large">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <ResponsiveGrid cols={2}>
               {fulfilledIssues.map((issue) => (
                 <ContentCard
                   key={issue._id}
@@ -105,13 +106,13 @@ export default async function PolitikSakfragorPage() {
                   fulfilled
                 />
               ))}
-            </div>
+            </ResponsiveGrid>
           </Section>
         )}
 
         {otherIssues.length > 0 && (
           <Section title="Övriga" titleSize="large">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <ResponsiveGrid cols={2}>
               {otherIssues.map((issue) => (
                 <ContentCard
                   key={issue._id}
@@ -122,7 +123,7 @@ export default async function PolitikSakfragorPage() {
                   issueSlug={issue.slug?.current}
                 />
               ))}
-            </div>
+            </ResponsiveGrid>
           </Section>
         )}
       </ListingPageLayout>

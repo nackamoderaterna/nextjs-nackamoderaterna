@@ -6,6 +6,7 @@ import { getLucideIcon } from "@/lib/utils/iconUtils";
 import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ROUTE_BASE } from "@/lib/routes";
+import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { Section } from "@/lib/components/shared/Section";
 import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
 import { PoliticalArea } from "~/sanity.types";
@@ -62,7 +63,7 @@ export default async function PolitikKategoriPage() {
         fallbackTitle="Politiska kategorier"
       >
         <Section>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <ResponsiveGrid cols={4} colsBase={2}>
             {data.politicalAreas.map((area) => {
               const Icon = getLucideIcon(area.icon?.name);
               return (
@@ -74,7 +75,7 @@ export default async function PolitikKategoriPage() {
                 />
               );
             })}
-          </div>
+          </ResponsiveGrid>
         </Section>
       </ListingPageLayout>
     </div>

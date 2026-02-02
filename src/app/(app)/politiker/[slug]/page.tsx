@@ -8,6 +8,7 @@ import { ContentHero } from "@/lib/components/shared/ContentHero";
 import { ContentCard } from "@/lib/components/politics/contentCard";
 import { PoliticianSidebar } from "@/lib/components/politician/PoliticianSidebar";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
+import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { PageContainer } from "@/lib/components/shared/PageContainer";
 import { Section } from "@/lib/components/shared/Section";
 import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleContext";
@@ -104,6 +105,57 @@ export default async function PoliticianPage({
   if (politician.pressbilder?.length)
     tocEntries.push({ id: "pressbilder", label: "Pressbilder" });
 
+  const mainContent = (
+    <div className="space-y-8">
+    {tocEntries.length > 1 && (
+  
+      <Section id="innehall" title="Innehåll" className="scroll-mt-24 pb-2 border-b border-border">
+        <nav aria-label="Innehåll" className="text-sm mb-6">
+         
+          <ul className="flex flex-wrap gap-x-4 gap-y-1 text-muted-foreground">
+            {tocEntries.map(({ id, label }) => (
+              <li key={id}>
+                <Link
+                  href={`#${id}`}
+                
+                  className="hover:text-primary transition-colors underline"
+                  scroll={true}
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </Section>
+      )}
+      {politician.bio && (
+        <Section id="biografi" title="Biografi" className="scroll-mt-24">
+          <div className="prose md:prose-lg">
+            <PortableText
+            value={politician.bio}
+            components={portableTextComponents}
+          />
+          </div>
+        </Section>
+      )}
+      {roles.length > 0 && (
+        <Section id="uppdrag" title="Uppdrag" className="scroll-mt-24">
+          <ResponsiveGrid cols={3}>
+            {roles.map((role, index) => (
+              <ContentCard
+                key={index}
+                title={role.title}
+                description={role.description}
+                href={role.href}
+              />
+            ))}
+          </ResponsiveGrid>
+        </Section>
+      )} 
+      </div>
+    )
+
   return (
     <PageContainer as="main" paddingY="compact">
       <SetBreadcrumbTitle title={politician.name ?? ""} />
@@ -122,53 +174,9 @@ export default async function PoliticianPage({
             : undefined
         }
       />
-      <div className="mt-8 pb-8 border-b border-border">
+      <div className="mt-8 ">
         <ContentWithSidebar
-          mainContent={
-            <div className="space-y-8">
-              {tocEntries.length > 1 && (
-                <nav aria-label="Innehåll" className="text-sm">
-                  <h2 className="text-lg font-semibold text-foreground mb-2">
-                    Innehåll
-                  </h2>
-                  <ul className="flex flex-wrap gap-x-4 gap-y-1 text-muted-foreground">
-                    {tocEntries.map(({ id, label }) => (
-                      <li key={id}>
-                        <a
-                          href={`#${id}`}
-                          className="hover:text-primary transition-colors underline"
-                        >
-                          {label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
-              )}
-              {politician.bio && (
-                <div id="biografi" className="prose md:prose-lg scroll-mt-24">
-                  <PortableText value={politician.bio} components={portableTextComponents} />
-                </div>
-              )}
-              {roles.length > 0 && (
-                <section id="uppdrag" className="scroll-mt-24">
-                  <h2 className="text-2xl font-bold text-foreground mb-4">
-                    Uppdrag
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {roles.map((role, index) => (
-                      <ContentCard
-                        key={index}
-                        title={role.title}
-                        description={role.description}
-                        href={role.href}
-                      />
-                    ))}
-                  </div>
-                </section>
-              )}
-            </div>
-          }
+          mainContent={mainContent}
           sidebarContent={
             hasSidebar ? (
               <PoliticianSidebar

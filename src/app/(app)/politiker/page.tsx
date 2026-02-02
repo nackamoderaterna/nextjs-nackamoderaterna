@@ -13,6 +13,7 @@ import { PeopleCard } from "@/lib/components/politician/PeopleCard";
 import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
+import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { EmptyState } from "@/lib/components/shared/EmptyState";
 import type { ListingPage } from "@/lib/types/pages";
 
@@ -105,7 +106,7 @@ export default async function PoliticiansPage() {
         {grouped.namndLeaders.length > 0 && (
           <section className="mb-10">
             <h2 className="text-2xl font-bold text-foreground mb-4">Gruppledare</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <ResponsiveGrid cols={4}>
               {grouped.namndLeaders.map(({ politician, namndTitle }) => (
                 <PeopleCard
                   key={politician._id}
@@ -116,7 +117,7 @@ export default async function PoliticiansPage() {
                   size="medium"
                 />
               ))}
-            </div>
+            </ResponsiveGrid>
           </section>
         )}
 

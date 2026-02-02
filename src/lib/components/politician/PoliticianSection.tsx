@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { PeopleCard } from "./PeopleCard";
 import { PoliticianWithNamnd } from "@/lib/politicians";
 import { ROUTE_BASE } from "@/lib/routes";
@@ -32,7 +33,7 @@ export function PoliticianSection({
       {title && (
         <h2 className="text-2xl font-semibold text-foreground mb-4">{title}</h2>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <ResponsiveGrid cols={4}>
         {politicians.map((politician) => {
           const roleTitle = resolveTitle(politician);
           if (cardType === "large") {
@@ -59,7 +60,7 @@ export function PoliticianSection({
               />
           );
         })}
-      </div>
+      </ResponsiveGrid>
     </section>
   );
 }
