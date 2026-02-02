@@ -14,51 +14,12 @@ interface NewsSidebarProps {
   currentSlug: string;
 }
 
-const SIDEBAR_ASPECT_CLASSES: Record<string, string> = {
-  portrait: "aspect-[4/5]",
-  square: "aspect-square",
-  landscape: "aspect-video",
-  auto: "aspect-auto",
-};
-
 export function NewsSidebar({ news, currentSlug }: NewsSidebarProps) {
   const documents = news.documents ?? [];
-  const mainImage = news.mainImage as { aspectRatio?: string } | undefined;
-  const aspectRatio = mainImage?.aspectRatio && SIDEBAR_ASPECT_CLASSES[mainImage.aspectRatio]
-    ? mainImage.aspectRatio
-    : "portrait";
-  const aspectClass = SIDEBAR_ASPECT_CLASSES[aspectRatio];
-  const useAuto = aspectRatio === "auto";
 
   return (
     <div className="grid gap-4">
-      {news.mainImage && (
-          <div
-            className={`relative w-full h-full overflow-hidden rounded-lg bg-muted ${aspectClass} hidden lg:block`}
-          >
-            {useAuto ? (
-              <SanityImage
-                image={news.mainImage}
-                fill={false}
-                width={800}
-                height={600}
-                className="w-full h-full object-cover"
-                alt={news.mainImage.alt || news.title || ""}
-              />
-            ) : (
-              <SanityImage
-                image={news.mainImage}
-                fill
-                className="object-cover"
-                alt={news.mainImage.alt || news.title || ""}
-              />
-            )}
-          </div>
-         
-        
-      )}
-
-{news.instagramUrl && (
+      {news.instagramUrl && (
           <Button
             asChild
             variant="outline"

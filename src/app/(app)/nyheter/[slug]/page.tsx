@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { sanityClient } from "@/lib/sanity/client";
 import { NewsExpanded } from "@/lib/types/news";
 import { newsQuery, allNewsSlugsQuery } from "@/lib/queries/nyheter";
-import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
+import { NewsArticleImage } from "@/lib/components/news/NewsArticleImage";
 import { Section } from "@/lib/components/shared/Section";
 import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleContext";
 import { formatDate } from "@/lib/utils/dateUtils";
@@ -17,7 +17,6 @@ import { ROUTE_BASE } from "@/lib/routes";
 import Link from "next/link";
 import { NewsCard } from "@/lib/components/news/NewsCard";
 import { getLucideIcon } from "@/lib/utils/iconUtils";
-import { SanityImage } from "@/lib/components/shared/SanityImage";
 
 // Generate static params for all news articles at build time
 export async function generateStaticParams() {
@@ -117,17 +116,6 @@ export default async function NewsArticlePage({
         {formatDate(news.effectiveDate)}
       </time>
 
-      {news.mainImage && (
-        <div className="relative w-full max-w-sm aspect-[4/5] rounded-lg overflow-hidden bg-muted my-6 lg:hidden">
-          <SanityImage
-            image={news.mainImage}
-            fill
-            className="object-cover"
-            alt={(news.mainImage as { alt?: string }).alt || news.title || ""}
-          />
-        </div>
-      )}
-
       <h2 className="text-xl font-medium text-foreground mt-8">
         {news.excerpt}
       </h2>
@@ -139,12 +127,22 @@ export default async function NewsArticlePage({
     </div>
   );
 
-  const sidebar = <NewsSidebar news={news} currentSlug={slug} />;
+  const sidebarContent = (
+    <div className="grid gap-4">
+      {news.mainImage && <NewsArticleImage news={news} />}
+      <NewsSidebar news={news} currentSlug={slug} />
+    </div>
+  );
 
   return (
     <div className="max-w-7xl mx-auto mt-8 px-4">
       <SetBreadcrumbTitle title={news.title ?? ""} />
-      <ContentWithSidebar mainContent={mainContent} sidebarContent={sidebar} />
+      <div className="mb-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="order-2 lg:order-1 lg:col-span-2">{mainContent}</div>
+        <aside className="order-1 lg:order-2 lg:col-span-1">
+          {sidebarContent}
+        </aside>
+      </div>
 
       {news.relatedByPoliticalArea && news.relatedByPoliticalArea.length > 0 && (
         <Section
