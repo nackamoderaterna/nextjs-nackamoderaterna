@@ -35,8 +35,9 @@ export default async function Header() {
   ];
 
   return (
-    <header className="w-full h-16 p-4 flex items-center border-b border-gray-200 bg-white">
-      <div className="max-w-7xl mx-auto w-full flex flex-wrap items-center justify-between gap-4">
+    <header className="w-full border-b border-gray-200 bg-white">
+      {/* Top row: logo, (search + Bli medlem) left, mobile menu right */}
+      <div className="max-w-7xl mx-auto w-full h-16 px-4 lg:px-8 flex items-center justify-between  gap-4">
         <div className="font-bold flex-shrink-0 flex items-center gap-3">
           {logo && (
             <Link href="/" className="flex items-center w-10">
@@ -53,29 +54,33 @@ export default async function Header() {
           <h2 className="text-xl font-bold">
             <Link href={ROUTE_BASE.HOME}>{companyName}</Link>
           </h2>
-         
         </div>
-        <div className="flex-1 hidden lg:block max-w-md">
-          <SearchBar />
+        <div className="flex-1 min-w-0" />
+        <div className="flex items-center justify-end gap-2  w-full max-w-lg">
+          <div className="hidden lg:flex items-center gap-2 w-full justify-end">
+            <SearchBar />
+            {bliMedlemUrl && (
+              <Button asChild variant="secondary" size="sm" className="shrink-0">
+                <Link
+                  href={bliMedlemUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center no-underline gap-2"
+                >
+                  Bli medlem
+                  <Heart className="size-4" />
+                </Link>
+              </Button>
+            )}
+          </div>
+          <MobileNav items={navItems} bliMedlemUrl={bliMedlemUrl} />
         </div>
-        <div className="flex-shrink-0">
-          <MainNav items={navItems} />
-          <MobileNav items={navItems} />
+      </div>
+      {/* Desktop: nav links in a second row, left aligned */}
+      <div className="hidden lg:block border-t border-gray-200">
+        <div className="max-w-7xl mx-auto w-full px-4 py-2 flex justify-start">
+          <MainNav items={navItems} align="left" />
         </div>
-        {bliMedlemUrl && (
-            <Button asChild variant="secondary" size="sm" className="hidden lg:inline-flex" >
-              <Link
-                href={bliMedlemUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                
-                className="inline-flex items-center justify-center no-underline gap-2"
-              >
-                Bli medlem
-                <Heart className="size-4" />
-              </Link>
-            </Button>
-          )}
       </div>
     </header>
   );

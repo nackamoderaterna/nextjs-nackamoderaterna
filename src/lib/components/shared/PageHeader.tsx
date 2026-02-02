@@ -56,14 +56,14 @@ export function PageHeader({ title, pageHeader }: PageHeaderProps) {
             asSection={false}
             className="w-full"
           >
-            <div className="z-10">
+            <div className="z-10 max-w-xl">
               {displayTitle && (
                 <h1 className="mb-4 text-4xl font-bold text-white md:text-5xl lg:text-6xl">
                   {displayTitle}
                 </h1>
               )}
               {description && (
-                <p className="max-w-2xl text-xl text-white opacity-90 md:text-2xl">
+                <p className="max-w-lg text-xl text-white opacity-90 md:text-2xl">
                   {description}
                 </p>
               )}

@@ -50,9 +50,9 @@ export function Breadcrumb() {
   return (
     <nav
       aria-label="Breadcrumb"
-      className="border-b border-border bg-muted/30 px-4 py-3"
+      className="border-b border-border bg-muted/30  py-3"
     >
-      <div className="max-w-7xl mx-auto flex items-center gap-2 text-sm text-muted-foreground">
+      <div className="max-w-7xl mx-auto flex items-center gap-2 px-4 md-p6 lg:px-8 text-sm text-muted-foreground">
         {items.map((item, index) => (
           <span
             key={item.href}

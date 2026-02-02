@@ -129,7 +129,6 @@ export default async function PoliticianPage({
                   <Link
                     href={`#${id}`}
                     scroll={true}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {label}
                   </Link>

@@ -95,13 +95,13 @@ export function SearchBar() {
   };
 
   return (
-    <div ref={searchRef} className="relative w-full max-w-lg">
-      <div className="relative">
+    <div ref={searchRef} className="relative w-full max-w-xl">
+      <div className="relative w-full">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
           ref={inputRef}
           type="text"
-          placeholder="Sök efter information på sidan..."
+          placeholder="Sök på webbplatsen..."
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);

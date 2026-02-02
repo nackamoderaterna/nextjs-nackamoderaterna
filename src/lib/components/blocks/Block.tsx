@@ -94,7 +94,7 @@ export default function Block({
   return (
     <Component
       className={cn(
-        "w-full",
+        "w-full mb-16",
         paddingYClasses[paddingY],
         backgroundClasses[background],
         className

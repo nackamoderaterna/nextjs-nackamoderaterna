@@ -18,9 +18,21 @@ import {
 import { navigationMenuTriggerStyle } from "@/lib/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 
-export function MainNav({ items }: { items: MenuItemWithReference[] }) {
+export function MainNav({
+  items,
+  align = "center",
+}: {
+  items: MenuItemWithReference[];
+  align?: "left" | "center";
+}) {
   return (
-    <nav className="hidden lg:flex flex-1 items-center justify-center gap-1">
+    <nav
+      className={cn(
+        "hidden lg:flex items-center gap-1",
+        align === "center" && "flex-1 justify-center",
+        align === "left" && "justify-start"
+      )}
+    >
       {items.map((item) => (
         <DesktopNavItem item={item} key={item.title} />
       ))}
