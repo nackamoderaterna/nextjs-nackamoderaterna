@@ -18,6 +18,7 @@ import { Metadata } from "next";
 import { Event } from "~/sanity.types";
 import type { ListingPage } from "@/lib/types/pages";
 import { ROUTE_BASE } from "@/lib/routes";
+import { Section } from "@/lib/components/shared/Section";
 
 const ITEMS_PER_PAGE = 10;
 const EVENTS_CACHE_SECONDS = 86400;
@@ -100,7 +101,7 @@ export default async function EventsPage({
 
     if (currentPage > totalPages && totalPages > 0) {
       return (
-        <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
           <ListingHeader
             title={listing?.title}
             intro={listing?.intro}
@@ -115,23 +116,17 @@ export default async function EventsPage({
     }
 
     return (
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <section className="pb-12 md:py-16">
-          <div className="max-w-7xl">
+      
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+        
             <ListingHeader
               title={listing?.title}
               intro={listing?.intro}
               fallbackTitle="Evenemang"
             />
-          </div>
-        </section>
         <EventFilters />
-        <section className="pb-10">
-          <div className="max-w-7xl">
-            <h2 className="text-2xl font-bold text-foreground mb-6">
-              Kommande
-            </h2>
-            {items.length === 0 ? (
+        <Section title="Kommande">
+        {items.length === 0 ? (
               <p className="text-muted-foreground text-center py-12">
                 Inga kommande evenemang för tillfället.
               </p>
@@ -148,8 +143,8 @@ export default async function EventsPage({
                 />
               </>
             )}
-          </div>
-        </section>
+        </Section>
+      
         <Block maxWidth="3xl" paddingY="large" background="muted">
           <ContactForm
             heading="Kontakta oss"
@@ -171,7 +166,7 @@ export default async function EventsPage({
 
     if (currentPage > totalPages && totalPages > 0) {
       return (
-        <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <main>
           <ListingHeader
             title={listing?.title}
             intro={listing?.intro}
@@ -189,32 +184,22 @@ export default async function EventsPage({
       "bg-muted hover:bg-muted/50 text-muted-foreground [&_.text-brand-primary]:text-muted-foreground";
 
     return (
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <section className="py-12 md:py-16">
-          <div className="max-w-7xl">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
             <ListingHeader
               title={listing?.title}
               intro={listing?.intro}
               fallbackTitle="Evenemang"
             />
-          </div>
-        </section>
         <EventFilters />
-        <section className="pb-16">
-          <div className="max-w-7xl">
-            <h2 className="text-2xl font-bold text-foreground mb-6">
-              Tidigare
-            </h2>
-            {items.length === 0 ? (
+        <Section title="Tidigare">
+          {items.length === 0 ? (
               <p className="text-muted-foreground text-center py-12">
                 Inga tidigare evenemang.
               </p>
             ) : (
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {items.map((event) =>
-                    renderEventCard(event, mutedClass, true)
-                  )}
+                  {items.map((event) => renderEventCard(event, mutedClass, true))}
                 </div>
                 <Pagination
                   currentPage={currentPage}
@@ -224,8 +209,7 @@ export default async function EventsPage({
                 />
               </>
             )}
-          </div>
-        </section>
+        </Section>
         <Block maxWidth="3xl" paddingY="large" background="muted">
           <ContactForm
             heading="Kontakta oss"
@@ -253,25 +237,18 @@ export default async function EventsPage({
   const pastDisplay = past.slice(0, 4);
 
   return (
-    <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <section className="py-12 md:py-16">
-        <div className="max-w-7xl">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+     
           <ListingHeader
             title={listing?.title}
             intro={listing?.intro}
             fallbackTitle="Evenemang"
           />
-        </div>
-      </section>
+      
 
       <EventFilters />
-
-      <section className="pb-10">
-        <div className="max-w-7xl">
-          <h2 className="text-2xl font-bold text-foreground mb-6">
-            Kommande
-          </h2>
-          {upcomingDisplay.length === 0 ? (
+      <Section title="Kommande">
+      {upcomingDisplay.length === 0 ? (
             <p className="text-muted-foreground text-center py-12">
               Inga kommande evenemang för tillfället.
             </p>
@@ -292,15 +269,11 @@ export default async function EventsPage({
               )}
             </>
           )}
-        </div>
-      </section>
+      </Section>
+
 
       {pastDisplay.length > 0 && (
-        <section className="pb-16">
-          <div className="max-w-7xl">
-            <h2 className="text-2xl font-bold text-foreground mb-6">
-              Tidigare
-            </h2>
+        <Section title="Tidigare">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {pastDisplay.map((event) =>
                 renderEventCard(
@@ -320,8 +293,7 @@ export default async function EventsPage({
                 </Link>
               </p>
             )}
-          </div>
-        </section>
+        </Section>
       )}
 
       <Block maxWidth="3xl" paddingY="large" background="muted">
