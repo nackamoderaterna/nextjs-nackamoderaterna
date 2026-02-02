@@ -8,6 +8,7 @@ import {
 import { SanityImage } from "../shared/SanityImage";
 import { ROUTE_BASE } from "@/lib/routes";
 import { cn } from "@/lib/utils";
+import { cleanInvisibleUnicode } from "@/lib/politicians";
 
 export interface PeopleCardProps {
   slug: string;
@@ -47,7 +48,10 @@ export function PeopleCard({
 }: PeopleCardProps) {
   const config = sizeConfig[size];
   const href = `${ROUTE_BASE.POLITICIANS}/${slug}`.replace(/\/+/g, "/");
-  const displayName = name?.trim() || "Namn saknas";
+  const displayName = cleanInvisibleUnicode(name?.trim() || "Namn saknas");
+  const displayTitle = title?.trim()
+    ? cleanInvisibleUnicode(title.trim())
+    : null;
 
   if (config.layout === "vertical") {
     return (
@@ -56,7 +60,7 @@ export function PeopleCard({
         variant="outline"
         size={config.itemSize}
         className={cn(
-          "h-full flex-col rounded-lg p-0 overflow-hidden hover:border-brand-primary/50 [a]:hover:bg-transparent group gap-0",
+          "h-full flex-col rounded-lg p-0 overflow-hidden group gap-0 hover:border-brand-primary/50 [a]:hover:bg-transparent",
           className
         )}
       >
@@ -82,8 +86,10 @@ export function PeopleCard({
             <ItemTitle className="text-foreground text-lg group-hover/item:text-foreground">
               {displayName}
             </ItemTitle>
-            {title?.trim() && (
-              <p className="text-sm text-muted-foreground mt-0.5">{title}</p>
+            {displayTitle && (
+              <p className="text-sm text-muted-foreground mt-0.5">
+                {displayTitle}
+              </p>
             )}
           </ItemContent>
         </Link>
@@ -97,7 +103,7 @@ export function PeopleCard({
       variant="outline"
       size={config.itemSize}
       className={cn(
-        "h-full rounded-lg hover:border-brand-primary/50  group hover:bg-muted",
+        "h-full rounded-lg group hover:border-brand-primary/50 [a]:hover:bg-transparent hover:bg-muted",
         className
       )}
     >
@@ -124,8 +130,10 @@ export function PeopleCard({
           <ItemTitle className="text-foreground group-hover/item:text-foreground">
             {displayName}
           </ItemTitle>
-          {title?.trim() && (
-            <p className="text-sm text-muted-foreground mt-0.5">{title}</p>
+          {displayTitle && (
+            <p className="text-sm text-muted-foreground mt-0.5">
+              {displayTitle}
+            </p>
           )}
         </ItemContent>
       </Link>

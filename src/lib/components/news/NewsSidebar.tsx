@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SanityImage } from "@/lib/components/shared/SanityImage";
-import { PeopleCard } from "@/lib/components/politician/PeopleCard";
+import { PersonListLink } from "@/lib/components/politician/PersonListLink";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
 import { SidebarNewsItem } from "@/lib/components/shared/SidebarListItem";
 import { NewsExpanded } from "@/lib/types/news";
@@ -85,17 +85,12 @@ export function NewsSidebar({ news, currentSlug }: NewsSidebarProps) {
           <nav aria-label="Lista över omnämnda företrädare">
             <div className="grid gap-4">
               {news.referencedPoliticians.map((politician) => (
-                <div
+                <PersonListLink
                   key={politician._id}
-                  className="rounded p-2 -m-2"
-                >
-                  <PeopleCard
-                    image={politician.image}
-                    name={politician.name}
-                    slug={politician.slug?.current || ""}
-                    size="small"
-                  />
-                </div>
+                  image={politician.image}
+                  name={politician.name}
+                  slug={politician.slug?.current || ""}
+                />
               ))}
             </div>
           </nav>

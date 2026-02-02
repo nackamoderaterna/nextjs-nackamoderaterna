@@ -11,12 +11,7 @@ import {
   ItemDescription,
   ItemTitle,
 } from "@/lib/components/ui/item";
-import {
-  Menubar,
-  MenubarLabel,
-  MenubarMenu,
-  MenubarTrigger,
-} from "@/lib/components/ui/menubar";
+import { InPageNav } from "@/lib/components/shared/InPageNav";
 import { PoliticianSidebar } from "@/lib/components/politician/PoliticianSidebar";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
@@ -119,23 +114,7 @@ export default async function PoliticianPage({
   const mainContent = (
     <div className="space-y-8">
     {tocEntries.length > 1 && (
-  
-      
-          <Menubar className="w-full mx-auto">
-            <MenubarLabel>Innehåll</MenubarLabel>
-            {tocEntries.map(({ id, label }) => (
-              <MenubarMenu key={id}>
-                <MenubarTrigger asChild>
-                  <Link
-                    href={`#${id}`}
-                    scroll={true}
-                  >
-                    {label}
-                  </Link>
-                </MenubarTrigger>
-              </MenubarMenu>
-            ))}
-          </Menubar>
+        <InPageNav entries={tocEntries} label="Meny" />
       )}
       {politician.bio && (
         <Section id="biografi" title="Biografi" className="scroll-mt-24">
