@@ -23,7 +23,7 @@ import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { Section } from "@/lib/components/shared/Section";
 
 const ITEMS_PER_PAGE = 10;
-const EVENTS_CACHE_SECONDS = 86400;
+const EVENTS_CACHE_SECONDS = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const listing = await sanityClient.fetch<ListingPage>(

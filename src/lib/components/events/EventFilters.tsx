@@ -1,49 +1,36 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Tabs, TabsList, TabsTrigger } from "@/lib/components/ui/tabs";
 import { ROUTE_BASE } from "@/lib/routes";
 
 const EVENT_VIEW_OPTIONS = [
-  { value: "all", label: "Alla evenemang" },
+  { value: "all", label: "Alla" },
   { value: "kommande", label: "Kommande" },
   { value: "tidigare", label: "Tidigare" },
 ] as const;
 
-function updateParams(current: URLSearchParams, view: string) {
-  const params = new URLSearchParams(current.toString());
-  params.delete("page");
-  if (view === "all") {
-    params.delete("view");
-  } else {
-    params.set("view", view);
-  }
-  return params;
+function getHref(view: string): string {
+  if (view === "all") return ROUTE_BASE.EVENTS;
+  return `${ROUTE_BASE.EVENTS}?view=${view}`;
 }
 
 export function EventFilters() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const view = searchParams.get("view") || "all";
   const value =
     view === "kommande" || view === "tidigare" ? view : "all";
 
-  const handleChange = (newValue: string) => {
-    const params = updateParams(searchParams, newValue);
-    const queryString = params.toString();
-    router.push(queryString ? `${ROUTE_BASE.EVENTS}?${queryString}` : ROUTE_BASE.EVENTS);
-  };
-
   return (
     <div className="mb-8">
-      <Tabs value={value} onValueChange={handleChange}>
-        <TabsList variant="line" className="h-auto p-0 bg-transparent">
+      <Tabs value={value}>
+        <TabsList>
           {EVENT_VIEW_OPTIONS.map((opt) => (
-            <TabsTrigger
-              key={opt.value}
-              value={opt.value}
-            >
-              {opt.label}
+            <TabsTrigger key={opt.value} value={opt.value} asChild>
+              <Link href={getHref(opt.value)} className="no-underline bg-transparent">
+                {opt.label}
+              </Link>
             </TabsTrigger>
           ))}
         </TabsList>
