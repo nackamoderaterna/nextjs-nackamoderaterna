@@ -48,6 +48,9 @@ function MenubarRadioGroup({
   )
 }
 
+const menubarTriggerClass =
+  "flex items-center rounded-sm px-2 py-1 text-sm font-medium outline-hidden select-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground transition-colors";
+
 function MenubarTrigger({
   className,
   ...props
@@ -55,10 +58,7 @@ function MenubarTrigger({
   return (
     <MenubarPrimitive.Trigger
       data-slot="menubar-trigger"
-      className={cn(
-        "focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground flex items-center rounded-sm px-2 py-1 text-sm font-medium outline-hidden select-none",
-        className
-      )}
+      className={cn(menubarTriggerClass, className)}
       {...props}
     />
   )

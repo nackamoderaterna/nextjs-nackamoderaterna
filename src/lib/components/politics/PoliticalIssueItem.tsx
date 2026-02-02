@@ -68,7 +68,7 @@ export function PoliticalIssueItem({
           <ItemTitle>{title}</ItemTitle>
           {featured && !fulfilled && (
             <Star
-              className="size-3.5 shrink-0 text-amber-500"
+              className="size-3.5 shrink-0 text-brand-primary"
               aria-label="kärnfråga"
             />
           )}

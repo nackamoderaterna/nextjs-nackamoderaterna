@@ -3,6 +3,7 @@ import { BlockHeading, getBlockHeading } from "./BlockHeading";
 import { PoliticalAreaCard } from "../politics/politicalAreaCard";
 import { getLucideIcon } from "@/lib/utils/iconUtils";
 import { ROUTE_BASE } from "@/lib/routes";
+import { ResponsiveGrid } from "../shared/ResponsiveGrid";
 
 interface PoliticalAreasBlockProps {
   _type: "block.politicalAreas";
@@ -26,25 +27,23 @@ export function PoliticalAreasBlock({ block }: { block: PoliticalAreasBlockProps
   return (
     <Block paddingY="large" maxWidth="7xl">
       <BlockHeading title={title} subtitle={subtitle} />
-      <div className="flex flex-wrap justify-center gap-4">
+      
+      <ResponsiveGrid cols={3}>
         {items.map((area) => {
           const slug = area.slug?.current;
           if (!slug || !area.name) return null;
           const Icon = getLucideIcon(area.icon?.name ?? undefined);
           return (
-            <div
-              key={area._id}
-              className="w-[calc(50%-0.5rem)] shrink-0 lg:w-[calc(25%-0.75rem)]"
-            >
               <PoliticalAreaCard
                 title={area.name}
                 href={`${ROUTE_BASE.POLITICS}/${slug}`}
                 icon={Icon ?? undefined}
               />
-            </div>
           );
+          
         })}
-      </div>
+        </ResponsiveGrid>
+      
     </Block>
   );
 }
