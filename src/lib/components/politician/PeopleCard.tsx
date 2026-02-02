@@ -60,21 +60,19 @@ export function PeopleCard({
         variant="outline"
         size={config.itemSize}
         className={cn(
-          "h-full flex-col rounded-lg p-0 overflow-hidden group gap-0 hover:border-brand-primary/50 [a]:hover:bg-transparent",
+          "h-full flex-col rounded-lg overflow-hidden group gap-0 hover:border-brand-primary/50 [a]:hover:bg-transparent",
           className
         )}
       >
         <Link href={href} className="flex flex-col h-full">
           <ItemMedia
             variant="image"
-            className={cn(
-              "w-full shrink-0 overflow-hidden rounded-t-lg",
-              config.imageClass
-            )}
+            className="relative w-full shrink-0 overflow-hidden rounded-t-lg aspect-square min-h-68 max-h-72"
           >
             {image ? (
               <SanityImage
                 image={image}
+                fill
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 768px) 50vw, 25vw"
               />
@@ -82,7 +80,7 @@ export function PeopleCard({
               <div className="size-full bg-muted" />
             )}
           </ItemMedia>
-          <ItemContent className="p-4 flex-1 w-full">
+          <ItemContent className="py-4 flex-1 w-full">
             <ItemTitle className="text-foreground text-lg group-hover/item:text-foreground">
               {displayName}
             </ItemTitle>

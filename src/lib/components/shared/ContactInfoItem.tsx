@@ -16,7 +16,7 @@ interface ContactInfoItemProps {
 const baseRowClasses =
   "flex items-center gap-3 rounded-lg px-2 py-1.5 -mx-2 -my-1.5 text-muted-foreground transition-colors";
 
-const linkRowClasses = `${baseRowClasses} hover:bg-brand-primary/10 hover:text-foreground`;
+const linkRowClasses = `${baseRowClasses} hover:bg-muted/80 hover:text-foreground`;
 
 export function ContactInfoItem({
   icon,
@@ -28,7 +28,7 @@ export function ContactInfoItem({
 }: ContactInfoItemProps) {
   const content = (
     <>
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-brand-primary/10 text-brand-primary [&>svg]:h-4 [&>svg]:w-4">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-muted border border-border text-foreground [&>svg]:h-4 [&>svg]:w-4">
         {icon}
       </span>
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">

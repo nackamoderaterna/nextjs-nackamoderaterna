@@ -9,13 +9,14 @@ import {
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
 import { PoliticianSection } from "@/lib/components/politician/PoliticianSection";
-import { PeopleCard } from "@/lib/components/politician/PeopleCard";
+import { PoliticiansViewSwitcher } from "@/lib/components/politician/politicians-table/PoliticiansViewSwitcher";
 import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { EmptyState } from "@/lib/components/shared/EmptyState";
 import type { ListingPage } from "@/lib/types/pages";
+import { PeopleCard } from "@/lib/components/politician/PeopleCard";
 
 export async function generateMetadata(): Promise<Metadata> {
   const listing = await sanityClient.fetch<ListingPage>(
@@ -84,6 +85,7 @@ export default async function PoliticiansPage() {
         fallbackTitle="Våra politiker"
         paddingY="compact"
       >
+        <PoliticiansViewSwitcher politicians={politicians}>
         {/* 1. Kommunalråd */}
         {(grouped.kommunalrad.president.length > 0 ||
           grouped.kommunalrad.ordinary.length > 0) && (
@@ -106,7 +108,7 @@ export default async function PoliticiansPage() {
         {grouped.namndLeaders.length > 0 && (
           <section className="mb-10">
             <h2 className="text-2xl font-bold text-foreground mb-4">Gruppledare</h2>
-            <ResponsiveGrid cols={4}>
+            <ResponsiveGrid cols={3}>
               {grouped.namndLeaders.map(({ politician, namndTitle }) => (
                 <PeopleCard
                   key={politician._id}
@@ -170,6 +172,7 @@ export default async function PoliticiansPage() {
         {politicians.length === 0 && (
           <EmptyState message="Inga politiker tillgängliga för tillfället." />
         )}
+        </PoliticiansViewSwitcher>
       </ListingPageLayout>
     </div>
   );

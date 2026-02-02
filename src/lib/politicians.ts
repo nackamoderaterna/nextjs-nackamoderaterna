@@ -43,7 +43,8 @@ export const politiciansDirectoryQuery = groq`*[_type == "politician"] | order(n
     "politicalArea": politicalArea-> {
       _id,
       name,
-      slug
+      slug,
+      icon{ name }
     }
   },
   socialLinks
@@ -103,6 +104,7 @@ export type PoliticianWithNamnd = Omit<
       slug: {
         current: string;
       };
+      icon?: { name?: string } | null;
     };
   }>;
   referencedInNews?: Array<{

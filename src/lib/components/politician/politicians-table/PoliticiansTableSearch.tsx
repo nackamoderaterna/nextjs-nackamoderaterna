@@ -1,0 +1,28 @@
+"use client";
+
+import { Input } from "@/lib/components/ui/input";
+import { Search } from "lucide-react";
+
+interface PoliticiansTableSearchProps {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+}
+
+export function PoliticiansTableSearch({
+  value,
+  onChange,
+  placeholder = "Sök namn eller boendeområde...",
+}: PoliticiansTableSearchProps) {
+  return (
+    <div className="relative w-full min-w-0 max-w-md sm:max-w-lg">
+      <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+      <Input
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="pl-9"
+      />
+    </div>
+  );
+}
