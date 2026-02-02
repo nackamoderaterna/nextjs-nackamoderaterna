@@ -43,7 +43,7 @@ export function StatsBlock({ block }: { block: StatsBlockProps }) {
   const { title, subtitle } = getBlockHeading(block);
 
   return (
-    <Block maxWidth="6xl">
+    <Block maxWidth="7xl">
         <BlockHeading title={title} subtitle={subtitle} className="mb-12" />
         <div className={`grid grid-cols-1 ${gridCols[columns] || gridCols[4]} gap-8`}>
           {block.stats?.map((stat, index) => (

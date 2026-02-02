@@ -17,7 +17,7 @@ export type BlockProps = {
    * Maximum width of the content container
    * @default "7xl"
    */
-  maxWidth?: "none" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "full";
+  maxWidth?: "3xl" | "7xl";
   /**
    * Background color variant
    * @default "default"
@@ -57,13 +57,8 @@ const paddingXClasses = {
 };
 
 const maxWidthClasses = {
-  none: "",
   "3xl": "max-w-3xl",
-  "4xl": "max-w-4xl",
-  "5xl": "max-w-5xl",
-  "6xl": "max-w-6xl",
   "7xl": "max-w-7xl",
-  full: "max-w-full",
 };
 
 const backgroundClasses = {
@@ -78,7 +73,7 @@ const backgroundClasses = {
  * 
  * @example
  * ```tsx
- * <Block paddingY="large" maxWidth="6xl">
+ * <Block paddingY="large" maxWidth="7xl">
  *   <h2>Content</h2>
  * </Block>
  * ```

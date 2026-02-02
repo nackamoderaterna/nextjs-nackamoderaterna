@@ -41,7 +41,7 @@ export function AccordionBlock({ block }: { block: AccordionBlockProps }) {
   const { title, subtitle } = getBlockHeading(block);
 
   return (
-    <Block maxWidth="4xl">
+    <Block maxWidth="3xl">
         <BlockHeading title={title} subtitle={subtitle} subtitleMaxWidth="none" className="mb-12" />
         <div className="space-y-4">
           {block.items?.map((item, index) => {

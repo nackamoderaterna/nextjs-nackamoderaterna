@@ -56,7 +56,7 @@ export function PeopleCard({
         variant="outline"
         size={config.itemSize}
         className={cn(
-          "h-full flex-col rounded-lg p-0 overflow-hidden hover:border-brand-primary/50 [a]:hover:bg-transparent",
+          "h-full flex-col rounded-lg p-0 overflow-hidden hover:border-brand-primary/50 [a]:hover:bg-transparent group gap-0",
           className
         )}
       >
@@ -71,7 +71,7 @@ export function PeopleCard({
             {image ? (
               <SanityImage
                 image={image}
-                className="object-cover"
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 768px) 50vw, 25vw"
               />
             ) : (
@@ -79,7 +79,7 @@ export function PeopleCard({
             )}
           </ItemMedia>
           <ItemContent className="p-4 flex-1 w-full">
-            <ItemTitle className="text-foreground text-lg group-hover/item:text-brand-primary">
+            <ItemTitle className="text-foreground text-lg group-hover/item:text-foreground">
               {displayName}
             </ItemTitle>
             {title?.trim() && (
@@ -97,7 +97,7 @@ export function PeopleCard({
       variant="outline"
       size={config.itemSize}
       className={cn(
-        "h-full rounded-lg hover:border-brand-primary/50 [a]:hover:bg-transparent",
+        "h-full rounded-lg hover:border-brand-primary/50  group hover:bg-muted",
         className
       )}
     >
@@ -121,7 +121,7 @@ export function PeopleCard({
           )}
         </ItemMedia>
         <ItemContent>
-          <ItemTitle className="text-foreground group-hover/item:text-brand-primary">
+          <ItemTitle className="text-foreground group-hover/item:text-foreground">
             {displayName}
           </ItemTitle>
           {title?.trim() && (

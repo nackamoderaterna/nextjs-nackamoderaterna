@@ -31,7 +31,7 @@ export function PoliticalAreaCard({
           </ItemMedia>
         )}
         <ItemContent>
-          <ItemTitle className="text-center text-foreground group-hover:text-brand-primary">
+          <ItemTitle className="text-foreground group-hover:text-brand-primary">
             {title}
           </ItemTitle>
         </ItemContent>

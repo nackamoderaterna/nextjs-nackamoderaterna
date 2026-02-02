@@ -25,29 +25,32 @@ export function TextMediaBlock({ block }: { block: TwoColumnBlockProps }) {
   };
 
   const imageColumn = (
-    <div className="rounded-lg overflow-hidden">
+    <div className="rounded-lg overflow-hidden h-full min-h-[240px] md:min-h-0 relative">
       <SanityImage
         image={block.image}
         alt={block.image?.alt || ""}
+        fill
         sizes="(max-width: 768px) 100vw, 50vw"
-        className="w-full h-auto"
+        className="object-cover"
       />
-    </div>
-  );
-
-  const textColumn = (
-    <div className="prose prose-neutral max-w-none">
-      <PortableText value={block.content} components={portableTextComponents} />
     </div>
   );
 
   const { title } = getBlockHeading(block);
 
+  const textColumn = (
+    <div className="flex flex-col gap-4 items-center justify-center py-8">
+      <BlockHeading title={title} centered={false} />
+      <div className="prose prose-neutral max-w-none">
+        <PortableText value={block.content} components={portableTextComponents} />
+      </div>
+    </div>
+  );
+
   return (
     <Block>
-        <BlockHeading title={title} />
         <div
-          className={`grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 ${alignClasses[cleanInvisibleUnicode(alignment) as "top" | "center" | "bottom"]}`}
+          className={`grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-stretch min-h-56 md:min-h-96 ${alignClasses[cleanInvisibleUnicode(alignment) as "top" | "center" | "bottom"]}`}
         >
           {imagePosition === "right" ? (
             <>

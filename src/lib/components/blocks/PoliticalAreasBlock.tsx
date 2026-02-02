@@ -24,7 +24,7 @@ export function PoliticalAreasBlock({ block }: { block: PoliticalAreasBlockProps
   }
 
   return (
-    <Block paddingY="large" maxWidth="6xl">
+    <Block paddingY="large" maxWidth="7xl">
       <BlockHeading title={title} subtitle={subtitle} />
       <div className="flex flex-wrap justify-center gap-4">
         {items.map((area) => {
