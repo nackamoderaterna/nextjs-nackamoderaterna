@@ -39,7 +39,7 @@ export default function RootLayout({
       <body className={interDisplay.className}>
         <BreadcrumbTitleProvider>
           <Header />
-          <main className="min-h-screen flex flex-col">
+          <main className="flex flex-col">
             <Breadcrumb />
             <div className="flex-1">{children}</div>
           </main>

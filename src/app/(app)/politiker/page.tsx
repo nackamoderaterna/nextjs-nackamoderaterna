@@ -75,7 +75,7 @@ export default async function PoliticiansPage() {
   const kommunfullmaktigeSubstitute = sortByName(grouped.kommunfullmaktige.substitute);
 
   return (
-    <div className="min-h-screen">
+    <div >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <ListingHeader
           title={listing?.title}

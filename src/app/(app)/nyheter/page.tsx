@@ -114,7 +114,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
   // Redirect to last page if page number is too high
   if (currentPage > totalPages && totalPages > 0) {
     return (
-      <div className="min-h-screen">
+      <div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <ListingHeader
             title={listing?.title}
@@ -130,7 +130,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
   }
 
   return (
-    <div className="min-h-screen">
+    <div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <ListingHeader
           title={listing?.title}
