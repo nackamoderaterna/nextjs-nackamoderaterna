@@ -53,7 +53,7 @@ export default async function Header() {
             <Link href={ROUTE_BASE.HOME}>{companyName}</Link>
           </h2>
         </div>
-        <div className="flex-1 min-w-[200px] hidden md:block max-w-md">
+        <div className="flex-1 w-full hidden lg:block max-w-md">
           <SearchBar />
         </div>
         <div className="flex-shrink-0">

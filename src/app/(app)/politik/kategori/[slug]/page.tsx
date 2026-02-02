@@ -134,7 +134,7 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
   );
 
   const sidebarContent = (
-    <div className="grid gap-4">
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
      
       {data.politicalIssues.length > 0 && (
         <Sidebar heading="Politiska mål">
@@ -161,7 +161,7 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
           className="w-full"
           size="lg"
         >
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 max-w-sm">
           <Link href={globalSettings.handlingsprogram.url} target="_blank" rel="noopener noreferrer">
             Läs vårt handlingsprogram
           </Link>

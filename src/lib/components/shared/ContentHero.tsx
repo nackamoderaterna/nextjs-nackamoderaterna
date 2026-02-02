@@ -39,7 +39,7 @@ export function ContentHero({
           </div>
         ) : showIcon ? (
 
-          <div className="flex  h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-brand-primary/10">
+          <div className="flex  lg:h-24 lg:w-24 h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-brand-primary/10">
             <Icon className="h-7 w-7 text-brand-primary" />
           </div>
         ) : null}
