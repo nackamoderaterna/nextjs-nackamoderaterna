@@ -18,6 +18,15 @@ export const politicalIssue = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: "description",
+      title: "Kort beskrivning",
+      type: "text",
+      rows: 3,
+      group: "content",
+      description:
+        "En koncis sammanfattning som visas på kort i listningar (t.ex. på politik- och sakfrågorsidorna). Håll texten kort och informativ—den ska ge läsaren en snabb överblick innan de klickar vidare.",
+    }),
+    defineField({
       name: "slug",
       title: "Slug",
       description: "URL-vänlig identifierare. Genereras automatiskt från frågan.",

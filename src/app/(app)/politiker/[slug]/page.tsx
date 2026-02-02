@@ -5,7 +5,7 @@ import { sanityClient } from "@/lib/sanity/client";
 import { cleanPoliticianData, PoliticianWithNamnd } from "@/lib/politicians";
 import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
 import { ContentHero } from "@/lib/components/shared/ContentHero";
-import { RoleCard } from "@/lib/components/politician/RoleCard";
+import { ContentCard } from "@/lib/components/politics/contentCard";
 import { PoliticianSidebar } from "@/lib/components/politician/PoliticianSidebar";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { Section } from "@/lib/components/shared/Section";
@@ -104,7 +104,7 @@ export default async function PoliticianPage({
     tocEntries.push({ id: "pressbilder", label: "Pressbilder" });
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main className="max-w-7xl mx-auto px-4 sm:px-4 lg:px-6 py-8">
       <SetBreadcrumbTitle title={politician.name ?? ""} />
       <ContentHero
         pageType="Politiker"
@@ -156,7 +156,12 @@ export default async function PoliticianPage({
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {roles.map((role, index) => (
-                      <RoleCard key={index} role={role} />
+                      <ContentCard
+                        key={index}
+                        title={role.title}
+                        description={role.description}
+                        href={role.href}
+                      />
                     ))}
                   </div>
                 </section>

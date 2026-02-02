@@ -1,5 +1,5 @@
 import { PoliticalAreaCard } from "@/lib/components/politics/politicalAreaCard";
-import { KeyIssueCard } from "@/lib/components/politics/keyIssueCard";
+import { ContentCard } from "@/lib/components/politics/contentCard";
 import { PoliticalArea, PoliticalIssue } from "~/sanity.types";
 import { politikPageQuery } from "@/lib/queries/politik";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
@@ -39,6 +39,7 @@ export type PoliticalIssueWithAreas = Omit<
   PoliticalIssue,
   "politicalAreas" | "geographicalAreas"
 > & {
+  description?: string | null;
   fulfilled?: boolean;
   slug?: { current?: string } | null;
   politicalAreas: Array<{
@@ -96,9 +97,10 @@ export default async function PoliticsPage() {
           <Section title="Våra kärnfrågor" titleSize="large">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {data.featuredPoliticalIssues.map((issue) => (
-                <KeyIssueCard
+                <ContentCard
                   key={issue._id}
                   title={issue.question || ""}
+                  description={issue.description}
                   politicalAreas={issue.politicalAreas}
                   geographicalAreas={issue.geographicalAreas ?? []}
                   issueSlug={issue.slug?.current}
@@ -129,9 +131,10 @@ export default async function PoliticsPage() {
           <Section title="Uppfyllda vallöften" titleSize="large">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {data.fulfilledPoliticalIssues.map((issue) => (
-                <KeyIssueCard
+                <ContentCard
                   key={issue._id}
                   title={issue.question || ""}
+                  description={issue.description}
                   politicalAreas={issue.politicalAreas}
                   geographicalAreas={issue.geographicalAreas ?? []}
                   issueSlug={issue.slug?.current}

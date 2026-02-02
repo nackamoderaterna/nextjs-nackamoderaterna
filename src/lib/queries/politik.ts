@@ -8,6 +8,7 @@ export const politikPageQuery = groq`
   ]{
     _id,
     question,
+    description,
     slug,
     featured,
     fulfilled,
@@ -32,6 +33,7 @@ export const politikPageQuery = groq`
   ] | order(_updatedAt desc) {
     _id,
     question,
+    description,
     slug,
     featured,
     fulfilled,
@@ -75,6 +77,7 @@ export const politikPageQuery = groq`
 export const allPoliticalIssuesQuery = groq`*[_type == "politicalIssue"] | order(featured desc, _updatedAt desc) {
   _id,
   question,
+  description,
   slug,
   featured,
   fulfilled,

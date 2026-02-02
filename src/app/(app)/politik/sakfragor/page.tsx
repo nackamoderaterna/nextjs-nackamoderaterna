@@ -1,4 +1,4 @@
-import { KeyIssueCard } from "@/lib/components/politics/keyIssueCard";
+import { ContentCard } from "@/lib/components/politics/contentCard";
 import { allPoliticalIssuesQuery } from "@/lib/queries/politik";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
@@ -37,6 +37,7 @@ type PoliticalIssueWithAreas = Omit<
   PoliticalIssue,
   "politicalAreas" | "geographicalAreas"
 > & {
+  description?: string | null;
   fulfilled?: boolean;
   slug?: { current: string } | null;
   politicalAreas: Array<{
@@ -78,9 +79,10 @@ export default async function PolitikSakfragorPage() {
           <Section title="Kärnfrågor" titleSize="large">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {featuredIssues.map((issue) => (
-                <KeyIssueCard
+                <ContentCard
                   key={issue._id}
                   title={issue.question || ""}
+                  description={issue.description}
                   politicalAreas={issue.politicalAreas}
                   geographicalAreas={issue.geographicalAreas ?? []}
                   issueSlug={issue.slug?.current}
@@ -94,9 +96,10 @@ export default async function PolitikSakfragorPage() {
           <Section title="Uppfyllda vallöften" titleSize="large">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {fulfilledIssues.map((issue) => (
-                <KeyIssueCard
+                <ContentCard
                   key={issue._id}
                   title={issue.question || ""}
+                  description={issue.description}
                   politicalAreas={issue.politicalAreas}
                   geographicalAreas={issue.geographicalAreas ?? []}
                   issueSlug={issue.slug?.current}
@@ -111,9 +114,10 @@ export default async function PolitikSakfragorPage() {
           <Section title="Övriga" titleSize="large">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {otherIssues.map((issue) => (
-                <KeyIssueCard
+                <ContentCard
                   key={issue._id}
                   title={issue.question || ""}
+                  description={issue.description}
                   politicalAreas={issue.politicalAreas}
                   geographicalAreas={issue.geographicalAreas ?? []}
                   issueSlug={issue.slug?.current}
