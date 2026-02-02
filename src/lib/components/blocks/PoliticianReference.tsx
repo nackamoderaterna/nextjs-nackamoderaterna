@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-import { PeopleCard } from "../politician/PeopleCard";
 import Block from "./Block";
 import { BlockHeading, getBlockHeading } from "./BlockHeading";
 import { Politician } from "~/sanity.types";
 import { cleanInvisibleUnicode } from "@/lib/politicians";
+import { PeopleCard } from "../politician/PeopleCard";
 
 const KOMMUNALRAD_ROLE_TITLES: Record<string, string> = {
   president: "Kommunstyrelsens ordförande",

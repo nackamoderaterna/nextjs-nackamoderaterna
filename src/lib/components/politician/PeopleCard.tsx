@@ -1,94 +1,134 @@
 import Link from "next/link";
+import {
+  Item,
+  ItemContent,
+  ItemMedia,
+  ItemTitle,
+} from "@/lib/components/ui/item";
 import { SanityImage } from "../shared/SanityImage";
-import { cn } from "@/lib/utils";
 import { ROUTE_BASE } from "@/lib/routes";
+import { cn } from "@/lib/utils";
 
-interface PeopleCardProps {
-  image: unknown;
-  name?: string;
-  title?: string;
+export interface PeopleCardProps {
   slug: string;
-  size: "small" | "large";
-  /** Optional class for the small variant container (e.g. to override hover in muted boxes) */
+  image?: unknown;
+  name?: string | null;
+  /** Role or position title (e.g. "Kommunalråd") */
+  title?: string | null;
+  size?: "small" | "medium" | "large";
   className?: string;
 }
 
+const sizeConfig = {
+  small: {
+    layout: "horizontal" as const,
+    imageClass: "aspect-square size-12",
+    itemSize: "sm" as const,
+  },
+  medium: {
+    layout: "horizontal" as const,
+    imageClass: "aspect-square size-16",
+    itemSize: "default" as const,
+  },
+  large: {
+    layout: "vertical" as const,
+    imageClass: "!size-auto w-full aspect-square",
+    itemSize: "default" as const,
+  },
+};
+
 export function PeopleCard({
-  image,
-  title,
-  name,
   slug,
-  size = "small",
+  image,
+  name,
+  title,
+  size = "medium",
   className,
 }: PeopleCardProps) {
-  const isHorizontal = size === "small";
-  const imageSize = "w-20 h-20";
-  const imageSizes = "80px";
+  const config = sizeConfig[size];
+  const href = `${ROUTE_BASE.POLITICIANS}/${slug}`.replace(/\/+/g, "/");
+  const displayName = name?.trim() || "Namn saknas";
 
-  if (isHorizontal) {
+  if (config.layout === "vertical") {
     return (
-      <Link
-        href={`${ROUTE_BASE.POLITICIANS}/${slug}`}
-        aria-label={`Läs mer om ${name}`}
+      <Item
+        asChild
+        variant="outline"
+        size={config.itemSize}
+        className={cn(
+          "h-full flex-col rounded-lg p-0 overflow-hidden hover:border-brand-primary/50 [a]:hover:bg-transparent",
+          className
+        )}
       >
-        <div
-          className={cn(
-            "flex items-center gap-3 group hover:bg-muted rounded hover:cursor-pointer transition-colors duration-300 p-2",
-            className
-          )}
-        >
-          <div
+        <Link href={href} className="flex flex-col h-full">
+          <ItemMedia
+            variant="image"
             className={cn(
-              "relative flex-shrink-0 rounded overflow-hidden bg-muted transition-transform duration-300 group-hover:scale-105",
-              imageSize
+              "w-full shrink-0 overflow-hidden rounded-t-lg",
+              config.imageClass
             )}
           >
+            {image ? (
+              <SanityImage
+                image={image}
+                className="object-cover"
+                sizes="(max-width: 768px) 50vw, 25vw"
+              />
+            ) : (
+              <div className="size-full bg-muted" />
+            )}
+          </ItemMedia>
+          <ItemContent className="p-4 flex-1 w-full">
+            <ItemTitle className="text-foreground text-lg group-hover/item:text-brand-primary">
+              {displayName}
+            </ItemTitle>
+            {title?.trim() && (
+              <p className="text-sm text-muted-foreground mt-0.5">{title}</p>
+            )}
+          </ItemContent>
+        </Link>
+      </Item>
+    );
+  }
+
+  return (
+    <Item
+      asChild
+      variant="outline"
+      size={config.itemSize}
+      className={cn(
+        "h-full rounded-lg hover:border-brand-primary/50 [a]:hover:bg-transparent",
+        className
+      )}
+    >
+      <Link href={href} className="flex items-center gap-4">
+        <ItemMedia
+          variant="image"
+          className={cn(
+            "relative shrink-0 overflow-hidden rounded-md",
+            config.imageClass
+          )}
+        >
+          {image ? (
             <SanityImage
               image={image}
               fill
-              alt={name || ""}
-              sizes={imageSizes}
-              loading="lazy"
+              className="object-cover"
+              sizes="96px"
             />
-          </div>
-
-          <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-foreground text-sm leading-tight">
-              {name}
-            </h3>
-            {title && (
-              <p className="text-muted-foreground text-xs mt-0.5 leading-tight">
-                {title}
-              </p>
-            )}
-          </div>
-        </div>
+          ) : (
+            <div className="size-full bg-muted" />
+          )}
+        </ItemMedia>
+        <ItemContent>
+          <ItemTitle className="text-foreground group-hover/item:text-brand-primary">
+            {displayName}
+          </ItemTitle>
+          {title?.trim() && (
+            <p className="text-sm text-muted-foreground mt-0.5">{title}</p>
+          )}
+        </ItemContent>
       </Link>
-    );
-  }
-  return (
-    <Link
-      href={`${ROUTE_BASE.POLITICIANS}/${slug}`}
-      aria-label={`Läs mer om ${name}`}
-    >
-      <div className="group bg-card border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-        {/* Image */}
-        <div className="relative h-64 w-full overflow-hidden bg-muted transition-transform duration-300 group-hover:scale-105">
-          <SanityImage
-            fill
-            image={image}
-            alt={name || ""}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-            loading="lazy"
-          />
-        </div>
-
-        {/* Content */}
-        <div className="p-6">
-          <h3 className={`font-semibold text-foreground text-xl`}>{name}</h3>
-          <p className={`text-muted-foreground text-base mt-1`}>{title}</p>
-        </div>
-      </div>
-    </Link>
+    </Item>
   );
 }

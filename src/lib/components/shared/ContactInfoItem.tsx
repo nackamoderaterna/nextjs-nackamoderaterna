@@ -9,10 +9,14 @@ interface ContactInfoItemProps {
   href?: string;
   /** Use for external links (opens in new tab) */
   external?: boolean;
+  /** When false, renders as static text with no link or hover effects even if href is set */
+  isLink?: boolean;
 }
 
-const rowClasses =
-  "flex items-center gap-3 rounded-lg px-2 py-1.5 -mx-2 -my-1.5 text-muted-foreground hover:bg-brand-primary/10 hover:text-foreground transition-colors";
+const baseRowClasses =
+  "flex items-center gap-3 rounded-lg px-2 py-1.5 -mx-2 -my-1.5 text-muted-foreground transition-colors";
+
+const linkRowClasses = `${baseRowClasses} hover:bg-brand-primary/10 hover:text-foreground`;
 
 export function ContactInfoItem({
   icon,
@@ -20,6 +24,7 @@ export function ContactInfoItem({
   children,
   href,
   external,
+  isLink = true,
 }: ContactInfoItemProps) {
   const content = (
     <>
@@ -35,25 +40,27 @@ export function ContactInfoItem({
     </>
   );
 
-  if (href) {
+  const renderAsLink = href && isLink;
+
+  if (renderAsLink) {
     if (external) {
       return (
         <a
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className={rowClasses}
+          className={linkRowClasses}
         >
           {content}
         </a>
       );
     }
     return (
-      <Link href={href} className={rowClasses}>
+      <Link href={href} className={linkRowClasses}>
         {content}
       </Link>
     );
   }
 
-  return <div className={rowClasses}>{content}</div>;
+  return <div className={baseRowClasses}>{content}</div>;
 }

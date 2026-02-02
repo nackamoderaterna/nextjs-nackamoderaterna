@@ -53,19 +53,7 @@ export default async function Header() {
           <h2 className="text-xl font-bold">
             <Link href={ROUTE_BASE.HOME}>{companyName}</Link>
           </h2>
-          {bliMedlemUrl && (
-            <Button asChild variant="default" size="sm" className="hidden lg:inline-flex">
-              <Link
-                href={bliMedlemUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center no-underline gap-2"
-              >
-                Bli medlem
-                <Heart className="size-4" />
-              </Link>
-            </Button>
-          )}
+         
         </div>
         <div className="flex-1 hidden lg:block max-w-md">
           <SearchBar />
@@ -74,6 +62,20 @@ export default async function Header() {
           <MainNav items={navItems} />
           <MobileNav items={navItems} />
         </div>
+        {bliMedlemUrl && (
+            <Button asChild variant="secondary" size="sm" className="hidden lg:inline-flex" >
+              <Link
+                href={bliMedlemUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                
+                className="inline-flex items-center justify-center no-underline gap-2"
+              >
+                Bli medlem
+                <Heart className="size-4" />
+              </Link>
+            </Button>
+          )}
       </div>
     </header>
   );
