@@ -35,7 +35,7 @@ export const politicalArea = defineType({
       description: "Beskrivning av det politiska området. Visas på områdets sida.",
       type: "array",
       group: "content",
-      of: [{ type: "block" }],
+      of: [{ type: "block" }, { type: "image" }],
     }),
     defineField({
       name: "image",

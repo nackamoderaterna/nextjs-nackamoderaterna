@@ -37,7 +37,7 @@ export const eventDocument = defineType({
       description: "Beskrivning av evenemanget. Visas på evenemangets sida.",
       type: "array",
       group: "content",
-      of: [{ type: "block" }],
+      of: [{ type: "block" }, { type: "image" }],
     }),
     defineField({
       name: "image",

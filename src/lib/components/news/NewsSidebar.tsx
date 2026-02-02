@@ -5,7 +5,7 @@ import { Sidebar } from "@/lib/components/shared/Sidebar";
 import { SidebarNewsItem } from "@/lib/components/shared/SidebarListItem";
 import { NewsExpanded } from "@/lib/types/news";
 import { Button } from "@/lib/components/ui/button";
-import { FileDown, Instagram } from "lucide-react";
+import { FileDown, Facebook, Instagram } from "lucide-react";
 import { formatDate } from "@/lib/utils/dateUtils";
 import { ROUTE_BASE } from "@/lib/routes";
 
@@ -30,14 +30,30 @@ export function NewsSidebar({ news, currentSlug }: NewsSidebarProps) {
               href={news.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              
               className="flex items-center justify-center gap-2"
             >
               <Instagram className="h-4 w-4" />
               Delta i diskussionen på Instagram
             </Link>
           </Button>
-          
+        )}
+      {news.facebookUrl && (
+          <Button
+            asChild
+            variant="outline"
+            className="w-full"
+            size="lg"
+          >
+            <Link
+              href={news.facebookUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2"
+            >
+              <Facebook className="h-4 w-4" />
+              Delta i diskussionen på Facebook
+            </Link>
+          </Button>
         )}
       {documents.length > 0 && (
         <Sidebar heading="Dokument">

@@ -117,6 +117,13 @@ export const news = defineType({
       group: "media",
     }),
     defineField({
+      name: "facebookUrl",
+      title: "Facebook-länk",
+      description: "Länk till diskussionen på Facebook. Visar en knapp under bilden för att delta i diskussionen.",
+      type: "url",
+      group: "media",
+    }),
+    defineField({
       name: "referencedPolitician",
       title: "Omnämnda politiker",
       description: "Politiker som nämns eller är relaterade till nyheten.",

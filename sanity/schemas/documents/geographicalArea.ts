@@ -34,7 +34,7 @@ export const geographicalArea = defineType({
       description: "Beskrivning av det geografiska området. Visas på områdets sida.",
       type: "array",
       group: "content",
-      of: [{ type: "block" }],
+      of: [{ type: "block" }, { type: "image" }],
     }),
     defineField({
       name: "image",

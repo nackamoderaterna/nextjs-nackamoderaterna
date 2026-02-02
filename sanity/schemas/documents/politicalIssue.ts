@@ -44,7 +44,7 @@ export const politicalIssue = defineType({
       description: "Huvudinnehållet för frågans sida.",
       type: "array",
       group: "content",
-      of: [{ type: "block" }],
+      of: [{ type: "block" }, { type: "image" }],
     }),
     defineField({
       name: "featured",

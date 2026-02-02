@@ -49,6 +49,7 @@ export type NewsExpanded = WithDereferencedFields<NewsBase, NewsRefs> & {
   effectiveDate: string;
   documents?: NewsDocumentWithUrl[];
   instagramUrl?: string | null;
+  facebookUrl?: string | null;
   variant?: NewsVariant;
   series?: ArticleSeriesInfo;
   seriesNews?: RelatedNewsItem[];
