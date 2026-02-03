@@ -1,5 +1,7 @@
 "use client";
 
+import { useSearchParams, useRouter } from "next/navigation";
+import { useCallback } from "react";
 import type { PoliticianWithNamnd } from "@/lib/politicians";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/lib/components/ui/tabs";
 import { PoliticiansDataTable } from "./PoliticiansDataTable";
@@ -14,8 +16,26 @@ export function PoliticiansViewSwitcher({
   politicians,
   children,
 }: PoliticiansViewSwitcherProps) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const view = searchParams.get("view") === "table" ? "table" : "cards";
+
+  const handleViewChange = useCallback(
+    (value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (value === "table") {
+        params.set("view", "table");
+      } else {
+        params.delete("view");
+      }
+      const qs = params.toString();
+      router.push(qs ? `/politiker?${qs}` : "/politiker");
+    },
+    [searchParams, router]
+  );
+
   return (
-    <Tabs defaultValue="cards" className="w-full">
+    <Tabs value={view} onValueChange={handleViewChange} className="w-full">
       <TabsList className="mb-6">
         <TabsTrigger value="cards" className="gap-2">
           <LayoutGrid className="size-4" />

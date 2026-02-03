@@ -1,13 +1,16 @@
 "use client";
 
 import * as React from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
   type ColumnFiltersState,
+  type SortingState,
 } from "@tanstack/react-table";
 import { cleanInvisibleUnicode } from "@/lib/politicians";
 import type { PoliticianWithNamnd } from "@/lib/politicians";
@@ -61,10 +64,97 @@ function getUniqueCategories(data: PoliticianWithNamnd[]): CategoryWithIcon[] {
     .sort((a, b) => a.name.localeCompare(b.name, "sv"));
 }
 
+const FILTER_COLUMN_IDS = ["kommunalrad", "partistyrelse", "kommunfullmaktige", "namndLedare"] as const;
+
+function buildUrl(params: URLSearchParams): string {
+  const qs = params.toString();
+  return qs ? `/politiker?${qs}` : "/politiker";
+}
+
+function columnFiltersFromParams(searchParams: URLSearchParams): ColumnFiltersState {
+  const filters: ColumnFiltersState = [];
+  for (const id of FILTER_COLUMN_IDS) {
+    const val = searchParams.get(id);
+    if (val === "ja" || val === "nej") {
+      filters.push({ id, value: val });
+    }
+  }
+  const cats = searchParams.get("categories");
+  if (cats) {
+    filters.push({ id: "politiskaOmraden", value: cats.split(",") });
+  }
+  return filters;
+}
+
+function syncParamsFromState(
+  searchParams: URLSearchParams,
+  globalFilter: string,
+  columnFilters: ColumnFiltersState
+): URLSearchParams {
+  const params = new URLSearchParams();
+  // Preserve view param
+  const view = searchParams.get("view");
+  if (view) params.set("view", view);
+
+  if (globalFilter.trim()) params.set("search", globalFilter.trim());
+
+  for (const f of columnFilters) {
+    if (FILTER_COLUMN_IDS.includes(f.id as (typeof FILTER_COLUMN_IDS)[number])) {
+      if (f.value === "ja" || f.value === "nej") {
+        params.set(f.id, f.value as string);
+      }
+    }
+    if (f.id === "politiskaOmraden" && Array.isArray(f.value) && f.value.length > 0) {
+      params.set("categories", (f.value as string[]).join(","));
+    }
+  }
+  return params;
+}
+
 export function PoliticiansDataTable({ data }: PoliticiansDataTableProps) {
-  const [globalFilter, setGlobalFilter] = React.useState("");
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const initialSearch = searchParams.get("search") ?? "";
+  const initialColumnFilters = React.useMemo(
+    () => columnFiltersFromParams(searchParams),
+    // Only compute on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
+  const [globalFilter, setGlobalFilter] = React.useState(initialSearch);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(initialColumnFilters);
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const categories = React.useMemo(() => getUniqueCategories(data), [data]);
+
+  // Sync state changes to URL
+  const updateUrl = React.useCallback(
+    (nextGlobal: string, nextColumnFilters: ColumnFiltersState) => {
+      const params = syncParamsFromState(searchParams, nextGlobal, nextColumnFilters);
+      router.replace(buildUrl(params), { scroll: false });
+    },
+    [searchParams, router]
+  );
+
+  const handleGlobalFilterChange = React.useCallback(
+    (value: string) => {
+      setGlobalFilter(value);
+      updateUrl(value, columnFilters);
+    },
+    [updateUrl, columnFilters]
+  );
+
+  const handleColumnFiltersChange = React.useCallback(
+    (updater: ColumnFiltersState | ((prev: ColumnFiltersState) => ColumnFiltersState)) => {
+      setColumnFilters((prev) => {
+        const next = typeof updater === "function" ? updater(prev) : updater;
+        updateUrl(globalFilter, next);
+        return next;
+      });
+    },
+    [updateUrl, globalFilter]
+  );
 
   const table = useReactTable({
     data,
@@ -72,11 +162,14 @@ export function PoliticiansDataTable({ data }: PoliticiansDataTableProps) {
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onGlobalFilterChange: setGlobalFilter,
-    onColumnFiltersChange: setColumnFilters,
+    getSortedRowModel: getSortedRowModel(),
+    onGlobalFilterChange: handleGlobalFilterChange,
+    onColumnFiltersChange: handleColumnFiltersChange,
+    onSortingChange: setSorting,
     state: {
       globalFilter,
       columnFilters,
+      sorting,
     },
     initialState: {
       pagination: { pageSize: PAGE_SIZE },
@@ -109,14 +202,14 @@ export function PoliticiansDataTable({ data }: PoliticiansDataTableProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:gap-4">
         <PoliticiansTableSearch
           value={globalFilter ?? ""}
-          onChange={setGlobalFilter}
+          onChange={handleGlobalFilterChange}
         />
+        <PoliticiansTableFiltersCategory table={table} categories={categories} />
         <PoliticiansTableFilters table={table} />
       </div>
-      <PoliticiansTableFiltersCategory table={table} categories={categories} />
 
       <div className="overflow-hidden rounded-md">
         <Table className="mx-auto w-full">
