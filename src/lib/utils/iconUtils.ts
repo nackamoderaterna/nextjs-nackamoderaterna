@@ -1,62 +1,154 @@
-import {
-  type LucideIcon,
-} from "lucide-react";
-import * as LucideIcons from "lucide-react";
+import { type LucideIcon } from "lucide-react";
 
+// Curated map of icons used in the CMS. This avoids importing the entire
+// lucide-react barrel (~1500 icons) which adds ~200KB+ of JS to evaluate.
+// Add icons here as they are configured in Sanity.
+import {
+  Heart,
+  Home,
+  User,
+  Users,
+  Settings,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  Landmark,
+  Building2,
+  GraduationCap,
+  TreePine,
+  Leaf,
+  Shield,
+  Scale,
+  Banknote,
+  Bus,
+  Bike,
+  Hospital,
+  Baby,
+  Briefcase,
+  Globe,
+  Handshake,
+  HeartHandshake,
+  Megaphone,
+  BookOpen,
+  FileText,
+  CircleDot,
+  Lightbulb,
+  Palette,
+  Wrench,
+  Hammer,
+  Mountain,
+  Waves,
+  Sun,
+  Flag,
+  Star,
+  Award,
+  Target,
+  Zap,
+  TrendingUp,
+  BarChart3,
+  PieChart,
+  Accessibility,
+  Stethoscope,
+  Dumbbell,
+  Music,
+  Camera,
+  Wifi,
+  LockKeyhole,
+  ShieldCheck,
+  Vote,
+  CircleHelp,
+  Info,
+  AlertTriangle,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
+
+const iconMap: Record<string, LucideIcon> = {
+  Heart,
+  Home,
+  User,
+  Users,
+  Settings,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  Landmark,
+  Building2,
+  GraduationCap,
+  TreePine,
+  Leaf,
+  Shield,
+  Scale,
+  Banknote,
+  Bus,
+  Bike,
+  Hospital,
+  Baby,
+  Briefcase,
+  Globe,
+  Handshake,
+  HeartHandshake,
+  Megaphone,
+  BookOpen,
+  FileText,
+  CircleDot,
+  Lightbulb,
+  Palette,
+  Wrench,
+  Hammer,
+  Mountain,
+  Waves,
+  Sun,
+  Flag,
+  Star,
+  Award,
+  Target,
+  Zap,
+  TrendingUp,
+  BarChart3,
+  PieChart,
+  Accessibility,
+  Stethoscope,
+  Dumbbell,
+  Music,
+  Camera,
+  Wifi,
+  LockKeyhole,
+  ShieldCheck,
+  Vote,
+  CircleHelp,
+  Info,
+  AlertTriangle,
+  CheckCircle,
+  XCircle,
+};
 
 /**
- * Get a Lucide icon component by name
- * @param iconName - The name of the icon (e.g., "Heart", "Banknote")
- * @returns The icon component or null if not found
+ * Get a Lucide icon component by its PascalCase name (as stored in Sanity).
+ *
+ * Only icons listed in the curated `iconMap` above are returned. If an icon
+ * configured in the CMS is missing, add its named import above.
  */
 export function getLucideIcon(iconName?: string | null): LucideIcon | null {
   if (!iconName) return null;
-  
-  // Clean the icon name: trim whitespace and remove invisible/zero-width characters
-  // This handles cases where copy-paste from Sanity Studio includes invisible Unicode chars
-  const cleanedName = String(iconName)
+
+  const cleaned = String(iconName)
     .trim()
-    // Remove zero-width spaces and other invisible characters
-    .replace(/[\u200B-\u200D\uFEFF\u00AD\u200C\u200D]/g, '')
-    // Remove other common invisible characters
-    .replace(/[\u2060-\u206F]/g, '')
+    .replace(/[\u200B-\u200D\uFEFF\u00AD\u200C\u200D\u2060-\u206F]/g, "")
     .trim();
-    
-  if (!cleanedName) return null;
-  
-  // Try to get directly from lucide-react (exact match)
-  let Icon = LucideIcons[cleanedName as keyof typeof LucideIcons];
-  
-  // If not found, try with "Icon" suffix (some icons are exported with Icon suffix)
-  if (!Icon) {
-    Icon = LucideIcons[`${cleanedName}Icon` as keyof typeof LucideIcons];
+  if (!cleaned) return null;
+
+  // Direct match
+  const icon = iconMap[cleaned] ?? iconMap[cleaned.replace(/Icon$/, "")];
+  if (icon) return icon;
+
+  // Case-insensitive fallback
+  const lower = cleaned.toLowerCase();
+  for (const [key, value] of Object.entries(iconMap)) {
+    if (key.toLowerCase() === lower) return value;
   }
-  
-  // Debug logging if not found
-  if (!Icon) {
-    // Check if there's a case-insensitive match
-    const allKeys = Object.keys(LucideIcons);
-    const lowerMatch = allKeys.find(
-      key => key.toLowerCase() === cleanedName.toLowerCase() || 
-             key.toLowerCase() === `${cleanedName}Icon`.toLowerCase()
-    );
-    
-    if (lowerMatch) {
-      console.warn(`Icon "${cleanedName}" not found, but found case-insensitive match: "${lowerMatch}". Using that instead.`);
-      Icon = LucideIcons[lowerMatch as keyof typeof LucideIcons];
-    } else {
-      console.warn(`Icon "${cleanedName}" (cleaned from "${iconName}") not found in lucide-react. Available keys sample:`, allKeys.slice(0, 10));
-    }
-  }
-  
-  // Check if it's a valid React component (can be function or object)
-  if (Icon && (typeof Icon === "function" || (typeof Icon === "object" && Icon !== null))) {
-    return Icon as LucideIcon;
-  }
-  
-  if (Icon) {
-    console.warn(`Icon "${cleanedName}" found but is not a valid component. Type:`, typeof Icon);
-  }
-  
+
   return null;
 }
