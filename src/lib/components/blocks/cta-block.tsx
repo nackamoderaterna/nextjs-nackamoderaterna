@@ -31,7 +31,10 @@ export function CTABlock({ block }: { block: CTABlockProps }) {
     block.secondaryAction ??
     (block.secondaryButton
       ? block.secondaryButton.label && block.secondaryButton.link
-        ? { label: block.secondaryButton.label, href: block.secondaryButton.link }
+        ? {
+            label: block.secondaryButton.label,
+            href: block.secondaryButton.link,
+          }
         : undefined
       : undefined);
   const layout = block.layout ?? "fullWidth";
@@ -56,23 +59,33 @@ export function CTABlock({ block }: { block: CTABlockProps }) {
   };
 
   return (
-    <Block paddingY="xlarge" maxWidth={maxWidth} containerClassName="rounded-xl p-12 md:p-16 border border-border bg-card shadow-sm">
+    <Block
+      paddingY="xlarge"
+      paddingX="standard"
+      maxWidth={maxWidth}
+      containerClassName="rounded-xl p-12 md:p-16 border border-border bg-brand-primary text-white shadow-sm"
+    >
       <div className="mx-auto max-w-3xl">
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-balance mb-6">
           {title ?? ""}
         </h2>
         {subtitle && (
-          <p className="text-lg text-muted-foreground leading-relaxed text-pretty mb-8">
+          <p className="text-lg text-white/80 leading-relaxed text-pretty mb-8">
             {subtitle}
           </p>
         )}
         <div
           className={cn(
             "flex flex-col sm:flex-row gap-4",
-            flexAlignmentClasses[alignment]
+            flexAlignmentClasses[alignment],
           )}
         >
-          <Button size="lg" className="group" asChild>
+          <Button
+            size="lg"
+            className="group text-foreground"
+            variant="outline"
+            asChild
+          >
             <Link href={primaryAction.href}>
               {primaryAction.label}
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -84,7 +97,7 @@ export function CTABlock({ block }: { block: CTABlockProps }) {
             </Button>
           )}
         </div>
-        </div>
+      </div>
     </Block>
   );
 }

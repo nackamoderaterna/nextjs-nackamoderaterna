@@ -1,6 +1,7 @@
 import Block from "./Block";
 import { BlockHeading, getBlockHeading } from "./BlockHeading";
 import { SanityImage } from "../shared/SanityImage";
+import { cleanInvisibleUnicode } from "@/lib/politicians";
 
 interface QuoteBlockProps {
   _type: "block.quote";
@@ -13,7 +14,9 @@ interface QuoteBlockProps {
 }
 
 export function QuoteBlock({ block }: { block: QuoteBlockProps }) {
-  const alignment = block.alignment || "center";
+  const alignment =
+    (cleanInvisibleUnicode(block.alignment) as "left" | "right" | "center") ||
+    "center";
 
   const alignmentClasses = {
     left: "text-left",
@@ -34,15 +37,17 @@ export function QuoteBlock({ block }: { block: QuoteBlockProps }) {
 
   return (
     <Block maxWidth="3xl">
-        <BlockHeading title={title} />
-        <div className={`${alignClass} flex flex-col ${flexAlignClass}`}>
-          <blockquote className="text-xl font-serif md:text-3xl font-light italic mb-8 leading-relaxed">
-            "{block.quote}"
-          </blockquote>
+      <BlockHeading title={title} />
+      <div className={`${alignClass} flex flex-col ${flexAlignClass}`}>
+        <blockquote className="text-2xl font-serif md:text-3xl font-light italic mb-8 leading-relaxed">
+          "{block.quote}"
+        </blockquote>
         {(block.author || block.authorImage) && (
-          <div className={`flex items-center gap-4 ${alignment === "right" ? "flex-row-reverse" : ""}`}>
+          <div
+            className={`flex items-center gap-4 ${alignment === "right" ? "flex-row-reverse" : ""}`}
+          >
             {block.authorImage && (
-              <div className="relative w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+              <div className="relative w-16 h-16 rounded overflow-hidden flex-shrink-0">
                 <SanityImage
                   image={block.authorImage}
                   alt={block.author || ""}
@@ -52,7 +57,7 @@ export function QuoteBlock({ block }: { block: QuoteBlockProps }) {
                 />
               </div>
             )}
-            <div>
+            <div className="text-left">
               {block.author && (
                 <div className="font-semibold">{block.author}</div>
               )}
@@ -64,7 +69,7 @@ export function QuoteBlock({ block }: { block: QuoteBlockProps }) {
             </div>
           </div>
         )}
-        </div>
+      </div>
     </Block>
   );
 }

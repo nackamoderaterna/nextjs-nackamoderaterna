@@ -47,9 +47,13 @@ export function TextMediaBlock({ block }: { block: TwoColumnBlockProps }) {
   const { title, subtitle } = getBlockHeading(block);
 
   const textColumn = (
-    <div className={`flex flex-col gap-4 ${textAlignClasses[textAlignment]}`}>
+    <div
+      className={`flex flex-col gap-4 py-8 lg:py-16 ${textAlignClasses[textAlignment]}`}
+    >
       {block.innerTitle && (
-        <h3 className="text-xl font-semibold md:text-2xl">{block.innerTitle}</h3>
+        <h3 className="text-xl font-semibold md:text-2xl">
+          {block.innerTitle}
+        </h3>
       )}
       <div
         className={`prose prose-neutral max-w-none ${textAlignment === "center" ? "mx-auto" : ""}`}
