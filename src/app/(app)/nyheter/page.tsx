@@ -1,49 +1,9 @@
-import { NewsCard, type SeriesRef } from "@/lib/components/news/NewsCard";
-import { Pagination } from "@/lib/components/news/Pagination";
-import { NewsFilters } from "@/lib/components/news/NewsFilters";
-import { sanityClient } from "@/lib/sanity/client";
-import {
-  newsListPaginatedQuery,
-  allPoliticalAreasQuery,
-} from "@/lib/queries/nyheter";
-import { listingPageByKeyQuery } from "@/lib/queries/pages";
-import { News } from "~/sanity.types";
+import { NewsListing } from "@/app/(app)/nyheter/NewsListing";
 import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
-import type { NewsVariant } from "@/lib/types/news";
 import type { ListingPage } from "@/lib/types/pages";
-import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
-import { EmptyState } from "@/lib/components/shared/EmptyState";
-import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
-
-type NewsListItem = Pick<
-  News,
-  | "_id"
-  | "title"
-  | "slug"
-  | "excerpt"
-  | "mainImage"
-  | "_createdAt"
-  | "dateOverride"
-  | "_updatedAt"
-  | "_rev"
-> & {
-  effectiveDate: string;
-  variant?: NewsVariant;
-  politicalAreas?: Array<{
-    _id: string;
-    name: string;
-    slug?: { current: string } | null;
-  }>;
-  series?: SeriesRef | null;
-};
-
-type NewsListPaginatedResult = {
-  items: NewsListItem[];
-  total: number;
-};
-
-const ITEMS_PER_PAGE = 10;
+import { sanityClient } from "@/lib/sanity/client";
+import { listingPageByKeyQuery } from "@/lib/queries/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
   const listing = await sanityClient.fetch<ListingPage>(
@@ -70,100 +30,13 @@ interface NewsPageProps {
   searchParams: Promise<{ page?: string; area?: string; type?: string }>;
 }
 
-const VALID_VARIANTS = ["default", "debate", "pressrelease"] as const;
-
 export default async function NewsPage({ searchParams }: NewsPageProps) {
   const params = await searchParams;
-  const currentPage = Math.max(1, parseInt(params.page || "1", 10));
-  const areaSlug = params.area || undefined;
-  const typeParam = params.type;
-  const variantFilter =
-    typeParam && VALID_VARIANTS.includes(typeParam as (typeof VALID_VARIANTS)[number])
-      ? (typeParam as NewsVariant)
-      : null;
-  const start = (currentPage - 1) * ITEMS_PER_PAGE;
-  const end = start + ITEMS_PER_PAGE;
-
-  const [result, politicalAreas, listing] = await Promise.all([
-    sanityClient.fetch<NewsListPaginatedResult>(
-      newsListPaginatedQuery,
-      {
-        start,
-        end,
-        areaSlug: areaSlug || null,
-        variant: variantFilter,
-      },
-      {
-        next: { revalidate: 300 },
-      }
-    ),
-    sanityClient.fetch<any[]>(allPoliticalAreasQuery, {}, {
-      next: { revalidate: 300 },
-    }),
-    sanityClient.fetch<ListingPage>(
-      listingPageByKeyQuery,
-      { key: "news" },
-      {
-        next: { revalidate: 300 },
-      }
-    ),
-  ]);
-
-  const { items: newsList, total } = result;
-  const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
-
-  // Redirect to last page if page number is too high
-  if (currentPage > totalPages && totalPages > 0) {
-    return (
-      <ListingPageLayout
-        title={listing?.title}
-        intro={listing?.intro}
-        fallbackTitle="Nyheter"
-      >
-        <EmptyState message="Sidan kunde inte hittas." />
-      </ListingPageLayout>
-    );
-  }
+  const area = params.area || null;
+  const type = params.type || null;
+  const currentPage = Math.max(1, parseInt(params.page ?? "1", 10));
 
   return (
-    <ListingPageLayout
-      title={listing?.title}
-      intro={listing?.intro}
-      fallbackTitle="Nyheter"
-    >
-      <NewsFilters politicalAreas={politicalAreas || []} />
-
-        {newsList.length === 0 ? (
-          <EmptyState message="Inga nyheter tillgängliga för tillfället." />
-        ) : (
-          <>
-            <div className="grid">
-              {newsList.map((news, index) => (
-                <NewsCard
-                  key={news._id}
-                  title={news.title || ""}
-                  isLast={index === newsList.length - 1}
-                  date={getEffectiveDate(news)}
-                  slug={news.slug?.current || ""}
-                  excerpt={news.excerpt || ""}
-                  variant={news.variant}
-                  politicalAreas={news.politicalAreas}
-                  series={news.series}
-                />
-              ))}
-            </div>
-
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              basePath="/nyheter"
-              preserveParams={{
-                ...(areaSlug && { area: areaSlug }),
-                ...(typeParam && { type: typeParam }),
-              }}
-            />
-          </>
-        )}
-    </ListingPageLayout>
+    <NewsListing areaSlug={area} typeParam={type} currentPage={currentPage} />
   );
 }
