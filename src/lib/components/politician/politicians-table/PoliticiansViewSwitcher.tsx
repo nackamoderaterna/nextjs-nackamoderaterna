@@ -1,11 +1,30 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useCallback } from "react";
 import type { PoliticianWithNamnd } from "@/lib/politicians";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/lib/components/ui/tabs";
-import { PoliticiansDataTable } from "./PoliticiansDataTable";
+import { Skeleton } from "@/lib/components/ui/skeleton";
 import { LayoutGrid, Table } from "lucide-react";
+
+const PoliticiansDataTable = dynamic(
+  () =>
+    import("./PoliticiansDataTable").then((mod) => mod.PoliticiansDataTable),
+  {
+    loading: () => (
+      <div className="space-y-4">
+        <div className="flex gap-4">
+          <Skeleton className="h-9 w-64" />
+          <Skeleton className="h-9 w-48" />
+          <Skeleton className="h-9 w-24" />
+        </div>
+        <Skeleton className="h-[400px] w-full rounded-md" />
+      </div>
+    ),
+    ssr: false,
+  }
+);
 
 interface PoliticiansViewSwitcherProps {
   politicians: PoliticianWithNamnd[];

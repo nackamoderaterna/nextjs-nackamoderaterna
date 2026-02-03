@@ -128,11 +128,15 @@ export function PoliticiansDataTable({ data }: PoliticiansDataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const categories = React.useMemo(() => getUniqueCategories(data), [data]);
 
-  // Sync state changes to URL
+  // Debounced URL sync — update table state immediately, batch URL updates
+  const pendingUrl = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const updateUrl = React.useCallback(
     (nextGlobal: string, nextColumnFilters: ColumnFiltersState) => {
-      const params = syncParamsFromState(searchParams, nextGlobal, nextColumnFilters);
-      router.replace(buildUrl(params), { scroll: false });
+      if (pendingUrl.current) clearTimeout(pendingUrl.current);
+      pendingUrl.current = setTimeout(() => {
+        const params = syncParamsFromState(searchParams, nextGlobal, nextColumnFilters);
+        router.replace(buildUrl(params), { scroll: false });
+      }, 300);
     },
     [searchParams, router]
   );
