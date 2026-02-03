@@ -12,6 +12,7 @@ import {imageGalleryBlock} from './imageGallery'
 import {contactBlock} from './contact'
 import {politicalAreasBlock} from './politicalAreas'
 import {geographicalAreasBlock} from './geographicalAreas'
+import {politicalIssuesBlock} from './politicalIssues'
 
 export const blocks = [
   text,
@@ -28,4 +29,5 @@ export const blocks = [
   contactBlock,
   politicalAreasBlock,
   geographicalAreasBlock,
+  politicalIssuesBlock,
 ]

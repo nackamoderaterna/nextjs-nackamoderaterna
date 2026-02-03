@@ -171,7 +171,7 @@ export default async function EventPage({ params }: Props) {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Reservera plats
+              Anmäl dig
             </a>
           </Button>
         )}

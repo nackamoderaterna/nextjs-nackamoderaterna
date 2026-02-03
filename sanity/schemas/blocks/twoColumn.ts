@@ -21,6 +21,12 @@ export const twoColumnBlock = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: "innerTitle",
+      title: "Rubrik i textkolumn",
+      type: "string",
+      description: "Rubrik som visas ovanför texten (inuti blocket)",
+    }),
+    defineField({
       name: "content",
       title: "Textinnehåll",
       type: "array",
@@ -54,15 +60,30 @@ export const twoColumnBlock = defineType({
       },
       initialValue: "top",
     }),
+    defineField({
+      name: "textAlignment",
+      title: "Horisontell justering av text",
+      description: "Hur texten ska justeras horisontellt",
+      type: "string",
+      options: {
+        list: [
+          { title: "Vänster", value: "left" },
+          { title: "Centrerat", value: "center" },
+          { title: "Höger", value: "right" },
+        ],
+      },
+      initialValue: "left",
+    }),
   ],
   preview: {
     select: {
-      "headingTitle": "heading.title",
+      headingTitle: "heading.title",
+      innerTitle: "innerTitle",
       imagePosition: "imagePosition",
     },
-    prepare({ headingTitle, imagePosition }) {
+    prepare({ headingTitle, innerTitle, imagePosition }) {
       return {
-        title: headingTitle || "Text och bild",
+        title: headingTitle || innerTitle || "Text och bild",
         subtitle: `Bild ${imagePosition === "right" ? "höger" : "vänster"}`,
       };
     },

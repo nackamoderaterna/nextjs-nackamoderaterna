@@ -7,7 +7,7 @@ interface SidebarListProps {
 }
 
 export function SidebarList({ children }: SidebarListProps) {
-  return <ul className="grid gap-4">{children}</ul>;
+  return <ul className="grid gap-3">{children}</ul>;
 }
 
 interface SidebarListItemProps {

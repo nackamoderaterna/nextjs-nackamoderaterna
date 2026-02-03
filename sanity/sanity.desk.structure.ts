@@ -7,7 +7,7 @@ export const deskStructure: StructureResolver = (S) =>
       S.documentTypeListItem("page"),
       S.documentTypeListItem("news"),
       S.documentTypeListItem("event").title("Evenemang"),
-      
+
       S.documentTypeListItem("politician"),
 
       S.divider().title("Politik"),
@@ -19,15 +19,6 @@ export const deskStructure: StructureResolver = (S) =>
       S.documentTypeListItem("geographicalArea"),
       S.divider().title("Inställningar"),
       S.listItem()
-        .title("Header")
-        .schemaType("navigationHeader")
-        .child(
-          S.document()
-            .schemaType("navigationHeader")
-            .documentId("navigationHeader")
-            .title("Huvudmeny"),
-        ),
-        S.listItem()
         .title("Footer")
         .schemaType("navigationFooter")
         .child(
@@ -44,5 +35,5 @@ export const deskStructure: StructureResolver = (S) =>
             .schemaType("globalSettings")
             .documentId("globalSettings"),
         ),
-        S.documentTypeListItem("listingPage").title("Statiska sidor"),
+      S.documentTypeListItem("listingPage").title("Statiska sidor"),
     ]);

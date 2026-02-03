@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { NewsCard } from "@/lib/components/news/NewsCard";
 import { ContentHero } from "@/lib/components/shared/ContentHero";
+import { PageHeader } from "@/lib/components/shared/PageHeader";
 import { PolicyList } from "@/lib/components/politics/policyList";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
@@ -117,7 +118,7 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
 
   const sidebar =
     data.politicalIssues?.length > 0 ? (
-      <Sidebar heading="Våra politikiska mål">
+      <Sidebar heading="Våra politiska mål">
       <PolicyList policies={data.politicalIssues} />
       </Sidebar>
     ) : null;
@@ -127,7 +128,18 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
       <main className="flex-1">
         <PageContainer paddingY="default">
           <SetBreadcrumbTitle title={data.name || ""} />
-          <ContentHero pageType="Område" image={data.image} title={data.name || ""} />
+          {data.image ? (
+            <PageHeader
+              title={data.name || ""}
+              pageHeader={{
+                image: data.image,
+                imageHeight: "small",
+                overlayOpacity: 40,
+              }}
+            />
+          ) : (
+            <ContentHero pageType="Område" title={data.name || ""} />
+          )}
 
           <ContentWithSidebar
             mainContent={main}

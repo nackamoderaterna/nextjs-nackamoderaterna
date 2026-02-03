@@ -45,10 +45,10 @@ export type BlockProps = {
 
 const paddingYClasses = {
   none: "py-0",
-  small: "py-8",
-  medium: "py-12",
-  large: "py-16 md:py-20",
-  xlarge: "py-16 md:py-24",
+  small: "py-4 md:py-6",
+  medium: "py-6 md:py-10",
+  large: "py-8 md:py-14",
+  xlarge: "py-10 md:py-16",
 };
 
 const paddingXClasses = {
@@ -94,7 +94,7 @@ export default function Block({
   return (
     <Component
       className={cn(
-        "w-full mb-16",
+        "w-full mb-8 md:mb-12",
         paddingYClasses[paddingY],
         backgroundClasses[background],
         className

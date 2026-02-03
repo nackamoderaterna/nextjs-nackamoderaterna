@@ -6,6 +6,7 @@ export default defineType({
   type: "document",
   groups: [
     { name: "company", title: "Företag", default: true },
+    { name: "navigation", title: "Navigation" },
     { name: "contact", title: "Kontakt" },
     { name: "address", title: "Adress" },
     { name: "social", title: "Sociala medier" },
@@ -35,6 +36,14 @@ export default defineType({
         "URL för Bli medlem-knappen i header. Lämna tom för att dölja knappen.",
     }),
     defineField({
+      name: "mainNavigation",
+      title: "Huvudmeny",
+      description: "Dra och släpp för att ändra ordning. Objekt med undermenyer visas inte i sidfoten.",
+      type: "array",
+      group: "navigation",
+      of: [{ type: "menuItem" }],
+    }),
+    defineField({
       name: "contactInfo",
       title: "Kontaktuppgifter",
       type: "object",
@@ -58,12 +67,27 @@ export default defineType({
       ],
     }),
     defineField({
-      name: "pressContact",
+      name: "pressContactInfo",
       title: "Presskontakt",
-      description: "Välj den politiker som är presskontakt. E-post och telefon hämtas automatiskt.",
-      type: "reference",
-      to: [{ type: "politician" }],
+      type: "object",
       group: "contact",
+      fields: [
+        defineField({
+          name: 'phone',
+          title: 'Telefonnummer',
+          type: 'string',
+        }),
+        defineField({
+          name: 'email',
+          title: 'E-postadress',
+          type: 'string',
+        }),
+        defineField({
+          name: 'contactPerson',
+          title: 'Kontaktperson',
+          type: 'string',
+        }),
+      ],
     }),
 
     //

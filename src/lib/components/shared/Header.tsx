@@ -7,10 +7,11 @@ import { sanityClient } from "@/lib/sanity/client";
 import {
   navigationQuery,
   NavigationData,
+  MenuItemWithReference,
 } from "@/lib/queries/navigation";
 import { staticNavItems } from "@/lib/navigation/staticNav";
 import { buildNavigation } from "@/lib/navigation/buildNavigation";
-import { globalSettingsQuery } from "@/lib/queries/globalSettings";
+import { globalSettingsQuery, GlobalSettingsData } from "@/lib/queries/globalSettings";
 import { SanityImage } from "./SanityImage";
 import { ROUTE_BASE } from "@/lib/routes";
 import { Heart } from "lucide-react";
@@ -18,21 +19,26 @@ import { Heart } from "lucide-react";
 export default async function Header() {
   const [navigation, globalSettings] = await Promise.all([
     sanityClient.fetch<NavigationData>(navigationQuery),
-    sanityClient.fetch<{
-      companyName?: string;
-      logo?: any;
-      bliMedlemUrl?: string | null;
-    }>(globalSettingsQuery),
+    sanityClient.fetch<GlobalSettingsData>(globalSettingsQuery),
   ]);
 
   const companyName = globalSettings?.companyName || "Nackamoderaterna";
   const logo = globalSettings?.logo;
   const bliMedlemUrl = globalSettings?.bliMedlemUrl;
 
-  const navItems = [
-    ...buildNavigation(staticNavItems),
-    ...(navigation?.customMenuItems ?? []),
-  ];
+  // Use CMS-configured navigation if available, otherwise fall back to static items
+  let navItems: MenuItemWithReference[];
+
+  if (globalSettings?.mainNavigation && globalSettings.mainNavigation.length > 0) {
+    // Use mainNavigation directly - it's already in MenuItemWithReference format
+    navItems = globalSettings.mainNavigation.filter((item) => !!item.title);
+  } else {
+    // Fall back to static items + CMS custom items
+    navItems = [
+      ...buildNavigation(staticNavItems),
+      ...(navigation?.customMenuItems ?? []),
+    ];
+  }
 
   return (
     <header className="w-full border-b border-gray-200 bg-white">
@@ -68,7 +74,7 @@ export default async function Header() {
                   className="inline-flex items-center justify-center no-underline gap-2"
                 >
                   Bli medlem
-                  <Heart className="size-4" />
+                  <Heart className="size-4" fill="currentColor" />
                 </Link>
               </Button>
             )}

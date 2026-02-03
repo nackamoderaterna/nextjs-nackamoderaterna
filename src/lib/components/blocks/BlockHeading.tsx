@@ -61,13 +61,13 @@ export function BlockHeading({
   return (
     <div
       className={cn(
-        "mb-8",
+        "mb-4 md:mb-6",
         centered && "text-center",
         className
       )}
     >
       {title && (
-        <h2 className="mb-4 text-3xl font-bold md:text-4xl">{title}</h2>
+        <h2 className="mb-2 md:mb-3 text-2xl font-bold md:text-3xl">{title}</h2>
       )}
       {subtitle && (
         <p

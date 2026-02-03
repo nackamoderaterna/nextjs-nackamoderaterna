@@ -110,6 +110,14 @@ type BlockGeographicalAreas = {
   }>;
 };
 
+type BlockPoliticalIssues = {
+  _type: "block.politicalIssues";
+  heading?: BlockHeadingData;
+  politicalArea?: { _ref: string } | null;
+  filter?: "all" | "featured" | "fulfilled" | "unfulfilled";
+  limit?: number;
+};
+
 export type PageBlock =
   | BlockText
   | BlockImage
@@ -124,5 +132,6 @@ export type PageBlock =
   | BlockImageGallery
   | BlockContact
   | BlockPoliticalAreas
-  | BlockGeographicalAreas;
+  | BlockGeographicalAreas
+  | BlockPoliticalIssues;
 

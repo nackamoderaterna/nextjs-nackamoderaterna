@@ -1,5 +1,10 @@
+import Link from "next/link";
 import { FooterColumn } from "./FooterColumn";
-import type { FooterColumn as FooterColumnType } from "@/lib/queries/navigation";
+import type {
+  FooterColumn as FooterColumnType,
+  MenuItemWithReference,
+} from "@/lib/queries/navigation";
+import { getMenuItemHref } from "@/lib/queries/navigation";
 import { ROUTE_BASE } from "@/lib/routes";
 
 const DEFAULT_COLUMNS: { title: string; items: { title: string; href: string }[] }[] = [
@@ -23,9 +28,11 @@ const DEFAULT_COLUMNS: { title: string; items: { title: string; href: string }[]
 
 interface FooterNavProps {
   columns?: FooterColumnType[];
+  mainNavigation?: MenuItemWithReference[] | null;
 }
 
-export function FooterNav({ columns }: FooterNavProps) {
+export function FooterNav({ columns, mainNavigation }: FooterNavProps) {
+  // Use CMS footer columns if configured
   if (columns?.length) {
     return (
       <>
@@ -40,6 +47,38 @@ export function FooterNav({ columns }: FooterNavProps) {
     );
   }
 
+  // Use main navigation from global settings, filtering out items with children
+  if (mainNavigation?.length) {
+    const footerItems = mainNavigation.filter(
+      (item) => !item.children?.length && item.title
+    );
+
+    if (footerItems.length > 0) {
+      return (
+        <div>
+          <h3 className="font-semibold text-foreground mb-4">Meny</h3>
+          <ul className="space-y-2">
+            {footerItems.map((item, index) => {
+              const href = getMenuItemHref(item);
+              if (href === "#") return null;
+              return (
+                <li key={index}>
+                  <Link
+                    href={href}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {item.title}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      );
+    }
+  }
+
+  // Fallback to default columns
   return (
     <>
       {DEFAULT_COLUMNS.map((column, index) => (
@@ -48,12 +87,12 @@ export function FooterNav({ columns }: FooterNavProps) {
           <ul className="space-y-2">
             {column.items.map((item, itemIndex) => (
               <li key={itemIndex}>
-                <a
+                <Link
                   href={item.href}
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {item.title}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

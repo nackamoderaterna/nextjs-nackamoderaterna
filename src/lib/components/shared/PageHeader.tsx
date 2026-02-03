@@ -2,17 +2,8 @@ import Link from "next/link";
 
 import Block from "../blocks/Block";
 import { Button } from "@/lib/components/ui/button";
-import { SanityBackgroundImage } from "./SanityBackgroundImage";
+import { SanityImage } from "./SanityImage";
 import type { PageHeaderData } from "@/lib/types/pages";
-
-const IMAGE_HEIGHT_CLASSES = {
-  small: "h-[400px]",
-  medium: "h-[600px]",
-  large: "h-[800px]",
-  fullscreen: "h-screen",
-} as const;
-
-type ImageHeightKey = keyof typeof IMAGE_HEIGHT_CLASSES;
 
 export type { PageHeaderData };
 
@@ -29,82 +20,54 @@ export function PageHeader({ title, pageHeader }: PageHeaderProps) {
       ? pageHeader.description
       : undefined;
   const headerImage = pageHeader?.image;
-  const overlayOpacity = pageHeader?.overlayOpacity ?? 40;
-  const imageHeight =
-    pageHeader?.imageHeight && pageHeader.imageHeight in IMAGE_HEIGHT_CLASSES
-      ? (pageHeader.imageHeight as ImageHeightKey)
-      : "medium";
-  const heightClass = IMAGE_HEIGHT_CLASSES[imageHeight];
   const ctaButton = pageHeader?.ctaButton;
   const hasImage = headerImage != null;
 
+  const textContent = (
+    <div className="flex flex-col justify-center gap-4">
+      {displayTitle && (
+        <h1 className="text-3xl font-bold text-foreground md:text-4xl lg:text-5xl">
+          {displayTitle}
+        </h1>
+      )}
+      {description && (
+        <p className="text-base leading-relaxed text-muted-foreground whitespace-pre-line md:text-lg">
+          {description}
+        </p>
+      )}
+      {ctaButton?.label && ctaButton?.href && (
+        <div className="mt-2">
+          <Button asChild size="lg">
+            <Link href={ctaButton.href}>{ctaButton.label}</Link>
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+
   if (hasImage) {
     return (
-      <div className={`relative w-full ${heightClass} overflow-hidden`}>
-        <div className="absolute inset-0">
-          <SanityBackgroundImage
-            image={headerImage}
-            overlayOpacity={overlayOpacity}
-            loading="eager"
-            priority
-          />
+      <Block paddingY="medium">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center">
+          {textContent}
+          <div className="rounded overflow-hidden relative aspect-[4/3] md:aspect-auto md:h-full md:min-h-[300px]">
+            <SanityImage
+              image={headerImage}
+              alt=""
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+              priority
+            />
+          </div>
         </div>
-        <div className={`relative ${heightClass} flex items-center`}>
-          <Block
-            paddingX="standard"
-            paddingY="none"
-            asSection={false}
-            className="w-full"
-          >
-            <div className="z-10 max-w-xl">
-              {displayTitle && (
-                <h1 className="mb-4 text-4xl font-bold text-white md:text-5xl lg:text-6xl">
-                  {displayTitle}
-                </h1>
-              )}
-              {description && (
-                <p className="max-w-lg text-xl text-white opacity-90 md:text-2xl">
-                  {description}
-                </p>
-              )}
-              {ctaButton?.label && ctaButton?.href && (
-                <div className="mt-6">
-                  <Button
-                    asChild
-                    size="lg"
-                  >
-                    <Link href={ctaButton.href}>{ctaButton.label}</Link>
-                  </Button>
-                </div>
-              )}
-            </div>
-          </Block>
-        </div>
-      </div>
+      </Block>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-12">
-        {displayTitle && (
-          <h1 className="mb-4 text-4xl font-bold text-foreground">
-            {displayTitle}
-          </h1>
-        )}
-        {description && (
-          <p className="max-w-4xl text-base leading-relaxed text-muted-foreground whitespace-pre-line">
-            {description}
-          </p>
-        )}
-        {ctaButton?.label && ctaButton?.href && (
-          <div className="mt-6">
-            <Button asChild size="lg">
-              <Link href={ctaButton.href}>{ctaButton.label}</Link>
-            </Button>
-          </div>
-        )}
-      </div>
-    </div>
+    <Block paddingY="medium">
+      {textContent}
+    </Block>
   );
 }

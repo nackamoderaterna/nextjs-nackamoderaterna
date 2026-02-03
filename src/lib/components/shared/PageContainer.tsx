@@ -2,9 +2,9 @@ import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 const paddingYClasses = {
-  default: "py-12",
-  compact: "py-8",
-  top: "pt-12",
+  default: "py-6 md:py-10",
+  compact: "py-4 md:py-6",
+  top: "pt-6 md:pt-10",
   none: "",
 } as const;
 

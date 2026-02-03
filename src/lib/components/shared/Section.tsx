@@ -38,12 +38,12 @@ export function Section({
   return (
     <section
       id={id}
-      className={cn("mb-16", className)}
+      className={cn("mb-8 md:mb-12", className)}
       aria-label={ariaLabel}
     >
 
       {(title || actions) && (
-        <div className="flex items-center justify-between mb-6 text-muted-foreground">
+        <div className="flex items-center justify-between mb-4 md:mb-6 text-muted-foreground">
           {title && <h2 className={cn(titleClasses)}>{title}</h2>}
           
           {actions}

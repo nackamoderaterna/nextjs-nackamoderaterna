@@ -44,18 +44,21 @@ function PolicyItem({
 }
 
 export function PolicyList({ policies }: PolicyList) {
-  const fulfilledPolicies = policies.filter((policy) => policy.fulfilled);
-  const unfulfilledPolicies = policies.filter((policy) => !policy.fulfilled);
+  // Sort: kärnfrågor (featured) first, then genomfört (fulfilled), then rest
+  const sorted = [
+    ...policies.filter((p) => p.featured && !p.fulfilled),
+    ...policies.filter((p) => p.featured && p.fulfilled),
+    ...policies.filter((p) => !p.featured && p.fulfilled),
+    ...policies.filter((p) => !p.featured && !p.fulfilled),
+  ];
+
   return (
     <ul>
-      {fulfilledPolicies.map((policy, index) => (
-        <PolicyItem key={policy._id ?? index} policy={policy} fulfilled />
-      ))}
-      {unfulfilledPolicies.map((policy, index) => (
+      {sorted.map((policy, index) => (
         <PolicyItem
           key={policy._id ?? index}
           policy={policy}
-          fulfilled={false}
+          fulfilled={!!policy.fulfilled}
         />
       ))}
     </ul>

@@ -79,6 +79,7 @@ export function formatTimeRange(startDate: string | Date, endDate?: string | Dat
   const startTime = start.toLocaleTimeString("sv-SE", {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: "Europe/Stockholm",
   });
 
   if (!endDate) {
@@ -89,6 +90,7 @@ export function formatTimeRange(startDate: string | Date, endDate?: string | Dat
   const endTime = end.toLocaleTimeString("sv-SE", {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: "Europe/Stockholm",
   });
 
   return `${startTime} - ${endTime}`;

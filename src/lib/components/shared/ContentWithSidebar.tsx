@@ -17,9 +17,9 @@ export function ContentWithSidebar({
   return (
     <div
       className={cn(
-        "mb-16",
+        "mb-8 md:mb-12",
         hasMainContent
-          ? "grid grid-cols-1 lg:grid-cols-3 gap-8"
+          ? "grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8"
           : "flex justify-start",
         className
       )}

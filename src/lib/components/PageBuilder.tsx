@@ -15,6 +15,7 @@ import { CTABlock } from "./blocks/cta-block";
 import { ContactBlock } from "./blocks/ContactBlock";
 import { PoliticalAreasBlock } from "./blocks/PoliticalAreasBlock";
 import { GeographicalAreasBlock } from "./blocks/GeographicalAreasBlock";
+import { PoliticalIssuesBlock } from "./blocks/PoliticalIssuesBlock";
 
 interface PageBuilderProps {
   blocks: PageBlock[];
@@ -59,6 +60,8 @@ export function PageBuilder({ blocks }: PageBuilderProps) {
             return <PoliticalAreasBlock key={key} block={block as any} />;
           case "block.geographicalAreas":
             return <GeographicalAreasBlock key={key} block={block as any} />;
+          case "block.politicalIssues":
+            return <PoliticalIssuesBlock key={key} block={block as any} />;
           default:
             return null;
         }

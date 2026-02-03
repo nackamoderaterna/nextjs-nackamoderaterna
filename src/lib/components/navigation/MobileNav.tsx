@@ -37,13 +37,12 @@ export function MobileNav({
       <SheetContent
         side="right"
         className="flex h-full w-full flex-col overflow-hidden sm:w-md"
+        onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <SheetHeader>Meny</SheetHeader>
-        <div className="px-4">
-          <SearchBar />
-        </div>
-        <div className="min-h-0 flex-1 overflow-y-auto">
-          <nav className="flex flex-col gap-1 px-4 pb-8 pt-4">
+        <div className="min-h-0 flex-1 overflow-y-auto flex flex-col">
+          {/* Nav first in DOM (first in tab order), but visually second */}
+          <nav className="order-last flex flex-col gap-1 px-4 pb-8">
             {items.map((item) => (
               <Link
                 key={item.title}
@@ -55,6 +54,10 @@ export function MobileNav({
               </Link>
             ))}
           </nav>
+          {/* Search last in DOM (last in tab order), but visually first */}
+          <div className="order-first px-4 pb-4">
+            <SearchBar />
+          </div>
         </div>
         {bliMedlemUrl && (
           <>
@@ -74,7 +77,7 @@ export function MobileNav({
                   className="inline-flex items-center justify-center no-underline gap-2"
                 >
                   Bli medlem
-                  <Heart className="size-4" />
+                  <Heart className="size-4" fill="currentColor" />
                 </Link>
               </Button>
             </div>
