@@ -4,7 +4,10 @@
       "Bash(npx tsc:*)",
       "Bash(ls:*)",
       "Bash(grep:*)",
-      "Bash(head:*)"
+      "Bash(head:*)",
+      "Bash(npm run build:*)",
+      "Bash(npx sanity schema:*)",
+      "Bash(npx sanity typegen:*)"
     ]
   }
 }

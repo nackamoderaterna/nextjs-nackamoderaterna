@@ -29,7 +29,7 @@ export function ContentHero({
   const showIcon = !showImage && !!Icon;
 
   return (
-    <section className="mb-12 border-b border-border rounded-lg pb-6 flex flex-col gap-4">
+    <section className="border-b border-border rounded-lg pb-6 mb-6 flex flex-col gap-4">
       <div className="flex flex-col md:flex-row items-start justify-start md:justify-center md:items-center gap-4">
         {showImage ? (
           <div className="relative h-auto aspect-square max-w-sm w-full lg:w-64 lg:h-64 rounded overflow-hidden shrink-0">

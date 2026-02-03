@@ -14,10 +14,49 @@ import { ContactBlock } from "./blocks/ContactBlock";
 import { PoliticalAreasBlock } from "./blocks/PoliticalAreasBlock";
 import { GeographicalAreasBlock } from "./blocks/GeographicalAreasBlock";
 import { PoliticalIssuesBlock } from "./blocks/PoliticalIssuesBlock";
+import { AnimateOnScroll } from "./shared/AnimateOnScroll";
 
 interface PageBuilderProps {
   blocks: PageBlock[];
 }
+
+function renderBlock(block: PageBlock) {
+  switch (block._type) {
+    case "block.text":
+      return <TextBlock block={block as any} />;
+    case "block.image":
+      return <ImageBlock block={block as any} />;
+    case "block.video":
+      return <VideoBlock block={block as any} />;
+    case "block.politician":
+      return <PoliticianReferenceBlock block={block as any} />;
+    case "block.news":
+      return <NewsBlock block={block as any} />;
+    case "block.cta":
+      return <CTABlock block={block as any} />;
+    case "block.stats":
+      return <StatsBlock block={block as any} />;
+    case "block.twoColumn":
+      return <TextMediaBlock block={block as any} />;
+    case "block.accordion":
+      return <AccordionBlock block={block as any} />;
+    case "block.quote":
+      return <QuoteBlock block={block as any} />;
+    case "block.imageGallery":
+      return <ImageGalleryBlock block={block as any} />;
+    case "block.contact":
+      return <ContactBlock block={block as any} />;
+    case "block.politicalAreas":
+      return <PoliticalAreasBlock block={block as any} />;
+    case "block.geographicalAreas":
+      return <GeographicalAreasBlock block={block as any} />;
+    case "block.politicalIssues":
+      return <PoliticalIssuesBlock block={block as any} />;
+    default:
+      return null;
+  }
+}
+
 export function PageBuilder({ blocks }: PageBuilderProps) {
   if (!blocks || blocks.length === 0) {
     return null;
@@ -27,42 +66,15 @@ export function PageBuilder({ blocks }: PageBuilderProps) {
     <div className="w-full mx-auto">
       {blocks.map((block, index) => {
         const key = (block as any)._id || `${block._type}-${index}`;
-        const blockType = block._type;
+        const content = renderBlock(block);
 
-        switch (blockType) {
-          case "block.text":
-            return <TextBlock key={key} block={block as any} />;
-          case "block.image":
-            return <ImageBlock key={key} block={block as any} />;
-          case "block.video":
-            return <VideoBlock key={key} block={block as any} />;
-          case "block.politician":
-            return <PoliticianReferenceBlock key={key} block={block as any} />;
-          case "block.news":
-            return <NewsBlock key={key} block={block as any} />;
-          case "block.cta":
-            return <CTABlock key={key} block={block as any} />;
-          case "block.stats":
-            return <StatsBlock key={key} block={block as any} />;
-          case "block.twoColumn":
-            return <TextMediaBlock key={key} block={block as any} />;
-          case "block.accordion":
-            return <AccordionBlock key={key} block={block as any} />;
-          case "block.quote":
-            return <QuoteBlock key={key} block={block as any} />;
-          case "block.imageGallery":
-            return <ImageGalleryBlock key={key} block={block as any} />;
-          case "block.contact":
-            return <ContactBlock key={key} block={block as any} />;
-          case "block.politicalAreas":
-            return <PoliticalAreasBlock key={key} block={block as any} />;
-          case "block.geographicalAreas":
-            return <GeographicalAreasBlock key={key} block={block as any} />;
-          case "block.politicalIssues":
-            return <PoliticalIssuesBlock key={key} block={block as any} />;
-          default:
-            return null;
-        }
+        if (!content) return null;
+
+        return (
+          <AnimateOnScroll key={key}>
+            {content}
+          </AnimateOnScroll>
+        );
       })}
     </div>
   );

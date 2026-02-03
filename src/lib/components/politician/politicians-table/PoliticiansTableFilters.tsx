@@ -31,7 +31,7 @@ const FILTER_LABELS: Record<(typeof FILTER_OPTIONS)[number], string> = {
 
 const FILTER_COLUMNS = [
   { id: "kommunalrad", label: "Kommunalråd" },
-  { id: "partistyrelse", label: "Partistyrelse" },
+  { id: "partistyrelse", label: "Föreningsstyrelse" },
   { id: "kommunfullmaktige", label: "Kommunfullmäktige" },
   { id: "namndLedare", label: "Gruppledare" },
 ] as const;

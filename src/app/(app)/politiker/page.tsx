@@ -4,7 +4,7 @@ import {
   politiciansDirectoryQuery,
   PoliticianWithNamnd,
   positionTitles,
-  sectionTitles,
+  sectionTitles as defaultSectionTitles,
 } from "@/lib/politicians";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
@@ -72,10 +72,18 @@ export default async function PoliticiansPage() {
   const politicians = politiciansRaw.map(cleanPoliticianData);
   const grouped = groupPoliticiansByRole(politicians);
 
-  
   // Sort kommunfullmäktige alphabetically
   const kommunfullmaktigeOrdinary = sortByName(grouped.kommunfullmaktige.ordinary);
   const kommunfullmaktigeSubstitute = sortByName(grouped.kommunfullmaktige.substitute);
+
+  // Section titles from CMS with fallbacks
+  const sectionTitles = {
+    kommunalrad: listing?.sectionTitles?.kommunalrad || defaultSectionTitles.kommunalrad,
+    groupLeaders: listing?.sectionTitles?.groupLeaders || "Gruppledare",
+    partyBoard: listing?.sectionTitles?.partyBoard || defaultSectionTitles.partyBoard,
+    kommunfullmaktige: listing?.sectionTitles?.kommunfullmaktige || defaultSectionTitles.kommunfullmaktige,
+    other: listing?.sectionTitles?.otherPoliticians || defaultSectionTitles.other,
+  };
 
   return (
     <div>
@@ -107,7 +115,7 @@ export default async function PoliticiansPage() {
         {/* 2. Nämnd leaders (no header, namnd name as subtitle) */}
         {grouped.namndLeaders.length > 0 && (
           <section className="mb-10">
-            <h2 className="text-2xl font-bold text-foreground mb-4">Gruppledare</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-4">{sectionTitles.groupLeaders}</h2>
             <ResponsiveGrid cols={3}>
               {grouped.namndLeaders.map(({ politician, namndTitle }) => (
                 <PeopleCard

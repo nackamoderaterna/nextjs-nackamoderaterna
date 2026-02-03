@@ -42,7 +42,11 @@ export function AccordionBlock({ block }: { block: AccordionBlockProps }) {
         className="space-y-0"
       >
         {block.items?.map((item, index) => (
-          <AccordionItem key={index} value={`item-${index}`} className="border-b border-border">
+          <AccordionItem
+            key={index}
+            value={`item-${index}`}
+            className="border-b border-border"
+          >
             <AccordionTrigger className="px-0 py-6 text-left font-semibold text-lg hover:no-underline [&[data-state=open]]:border-b-0">
               {item.title}
             </AccordionTrigger>

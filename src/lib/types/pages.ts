@@ -49,10 +49,33 @@ export type PageData = {
   seo?: PageSEO | null;
 };
 
+/** Section titles for listing pages. */
+export type SectionTitles = {
+  // Politik page
+  featuredIssues?: string;
+  categories?: string;
+  areas?: string;
+  fulfilledPromises?: string;
+  // Events page
+  upcoming?: string;
+  past?: string;
+  // Politicians page
+  kommunalrad?: string;
+  groupLeaders?: string;
+  partyBoard?: string;
+  kommunfullmaktige?: string;
+  otherPoliticians?: string;
+  // Sakfrågor page
+  sakfragorFeatured?: string;
+  sakfragorFulfilled?: string;
+  sakfragorAll?: string;
+};
+
 /** Listing page document (e.g. by key: politics, news, events). */
 export type ListingPage = {
   title?: string;
   intro?: string;
+  sectionTitles?: SectionTitles;
   seo?: {
     title?: string;
     description?: string;

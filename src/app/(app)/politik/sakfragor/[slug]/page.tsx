@@ -11,7 +11,10 @@ import {
 } from "@/lib/queries/politik";
 import { sanityClient } from "@/lib/sanity/client";
 import { buildImageUrl } from "@/lib/sanity/image";
-import { generateMetadata as generateSEOMetadata, getDefaultOgImage } from "@/lib/utils/seo";
+import {
+  generateMetadata as generateSEOMetadata,
+  getDefaultOgImage,
+} from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { PortableText } from "next-sanity";
 import {
@@ -25,7 +28,10 @@ import { ROUTE_BASE } from "@/lib/routes";
 import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
 import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleContext";
-import { SidebarList, SidebarListItem } from "@/lib/components/shared/SidebarList";
+import {
+  SidebarList,
+  SidebarListItem,
+} from "@/lib/components/shared/SidebarList";
 import { Heart } from "lucide-react";
 import { getLucideIcon } from "@/lib/utils/iconUtils";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
@@ -36,7 +42,7 @@ import { ReactNode } from "react";
 // Generate static params for all political issues at build time
 export async function generateStaticParams() {
   const issues = await sanityClient.fetch<{ slug: string }[]>(
-    allPoliticalIssueSlugsQuery
+    allPoliticalIssueSlugsQuery,
   );
 
   return issues.map((issue) => ({
@@ -91,15 +97,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const firstGeoArea = data.geographicalAreas?.[0];
-  const imageUrl =
-    firstGeoArea?.image
-      ? buildImageUrl(firstGeoArea.image, {
-          width: 1200,
-          height: 630,
-        })
-      : fallbackImage;
+  const imageUrl = firstGeoArea?.image
+    ? buildImageUrl(firstGeoArea.image, {
+        width: 1200,
+        height: 630,
+      })
+    : fallbackImage;
 
-  const contentBlock = data.content?.[0] as { children?: Array<{ text?: string }> } | undefined;
+  const contentBlock = data.content?.[0] as
+    | { children?: Array<{ text?: string }> }
+    | undefined;
   const description = contentBlock?.children?.[0]?.text
     ? `${data.question} - ${contentBlock.children[0].text.substring(0, 150)}...`
     : `Läs mer om ${data.question}`;
@@ -121,13 +128,12 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
     { slug },
     {
       next: { revalidate: 3600 },
-    }
+    },
   );
 
   if (!data) {
     notFound();
   }
-
 
   const main =
     data.content && data.content.length > 0 ? (
@@ -155,13 +161,17 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
               <SidebarListItem
                 key={area._id}
                 title={area.name || ""}
-                href={areaSlug ? `${ROUTE_BASE.POLITICS_CATEGORY}/${areaSlug}` : undefined}
+                href={
+                  areaSlug
+                    ? `${ROUTE_BASE.POLITICS_CATEGORY}/${areaSlug}`
+                    : undefined
+                }
                 icon={<AreaIcon className="h-4 w-4 text-brand-primary" />}
               />
             );
           })}
         </SidebarList>
-      </Sidebar>
+      </Sidebar>,
     );
   }
 
@@ -178,7 +188,7 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
             />
           ))}
         </SidebarList>
-      </Sidebar>
+      </Sidebar>,
     );
   }
 
@@ -189,15 +199,11 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
           Uppfyllt den{" "}
           {format(new Date(data.fulfilledAt), "d MMMM yyyy", { locale: sv })}
         </p>
-      </Sidebar>
+      </Sidebar>,
     );
   }
 
-  const sidebar = (
-    <div className="grid gap-4">
-      {sidebarItems}
-    </div>
-  );
+  const sidebar = <div className="grid gap-4">{sidebarItems}</div>;
 
   return (
     <div className="bg-background flex flex-col">
@@ -206,10 +212,7 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
           <SetBreadcrumbTitle title={data.question || ""} />
           <ContentHero pageType="Sakfråga" title={data.question || ""} />
 
-          <ContentWithSidebar
-            mainContent={main}
-            sidebarContent={sidebar}
-          />
+          <ContentWithSidebar mainContent={main} sidebarContent={sidebar} />
 
           {/* News Section */}
           {data.latestNews && data.latestNews.length > 0 && (
@@ -234,7 +237,14 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
             data.responsiblePoliticians.length > 0 && (
               <Section title="Ansvariga politiker">
                 <ResponsiveGrid cols={4}>
-                  {(data.responsiblePoliticians as Array<{ _id: string; name?: string | null; slug?: { current?: string } | null; image?: unknown }>).map((politician) => (
+                  {(
+                    data.responsiblePoliticians as Array<{
+                      _id: string;
+                      name?: string | null;
+                      slug?: { current?: string } | null;
+                      image?: unknown;
+                    }>
+                  ).map((politician) => (
                     <PeopleCard
                       key={politician._id}
                       name={politician.name ?? ""}

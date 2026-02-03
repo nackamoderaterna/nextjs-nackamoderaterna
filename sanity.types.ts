@@ -580,6 +580,19 @@ export type ListingPage = {
   key?: "politicians" | "politics" | "politikKategori" | "politikOmrade" | "politikSakfragor" | "news" | "events" | "contact";
   title?: string;
   intro?: string;
+  sectionTitles?: {
+    featuredIssues?: string;
+    categories?: string;
+    areas?: string;
+    fulfilledPromises?: string;
+    upcoming?: string;
+    past?: string;
+    kommunalrad?: string;
+    groupLeaders?: string;
+    partyBoard?: string;
+    kommunfullmaktige?: string;
+    otherPoliticians?: string;
+  };
   seo?: Seo;
 };
 
@@ -804,7 +817,9 @@ export type Page = {
     _key: string;
   } & BlockPoliticalAreas | {
     _key: string;
-  } & BlockGeographicalAreas>;
+  } & BlockGeographicalAreas | {
+    _key: string;
+  } & BlockPoliticalIssues>;
   pageHeader?: PageHeader;
   pageModal?: PageModal;
   seo?: Seo;
@@ -1794,6 +1809,8 @@ export type NavigationQueryResult = {
         _key: string;
       } & BlockPoliticalAreas | {
         _key: string;
+      } & BlockPoliticalIssues | {
+        _key: string;
       } & BlockPolitician | {
         _key: string;
       } & BlockQuote | {
@@ -2187,6 +2204,8 @@ export type NavigationQueryResult = {
         } & BlockNews | {
           _key: string;
         } & BlockPoliticalAreas | {
+          _key: string;
+        } & BlockPoliticalIssues | {
           _key: string;
         } & BlockPolitician | {
           _key: string;
@@ -2598,6 +2617,8 @@ export type FooterQueryResult = {
         } & BlockNews | {
           _key: string;
         } & BlockPoliticalAreas | {
+          _key: string;
+        } & BlockPoliticalIssues | {
           _key: string;
         } & BlockPolitician | {
           _key: string;
@@ -3102,7 +3123,7 @@ export type AllPoliticalAreasQueryResult = Array<{
 
 // Source: ./src/lib/queries/pages.ts
 // Variable: pageBySlugQuery
-// Query: *[_type == "page" && slug.current == $slug][0] {  _id,  title,  slug,  pageHeader{    header,    description,    image{      ...,      "url": asset->url    },    imageHeight,    overlayOpacity,    ctaButton{      label,      href    }  },  seo{    title,    description,    keywords,    image{      ...,      "url": asset->url    }  },  pageModal{    enabled,    onLoadDelayMs,    frequency,    storageKey,    title,    content,    primaryButton{      label,      href    },    secondaryButton{      label,      href    }  },  blocks[] {    ...,    // POLITICAN START    _type == "block.politician" => {      mode,      "items": select(        mode == "kommunalrad" =>          *[_type == "politician" && kommunalrad.active == true] | order(name asc){            _id,            name,            slug,            image,            kommunalrad          },        items[] {          "politician": politician->{            _id,            name,            slug,            image,            kommunalrad          },          titleOverride        }      )    },    // POLITICIAN END    // NEWS START    _type == "block.news" => {    heading{ title, subtitle },    viewAllLink,    mode,    politicalArea,    geographicArea,    items[]->{      _id,      title,      excerpt,      publishedAt,      slug,      mainImage{        ...,        "url": asset->url      }    },    // Resolved items depending on mode (limit: 10)    "resolvedItems": select(      // MANUAL      mode == "manual" => (items[]->{        _id,        _publishedAt,        title,        excerpt,        publishedAt,        dateOverride,        _createdAt,        "effectiveDate": coalesce(dateOverride, _createdAt),        slug,        mainImage{          ...,          "url": asset->url        }      })[0...10],      // LATEST      mode == "latest" => *[_type == "news"]         | order(coalesce(dateOverride, publishedAt) desc)        [0...10]{          _id,          _createdAt,          title,          excerpt,          publishedAt,          slug,          dateOverride,          "effectiveDate": coalesce(dateOverride, _createdAt),          mainImage{            ...,            "url": asset->url          }        },      // BY POLITICAL AREA      mode == "byPoliticalArea" && defined(politicalArea) => *[_type == "news" && references(^.politicalArea._ref)]        | order(coalesce(dateOverride, publishedAt) desc)        [0...10]{          _id,          _createdAt,          title,          excerpt,          publishedAt,          slug,          dateOverride,          "effectiveDate": coalesce(dateOverride, _createdAt),          mainImage{            ...,            "url": asset->url          }        },      // BY GEOGRAPHIC AREA      mode == "byGeographicArea" && defined(geographicArea) => *[_type == "news" && references(^.geographicArea._ref)]        | order(coalesce(dateOverride, publishedAt) desc)        [0...10]{          _id,          _createdAt,          title,          excerpt,          publishedAt,          slug,          dateOverride,          "effectiveDate": coalesce(dateOverride, _createdAt),          mainImage{            ...,            "url": asset->url          }        },      // DEFAULT → empty array       *[_type == "news"]         | order(coalesce(dateOverride, publishedAt) desc)        [0...10]{          _id,          _createdAt,          title,          excerpt,          publishedAt,          slug,          dateOverride,          "effectiveDate": coalesce(dateOverride, _createdAt),          mainImage        },    )  },    // IMAGE GALLERY START    _type == "block.imageGallery" => {      heading{ title, subtitle },      columns,      aspectRatio,      images[]{        _key,        asset,        alt,        caption,        aspectRatio      }    },    // IMAGE GALLERY END    // POLITICAL AREAS START    _type == "block.politicalAreas" => {      heading{ title, subtitle },      "items": items[]->{        _id,        name,        slug,        icon{ name }      }    },    // POLITICAL AREAS END    // GEOGRAPHICAL AREAS START    _type == "block.geographicalAreas" => {      heading{ title, subtitle },      "items": items[]->{        _id,        name,        slug,        image      }    },    // GEOGRAPHICAL AREAS END    // POLITICAL ISSUES START    _type == "block.politicalIssues" => {      heading{ title, subtitle },      mode,      politicalArea,      filter,      limit,      "items": items[]->{        _id,        question,        description,        slug,        featured,        fulfilled,        "politicalAreas": politicalAreas[]->{          _id,          name,          slug,          icon{ name }        },        "geographicalAreas": geographicalAreas[]->{          _id,          name,          slug        }      }    },    // POLITICAL ISSUES END  }}
+// Query: *[_type == "page" && slug.current == $slug][0] {  _id,  title,  slug,  pageHeader{    header,    description,    image{      ...,      "url": asset->url    },    imageHeight,    overlayOpacity,    ctaButton{      label,      href,      icon{ name }    }  },  seo{    title,    description,    keywords,    image{      ...,      "url": asset->url    }  },  pageModal{    enabled,    onLoadDelayMs,    frequency,    storageKey,    title,    content,    primaryButton{      label,      href    },    secondaryButton{      label,      href    }  },  blocks[] {    ...,    // POLITICAN START    _type == "block.politician" => {      mode,      "items": select(        mode == "kommunalrad" =>          *[_type == "politician" && kommunalrad.active == true] | order(name asc){            _id,            name,            slug,            image,            kommunalrad          },        items[] {          "politician": politician->{            _id,            name,            slug,            image,            kommunalrad          },          titleOverride        }      )    },    // POLITICIAN END    // NEWS START    _type == "block.news" => {    heading{ title, subtitle },    viewAllLink,    mode,    politicalArea,    geographicArea,    items[]->{      _id,      title,      excerpt,      publishedAt,      slug,      mainImage{        ...,        "url": asset->url      }    },    // Resolved items depending on mode (limit: 10)    "resolvedItems": select(      // MANUAL      mode == "manual" => (items[]->{        _id,        _publishedAt,        title,        excerpt,        publishedAt,        dateOverride,        _createdAt,        "effectiveDate": coalesce(dateOverride, _createdAt),        slug,        mainImage{          ...,          "url": asset->url        }      })[0...10],      // LATEST      mode == "latest" => *[_type == "news"]         | order(coalesce(dateOverride, publishedAt) desc)        [0...10]{          _id,          _createdAt,          title,          excerpt,          publishedAt,          slug,          dateOverride,          "effectiveDate": coalesce(dateOverride, _createdAt),          mainImage{            ...,            "url": asset->url          }        },      // BY POLITICAL AREA      mode == "byPoliticalArea" && defined(politicalArea) => *[_type == "news" && references(^.politicalArea._ref)]        | order(coalesce(dateOverride, publishedAt) desc)        [0...10]{          _id,          _createdAt,          title,          excerpt,          publishedAt,          slug,          dateOverride,          "effectiveDate": coalesce(dateOverride, _createdAt),          mainImage{            ...,            "url": asset->url          }        },      // BY GEOGRAPHIC AREA      mode == "byGeographicArea" && defined(geographicArea) => *[_type == "news" && references(^.geographicArea._ref)]        | order(coalesce(dateOverride, publishedAt) desc)        [0...10]{          _id,          _createdAt,          title,          excerpt,          publishedAt,          slug,          dateOverride,          "effectiveDate": coalesce(dateOverride, _createdAt),          mainImage{            ...,            "url": asset->url          }        },      // DEFAULT → empty array       *[_type == "news"]         | order(coalesce(dateOverride, publishedAt) desc)        [0...10]{          _id,          _createdAt,          title,          excerpt,          publishedAt,          slug,          dateOverride,          "effectiveDate": coalesce(dateOverride, _createdAt),          mainImage        },    )  },    // IMAGE GALLERY START    _type == "block.imageGallery" => {      heading{ title, subtitle },      columns,      aspectRatio,      images[]{        _key,        asset,        alt,        caption,        aspectRatio      }    },    // IMAGE GALLERY END    // POLITICAL AREAS START    _type == "block.politicalAreas" => {      heading{ title, subtitle },      "items": items[]->{        _id,        name,        slug,        icon{ name }      }    },    // POLITICAL AREAS END    // GEOGRAPHICAL AREAS START    _type == "block.geographicalAreas" => {      heading{ title, subtitle },      "items": items[]->{        _id,        name,        slug,        image      }    },    // GEOGRAPHICAL AREAS END    // POLITICAL ISSUES START    _type == "block.politicalIssues" => {      heading{ title, subtitle },      mode,      politicalArea,      filter,      limit,      "items": items[]->{        _id,        question,        description,        slug,        featured,        fulfilled,        "politicalAreas": politicalAreas[]->{          _id,          name,          slug,          icon{ name }        },        "geographicalAreas": geographicalAreas[]->{          _id,          name,          slug        }      }    },    // POLITICAL ISSUES END  }}
 export type PageBySlugQueryResult = {
   _id: string;
   title: string | null;
@@ -3128,6 +3149,9 @@ export type PageBySlugQueryResult = {
     ctaButton: {
       label: string | null;
       href: string | null;
+      icon: {
+        name: string | null;
+      } | null;
     } | null;
   } | null;
   seo: {
@@ -3418,6 +3442,43 @@ export type PageBySlugQueryResult = {
     }> | null;
   } | {
     _key: string;
+    _type: "block.politicalIssues";
+    heading: {
+      title: string | null;
+      subtitle: string | null;
+    } | null;
+    mode: "allFeatured" | "byCategory" | "manual" | null;
+    items: Array<{
+      _id: string;
+      question: string | null;
+      description: string | null;
+      slug: Slug | null;
+      featured: boolean | null;
+      fulfilled: boolean | null;
+      politicalAreas: Array<{
+        _id: string;
+        name: string | null;
+        slug: Slug | null;
+        icon: {
+          name: string | null;
+        } | null;
+      }> | null;
+      geographicalAreas: Array<{
+        _id: string;
+        name: string | null;
+        slug: Slug | null;
+      }> | null;
+    }> | null;
+    politicalArea: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "politicalArea";
+    } | null;
+    filter: "all" | "featured" | "fulfilled" | "unfulfilled" | null;
+    limit: number | null;
+  } | {
+    _key: string;
     _type: "block.politician";
     heading?: BlockHeading;
     mode: "kommunalrad" | "manual" | null;
@@ -3570,12 +3631,25 @@ export type AllPageSlugsQueryResult = Array<{
   slug: string | null;
 }>;
 // Variable: listingPageByKeyQuery
-// Query: *[_type == "listingPage" && key == $key][0]{  _id,  key,  title,  intro,  seo{    title,    description,    image{      ...,      "url": asset->url    }  }}
+// Query: *[_type == "listingPage" && key == $key][0]{  _id,  key,  title,  intro,  sectionTitles,  seo{    title,    description,    image{      ...,      "url": asset->url    }  }}
 export type ListingPageByKeyQueryResult = {
   _id: string;
   key: "contact" | "events" | "news" | "politicians" | "politics" | "politikKategori" | "politikOmrade" | "politikSakfragor" | null;
   title: string | null;
   intro: string | null;
+  sectionTitles: {
+    featuredIssues?: string;
+    categories?: string;
+    areas?: string;
+    fulfilledPromises?: string;
+    upcoming?: string;
+    past?: string;
+    kommunalrad?: string;
+    groupLeaders?: string;
+    partyBoard?: string;
+    kommunfullmaktige?: string;
+    otherPoliticians?: string;
+  } | null;
   seo: {
     title: string | null;
     description: string | null;
@@ -4401,9 +4475,9 @@ declare module "@sanity/client" {
     "*[_type == \"news\" && defined(slug.current)] {\n  \"slug\": slug.current\n}": AllNewsSlugsQueryResult;
     "{\n  \"items\": *[\n    _type == \"news\"\n    && ($areaSlug == null || $areaSlug == \"\" || $areaSlug in politicalAreas[]->slug.current)\n    && ($variant == null || variant == $variant)\n  ] | order(\n    coalesce(dateOverride, _createdAt) desc\n  )[$start...$end] {\n    _id,\n    title,\n    slug,\n    excerpt,\n    mainImage,\n    variant,\n    _createdAt,\n    _updatedAt,\n    dateOverride,\n    _rev,\n    \"effectiveDate\": coalesce(dateOverride, _createdAt),\n    \"politicalAreas\": politicalAreas[]-> {\n      _id,\n      name,\n      slug,\n      icon{ name }\n    },\n    \"series\": articleSeries->{\n      _id,\n      title,\n      slug\n    }\n  },\n  \"total\": count(*[\n    _type == \"news\"\n    && ($areaSlug == null || $areaSlug == \"\" || $areaSlug in politicalAreas[]->slug.current)\n    && ($variant == null || variant == $variant)\n  ])\n}": NewsListPaginatedQueryResult;
     "\n  *[_type == \"politicalArea\"] | order(name asc) {\n    _id,\n    name,\n    slug,\n    title,\n    icon{ name }\n  }\n": AllPoliticalAreasQueryResult;
-    "*[_type == \"page\" && slug.current == $slug][0] {\n  _id,\n  title,\n  slug,\n  pageHeader{\n    header,\n    description,\n    image{\n      ...,\n      \"url\": asset->url\n    },\n    imageHeight,\n    overlayOpacity,\n    ctaButton{\n      label,\n      href\n    }\n  },\n  seo{\n    title,\n    description,\n    keywords,\n    image{\n      ...,\n      \"url\": asset->url\n    }\n  },\n  pageModal{\n    enabled,\n    onLoadDelayMs,\n    frequency,\n    storageKey,\n    title,\n    content,\n    primaryButton{\n      label,\n      href\n    },\n    secondaryButton{\n      label,\n      href\n    }\n  },\n  blocks[] {\n    ...,\n    // POLITICAN START\n    _type == \"block.politician\" => {\n      mode,\n      \"items\": select(\n        mode == \"kommunalrad\" =>\n          *[_type == \"politician\" && kommunalrad.active == true] | order(name asc){\n            _id,\n            name,\n            slug,\n            image,\n            kommunalrad\n          },\n        items[] {\n          \"politician\": politician->{\n            _id,\n            name,\n            slug,\n            image,\n            kommunalrad\n          },\n          titleOverride\n        }\n      )\n    },\n    // POLITICIAN END\n    // NEWS START\n    _type == \"block.news\" => {\n    heading{ title, subtitle },\n    viewAllLink,\n    mode,\n    politicalArea,\n    geographicArea,\n    items[]->{\n      _id,\n      title,\n      excerpt,\n      publishedAt,\n      slug,\n      mainImage{\n        ...,\n        \"url\": asset->url\n      }\n    },\n\n    // Resolved items depending on mode (limit: 10)\n    \"resolvedItems\": select(\n      // MANUAL\n      mode == \"manual\" => (items[]->{\n        _id,\n        _publishedAt,\n        title,\n        excerpt,\n        publishedAt,\n        dateOverride,\n        _createdAt,\n        \"effectiveDate\": coalesce(dateOverride, _createdAt),\n        slug,\n        mainImage{\n          ...,\n          \"url\": asset->url\n        }\n      })[0...10],\n\n      // LATEST\n      mode == \"latest\" => *[_type == \"news\"] \n        | order(coalesce(dateOverride, publishedAt) desc)\n        [0...10]{\n          _id,\n          _createdAt,\n          title,\n          excerpt,\n          publishedAt,\n          slug,\n          dateOverride,\n          \"effectiveDate\": coalesce(dateOverride, _createdAt),\n          mainImage{\n            ...,\n            \"url\": asset->url\n          }\n        },\n\n      // BY POLITICAL AREA\n      mode == \"byPoliticalArea\" && defined(politicalArea) => *[_type == \"news\" && references(^.politicalArea._ref)]\n        | order(coalesce(dateOverride, publishedAt) desc)\n        [0...10]{\n          _id,\n          _createdAt,\n          title,\n          excerpt,\n          publishedAt,\n          slug,\n          dateOverride,\n          \"effectiveDate\": coalesce(dateOverride, _createdAt),\n          mainImage{\n            ...,\n            \"url\": asset->url\n          }\n        },\n\n      // BY GEOGRAPHIC AREA\n      mode == \"byGeographicArea\" && defined(geographicArea) => *[_type == \"news\" && references(^.geographicArea._ref)]\n        | order(coalesce(dateOverride, publishedAt) desc)\n        [0...10]{\n          _id,\n          _createdAt,\n          title,\n          excerpt,\n          publishedAt,\n          slug,\n          dateOverride,\n          \"effectiveDate\": coalesce(dateOverride, _createdAt),\n          mainImage{\n            ...,\n            \"url\": asset->url\n          }\n        },\n\n      // DEFAULT \u2192 empty array\n       *[_type == \"news\"] \n        | order(coalesce(dateOverride, publishedAt) desc)\n        [0...10]{\n          _id,\n          _createdAt,\n          title,\n          excerpt,\n          publishedAt,\n          slug,\n          dateOverride,\n          \"effectiveDate\": coalesce(dateOverride, _createdAt),\n          mainImage\n        },\n    )\n  },\n    // IMAGE GALLERY START\n    _type == \"block.imageGallery\" => {\n      heading{ title, subtitle },\n      columns,\n      aspectRatio,\n      images[]{\n        _key,\n        asset,\n        alt,\n        caption,\n        aspectRatio\n      }\n    },\n    // IMAGE GALLERY END\n    // POLITICAL AREAS START\n    _type == \"block.politicalAreas\" => {\n      heading{ title, subtitle },\n      \"items\": items[]->{\n        _id,\n        name,\n        slug,\n        icon{ name }\n      }\n    },\n    // POLITICAL AREAS END\n    // GEOGRAPHICAL AREAS START\n    _type == \"block.geographicalAreas\" => {\n      heading{ title, subtitle },\n      \"items\": items[]->{\n        _id,\n        name,\n        slug,\n        image\n      }\n    },\n    // GEOGRAPHICAL AREAS END\n    // POLITICAL ISSUES START\n    _type == \"block.politicalIssues\" => {\n      heading{ title, subtitle },\n      mode,\n      politicalArea,\n      filter,\n      limit,\n      \"items\": items[]->{\n        _id,\n        question,\n        description,\n        slug,\n        featured,\n        fulfilled,\n        \"politicalAreas\": politicalAreas[]->{\n          _id,\n          name,\n          slug,\n          icon{ name }\n        },\n        \"geographicalAreas\": geographicalAreas[]->{\n          _id,\n          name,\n          slug\n        }\n      }\n    },\n    // POLITICAL ISSUES END\n  }\n}": PageBySlugQueryResult;
+    "*[_type == \"page\" && slug.current == $slug][0] {\n  _id,\n  title,\n  slug,\n  pageHeader{\n    header,\n    description,\n    image{\n      ...,\n      \"url\": asset->url\n    },\n    imageHeight,\n    overlayOpacity,\n    ctaButton{\n      label,\n      href,\n      icon{ name }\n    }\n  },\n  seo{\n    title,\n    description,\n    keywords,\n    image{\n      ...,\n      \"url\": asset->url\n    }\n  },\n  pageModal{\n    enabled,\n    onLoadDelayMs,\n    frequency,\n    storageKey,\n    title,\n    content,\n    primaryButton{\n      label,\n      href\n    },\n    secondaryButton{\n      label,\n      href\n    }\n  },\n  blocks[] {\n    ...,\n    // POLITICAN START\n    _type == \"block.politician\" => {\n      mode,\n      \"items\": select(\n        mode == \"kommunalrad\" =>\n          *[_type == \"politician\" && kommunalrad.active == true] | order(name asc){\n            _id,\n            name,\n            slug,\n            image,\n            kommunalrad\n          },\n        items[] {\n          \"politician\": politician->{\n            _id,\n            name,\n            slug,\n            image,\n            kommunalrad\n          },\n          titleOverride\n        }\n      )\n    },\n    // POLITICIAN END\n    // NEWS START\n    _type == \"block.news\" => {\n    heading{ title, subtitle },\n    viewAllLink,\n    mode,\n    politicalArea,\n    geographicArea,\n    items[]->{\n      _id,\n      title,\n      excerpt,\n      publishedAt,\n      slug,\n      mainImage{\n        ...,\n        \"url\": asset->url\n      }\n    },\n\n    // Resolved items depending on mode (limit: 10)\n    \"resolvedItems\": select(\n      // MANUAL\n      mode == \"manual\" => (items[]->{\n        _id,\n        _publishedAt,\n        title,\n        excerpt,\n        publishedAt,\n        dateOverride,\n        _createdAt,\n        \"effectiveDate\": coalesce(dateOverride, _createdAt),\n        slug,\n        mainImage{\n          ...,\n          \"url\": asset->url\n        }\n      })[0...10],\n\n      // LATEST\n      mode == \"latest\" => *[_type == \"news\"] \n        | order(coalesce(dateOverride, publishedAt) desc)\n        [0...10]{\n          _id,\n          _createdAt,\n          title,\n          excerpt,\n          publishedAt,\n          slug,\n          dateOverride,\n          \"effectiveDate\": coalesce(dateOverride, _createdAt),\n          mainImage{\n            ...,\n            \"url\": asset->url\n          }\n        },\n\n      // BY POLITICAL AREA\n      mode == \"byPoliticalArea\" && defined(politicalArea) => *[_type == \"news\" && references(^.politicalArea._ref)]\n        | order(coalesce(dateOverride, publishedAt) desc)\n        [0...10]{\n          _id,\n          _createdAt,\n          title,\n          excerpt,\n          publishedAt,\n          slug,\n          dateOverride,\n          \"effectiveDate\": coalesce(dateOverride, _createdAt),\n          mainImage{\n            ...,\n            \"url\": asset->url\n          }\n        },\n\n      // BY GEOGRAPHIC AREA\n      mode == \"byGeographicArea\" && defined(geographicArea) => *[_type == \"news\" && references(^.geographicArea._ref)]\n        | order(coalesce(dateOverride, publishedAt) desc)\n        [0...10]{\n          _id,\n          _createdAt,\n          title,\n          excerpt,\n          publishedAt,\n          slug,\n          dateOverride,\n          \"effectiveDate\": coalesce(dateOverride, _createdAt),\n          mainImage{\n            ...,\n            \"url\": asset->url\n          }\n        },\n\n      // DEFAULT \u2192 empty array\n       *[_type == \"news\"] \n        | order(coalesce(dateOverride, publishedAt) desc)\n        [0...10]{\n          _id,\n          _createdAt,\n          title,\n          excerpt,\n          publishedAt,\n          slug,\n          dateOverride,\n          \"effectiveDate\": coalesce(dateOverride, _createdAt),\n          mainImage\n        },\n    )\n  },\n    // IMAGE GALLERY START\n    _type == \"block.imageGallery\" => {\n      heading{ title, subtitle },\n      columns,\n      aspectRatio,\n      images[]{\n        _key,\n        asset,\n        alt,\n        caption,\n        aspectRatio\n      }\n    },\n    // IMAGE GALLERY END\n    // POLITICAL AREAS START\n    _type == \"block.politicalAreas\" => {\n      heading{ title, subtitle },\n      \"items\": items[]->{\n        _id,\n        name,\n        slug,\n        icon{ name }\n      }\n    },\n    // POLITICAL AREAS END\n    // GEOGRAPHICAL AREAS START\n    _type == \"block.geographicalAreas\" => {\n      heading{ title, subtitle },\n      \"items\": items[]->{\n        _id,\n        name,\n        slug,\n        image\n      }\n    },\n    // GEOGRAPHICAL AREAS END\n    // POLITICAL ISSUES START\n    _type == \"block.politicalIssues\" => {\n      heading{ title, subtitle },\n      mode,\n      politicalArea,\n      filter,\n      limit,\n      \"items\": items[]->{\n        _id,\n        question,\n        description,\n        slug,\n        featured,\n        fulfilled,\n        \"politicalAreas\": politicalAreas[]->{\n          _id,\n          name,\n          slug,\n          icon{ name }\n        },\n        \"geographicalAreas\": geographicalAreas[]->{\n          _id,\n          name,\n          slug\n        }\n      }\n    },\n    // POLITICAL ISSUES END\n  }\n}": PageBySlugQueryResult;
     "*[_type == \"page\" && defined(slug.current)] {\n  \"slug\": slug.current\n}": AllPageSlugsQueryResult;
-    "*[_type == \"listingPage\" && key == $key][0]{\n  _id,\n  key,\n  title,\n  intro,\n  seo{\n    title,\n    description,\n    image{\n      ...,\n      \"url\": asset->url\n    }\n  }\n}": ListingPageByKeyQueryResult;
+    "*[_type == \"listingPage\" && key == $key][0]{\n  _id,\n  key,\n  title,\n  intro,\n  sectionTitles,\n  seo{\n    title,\n    description,\n    image{\n      ...,\n      \"url\": asset->url\n    }\n  }\n}": ListingPageByKeyQueryResult;
     "*[_type == \"politician\" && defined(slug.current)] {\n  \"slug\": slug.current\n}": AllPoliticianSlugsQueryResult;
     "*[_type == \"politician\" && slug.current == $slug][0] {\n  _id,\n  name,\n  slug,\n  image,\n  email,\n  phone,\n  bio,\n  kommunalrad,\n  partyBoard,\n  kommunfullmaktige,\n  \"namndPositions\": namndPositions[] {\n    title,\n    isLeader,\n    \"namnd\": namndRef-> {\n      _id,\n      title,\n      slug\n    }\n  },\n  \"livingArea\": livingArea-> {\n    _id,\n    name,\n    slug,\n  },\n  \"politicalAreas\": politicalAreas[] {\n    showOnPoliticalAreaPage,\n    \"politicalArea\": politicalArea-> {\n      _id,\n      name,\n      slug,\n      icon{ name }\n    }\n  },\n  socialLinks,\n  pressbilder,\n  \"referencedInNews\": *[_type == \"news\" && references(^._id)]\n    | order(coalesce(dateOverride, _createdAt) desc)[0...10] {\n    _id,\n    title,\n    slug,\n    _createdAt,\n    dateOverride,\n    excerpt,\n    \"effectiveDate\": coalesce(dateOverride, _createdAt),\n  }\n}": PoliticianBySlugQueryResult;
     "\n{\n  \"featuredPoliticalIssues\": *[\n    _type == \"politicalIssue\" &&\n    featured == true\n  ]{\n    _id,\n    question,\n    description,\n    slug,\n    featured,\n    fulfilled,\n\n    \"politicalAreas\": politicalAreas[]->{\n      _id,\n      name,\n      slug,\n      icon{ name }\n    },\n\n    \"geographicalAreas\": geographicalAreas[]->{\n      _id,\n      name,\n      slug\n    }\n  },\n\n  \"fulfilledPoliticalIssues\": *[\n    _type == \"politicalIssue\" &&\n    fulfilled == true\n  ] | order(_updatedAt desc) {\n    _id,\n    question,\n    description,\n    slug,\n    featured,\n    fulfilled,\n\n    \"politicalAreas\": politicalAreas[]->{\n      _id,\n      name,\n      slug,\n      icon{ name }\n    },\n\n    \"geographicalAreas\": geographicalAreas[]->{\n      _id,\n      name,\n      slug\n    }\n  },\n\n  \"politicalAreas\": *[_type == \"politicalArea\"] | order(name asc) {\n    _id,\n    name,\n    slug,\n    description,\n    image,\n    icon{\n      name\n    }\n  },\n\n  \"geographicalAreas\": *[_type == \"geographicalArea\"]{\n    _id,\n    name,\n    slug,\n    description,\n    image\n  }\n}\n": PolitikPageQueryResult;

@@ -8,6 +8,7 @@ import { pageBySlugQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
 import { generatePageMetadata } from "@/lib/utils/pageSeo";
 import type { PageData } from "@/lib/types/pages";
+import { PageContainer } from "@/lib/components/shared/PageContainer";
 
 export const revalidate = 300;
 
@@ -15,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const page = await sanityClient.fetch<PageData>(
     pageBySlugQuery,
     { slug: "hem" },
-    { next: { revalidate: 300 } }
+    { next: { revalidate: 300 } },
   );
 
   return generatePageMetadata(page, "Nackamoderaterna");
@@ -27,7 +28,7 @@ export default async function Home() {
     { slug: "hem" },
     {
       next: { revalidate: 300 },
-    }
+    },
   );
 
   if (!page) {
@@ -35,10 +36,18 @@ export default async function Home() {
   }
 
   return (
-    <div className="w-full mx-auto">
-      <PageModal modal={page.pageModal} pageSlug={page.slug?.current || "hem"} />
-      <PageHeader title={page.title ?? undefined} pageHeader={page.pageHeader ?? undefined} />
-      <PageBuilder blocks={page.blocks || []} />
-    </div>
+    <>
+      <PageModal
+        modal={page.pageModal}
+        pageSlug={page.slug?.current || "hem"}
+      />
+      <PageHeader
+        title={page.title ?? undefined}
+        pageHeader={page.pageHeader ?? undefined}
+      />
+      <PageContainer>
+        <PageBuilder blocks={page.blocks || []} />
+      </PageContainer>
+    </>
   );
 }

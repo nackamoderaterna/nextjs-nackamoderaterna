@@ -48,6 +48,33 @@ export const listingPage = defineType({
         "En kort text som visas överst på sidan. Endast enkel text, inga bilder eller länkar.",
     }),
     defineField({
+      name: "sectionTitles",
+      title: "Sektionsrubriker",
+      type: "object",
+      group: "content",
+      description: "Anpassa rubrikerna för olika sektioner på sidan. Lämna tomt för standardvärden.",
+      fields: [
+        // Politik page sections
+        { name: "featuredIssues", title: "Kärnfrågor (Politik)", type: "string" },
+        { name: "categories", title: "Kategorier (Politik)", type: "string" },
+        { name: "areas", title: "Områden (Politik)", type: "string" },
+        { name: "fulfilledPromises", title: "Uppfyllda vallöften (Politik)", type: "string" },
+        // Events page sections
+        { name: "upcoming", title: "Kommande (Evenemang)", type: "string" },
+        { name: "past", title: "Tidigare (Evenemang)", type: "string" },
+        // Politicians page sections
+        { name: "kommunalrad", title: "Kommunalråd (Politiker)", type: "string" },
+        { name: "groupLeaders", title: "Gruppledare (Politiker)", type: "string" },
+        { name: "partyBoard", title: "Föreningsstyrelsen (Politiker)", type: "string" },
+        { name: "kommunfullmaktige", title: "Kommunfullmäktige (Politiker)", type: "string" },
+        { name: "otherPoliticians", title: "Övriga politiker (Politiker)", type: "string" },
+        // Sakfrågor page sections
+        { name: "sakfragorFeatured", title: "Kärnfrågor (Sakfrågor)", type: "string" },
+        { name: "sakfragorFulfilled", title: "Genomförda vallöften (Sakfrågor)", type: "string" },
+        { name: "sakfragorAll", title: "Sakfrågor (Sakfrågor)", type: "string" },
+      ],
+    }),
+    defineField({
       name: "seo",
       title: "SEO",
       type: "seo",

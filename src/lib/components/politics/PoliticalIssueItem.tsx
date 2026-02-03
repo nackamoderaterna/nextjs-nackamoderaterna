@@ -86,7 +86,10 @@ export function PoliticalIssueItem({
             {[...geographicalAreaItems]
               .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "", "sv"))
               .map((a) => (
-                <CategoryBadge key={a._id || a.name || ""} name={a.name ?? ""} />
+                <CategoryBadge
+                  key={a._id || a.name || ""}
+                  name={a.name ?? ""}
+                />
               ))}
           </span>
         </ItemDescription>

@@ -11,7 +11,10 @@ import {
 } from "@/lib/queries/navigation";
 import { staticNavItems } from "@/lib/navigation/staticNav";
 import { buildNavigation } from "@/lib/navigation/buildNavigation";
-import { globalSettingsQuery, GlobalSettingsData } from "@/lib/queries/globalSettings";
+import {
+  globalSettingsQuery,
+  GlobalSettingsData,
+} from "@/lib/queries/globalSettings";
 import { SanityImage } from "./SanityImage";
 import { ROUTE_BASE } from "@/lib/routes";
 import { Heart } from "lucide-react";
@@ -29,7 +32,10 @@ export default async function Header() {
   // Use CMS-configured navigation if available, otherwise fall back to static items
   let navItems: MenuItemWithReference[];
 
-  if (globalSettings?.mainNavigation && globalSettings.mainNavigation.length > 0) {
+  if (
+    globalSettings?.mainNavigation &&
+    globalSettings.mainNavigation.length > 0
+  ) {
     // Use mainNavigation directly - it's already in MenuItemWithReference format
     navItems = globalSettings.mainNavigation.filter((item) => !!item.title);
   } else {
@@ -66,15 +72,20 @@ export default async function Header() {
           <div className="hidden sm:flex items-center gap-2 w-full justify-end">
             <SearchBar />
             {bliMedlemUrl && (
-              <Button asChild variant="secondary" size="sm" className="shrink-0">
+              <Button
+                asChild
+                variant="secondary"
+                size="sm"
+                className="shrink-0"
+              >
                 <Link
                   href={bliMedlemUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center no-underline gap-2"
                 >
+                  <Heart className="size-4" />
                   Bli medlem
-                  <Heart className="size-4" fill="currentColor" />
                 </Link>
               </Button>
             )}

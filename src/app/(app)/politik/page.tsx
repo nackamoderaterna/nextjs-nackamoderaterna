@@ -88,6 +88,14 @@ export default async function PoliticsPage() {
       }
     ),
   ]);
+  // Section titles from CMS with fallbacks
+  const titles = {
+    featured: listing?.sectionTitles?.featuredIssues || "Kärnfrågor",
+    categories: listing?.sectionTitles?.categories || "Kategorier",
+    areas: listing?.sectionTitles?.areas || "Områden",
+    fulfilled: listing?.sectionTitles?.fulfilledPromises || "Uppfyllda vallöften",
+  };
+
   return (
     <div className="bg-background">
       <ListingPageLayout
@@ -96,7 +104,7 @@ export default async function PoliticsPage() {
         fallbackTitle="Vår politik"
       >
           {/* Key Issues Section */}
-          <Section title="Kärnfrågor" titleSize="large"   actions={<Button asChild variant="link" size="sm"><Link href={`${ROUTE_BASE.POLITICS_ISSUES}`}>Se alla</Link></Button>}>
+          <Section title={titles.featured} titleSize="large" actions={<Button asChild variant="link" size="sm"><Link href={`${ROUTE_BASE.POLITICS_ISSUES}`}>Se alla</Link></Button>}>
             <ResponsiveGrid cols={3}>
               {data.featuredPoliticalIssues.map((issue) => (
                 <PoliticalIssueItem
@@ -106,14 +114,14 @@ export default async function PoliticsPage() {
                   politicalAreas={issue.politicalAreas}
                   geographicalAreas={issue.geographicalAreas ?? []}
                   issueSlug={issue.slug?.current}
-                
+
                 />
               ))}
             </ResponsiveGrid>
           </Section>
 
         {/* Political Areas Grid */}
-        <Section title="Kategorier" titleSize="large">
+        <Section title={titles.categories} titleSize="large">
           <ResponsiveGrid cols={4} colsBase={2}>
             {data.politicalAreas.sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "", "sv")).map((area) => {
               const Icon = getLucideIcon(area.icon?.name);
@@ -131,7 +139,7 @@ export default async function PoliticsPage() {
 
         {/* Geographical Areas (Områden) */}
         {data.geographicalAreas?.length > 0 && (
-          <Section title="Områden" titleSize="large">
+          <Section title={titles.areas} titleSize="large">
             <ResponsiveGrid cols={3}>
               {data.geographicalAreas
                 .filter((area) => area.slug?.current)
@@ -150,7 +158,7 @@ export default async function PoliticsPage() {
 
         {/* Fulfilled Promises Section */}
         {data.fulfilledPoliticalIssues.length > 0 && (
-          <Section title="Uppfyllda vallöften" titleSize="large">
+          <Section title={titles.fulfilled} titleSize="large">
             <ResponsiveGrid cols={3}>
               {data.fulfilledPoliticalIssues.map((issue) => (
                 <PoliticalIssueItem

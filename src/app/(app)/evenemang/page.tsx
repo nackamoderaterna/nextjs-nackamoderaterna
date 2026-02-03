@@ -92,6 +92,12 @@ export default async function EventsPage({
     { next: { revalidate: EVENTS_CACHE_SECONDS } }
   );
 
+  // Section titles from CMS with fallbacks
+  const titles = {
+    upcoming: listing?.sectionTitles?.upcoming || "Kommande",
+    past: listing?.sectionTitles?.past || "Tidigare",
+  };
+
   if (view === "kommande") {
     const result = await sanityClient.fetch<PaginatedResult>(
       upcomingEventsPaginatedQuery,
@@ -125,7 +131,7 @@ export default async function EventsPage({
         as="main"
       >
         <EventFilters />
-        <Section title="Kommande">
+        <Section title={titles.upcoming}>
         {items.length === 0 ? (
               <EmptyState message="Inga kommande evenemang för tillfället." />
             ) : (
@@ -142,7 +148,7 @@ export default async function EventsPage({
               </>
             )}
         </Section>
-      
+
         <Block maxWidth="3xl" paddingY="large" background="muted">
           <ContactForm
             heading="Kontakta oss"
@@ -189,7 +195,7 @@ export default async function EventsPage({
         as="main"
       >
         <EventFilters />
-        <Section title="Tidigare">
+        <Section title={titles.past}>
           {items.length === 0 ? (
               <EmptyState message="Inga tidigare evenemang." />
             ) : (
@@ -241,7 +247,7 @@ export default async function EventsPage({
       as="main"
     >
       <EventFilters />
-      <Section title="Kommande">
+      <Section title={titles.upcoming}>
       {upcomingDisplay.length === 0 ? (
             <EmptyState message="Inga kommande evenemang för tillfället." />
           ) : (
@@ -265,7 +271,7 @@ export default async function EventsPage({
 
 
       {pastDisplay.length > 0 && (
-        <Section title="Tidigare">
+        <Section title={titles.past}>
             <ResponsiveGrid cols={3} gap="large">
               {pastDisplay.map((event) =>
                 renderEventCard(

@@ -7,6 +7,7 @@ import { Metadata } from "next";
 import { ROUTE_BASE } from "@/lib/routes";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
+import { Section } from "@/lib/components/shared/Section";
 import { PoliticalIssue } from "~/sanity.types";
 import type { ListingPage } from "@/lib/types/pages";
 
