@@ -57,7 +57,7 @@ export const politikPageQuery = groq`
     name,
     slug,
     description,
-    image,
+    image{ ..., hotspot, crop },
     icon{
       name
     }
@@ -68,7 +68,7 @@ export const politikPageQuery = groq`
     name,
     slug,
     description,
-    image
+    image{ ..., hotspot, crop }
   }
 }
 `;
@@ -133,14 +133,14 @@ export const politicalIssuePageQuery = groq`
       _id,
       name,
       slug,
-      image
+      image{ ..., hotspot, crop }
     },
 
     "responsiblePoliticians": responsiblePoliticians[]->{
       _id,
       name,
       slug,
-      image
+      image{ ..., hotspot, crop }
     },
 
     "latestNews": *[
@@ -153,7 +153,7 @@ export const politicalIssuePageQuery = groq`
       title,
       slug,
       excerpt,
-      mainImage,
+      mainImage{ ..., hotspot, crop },
       dateOverride,
       _createdAt
     }
@@ -167,7 +167,7 @@ export const politicalAreaPageQuery = groq`
     name,
     slug,
     description,
-    image,
+    image{ ..., hotspot, crop },
     icon{ name },
 
     "latestNews": *[
@@ -180,7 +180,7 @@ export const politicalAreaPageQuery = groq`
       title,
       slug,
       excerpt,
-      mainImage,
+      mainImage{ ..., hotspot, crop },
       dateOverride,
       _createdAt
     },
@@ -198,7 +198,7 @@ export const politicalAreaPageQuery = groq`
       _type == "politician" &&
       count(
         politicalAreas[
-          showOnPoliticalAreaPage == true && 
+          showOnPoliticalAreaPage == true &&
           defined(politicalArea) &&
           politicalArea._ref == $areaId
         ]
@@ -207,7 +207,7 @@ export const politicalAreaPageQuery = groq`
       _id,
       name,
       slug,
-      image
+      image{ ..., hotspot, crop }
     }
   }
 `;
@@ -219,7 +219,7 @@ export const geographicalAreaPageQuery = groq`
     name,
     slug,
     description,
-    image,
+    image{ ..., hotspot, crop },
 
     "latestNews": *[
       _type == "news" &&
@@ -231,7 +231,7 @@ export const geographicalAreaPageQuery = groq`
       title,
       slug,
       excerpt,
-      mainImage,
+      mainImage{ ..., hotspot, crop },
       dateOverride,
       _createdAt
     },
@@ -254,7 +254,7 @@ export const geographicalAreaPageQuery = groq`
       _id,
       name,
       slug,
-      image
+      image{ ..., hotspot, crop }
     }
   }
 `;

@@ -8,7 +8,7 @@ export const upcomingEventsQuery = groq`
     slug,
     startDate,
     endDate,
-    image,
+    image{ ..., hotspot, crop },
     location,
     eventType
   }
@@ -22,7 +22,7 @@ export const allEventsQuery = groq`
     slug,
     startDate,
     endDate,
-    image,
+    image{ ..., hotspot, crop },
     location,
     eventType,
     isPublic
@@ -37,7 +37,7 @@ export const upcomingEventsPaginatedQuery = groq`{
     slug,
     startDate,
     endDate,
-    image,
+    image{ ..., hotspot, crop },
     location,
     eventType,
     isPublic
@@ -53,7 +53,7 @@ export const pastEventsPaginatedQuery = groq`{
     slug,
     startDate,
     endDate,
-    image,
+    image{ ..., hotspot, crop },
     location,
     eventType,
     isPublic
@@ -74,7 +74,7 @@ export const singleEventQuery = groq`
     startDate,
     endDate,
     description,
-    image,
+    image{ ..., hotspot, crop },
     location,
     eventType,
     registrationUrl,

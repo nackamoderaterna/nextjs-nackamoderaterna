@@ -6,7 +6,7 @@ export const politiciansDirectoryQuery = groq`*[_type == "politician"] | order(n
   _id,
   name,
   slug,
-  image,
+  image{ ..., hotspot, crop },
   email,
   phone,
   bio,

@@ -4094,6 +4094,27 @@
                 "type": "string"
               },
               "optional": true
+            },
+            "sakfragorFeatured": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "string"
+              },
+              "optional": true
+            },
+            "sakfragorFulfilled": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "string"
+              },
+              "optional": true
+            },
+            "sakfragorAll": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "string"
+              },
+              "optional": true
             }
           }
         },

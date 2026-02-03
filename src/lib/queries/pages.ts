@@ -9,6 +9,8 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
     description,
     image{
       ...,
+      hotspot,
+      crop,
       "url": asset->url
     },
     imageHeight,
@@ -25,6 +27,8 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
     keywords,
     image{
       ...,
+      hotspot,
+      crop,
       "url": asset->url
     }
   },
@@ -55,7 +59,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
             _id,
             name,
             slug,
-            image,
+            image{ ..., hotspot, crop },
             kommunalrad
           },
         items[] {
@@ -63,7 +67,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
             _id,
             name,
             slug,
-            image,
+            image{ ..., hotspot, crop },
             kommunalrad
           },
           titleOverride
@@ -86,6 +90,8 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
       slug,
       mainImage{
         ...,
+        hotspot,
+        crop,
         "url": asset->url
       }
     },
@@ -105,12 +111,14 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
         slug,
         mainImage{
           ...,
+          hotspot,
+          crop,
           "url": asset->url
         }
       })[0...10],
 
       // LATEST
-      mode == "latest" => *[_type == "news"] 
+      mode == "latest" => *[_type == "news"]
         | order(coalesce(dateOverride, publishedAt) desc)
         [0...10]{
           _id,
@@ -123,6 +131,8 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
           "effectiveDate": coalesce(dateOverride, _createdAt),
           mainImage{
             ...,
+            hotspot,
+            crop,
             "url": asset->url
           }
         },
@@ -141,6 +151,8 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
           "effectiveDate": coalesce(dateOverride, _createdAt),
           mainImage{
             ...,
+            hotspot,
+            crop,
             "url": asset->url
           }
         },
@@ -159,12 +171,14 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
           "effectiveDate": coalesce(dateOverride, _createdAt),
           mainImage{
             ...,
+            hotspot,
+            crop,
             "url": asset->url
           }
         },
 
       // DEFAULT → empty array
-       *[_type == "news"] 
+       *[_type == "news"]
         | order(coalesce(dateOverride, publishedAt) desc)
         [0...10]{
           _id,
@@ -175,7 +189,11 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
           slug,
           dateOverride,
           "effectiveDate": coalesce(dateOverride, _createdAt),
-          mainImage
+          mainImage{
+            ...,
+            hotspot,
+            crop
+          }
         },
     )
   },
@@ -189,7 +207,9 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
         asset,
         alt,
         caption,
-        aspectRatio
+        aspectRatio,
+        hotspot,
+        crop
       }
     },
     // IMAGE GALLERY END
@@ -211,7 +231,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
         _id,
         name,
         slug,
-        image
+        image{ ..., hotspot, crop }
       }
     },
     // GEOGRAPHICAL AREAS END
@@ -262,6 +282,8 @@ export const listingPageByKeyQuery = groq`*[_type == "listingPage" && key == $ke
     description,
     image{
       ...,
+      hotspot,
+      crop,
       "url": asset->url
     }
   }

@@ -64,11 +64,17 @@ export default async function PolitikSakfragorPage() {
     }),
   ]);
 
-  const orderedIssues = [
-    ...allIssues.filter((i) => i.featured),
-    ...allIssues.filter((i) => i.fulfilled && !i.featured),
-    ...allIssues.filter((i) => !i.featured && !i.fulfilled),
-  ];
+  // Section titles from CMS with fallbacks
+  const titles = {
+    featured: listing?.sectionTitles?.sakfragorFeatured || "Kärnfrågor",
+    fulfilled: listing?.sectionTitles?.sakfragorFulfilled || "Genomförda vallöften",
+    all: listing?.sectionTitles?.sakfragorAll || "Sakfrågor",
+  };
+
+  // Group issues
+  const featuredIssues = allIssues.filter((i) => i.featured && !i.fulfilled);
+  const fulfilledIssues = allIssues.filter((i) => i.fulfilled);
+  const otherIssues = allIssues.filter((i) => !i.featured && !i.fulfilled);
 
   return (
     <div className="bg-background">
@@ -77,22 +83,62 @@ export default async function PolitikSakfragorPage() {
         intro={listing?.intro}
         fallbackTitle="Våra sakfrågor"
       >
-        {orderedIssues.length > 0 ? (
-          <ResponsiveGrid cols={3}>
-            {orderedIssues.map((issue) => (
-              <PoliticalIssueItem
-                key={issue._id}
-                title={issue.question || ""}
-                description={issue.description}
-                politicalAreas={issue.politicalAreas}
-                geographicalAreas={issue.geographicalAreas ?? []}
-                issueSlug={issue.slug?.current}
-                fulfilled={!!issue.fulfilled}
-                featured={!!issue.featured}
-              />
-            ))}
-          </ResponsiveGrid>
-        ) : null}
+        {/* Kärnfrågor */}
+        {featuredIssues.length > 0 && (
+          <Section title={titles.featured} titleSize="large">
+            <ResponsiveGrid cols={3}>
+              {featuredIssues.map((issue) => (
+                <PoliticalIssueItem
+                  key={issue._id}
+                  title={issue.question || ""}
+                  description={issue.description}
+                  politicalAreas={issue.politicalAreas}
+                  geographicalAreas={issue.geographicalAreas ?? []}
+                  issueSlug={issue.slug?.current}
+                  featured
+                />
+              ))}
+            </ResponsiveGrid>
+          </Section>
+        )}
+
+        {/* Genomförda vallöften */}
+        {fulfilledIssues.length > 0 && (
+          <Section title={titles.fulfilled} titleSize="large">
+            <ResponsiveGrid cols={3}>
+              {fulfilledIssues.map((issue) => (
+                <PoliticalIssueItem
+                  key={issue._id}
+                  title={issue.question || ""}
+                  description={issue.description}
+                  politicalAreas={issue.politicalAreas}
+                  geographicalAreas={issue.geographicalAreas ?? []}
+                  issueSlug={issue.slug?.current}
+                  fulfilled
+                  featured={!!issue.featured}
+                />
+              ))}
+            </ResponsiveGrid>
+          </Section>
+        )}
+
+        {/* Sakfrågor */}
+        {otherIssues.length > 0 && (
+          <Section title={titles.all} titleSize="large">
+            <ResponsiveGrid cols={3}>
+              {otherIssues.map((issue) => (
+                <PoliticalIssueItem
+                  key={issue._id}
+                  title={issue.question || ""}
+                  description={issue.description}
+                  politicalAreas={issue.politicalAreas}
+                  geographicalAreas={issue.geographicalAreas ?? []}
+                  issueSlug={issue.slug?.current}
+                />
+              ))}
+            </ResponsiveGrid>
+          </Section>
+        )}
       </ListingPageLayout>
     </div>
   );

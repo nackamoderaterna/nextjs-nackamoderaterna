@@ -59,6 +59,8 @@ export const globalSettingsQuery = groq`
       keywords,
       image{
         ...,
+        hotspot,
+        crop,
         "url": asset->url
       }
     },

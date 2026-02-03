@@ -102,7 +102,7 @@ export function CTABlock({ block }: { block: CTABlockProps }) {
               <Button
                 size="lg"
                 className="group text-foreground"
-                variant="outline"
+                variant="secondary"
                 asChild
               >
                 <Link href={primaryAction.href}>
@@ -115,17 +115,19 @@ export function CTABlock({ block }: { block: CTABlockProps }) {
               </Button>
             );
           })()}
-          {secondaryAction?.label && secondaryAction?.href && (() => {
-            const SecondaryIcon = getLucideIcon(secondaryAction.icon?.name);
-            return (
-              <Button size="lg" variant="outline" asChild>
-                <Link href={secondaryAction.href}>
-                  {SecondaryIcon && <SecondaryIcon className="h-4 w-4" />}
-                  {secondaryAction.label}
-                </Link>
-              </Button>
-            );
-          })()}
+          {secondaryAction?.label &&
+            secondaryAction?.href &&
+            (() => {
+              const SecondaryIcon = getLucideIcon(secondaryAction.icon?.name);
+              return (
+                <Button size="lg" variant="outline" asChild>
+                  <Link href={secondaryAction.href}>
+                    {SecondaryIcon && <SecondaryIcon className="h-4 w-4" />}
+                    {secondaryAction.label}
+                  </Link>
+                </Button>
+              );
+            })()}
         </div>
       </div>
     </Block>

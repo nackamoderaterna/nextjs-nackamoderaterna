@@ -9,7 +9,7 @@ export const politicianBySlugQuery = groq`*[_type == "politician" && slug.curren
   _id,
   name,
   slug,
-  image,
+  image{ ..., hotspot, crop },
   email,
   phone,
   bio,

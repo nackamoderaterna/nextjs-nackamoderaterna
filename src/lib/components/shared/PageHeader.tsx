@@ -13,6 +13,14 @@ interface PageHeaderProps {
   pageHeader?: PageHeaderData | null;
 }
 
+// Image height classes based on Sanity imageHeight field
+const imageHeightClasses: Record<string, string> = {
+  small: "min-h-[280px] md:min-h-[300px]",
+  medium: "min-h-[350px] md:min-h-[400px]",
+  large: "min-h-[420px] md:min-h-[500px]",
+  fullscreen: "min-h-[500px] md:min-h-[600px]",
+};
+
 export function PageHeader({ title, pageHeader }: PageHeaderProps) {
   const displayTitle = (pageHeader?.header?.trim() || title) ?? undefined;
   const description =
@@ -22,8 +30,11 @@ export function PageHeader({ title, pageHeader }: PageHeaderProps) {
   const headerImage = pageHeader?.image;
   const ctaButton = pageHeader?.ctaButton;
   const hasImage = headerImage != null;
+  const imageHeight = pageHeader?.imageHeight || "medium";
 
-  const CtaIcon = ctaButton?.icon?.name ? getLucideIcon(ctaButton.icon.name) : null;
+  const CtaIcon = ctaButton?.icon?.name
+    ? getLucideIcon(ctaButton.icon.name)
+    : null;
 
   const textContent = (
     <div className="flex flex-col max-w-sm justify-center gap-4">
@@ -51,14 +62,19 @@ export function PageHeader({ title, pageHeader }: PageHeaderProps) {
   );
 
   if (hasImage) {
+    const heightClass =
+      imageHeightClasses[imageHeight] || imageHeightClasses.medium;
+
     return (
-      <div className="w-full bg-muted border-b">
+      <div className="w-full border-b mb-6">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-          <div className="flex flex-col md:flex-row gap-6 md:gap-12 items-stretch min-h-[300px] md:min-h-[400px]">
+          <div className="flex flex-col md:flex-row gap-6 md:gap-12 items-stretch">
             <div className="flex items-center md:flex-shrink-0">
               {textContent}
             </div>
-            <div className="relative flex-1 rounded overflow-hidden order-first md:order-none min-h-[200px] animate-in fade-in slide-in-from-bottom-6 duration-700">
+            <div
+              className={`relative flex-1 rounded overflow-hidden order-first md:order-none ${heightClass} animate-in fade-in slide-in-from-bottom-6 duration-700`}
+            >
               <SanityImage
                 image={headerImage}
                 alt=""
@@ -75,7 +91,7 @@ export function PageHeader({ title, pageHeader }: PageHeaderProps) {
   }
 
   return (
-    <div className="w-full bg-muted border-b">
+    <div className="w-full border-b">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         {textContent}
       </div>

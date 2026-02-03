@@ -21,7 +21,7 @@ export const newsQuery = groq`
     _id,
     name,
     slug,
-    image
+    image{ ..., hotspot, crop }
   },
 
   "politicalAreas": politicalAreas[]->{
@@ -35,7 +35,7 @@ export const newsQuery = groq`
     _id,
     name,
     slug,
-    image
+    image{ ..., hotspot, crop }
   },
 
   "politicalIssues": politicalIssues[]->{
@@ -59,7 +59,7 @@ export const newsQuery = groq`
     title,
     slug,
     excerpt,
-    mainImage,
+    mainImage{ ..., hotspot, crop },
     "effectiveDate": coalesce(dateOverride, _createdAt)
   },
 
@@ -73,7 +73,7 @@ export const newsQuery = groq`
     title,
     slug,
     excerpt,
-    mainImage,
+    mainImage{ ..., hotspot, crop },
     "effectiveDate": coalesce(dateOverride, _createdAt)
   }
 }
@@ -86,7 +86,7 @@ export const newsListQuery = groq`*[_type == "news"] | order(
   title,
   slug,
   excerpt,
-  mainImage,
+  mainImage{ ..., hotspot, crop },
   _createdAt,
   _updatedAt,
   dateOverride,
@@ -115,7 +115,7 @@ export const newsListPaginatedQuery = groq`{
     title,
     slug,
     excerpt,
-    mainImage,
+    mainImage{ ..., hotspot, crop },
     variant,
     _createdAt,
     _updatedAt,

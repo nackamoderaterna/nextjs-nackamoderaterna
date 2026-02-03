@@ -30,6 +30,9 @@ export default defineType({
       name: "image",
       title: "SEO-bild",
       type: "image",
+      options: {
+        hotspot: true,
+      },
       description:
         "Bild som används för social delning (Open Graph / Twitter-kort). Visas när sidan delas på sociala medier.",
     },
