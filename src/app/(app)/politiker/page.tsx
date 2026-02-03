@@ -39,7 +39,7 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export const revalidate = 300;
+export const revalidate = 3600;
 
 // Helper to sort politicians alphabetically by name
 function sortByName(politicians: PoliticianWithNamnd[]): PoliticianWithNamnd[] {
@@ -56,14 +56,14 @@ export default async function PoliticiansPage() {
       politiciansDirectoryQuery,
       {},
       {
-        next: { revalidate: 300 },
+        next: { revalidate: 3600 },
       }
     ),
     sanityClient.fetch<ListingPage>(
       listingPageByKeyQuery,
       { key: "politicians" },
       {
-        next: { revalidate: 300 },
+        next: { revalidate: 3600 },
       }
     ),
   ]);

@@ -4,15 +4,6 @@ import { BreadcrumbTitleProvider } from "@/lib/components/shared/BreadcrumbTitle
 import "../globals.css";
 import { Footer } from "@/lib/components/shared/Footer";
 import { Analytics } from "@vercel/analytics/react";
-import { Inter } from "next/font/google";
-
-const interDisplay = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter-display",
-  preload: true,
-  fallback: ["system-ui", "arial"],
-});
 
 export default function RootLayout({
   children,
@@ -20,14 +11,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={interDisplay.variable}>
+    <html lang="sv">
       <head>
-        {/* Google Fonts (next/font/google) */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-
         {/* Sanity image CDN */}
         <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="" />
         <link rel="dns-prefetch" href="https://cdn.sanity.io" />
@@ -36,7 +21,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://vitals.vercel-insights.com" crossOrigin="" />
         <link rel="dns-prefetch" href="https://vitals.vercel-insights.com" />
       </head>
-      <body className={interDisplay.className}>
+      <body>
         <BreadcrumbTitleProvider>
           <Header />
           <main className="flex flex-col">

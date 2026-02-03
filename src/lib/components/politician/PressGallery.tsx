@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { buildImageUrl } from "@/lib/sanity/image";
+import { buildImageUrl, buildOriginalImageUrl } from "@/lib/sanity/image";
 import { SanityImage } from "@/lib/components/shared/SanityImage";
 import { Download } from "lucide-react";
 import {
@@ -36,7 +36,7 @@ export function PressGallery({ images }: PressGalleryProps) {
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {validImages.map((image, index) => {
-          const downloadUrl = buildImageUrl(image, { width: 2400, quality: 90 });
+          const downloadUrl = buildOriginalImageUrl(image);
           return (
             <div key={image._key ?? index} className="space-y-2">
               <button

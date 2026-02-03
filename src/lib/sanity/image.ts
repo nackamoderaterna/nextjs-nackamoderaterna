@@ -17,11 +17,28 @@ export function buildImageUrl(
   let url = builder
     .image(image)
     .auto("format")
-    .fit(options?.fit || "max"); // ✅ NOT crop
+    .fit(options?.fit || "max");
 
   if (options?.width) url = url.width(options.width);
   if (options?.height) url = url.height(options.height);
   if (options?.quality) url = url.quality(options.quality);
 
   return url.url();
+}
+
+/**
+ * Returns the original Sanity asset URL with a `?dl=` parameter so the
+ * browser triggers a file download with a proper filename. No format
+ * conversion or resizing is applied — the user gets the original file.
+ */
+export function buildOriginalImageUrl(
+  image: SanityImageSource,
+  filename?: string,
+) {
+  if (!image) return "";
+  const builder = imageUrlBuilder(sanityClient);
+  const url = builder.image(image).url();
+  if (!url) return "";
+  const dl = filename || url.split("/").pop()?.split("?")[0] || "image";
+  return `${url}?dl=${encodeURIComponent(dl)}`;
 }

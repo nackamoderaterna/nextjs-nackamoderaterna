@@ -73,7 +73,7 @@ export async function generateMetadata({
   });
 }
 
-export const revalidate = 300;
+export const revalidate = 3600;
 
 export default async function PoliticianPage({
   params,
@@ -85,7 +85,7 @@ export default async function PoliticianPage({
     politicianBySlugQuery,
     { slug },
     {
-      next: { revalidate: 300 },
+      next: { revalidate: 3600 },
     }
   );
 
@@ -111,24 +111,21 @@ export default async function PoliticianPage({
   if (politician.pressbilder?.length)
     tocEntries.push({ id: "pressbilder", label: "Pressbilder" });
 
-  const mainContent = (
+  const hasMainContent = !!politician.bio;
+  const mainContent = hasMainContent ? (
     <div className="space-y-8">
-    {tocEntries.length > 1 && (
-        <InPageNav entries={tocEntries} showLabel={false} />
-      )}
       {politician.bio && (
         <Section id="biografi" title="Biografi" className="scroll-mt-24">
           <div className="prose md:prose-lg">
             <PortableText
-            value={politician.bio}
-            components={portableTextComponents}
-          />
+              value={politician.bio}
+              components={portableTextComponents}
+            />
           </div>
         </Section>
       )}
-     
-      </div>
-    )
+    </div>
+  ) : undefined;
 
   return (
     <PageContainer as="main" paddingY="compact">
@@ -147,7 +144,11 @@ export default async function PoliticianPage({
             ? `${ROUTE_BASE.AREAS}/${politician.livingArea.slug.current}`
             : undefined
         }
-      />
+      >
+        {tocEntries.length > 1 ? (
+          <InPageNav entries={tocEntries} showLabel={false} />
+        ) : null}
+      </ContentHero>
       <div className="mt-8 ">
         <ContentWithSidebar
           mainContent={mainContent}

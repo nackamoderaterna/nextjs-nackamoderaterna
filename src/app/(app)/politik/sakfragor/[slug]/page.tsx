@@ -110,7 +110,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-export const revalidate = 300;
+export const revalidate = 3600;
 
 export default async function PoliticalIssueSinglePage({ params }: Props) {
   const { slug } = await params;
@@ -118,7 +118,7 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
     politicalIssuePageQuery,
     { slug },
     {
-      next: { revalidate: 300 },
+      next: { revalidate: 3600 },
     }
   );
 

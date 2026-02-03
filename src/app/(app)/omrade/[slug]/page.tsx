@@ -74,7 +74,7 @@ export async function generateMetadata({
   });
 }
 
-export const revalidate = 300;
+export const revalidate = 3600;
 
 export default async function GeographicalAreaSinglePage({ params }: Props) {
   const { slug } = await params;
@@ -82,7 +82,7 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
     geographicalAreaPageQuery,
     { slug },
     {
-      next: { revalidate: 300 },
+      next: { revalidate: 3600 },
     }
   );
 
