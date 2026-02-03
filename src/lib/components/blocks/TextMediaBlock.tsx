@@ -48,7 +48,7 @@ export function TextMediaBlock({ block }: { block: TwoColumnBlockProps }) {
 
   const textColumn = (
     <div
-      className={`flex flex-col gap-4 py-8 lg:py-16 ${textAlignClasses[textAlignment]}`}
+      className={`flex flex-col gap-4 pb-8 lg:py-16 ${textAlignClasses[textAlignment]}`}
     >
       {block.innerTitle && (
         <h3 className="text-xl font-semibold md:text-2xl">

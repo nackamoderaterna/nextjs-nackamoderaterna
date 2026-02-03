@@ -2,9 +2,7 @@ import { TextBlock } from "./blocks/textBlock";
 import { ImageBlock } from "./blocks/imageBlock";
 import VideoBlock from "./blocks/videoBlock";
 import { PageBlock } from "@/lib/types/types";
-import {
-  PoliticianReferenceBlock,
-} from "./blocks/PoliticianReference";
+import { PoliticianReferenceBlock } from "./blocks/PoliticianReference";
 import { NewsBlock } from "./blocks/NewsBlock";
 import { StatsBlock } from "./blocks/StatsBlock";
 import { TextMediaBlock } from "./blocks/TextMediaBlock";
@@ -30,7 +28,7 @@ export function PageBuilder({ blocks }: PageBuilderProps) {
       {blocks.map((block, index) => {
         const key = (block as any)._id || `${block._type}-${index}`;
         const blockType = block._type;
-        
+
         switch (blockType) {
           case "block.text":
             return <TextBlock key={key} block={block as any} />;

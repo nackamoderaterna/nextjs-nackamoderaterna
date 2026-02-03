@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Block from "./Block";
 import { getBlockHeading } from "./BlockHeading";
+import { cleanInvisibleUnicode } from "@/lib/politicians";
 
 interface CTABlockProps {
   _type: "block.cta";
@@ -38,7 +39,9 @@ export function CTABlock({ block }: { block: CTABlockProps }) {
         : undefined
       : undefined);
   const layout = block.layout ?? "fullWidth";
-  const alignment = block.alignment ?? "center";
+  const alignment =
+    (cleanInvisibleUnicode(block.alignment) as "left" | "center" | "right") ??
+    "center";
 
   if (!primaryAction?.label || !primaryAction?.href) {
     return null;
@@ -65,7 +68,13 @@ export function CTABlock({ block }: { block: CTABlockProps }) {
       maxWidth={maxWidth}
       containerClassName="rounded-xl p-12 md:p-16 border border-border bg-brand-primary text-white shadow-sm"
     >
-      <div className="mx-auto max-w-3xl">
+      <div
+        className={cn(
+          "mx-auto flex-col max-w-3xl flex",
+          flexAlignmentClasses[alignment],
+          alignmentClasses[alignment],
+        )}
+      >
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-balance mb-6">
           {title ?? ""}
         </h2>

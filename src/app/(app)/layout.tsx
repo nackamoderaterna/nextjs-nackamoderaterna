@@ -18,7 +18,11 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://cdn.sanity.io" />
 
         {/* Vercel Analytics */}
-        <link rel="preconnect" href="https://vitals.vercel-insights.com" crossOrigin="" />
+        <link
+          rel="preconnect"
+          href="https://vitals.vercel-insights.com"
+          crossOrigin=""
+        />
         <link rel="dns-prefetch" href="https://vitals.vercel-insights.com" />
       </head>
       <body>
@@ -26,7 +30,7 @@ export default function RootLayout({
           <Header />
           <main className="flex flex-col">
             <Breadcrumb />
-            <div className="flex-1">{children}</div>
+            <div className="flex-1 py-8">{children}</div>
           </main>
           <Footer />
         </BreadcrumbTitleProvider>

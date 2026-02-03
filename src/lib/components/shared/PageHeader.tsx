@@ -47,16 +47,16 @@ export function PageHeader({ title, pageHeader }: PageHeaderProps) {
 
   if (hasImage) {
     return (
-      <Block paddingY="medium">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center">
+      <Block paddingY="none">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 items-center grid0">
           {textContent}
-          <div className="rounded overflow-hidden relative aspect-[4/3] md:aspect-auto md:h-full md:min-h-[300px]">
+          <div className="rounded order-first md:order-none overflow-hidden relative aspect-[4/3] md:aspect-auto md:col-span-2 md:h-full md:min-h-120">
             <SanityImage
               image={headerImage}
               alt=""
               fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 75vw"
+              className="object-cover h-full"
               priority
             />
           </div>
@@ -65,9 +65,5 @@ export function PageHeader({ title, pageHeader }: PageHeaderProps) {
     );
   }
 
-  return (
-    <Block paddingY="medium">
-      {textContent}
-    </Block>
-  );
+  return <Block paddingY="medium">{textContent}</Block>;
 }

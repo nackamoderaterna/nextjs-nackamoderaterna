@@ -40,7 +40,7 @@ export function MobileNav({
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <SheetHeader>Meny</SheetHeader>
-        <div className="min-h-0 flex-1 overflow-y-auto flex flex-col">
+        <div className="min-h-0 overflow-y-auto flex flex-col">
           {/* Nav first in DOM (first in tab order), but visually second */}
           <nav className="order-last flex flex-col gap-1 px-4 pb-8">
             {items.map((item) => (
