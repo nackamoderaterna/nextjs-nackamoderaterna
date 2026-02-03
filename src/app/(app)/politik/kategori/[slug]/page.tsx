@@ -72,10 +72,16 @@ export async function generateMetadata({
     ? buildImageUrl(data.image, { width: 1200, height: 630 })
     : undefined;
 
+  const firstBlock = data.description?.find(
+    (b): b is typeof b & { children: { text?: string }[] } =>
+      "children" in b && Array.isArray(b.children)
+  );
+  const descriptionText = firstBlock?.children?.[0]?.text?.substring(0, 150);
+
   return generateSEOMetadata({
     title: `${data.name} | Nackamoderaterna`,
-    description: data.description
-      ? `${data.name} - ${data.description[0]?.children?.[0]?.text?.substring(0, 150)}...`
+    description: descriptionText
+      ? `${data.name} - ${descriptionText}...`
       : `Läs mer om ${data.name}`,
     image: imageUrl,
     url: `${ROUTE_BASE.POLITICS_CATEGORY}/${slug}`,

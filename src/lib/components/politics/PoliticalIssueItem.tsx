@@ -7,7 +7,6 @@ import {
   ItemContent,
   ItemDescription,
   ItemHeader,
-  ItemMedia,
   ItemTitle,
 } from "@/lib/components/ui/item";
 
@@ -53,25 +52,22 @@ export function PoliticalIssueItem({
     fulfilled ? "hover:border-green-600/60" : "hover:border-brand-primary/50"
   }`;
 
+  const indicator = fulfilled ? (
+    <span className="flex size-8 shrink-0 items-center justify-center rounded-sm border bg-muted">
+      <CheckCircle2 className="size-4 text-green-600" aria-label="uppfyllt" />
+    </span>
+  ) : featured ? (
+    <span className="flex size-8 shrink-0 items-center justify-center rounded-sm border border-brand-primary/30 bg-brand-primary/10">
+      <Star className="size-4 text-brand-primary" aria-label="kärnfråga" />
+    </span>
+  ) : null;
+
   const content = (
     <>
-      {fulfilled && (
-        <ItemMedia variant="icon">
-          <CheckCircle2
-            className="size-5 text-green-600"
-            aria-label="uppfyllt"
-          />
-        </ItemMedia>
-      )}
       <ItemContent>
-        <ItemHeader>
+        <ItemHeader className="justify-between">
           <ItemTitle>{title}</ItemTitle>
-          {featured && !fulfilled && (
-            <Star
-              className="size-3.5 shrink-0 text-brand-primary"
-              aria-label="kärnfråga"
-            />
-          )}
+          {indicator}
         </ItemHeader>
         {description && <ItemDescription>{description}</ItemDescription>}
       </ItemContent>

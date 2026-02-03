@@ -1,4 +1,5 @@
 import { blockHeading } from "./blockHeading";
+import buttonWithIcon from "./buttonWithIcon";
 import { containerSettings } from "./containerSettings";
 import { contentSettings } from "./contentSettings";
 import menuItem from "./menuItem";
@@ -13,6 +14,7 @@ import socialLinks from "./socialLinks";
 
 export const objects = [
   blockHeading,
+  buttonWithIcon,
   menuItem,
   seo,
   pageModal,

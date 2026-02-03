@@ -62,21 +62,7 @@ export default defineType({
       name: "ctaButton",
       title: "CTA-knapp",
       description: "Valfri knapp i sidhuvudet (t.ex. \"Läs mer\", \"Kontakta oss\").",
-      type: "object",
-      fields: [
-        defineField({
-          name: "label",
-          title: "Knapptext",
-          type: "string",
-          validation: (Rule) => Rule.required(),
-        }),
-        defineField({
-          name: "href",
-          title: "Länk",
-          type: "string",
-          validation: (Rule) => Rule.required(),
-        }),
-      ],
+      type: "buttonWithIcon",
     }),
   ],
 });

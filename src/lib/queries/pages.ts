@@ -214,6 +214,34 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
       }
     },
     // GEOGRAPHICAL AREAS END
+    // POLITICAL ISSUES START
+    _type == "block.politicalIssues" => {
+      heading{ title, subtitle },
+      mode,
+      politicalArea,
+      filter,
+      limit,
+      "items": items[]->{
+        _id,
+        question,
+        description,
+        slug,
+        featured,
+        fulfilled,
+        "politicalAreas": politicalAreas[]->{
+          _id,
+          name,
+          slug,
+          icon{ name }
+        },
+        "geographicalAreas": geographicalAreas[]->{
+          _id,
+          name,
+          slug
+        }
+      }
+    },
+    // POLITICAL ISSUES END
   }
 }`;
 

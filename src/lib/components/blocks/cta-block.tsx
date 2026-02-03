@@ -5,6 +5,13 @@ import Link from "next/link";
 import Block from "./Block";
 import { getBlockHeading } from "./BlockHeading";
 import { cleanInvisibleUnicode } from "@/lib/politicians";
+import { getLucideIcon } from "@/lib/utils/iconUtils";
+
+interface ButtonAction {
+  label: string;
+  href: string;
+  icon?: { name?: string | null } | null;
+}
 
 interface CTABlockProps {
   _type: "block.cta";
@@ -13,8 +20,8 @@ interface CTABlockProps {
   title?: string;
   subtitle?: string;
   description?: string;
-  primaryAction?: { label: string; href: string };
-  secondaryAction?: { label: string; href: string };
+  primaryAction?: ButtonAction;
+  secondaryAction?: ButtonAction;
   alignment?: "left" | "center" | "right";
   // Legacy fields (backward compatibility)
   primaryButton?: { label: string; link: string };
@@ -89,22 +96,36 @@ export function CTABlock({ block }: { block: CTABlockProps }) {
             flexAlignmentClasses[alignment],
           )}
         >
-          <Button
-            size="lg"
-            className="group text-foreground"
-            variant="outline"
-            asChild
-          >
-            <Link href={primaryAction.href}>
-              {primaryAction.label}
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </Button>
-          {secondaryAction?.label && secondaryAction?.href && (
-            <Button size="lg" variant="outline" asChild>
-              <Link href={secondaryAction.href}>{secondaryAction.label}</Link>
-            </Button>
-          )}
+          {(() => {
+            const PrimaryIcon = getLucideIcon(primaryAction.icon?.name);
+            return (
+              <Button
+                size="lg"
+                className="group text-foreground"
+                variant="outline"
+                asChild
+              >
+                <Link href={primaryAction.href}>
+                  {PrimaryIcon && <PrimaryIcon className="h-4 w-4" />}
+                  {primaryAction.label}
+                  {!PrimaryIcon && (
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  )}
+                </Link>
+              </Button>
+            );
+          })()}
+          {secondaryAction?.label && secondaryAction?.href && (() => {
+            const SecondaryIcon = getLucideIcon(secondaryAction.icon?.name);
+            return (
+              <Button size="lg" variant="outline" asChild>
+                <Link href={secondaryAction.href}>
+                  {SecondaryIcon && <SecondaryIcon className="h-4 w-4" />}
+                  {secondaryAction.label}
+                </Link>
+              </Button>
+            );
+          })()}
         </div>
       </div>
     </Block>

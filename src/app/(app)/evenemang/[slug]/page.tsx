@@ -60,10 +60,16 @@ export async function generateMetadata({
     ? buildImageUrl(event.image, { width: 1200, height: 630 })
     : fallbackImage;
 
+  const firstBlock = event.description?.find(
+    (b): b is typeof b & { children: { text?: string }[] } =>
+      "children" in b && Array.isArray(b.children)
+  );
+  const descriptionText = firstBlock?.children?.[0]?.text?.substring(0, 150);
+
   return generateSEOMetadata({
     title: `${event.title} | Nackamoderaterna`,
-    description: event.description
-      ? `${event.title} - ${event.description[0]?.children?.[0]?.text?.substring(0, 150)}...`
+    description: descriptionText
+      ? `${event.title} - ${descriptionText}...`
       : `Läs mer om evenemanget ${event.title}`,
     image: imageUrl,
     url: `${ROUTE_BASE.EVENTS}/${slug}`,

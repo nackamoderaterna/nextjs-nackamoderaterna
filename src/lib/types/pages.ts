@@ -10,7 +10,11 @@ export type PageHeaderData = {
   image?: unknown;
   imageHeight?: "small" | "medium" | "large" | "fullscreen";
   overlayOpacity?: number | null;
-  ctaButton?: { label: string; href: string } | null;
+  ctaButton?: {
+    label: string;
+    href: string;
+    icon?: { name?: string | null } | null;
+  } | null;
 };
 
 export type PageSEO = {

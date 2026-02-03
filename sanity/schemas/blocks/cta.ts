@@ -33,39 +33,13 @@ export const ctaBlock = defineType({
       name: "primaryAction",
       title: "Primär knapp",
       description: "Huvudknappen som ska fånga användarens uppmärksamhet.",
-      type: "object",
-      fields: [
-        defineField({
-          name: "label",
-          title: "Knapptext",
-          type: "string",
-          validation: (Rule) => Rule.required(),
-        }),
-        defineField({
-          name: "href",
-          title: "Länk",
-          type: "string",
-          validation: (Rule) => Rule.required(),
-        }),
-      ],
+      type: "buttonWithIcon",
     }),
     defineField({
       name: "secondaryAction",
       title: "Sekundär knapp",
       description: "Valfri sekundär knapp för alternativa åtgärder.",
-      type: "object",
-      fields: [
-        defineField({
-          name: "label",
-          title: "Knapptext",
-          type: "string",
-        }),
-        defineField({
-          name: "href",
-          title: "Länk",
-          type: "string",
-        }),
-      ],
+      type: "buttonWithIcon",
     }),
     defineField({
       name: "alignment",

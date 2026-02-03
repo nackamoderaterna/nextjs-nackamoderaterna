@@ -78,10 +78,7 @@ export type PageHeader = {
   };
   imageHeight?: "small" | "medium" | "large" | "fullscreen";
   overlayOpacity?: number;
-  ctaButton?: {
-    label?: string;
-    href?: string;
-  };
+  ctaButton?: ButtonWithIcon;
 };
 
 export type PageModal = {
@@ -168,17 +165,50 @@ export type MenuItem = {
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "politicalIssue";
   };
-  staticRoute?: "/" | "/politiker" | "/nyheter" | "/event" | "/politik" | "/kontakt";
+  staticRoute?: "/" | "/politik" | "/politik/kategori" | "/omrade" | "/politik/sakfragor" | "/politiker" | "/nyheter" | "/evenemang" | "/kontakt";
   url?: string;
   children?: Array<{
     _key: string;
   } & MenuItem>;
 };
 
+export type ButtonWithIcon = {
+  _type: "buttonWithIcon";
+  label?: string;
+  href?: string;
+  icon?: LucideIcon;
+};
+
+export type BlockHeading = {
+  _type: "blockHeading";
+  title?: string;
+  subtitle?: string;
+};
+
+export type BlockPoliticalIssues = {
+  _type: "block.politicalIssues";
+  heading?: BlockHeading;
+  mode?: "manual" | "allFeatured" | "byCategory";
+  items?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "politicalIssue";
+  }>;
+  politicalArea?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "politicalArea";
+  };
+  filter?: "all" | "featured" | "fulfilled" | "unfulfilled";
+  limit?: number;
+};
+
 export type BlockGeographicalAreas = {
   _type: "block.geographicalAreas";
-  heading?: string;
-  description?: string;
+  heading?: BlockHeading;
   items?: Array<{
     _ref: string;
     _type: "reference";
@@ -190,8 +220,7 @@ export type BlockGeographicalAreas = {
 
 export type BlockPoliticalAreas = {
   _type: "block.politicalAreas";
-  heading?: string;
-  description?: string;
+  heading?: BlockHeading;
   items?: Array<{
     _ref: string;
     _type: "reference";
@@ -203,14 +232,13 @@ export type BlockPoliticalAreas = {
 
 export type BlockContact = {
   _type: "block.contact";
-  heading?: string;
-  description?: string;
+  heading?: BlockHeading;
   showContactInfo?: boolean;
 };
 
 export type BlockImageGallery = {
   _type: "block.imageGallery";
-  heading?: string;
+  heading?: BlockHeading;
   images?: Array<{
     asset?: {
       _ref: string;
@@ -223,6 +251,7 @@ export type BlockImageGallery = {
     crop?: SanityImageCrop;
     alt?: string;
     caption?: string;
+    aspectRatio?: "default" | "portrait" | "square" | "landscape" | "auto";
     _type: "image";
     _key: string;
   }>;
@@ -232,7 +261,7 @@ export type BlockImageGallery = {
 
 export type BlockQuote = {
   _type: "block.quote";
-  heading?: string;
+  heading?: BlockHeading;
   quote?: string;
   author?: string;
   authorTitle?: string;
@@ -253,8 +282,7 @@ export type BlockQuote = {
 
 export type BlockAccordion = {
   _type: "block.accordion";
-  heading?: string;
-  description?: string;
+  heading?: BlockHeading;
   items?: Array<{
     title?: string;
     content?: Array<{
@@ -282,7 +310,7 @@ export type BlockAccordion = {
 
 export type BlockTwoColumn = {
   _type: "block.twoColumn";
-  heading?: string;
+  heading?: BlockHeading;
   image?: {
     asset?: {
       _ref: string;
@@ -295,6 +323,7 @@ export type BlockTwoColumn = {
     crop?: SanityImageCrop;
     _type: "image";
   };
+  innerTitle?: string;
   content?: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -315,12 +344,12 @@ export type BlockTwoColumn = {
   }>;
   imagePosition?: "left" | "right";
   verticalAlignment?: "top" | "center" | "bottom";
+  textAlignment?: "left" | "center" | "right";
 };
 
 export type BlockStats = {
   _type: "block.stats";
-  heading?: string;
-  description?: string;
+  heading?: BlockHeading;
   stats?: Array<{
     value?: string;
     label?: string;
@@ -331,22 +360,16 @@ export type BlockStats = {
 
 export type BlockCta = {
   _type: "block.cta";
-  heading?: string;
-  description?: string;
-  primaryButton?: {
-    label?: string;
-    link?: string;
-  };
-  secondaryButton?: {
-    label?: string;
-    link?: string;
-  };
+  layout?: "fullWidth" | "contained";
+  heading?: BlockHeading;
+  primaryAction?: ButtonWithIcon;
+  secondaryAction?: ButtonWithIcon;
   alignment?: "left" | "center" | "right";
 };
 
 export type BlockNews = {
   _type: "block.news";
-  heading?: string;
+  heading?: BlockHeading;
   mode?: "latest" | "manual" | "area" | "politics";
   politicalArea?: {
     _ref: string;
@@ -360,6 +383,7 @@ export type BlockNews = {
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "geographicalArea";
   };
+  viewAllLink?: string;
   items?: Array<{
     _ref: string;
     _type: "reference";
@@ -367,12 +391,11 @@ export type BlockNews = {
     _key: string;
     [internalGroqTypeReferenceTo]?: "news";
   }>;
-  limit?: number;
 };
 
 export type BlockPolitician = {
   _type: "block.politician";
-  heading?: string;
+  heading?: BlockHeading;
   mode?: "manual" | "kommunalrad";
   items?: Array<{
     politician?: {
@@ -389,14 +412,14 @@ export type BlockPolitician = {
 
 export type BlockVideo = {
   _type: "block.video";
-  heading?: string;
+  heading?: BlockHeading;
   video?: string;
   caption?: string;
 };
 
 export type BlockImage = {
   _type: "block.image";
-  heading?: string;
+  heading?: BlockHeading;
   image?: {
     asset?: {
       _ref: string;
@@ -416,7 +439,7 @@ export type BlockImage = {
 
 export type BlockText = {
   _type: "block.text";
-  heading?: string;
+  heading?: BlockHeading;
   content?: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -457,6 +480,10 @@ export type GlobalSettings = {
     crop?: SanityImageCrop;
     _type: "image";
   };
+  bliMedlemUrl?: string;
+  mainNavigation?: Array<{
+    _key: string;
+  } & MenuItem>;
   contactInfo?: {
     phone?: string;
     email?: string;
@@ -550,7 +577,7 @@ export type ListingPage = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  key?: "politicians" | "politics" | "news" | "events" | "contact";
+  key?: "politicians" | "politics" | "politikKategori" | "politikOmrade" | "politikSakfragor" | "news" | "events" | "contact";
   title?: string;
   intro?: string;
   seo?: Seo;
@@ -566,6 +593,9 @@ export type NavigationHeader = {
   items?: Array<{
     _key: string;
   } & MenuItem>;
+  customMenuItems?: Array<{
+    _key: string;
+  } & MenuItem>;
 };
 
 export type PoliticalIssue = {
@@ -575,8 +605,41 @@ export type PoliticalIssue = {
   _updatedAt: string;
   _rev: string;
   question?: string;
+  description?: string;
+  slug?: Slug;
+  content?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
+  }>;
   featured?: boolean;
   fulfilled?: boolean;
+  fulfilledAt?: string;
   politicalAreas?: Array<{
     _ref: string;
     _type: "reference";
@@ -598,6 +661,12 @@ export type PoliticalIssue = {
     _key: string;
     [internalGroqTypeReferenceTo]?: "politician";
   }>;
+};
+
+export type Slug = {
+  _type: "slug";
+  current?: string;
+  source?: string;
 };
 
 export type NamndPosition = {
@@ -649,6 +718,18 @@ export type Event = {
     level?: number;
     _type: "block";
     _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
   }>;
   image?: {
     asset?: {
@@ -685,12 +766,6 @@ export type Event = {
     _key: string;
     [internalGroqTypeReferenceTo]?: "politicalArea";
   }>;
-};
-
-export type Slug = {
-  _type: "slug";
-  current?: string;
-  source?: string;
 };
 
 export type Page = {
@@ -818,6 +893,21 @@ export type Politician = {
     _type: "politicalAreaReference";
     _key: string;
   }>;
+  pressbilder?: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    caption?: string;
+    _type: "image";
+    _key: string;
+  }>;
   socialLinks?: SocialLinks;
 };
 
@@ -845,6 +935,18 @@ export type PoliticalArea = {
     }>;
     level?: number;
     _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
     _key: string;
   }>;
   image?: {
@@ -886,6 +988,18 @@ export type GeographicalArea = {
     }>;
     level?: number;
     _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
     _key: string;
   }>;
   image?: {
@@ -966,9 +1080,10 @@ export type News = {
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     alt?: string;
+    aspectRatio?: "portrait" | "square" | "landscape" | "auto";
     _type: "image";
   };
-  document?: {
+  documents?: Array<{
     asset?: {
       _ref: string;
       _type: "reference";
@@ -977,7 +1092,10 @@ export type News = {
     };
     media?: unknown;
     _type: "file";
-  };
+    _key: string;
+  }>;
+  instagramUrl?: string;
+  facebookUrl?: string;
   referencedPolitician?: Array<{
     _ref: string;
     _type: "reference";
@@ -998,6 +1116,13 @@ export type News = {
     _weak?: boolean;
     _key: string;
     [internalGroqTypeReferenceTo]?: "geographicalArea";
+  }>;
+  politicalIssues?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "politicalIssue";
   }>;
   articleSeries?: {
     _ref: string;
@@ -1115,7 +1240,7 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type AllSanitySchemaTypes = RichTextHighlightedLink | RichTextQuote | LucideIcon | ContentSettings | ContainerSettings | ThemeSettings | SocialLinks | PageHeader | PageModal | Seo | MenuItem | BlockGeographicalAreas | BlockPoliticalAreas | BlockContact | BlockImageGallery | BlockQuote | BlockAccordion | BlockTwoColumn | BlockStats | BlockCta | BlockNews | BlockPolitician | BlockVideo | BlockImage | BlockText | GlobalSettings | SanityImageCrop | SanityImageHotspot | NavigationFooter | ListingPage | NavigationHeader | PoliticalIssue | NamndPosition | Event | Slug | Page | Politician | PoliticalArea | GeographicalArea | Namnd | News | ArticleSeries | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
+export type AllSanitySchemaTypes = RichTextHighlightedLink | RichTextQuote | LucideIcon | ContentSettings | ContainerSettings | ThemeSettings | SocialLinks | PageHeader | PageModal | Seo | MenuItem | ButtonWithIcon | BlockHeading | BlockPoliticalIssues | BlockGeographicalAreas | BlockPoliticalAreas | BlockContact | BlockImageGallery | BlockQuote | BlockAccordion | BlockTwoColumn | BlockStats | BlockCta | BlockNews | BlockPolitician | BlockVideo | BlockImage | BlockText | GlobalSettings | SanityImageCrop | SanityImageHotspot | NavigationFooter | ListingPage | NavigationHeader | PoliticalIssue | Slug | NamndPosition | Event | Page | Politician | PoliticalArea | GeographicalArea | Namnd | News | ArticleSeries | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/lib/politicians.ts
 // Variable: politiciansDirectoryQuery
@@ -1272,6 +1397,18 @@ export type SingleEventQueryResult = {
     level?: number;
     _type: "block";
     _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
   }> | null;
   image: {
     asset?: {
@@ -1297,7 +1434,7 @@ export type SingleEventQueryResult = {
 
 // Source: ./src/lib/queries/globalSettings.ts
 // Variable: globalSettingsQuery
-// Query: *[_type == "globalSettings"][0] {    companyName,    logo,    bliMedlemUrl,    mainNavigation,    contactInfo,    pressContactInfo,    postAddress,    visitingAddress,    socialLinks,    seo{      title,      description,      keywords,      image{        ...,        "url": asset->url      }    },    "handlingsprogram": handlingsprogram {      ...,      "url": asset->url,      "originalFilename": asset->originalFilename    }  }
+// Query: *[_type == "globalSettings"][0] {    companyName,    logo,    bliMedlemUrl,    mainNavigation[] {      title,      linkType,      staticRoute,      "internalLink": internalLink-> {        _type,        "slug": slug.current,        title,        name      },      url,      children[] {        title,        linkType,        staticRoute,        "internalLink": internalLink-> {          _type,          "slug": slug.current,          title,          name        },        url      }    },    contactInfo,    pressContactInfo,    postAddress,    visitingAddress,    socialLinks,    seo{      title,      description,      keywords,      image{        ...,        "url": asset->url      }    },    "handlingsprogram": handlingsprogram {      ...,      "url": asset->url,      "originalFilename": asset->originalFilename    }  }
 export type GlobalSettingsQueryResult = {
   companyName: string | null;
   logo: {
@@ -1312,8 +1449,71 @@ export type GlobalSettingsQueryResult = {
     crop?: SanityImageCrop;
     _type: "image";
   } | null;
-  bliMedlemUrl: null;
-  mainNavigation: null;
+  bliMedlemUrl: string | null;
+  mainNavigation: Array<{
+    title: string | null;
+    linkType: "external" | "internal" | "static" | null;
+    staticRoute: "/" | "/evenemang" | "/kontakt" | "/nyheter" | "/omrade" | "/politik" | "/politik/kategori" | "/politik/sakfragor" | "/politiker" | null;
+    internalLink: {
+      _type: "event";
+      slug: string | null;
+      title: string | null;
+      name: null;
+    } | {
+      _type: "news";
+      slug: string | null;
+      title: string | null;
+      name: null;
+    } | {
+      _type: "page";
+      slug: string | null;
+      title: string | null;
+      name: null;
+    } | {
+      _type: "politicalIssue";
+      slug: string | null;
+      title: null;
+      name: null;
+    } | {
+      _type: "politician";
+      slug: string | null;
+      title: null;
+      name: string | null;
+    } | null;
+    url: string | null;
+    children: Array<{
+      title: string | null;
+      linkType: "external" | "internal" | "static" | null;
+      staticRoute: "/" | "/evenemang" | "/kontakt" | "/nyheter" | "/omrade" | "/politik" | "/politik/kategori" | "/politik/sakfragor" | "/politiker" | null;
+      internalLink: {
+        _type: "event";
+        slug: string | null;
+        title: string | null;
+        name: null;
+      } | {
+        _type: "news";
+        slug: string | null;
+        title: string | null;
+        name: null;
+      } | {
+        _type: "page";
+        slug: string | null;
+        title: string | null;
+        name: null;
+      } | {
+        _type: "politicalIssue";
+        slug: string | null;
+        title: null;
+        name: null;
+      } | {
+        _type: "politician";
+        slug: string | null;
+        title: null;
+        name: string | null;
+      } | null;
+      url: string | null;
+    }> | null;
+  }> | null;
   contactInfo: {
     phone?: string;
     email?: string;
@@ -1380,22 +1580,407 @@ export type NavigationQueryResult = {
   _id: "navigationHeader";
   title: string | null;
   customMenuItems: null;
-} | null;
-// Variable: footerQuery
-// Query: *[_id == "navigationFooter"][0] {  _id,  columns[] {    title,    items[] {      title,      linkType,      staticRoute,      "internalLink": internalLink-> {        ...,        _type,        "slug": slug.current,        title,        name      },      url    }  },  footerText,  legalText}
-export type FooterQueryResult = {
-  _id: "navigationFooter";
-  columns: null;
-  footerText: null;
-  legalText: null;
 } | {
-  _id: "navigationFooter";
-  columns: Array<{
+  _id: "navigationHeader";
+  title: string | null;
+  customMenuItems: Array<{
     title: string | null;
-    items: Array<{
+    linkType: "external" | "internal" | "static" | null;
+    staticRoute: "/" | "/evenemang" | "/kontakt" | "/nyheter" | "/omrade" | "/politik" | "/politik/kategori" | "/politik/sakfragor" | "/politiker" | null;
+    internalLink: {
+      _id: string;
+      _type: "event";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
       title: string | null;
-      linkType: "external" | "internal" | "static" | null;
-      staticRoute: "/" | "/event" | "/kontakt" | "/nyheter" | "/politik" | "/politiker" | null;
+      slug: string | null;
+      description?: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      } | {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+        _key: string;
+      }>;
+      image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      startDate?: string;
+      endDate?: string;
+      location?: {
+        venue?: string;
+        address?: string;
+        city?: string;
+      };
+      eventType?: "campaign" | "conference" | "meeting" | "other";
+      registrationUrl?: string;
+      isPublic?: boolean;
+      geographicalArea?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "geographicalArea";
+      };
+      politicalAreas?: Array<{
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        _key: string;
+        [internalGroqTypeReferenceTo]?: "politicalArea";
+      }>;
+      name: null;
+    } | {
+      _id: string;
+      _type: "news";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      title: string | null;
+      slug: string | null;
+      variant?: "debate" | "default" | "pressrelease";
+      excerpt?: string;
+      body?: Array<{
+        _key: string;
+      } & RichTextHighlightedLink | {
+        _key: string;
+      } & RichTextQuote | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      } | {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+        _key: string;
+      }>;
+      mainImage?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        aspectRatio?: "auto" | "landscape" | "portrait" | "square";
+        _type: "image";
+      };
+      documents?: Array<{
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+        };
+        media?: unknown;
+        _type: "file";
+        _key: string;
+      }>;
+      instagramUrl?: string;
+      facebookUrl?: string;
+      referencedPolitician?: Array<{
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        _key: string;
+        [internalGroqTypeReferenceTo]?: "politician";
+      }>;
+      politicalAreas?: Array<{
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        _key: string;
+        [internalGroqTypeReferenceTo]?: "politicalArea";
+      }>;
+      geographicalAreas?: Array<{
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        _key: string;
+        [internalGroqTypeReferenceTo]?: "geographicalArea";
+      }>;
+      politicalIssues?: Array<{
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        _key: string;
+        [internalGroqTypeReferenceTo]?: "politicalIssue";
+      }>;
+      articleSeries?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "articleSeries";
+      };
+      dateOverride?: string;
+      name: null;
+    } | {
+      _id: string;
+      _type: "page";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      title: string | null;
+      slug: string | null;
+      blocks?: Array<{
+        _key: string;
+      } & BlockAccordion | {
+        _key: string;
+      } & BlockContact | {
+        _key: string;
+      } & BlockCta | {
+        _key: string;
+      } & BlockGeographicalAreas | {
+        _key: string;
+      } & BlockImage | {
+        _key: string;
+      } & BlockImageGallery | {
+        _key: string;
+      } & BlockNews | {
+        _key: string;
+      } & BlockPoliticalAreas | {
+        _key: string;
+      } & BlockPolitician | {
+        _key: string;
+      } & BlockQuote | {
+        _key: string;
+      } & BlockStats | {
+        _key: string;
+      } & BlockText | {
+        _key: string;
+      } & BlockTwoColumn | {
+        _key: string;
+      } & BlockVideo>;
+      pageHeader?: PageHeader;
+      pageModal?: PageModal;
+      seo?: Seo;
+      name: null;
+    } | {
+      _id: string;
+      _type: "politicalIssue";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      question?: string;
+      description?: string;
+      slug: string | null;
+      content?: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      } | {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+        _key: string;
+      }>;
+      featured?: boolean;
+      fulfilled?: boolean;
+      fulfilledAt?: string;
+      politicalAreas?: Array<{
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        _key: string;
+        [internalGroqTypeReferenceTo]?: "politicalArea";
+      }>;
+      geographicalAreas?: Array<{
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        _key: string;
+        [internalGroqTypeReferenceTo]?: "geographicalArea";
+      }>;
+      responsiblePoliticians?: Array<{
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        _key: string;
+        [internalGroqTypeReferenceTo]?: "politician";
+      }>;
+      title: null;
+      name: null;
+    } | {
+      _id: string;
+      _type: "politician";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      name: string | null;
+      slug: string | null;
+      image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      email?: string;
+      phone?: string;
+      bio?: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }>;
+      kommunalrad?: {
+        active?: boolean;
+        role?: "ordinary" | "president";
+      };
+      partyBoard?: {
+        active?: boolean;
+        title?: string;
+        isLeader?: boolean;
+      };
+      kommunfullmaktige?: {
+        active?: boolean;
+        title?: string;
+        role?: "ordinary" | "substitute";
+      };
+      namndPositions?: Array<{
+        namndRef?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "namnd";
+        };
+        title?: string;
+        isLeader?: boolean;
+        _type: "namndPosition";
+        _key: string;
+      }>;
+      livingArea?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "geographicalArea";
+      };
+      politicalAreas?: Array<{
+        politicalArea?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "politicalArea";
+        };
+        showOnPoliticalAreaPage?: boolean;
+        _type: "politicalAreaReference";
+        _key: string;
+      }>;
+      pressbilder?: Array<{
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        caption?: string;
+        _type: "image";
+        _key: string;
+      }>;
+      socialLinks?: SocialLinks;
+      title: null;
+    } | null;
+    url: string | null;
+    children: Array<{
+      _key: string;
+      _type: "menuItem";
+      title?: string;
+      linkType?: "external" | "internal" | "static";
       internalLink: {
         _id: string;
         _type: "event";
@@ -1420,6 +2005,18 @@ export type FooterQueryResult = {
           }>;
           level?: number;
           _type: "block";
+          _key: string;
+        } | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
           _key: string;
         }>;
         image?: {
@@ -1513,9 +2110,10 @@ export type FooterQueryResult = {
           hotspot?: SanityImageHotspot;
           crop?: SanityImageCrop;
           alt?: string;
+          aspectRatio?: "auto" | "landscape" | "portrait" | "square";
           _type: "image";
         };
-        document?: {
+        documents?: Array<{
           asset?: {
             _ref: string;
             _type: "reference";
@@ -1524,7 +2122,10 @@ export type FooterQueryResult = {
           };
           media?: unknown;
           _type: "file";
-        };
+          _key: string;
+        }>;
+        instagramUrl?: string;
+        facebookUrl?: string;
         referencedPolitician?: Array<{
           _ref: string;
           _type: "reference";
@@ -1545,6 +2146,13 @@ export type FooterQueryResult = {
           _weak?: boolean;
           _key: string;
           [internalGroqTypeReferenceTo]?: "geographicalArea";
+        }>;
+        politicalIssues?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          _key: string;
+          [internalGroqTypeReferenceTo]?: "politicalIssue";
         }>;
         articleSeries?: {
           _ref: string;
@@ -1602,8 +2210,41 @@ export type FooterQueryResult = {
         _updatedAt: string;
         _rev: string;
         question?: string;
+        description?: string;
+        slug: string | null;
+        content?: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        } | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+          _key: string;
+        }>;
         featured?: boolean;
         fulfilled?: boolean;
+        fulfilledAt?: string;
         politicalAreas?: Array<{
           _ref: string;
           _type: "reference";
@@ -1625,7 +2266,6 @@ export type FooterQueryResult = {
           _key: string;
           [internalGroqTypeReferenceTo]?: "politician";
         }>;
-        slug: null;
         title: null;
         name: null;
       } | {
@@ -1709,6 +2349,432 @@ export type FooterQueryResult = {
           };
           showOnPoliticalAreaPage?: boolean;
           _type: "politicalAreaReference";
+          _key: string;
+        }>;
+        pressbilder?: Array<{
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          caption?: string;
+          _type: "image";
+          _key: string;
+        }>;
+        socialLinks?: SocialLinks;
+        title: null;
+      } | null;
+      staticRoute: "/" | "/evenemang" | "/kontakt" | "/nyheter" | "/omrade" | "/politik" | "/politik/kategori" | "/politik/sakfragor" | "/politiker" | null;
+      url?: string;
+      children?: Array<{
+        _key: string;
+      } & MenuItem>;
+    }> | null;
+  }> | null;
+} | null;
+// Variable: footerQuery
+// Query: *[_id == "navigationFooter"][0] {  _id,  columns[] {    title,    items[] {      title,      linkType,      staticRoute,      "internalLink": internalLink-> {        ...,        _type,        "slug": slug.current,        title,        name      },      url    }  },  footerText,  legalText}
+export type FooterQueryResult = {
+  _id: "navigationFooter";
+  columns: null;
+  footerText: null;
+  legalText: null;
+} | {
+  _id: "navigationFooter";
+  columns: Array<{
+    title: string | null;
+    items: Array<{
+      title: string | null;
+      linkType: "external" | "internal" | "static" | null;
+      staticRoute: "/" | "/evenemang" | "/kontakt" | "/nyheter" | "/omrade" | "/politik" | "/politik/kategori" | "/politik/sakfragor" | "/politiker" | null;
+      internalLink: {
+        _id: string;
+        _type: "event";
+        _createdAt: string;
+        _updatedAt: string;
+        _rev: string;
+        title: string | null;
+        slug: string | null;
+        description?: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        } | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+          _key: string;
+        }>;
+        image?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        startDate?: string;
+        endDate?: string;
+        location?: {
+          venue?: string;
+          address?: string;
+          city?: string;
+        };
+        eventType?: "campaign" | "conference" | "meeting" | "other";
+        registrationUrl?: string;
+        isPublic?: boolean;
+        geographicalArea?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "geographicalArea";
+        };
+        politicalAreas?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          _key: string;
+          [internalGroqTypeReferenceTo]?: "politicalArea";
+        }>;
+        name: null;
+      } | {
+        _id: string;
+        _type: "news";
+        _createdAt: string;
+        _updatedAt: string;
+        _rev: string;
+        title: string | null;
+        slug: string | null;
+        variant?: "debate" | "default" | "pressrelease";
+        excerpt?: string;
+        body?: Array<{
+          _key: string;
+        } & RichTextHighlightedLink | {
+          _key: string;
+        } & RichTextQuote | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        } | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+          _key: string;
+        }>;
+        mainImage?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          aspectRatio?: "auto" | "landscape" | "portrait" | "square";
+          _type: "image";
+        };
+        documents?: Array<{
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+          };
+          media?: unknown;
+          _type: "file";
+          _key: string;
+        }>;
+        instagramUrl?: string;
+        facebookUrl?: string;
+        referencedPolitician?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          _key: string;
+          [internalGroqTypeReferenceTo]?: "politician";
+        }>;
+        politicalAreas?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          _key: string;
+          [internalGroqTypeReferenceTo]?: "politicalArea";
+        }>;
+        geographicalAreas?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          _key: string;
+          [internalGroqTypeReferenceTo]?: "geographicalArea";
+        }>;
+        politicalIssues?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          _key: string;
+          [internalGroqTypeReferenceTo]?: "politicalIssue";
+        }>;
+        articleSeries?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "articleSeries";
+        };
+        dateOverride?: string;
+        name: null;
+      } | {
+        _id: string;
+        _type: "page";
+        _createdAt: string;
+        _updatedAt: string;
+        _rev: string;
+        title: string | null;
+        slug: string | null;
+        blocks?: Array<{
+          _key: string;
+        } & BlockAccordion | {
+          _key: string;
+        } & BlockContact | {
+          _key: string;
+        } & BlockCta | {
+          _key: string;
+        } & BlockGeographicalAreas | {
+          _key: string;
+        } & BlockImage | {
+          _key: string;
+        } & BlockImageGallery | {
+          _key: string;
+        } & BlockNews | {
+          _key: string;
+        } & BlockPoliticalAreas | {
+          _key: string;
+        } & BlockPolitician | {
+          _key: string;
+        } & BlockQuote | {
+          _key: string;
+        } & BlockStats | {
+          _key: string;
+        } & BlockText | {
+          _key: string;
+        } & BlockTwoColumn | {
+          _key: string;
+        } & BlockVideo>;
+        pageHeader?: PageHeader;
+        pageModal?: PageModal;
+        seo?: Seo;
+        name: null;
+      } | {
+        _id: string;
+        _type: "politicalIssue";
+        _createdAt: string;
+        _updatedAt: string;
+        _rev: string;
+        question?: string;
+        description?: string;
+        slug: string | null;
+        content?: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        } | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+          _key: string;
+        }>;
+        featured?: boolean;
+        fulfilled?: boolean;
+        fulfilledAt?: string;
+        politicalAreas?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          _key: string;
+          [internalGroqTypeReferenceTo]?: "politicalArea";
+        }>;
+        geographicalAreas?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          _key: string;
+          [internalGroqTypeReferenceTo]?: "geographicalArea";
+        }>;
+        responsiblePoliticians?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          _key: string;
+          [internalGroqTypeReferenceTo]?: "politician";
+        }>;
+        title: null;
+        name: null;
+      } | {
+        _id: string;
+        _type: "politician";
+        _createdAt: string;
+        _updatedAt: string;
+        _rev: string;
+        name: string | null;
+        slug: string | null;
+        image?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        email?: string;
+        phone?: string;
+        bio?: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }>;
+        kommunalrad?: {
+          active?: boolean;
+          role?: "ordinary" | "president";
+        };
+        partyBoard?: {
+          active?: boolean;
+          title?: string;
+          isLeader?: boolean;
+        };
+        kommunfullmaktige?: {
+          active?: boolean;
+          title?: string;
+          role?: "ordinary" | "substitute";
+        };
+        namndPositions?: Array<{
+          namndRef?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "namnd";
+          };
+          title?: string;
+          isLeader?: boolean;
+          _type: "namndPosition";
+          _key: string;
+        }>;
+        livingArea?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "geographicalArea";
+        };
+        politicalAreas?: Array<{
+          politicalArea?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "politicalArea";
+          };
+          showOnPoliticalAreaPage?: boolean;
+          _type: "politicalAreaReference";
+          _key: string;
+        }>;
+        pressbilder?: Array<{
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          caption?: string;
+          _type: "image";
           _key: string;
         }>;
         socialLinks?: SocialLinks;
@@ -1813,9 +2879,10 @@ export type NewsQueryResult = {
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     alt?: string;
+    aspectRatio?: "auto" | "landscape" | "portrait" | "square";
     _type: "image";
   };
-  document?: {
+  documents: Array<{
     asset?: {
       _ref: string;
       _type: "reference";
@@ -1824,7 +2891,12 @@ export type NewsQueryResult = {
     };
     media?: unknown;
     _type: "file";
-  };
+    _key: string;
+    url: string | null;
+    originalFilename: string | null;
+  }> | Array<never>;
+  instagramUrl?: string;
+  facebookUrl?: string;
   referencedPolitician?: Array<{
     _ref: string;
     _type: "reference";
@@ -1857,6 +2929,11 @@ export type NewsQueryResult = {
       _type: "image";
     } | null;
   }> | null;
+  politicalIssues: Array<{
+    _id: string;
+    question: string | null;
+    slug: Slug | null;
+  }> | null;
   articleSeries?: {
     _ref: string;
     _type: "reference";
@@ -1865,18 +2942,6 @@ export type NewsQueryResult = {
   };
   dateOverride?: string;
   effectiveDate: string;
-  documents: Array<never> | Array<{
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
-    };
-    media?: unknown;
-    _type: "file";
-    url: string | null;
-    originalFilename: string | null;
-  }>;
   referencedPoliticians: Array<{
     _id: string;
     name: string | null;
@@ -1894,7 +2959,6 @@ export type NewsQueryResult = {
       _type: "image";
     } | null;
   }> | null;
-  politicalIssues: null;
   series: {
     _id: string;
     title: string | null;
@@ -1917,6 +2981,7 @@ export type NewsQueryResult = {
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
       alt?: string;
+      aspectRatio?: "auto" | "landscape" | "portrait" | "square";
       _type: "image";
     } | null;
     effectiveDate: string;
@@ -1937,6 +3002,7 @@ export type NewsQueryResult = {
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
       alt?: string;
+      aspectRatio?: "auto" | "landscape" | "portrait" | "square";
       _type: "image";
     } | null;
     effectiveDate: string;
@@ -1960,6 +3026,7 @@ export type NewsListQueryResult = Array<{
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     alt?: string;
+    aspectRatio?: "auto" | "landscape" | "portrait" | "square";
     _type: "image";
   } | null;
   _createdAt: string;
@@ -1996,6 +3063,7 @@ export type NewsListPaginatedQueryResult = {
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
       alt?: string;
+      aspectRatio?: "auto" | "landscape" | "portrait" | "square";
       _type: "image";
     } | null;
     variant: "debate" | "default" | "pressrelease" | null;
@@ -2034,7 +3102,7 @@ export type AllPoliticalAreasQueryResult = Array<{
 
 // Source: ./src/lib/queries/pages.ts
 // Variable: pageBySlugQuery
-// Query: *[_type == "page" && slug.current == $slug][0] {  _id,  title,  slug,  pageHeader{    header,    description,    image{      ...,      "url": asset->url    },    imageHeight,    overlayOpacity,    ctaButton{      label,      href    }  },  seo{    title,    description,    keywords,    image{      ...,      "url": asset->url    }  },  pageModal{    enabled,    onLoadDelayMs,    frequency,    storageKey,    title,    content,    primaryButton{      label,      href    },    secondaryButton{      label,      href    }  },  blocks[] {    ...,    // POLITICAN START    _type == "block.politician" => {      mode,      "items": select(        mode == "kommunalrad" =>          *[_type == "politician" && kommunalrad.active == true] | order(name asc){            _id,            name,            slug,            image,            kommunalrad          },        items[] {          "politician": politician->{            _id,            name,            slug,            image,            kommunalrad          },          titleOverride        }      )    },    // POLITICIAN END    // NEWS START    _type == "block.news" => {    heading{ title, subtitle },    viewAllLink,    mode,    politicalArea,    geographicArea,    items[]->{      _id,      title,      excerpt,      publishedAt,      slug,      mainImage{        ...,        "url": asset->url      }    },    // Resolved items depending on mode (limit: 10)    "resolvedItems": select(      // MANUAL      mode == "manual" => (items[]->{        _id,        _publishedAt,        title,        excerpt,        publishedAt,        dateOverride,        _createdAt,        "effectiveDate": coalesce(dateOverride, _createdAt),        slug,        mainImage{          ...,          "url": asset->url        }      })[0...10],      // LATEST      mode == "latest" => *[_type == "news"]         | order(coalesce(dateOverride, publishedAt) desc)        [0...10]{          _id,          _createdAt,          title,          excerpt,          publishedAt,          slug,          dateOverride,          "effectiveDate": coalesce(dateOverride, _createdAt),          mainImage{            ...,            "url": asset->url          }        },      // BY POLITICAL AREA      mode == "byPoliticalArea" && defined(politicalArea) => *[_type == "news" && references(^.politicalArea._ref)]        | order(coalesce(dateOverride, publishedAt) desc)        [0...10]{          _id,          _createdAt,          title,          excerpt,          publishedAt,          slug,          dateOverride,          "effectiveDate": coalesce(dateOverride, _createdAt),          mainImage{            ...,            "url": asset->url          }        },      // BY GEOGRAPHIC AREA      mode == "byGeographicArea" && defined(geographicArea) => *[_type == "news" && references(^.geographicArea._ref)]        | order(coalesce(dateOverride, publishedAt) desc)        [0...10]{          _id,          _createdAt,          title,          excerpt,          publishedAt,          slug,          dateOverride,          "effectiveDate": coalesce(dateOverride, _createdAt),          mainImage{            ...,            "url": asset->url          }        },      // DEFAULT → empty array       *[_type == "news"]         | order(coalesce(dateOverride, publishedAt) desc)        [0...10]{          _id,          _createdAt,          title,          excerpt,          publishedAt,          slug,          dateOverride,          "effectiveDate": coalesce(dateOverride, _createdAt),          mainImage        },    )  },    // IMAGE GALLERY START    _type == "block.imageGallery" => {      heading{ title, subtitle },      columns,      aspectRatio,      images[]{        _key,        asset,        alt,        caption,        aspectRatio      }    },    // IMAGE GALLERY END    // POLITICAL AREAS START    _type == "block.politicalAreas" => {      heading{ title, subtitle },      "items": items[]->{        _id,        name,        slug,        icon{ name }      }    },    // POLITICAL AREAS END    // GEOGRAPHICAL AREAS START    _type == "block.geographicalAreas" => {      heading{ title, subtitle },      "items": items[]->{        _id,        name,        slug,        image      }    },    // GEOGRAPHICAL AREAS END  }}
+// Query: *[_type == "page" && slug.current == $slug][0] {  _id,  title,  slug,  pageHeader{    header,    description,    image{      ...,      "url": asset->url    },    imageHeight,    overlayOpacity,    ctaButton{      label,      href    }  },  seo{    title,    description,    keywords,    image{      ...,      "url": asset->url    }  },  pageModal{    enabled,    onLoadDelayMs,    frequency,    storageKey,    title,    content,    primaryButton{      label,      href    },    secondaryButton{      label,      href    }  },  blocks[] {    ...,    // POLITICAN START    _type == "block.politician" => {      mode,      "items": select(        mode == "kommunalrad" =>          *[_type == "politician" && kommunalrad.active == true] | order(name asc){            _id,            name,            slug,            image,            kommunalrad          },        items[] {          "politician": politician->{            _id,            name,            slug,            image,            kommunalrad          },          titleOverride        }      )    },    // POLITICIAN END    // NEWS START    _type == "block.news" => {    heading{ title, subtitle },    viewAllLink,    mode,    politicalArea,    geographicArea,    items[]->{      _id,      title,      excerpt,      publishedAt,      slug,      mainImage{        ...,        "url": asset->url      }    },    // Resolved items depending on mode (limit: 10)    "resolvedItems": select(      // MANUAL      mode == "manual" => (items[]->{        _id,        _publishedAt,        title,        excerpt,        publishedAt,        dateOverride,        _createdAt,        "effectiveDate": coalesce(dateOverride, _createdAt),        slug,        mainImage{          ...,          "url": asset->url        }      })[0...10],      // LATEST      mode == "latest" => *[_type == "news"]         | order(coalesce(dateOverride, publishedAt) desc)        [0...10]{          _id,          _createdAt,          title,          excerpt,          publishedAt,          slug,          dateOverride,          "effectiveDate": coalesce(dateOverride, _createdAt),          mainImage{            ...,            "url": asset->url          }        },      // BY POLITICAL AREA      mode == "byPoliticalArea" && defined(politicalArea) => *[_type == "news" && references(^.politicalArea._ref)]        | order(coalesce(dateOverride, publishedAt) desc)        [0...10]{          _id,          _createdAt,          title,          excerpt,          publishedAt,          slug,          dateOverride,          "effectiveDate": coalesce(dateOverride, _createdAt),          mainImage{            ...,            "url": asset->url          }        },      // BY GEOGRAPHIC AREA      mode == "byGeographicArea" && defined(geographicArea) => *[_type == "news" && references(^.geographicArea._ref)]        | order(coalesce(dateOverride, publishedAt) desc)        [0...10]{          _id,          _createdAt,          title,          excerpt,          publishedAt,          slug,          dateOverride,          "effectiveDate": coalesce(dateOverride, _createdAt),          mainImage{            ...,            "url": asset->url          }        },      // DEFAULT → empty array       *[_type == "news"]         | order(coalesce(dateOverride, publishedAt) desc)        [0...10]{          _id,          _createdAt,          title,          excerpt,          publishedAt,          slug,          dateOverride,          "effectiveDate": coalesce(dateOverride, _createdAt),          mainImage        },    )  },    // IMAGE GALLERY START    _type == "block.imageGallery" => {      heading{ title, subtitle },      columns,      aspectRatio,      images[]{        _key,        asset,        alt,        caption,        aspectRatio      }    },    // IMAGE GALLERY END    // POLITICAL AREAS START    _type == "block.politicalAreas" => {      heading{ title, subtitle },      "items": items[]->{        _id,        name,        slug,        icon{ name }      }    },    // POLITICAL AREAS END    // GEOGRAPHICAL AREAS START    _type == "block.geographicalAreas" => {      heading{ title, subtitle },      "items": items[]->{        _id,        name,        slug,        image      }    },    // GEOGRAPHICAL AREAS END    // POLITICAL ISSUES START    _type == "block.politicalIssues" => {      heading{ title, subtitle },      mode,      politicalArea,      filter,      limit,      "items": items[]->{        _id,        question,        description,        slug,        featured,        fulfilled,        "politicalAreas": politicalAreas[]->{          _id,          name,          slug,          icon{ name }        },        "geographicalAreas": geographicalAreas[]->{          _id,          name,          slug        }      }    },    // POLITICAL ISSUES END  }}
 export type PageBySlugQueryResult = {
   _id: string;
   title: string | null;
@@ -2116,8 +3184,7 @@ export type PageBySlugQueryResult = {
   blocks: Array<{
     _key: string;
     _type: "block.accordion";
-    heading?: string;
-    description?: string;
+    heading?: BlockHeading;
     items?: Array<{
       title?: string;
       content?: Array<{
@@ -2144,28 +3211,23 @@ export type PageBySlugQueryResult = {
   } | {
     _key: string;
     _type: "block.contact";
-    heading?: string;
-    description?: string;
+    heading?: BlockHeading;
     showContactInfo?: boolean;
   } | {
     _key: string;
     _type: "block.cta";
-    heading?: string;
-    description?: string;
-    primaryButton?: {
-      label?: string;
-      link?: string;
-    };
-    secondaryButton?: {
-      label?: string;
-      link?: string;
-    };
+    layout?: "contained" | "fullWidth";
+    heading?: BlockHeading;
+    primaryAction?: ButtonWithIcon;
+    secondaryAction?: ButtonWithIcon;
     alignment?: "center" | "left" | "right";
   } | {
     _key: string;
     _type: "block.geographicalAreas";
-    heading: null;
-    description?: string;
+    heading: {
+      title: string | null;
+      subtitle: string | null;
+    } | null;
     items: Array<{
       _id: string;
       name: string | null;
@@ -2186,7 +3248,7 @@ export type PageBySlugQueryResult = {
   } | {
     _key: string;
     _type: "block.image";
-    heading?: string;
+    heading?: BlockHeading;
     image?: {
       asset?: {
         _ref: string;
@@ -2205,7 +3267,10 @@ export type PageBySlugQueryResult = {
   } | {
     _key: string;
     _type: "block.imageGallery";
-    heading: null;
+    heading: {
+      title: string | null;
+      subtitle: string | null;
+    } | null;
     images: Array<{
       _key: string;
       asset: {
@@ -2216,14 +3281,17 @@ export type PageBySlugQueryResult = {
       } | null;
       alt: string | null;
       caption: string | null;
-      aspectRatio: null;
+      aspectRatio: "auto" | "default" | "landscape" | "portrait" | "square" | null;
     }> | null;
     columns: 2 | 3 | 4 | null;
     aspectRatio: "auto" | "landscape" | "portrait" | "square" | null;
   } | {
     _key: string;
     _type: "block.news";
-    heading: null;
+    heading: {
+      title: string | null;
+      subtitle: string | null;
+    } | null;
     mode: "area" | "latest" | "manual" | "politics" | null;
     politicalArea: {
       _ref: string;
@@ -2237,6 +3305,7 @@ export type PageBySlugQueryResult = {
       _weak?: boolean;
       [internalGroqTypeReferenceTo]?: "geographicalArea";
     } | null;
+    viewAllLink: string | null;
     items: Array<{
       _id: string;
       title: string | null;
@@ -2254,12 +3323,11 @@ export type PageBySlugQueryResult = {
         hotspot?: SanityImageHotspot;
         crop?: SanityImageCrop;
         alt?: string;
+        aspectRatio?: "auto" | "landscape" | "portrait" | "square";
         _type: "image";
         url: string | null;
       } | null;
     }> | null;
-    limit?: number;
-    viewAllLink: null;
     resolvedItems: Array<{
       _id: string;
       _publishedAt: null;
@@ -2281,6 +3349,7 @@ export type PageBySlugQueryResult = {
         hotspot?: SanityImageHotspot;
         crop?: SanityImageCrop;
         alt?: string;
+        aspectRatio?: "auto" | "landscape" | "portrait" | "square";
         _type: "image";
         url: string | null;
       } | null;
@@ -2304,6 +3373,7 @@ export type PageBySlugQueryResult = {
         hotspot?: SanityImageHotspot;
         crop?: SanityImageCrop;
         alt?: string;
+        aspectRatio?: "auto" | "landscape" | "portrait" | "square";
         _type: "image";
         url: string | null;
       } | null;
@@ -2327,14 +3397,17 @@ export type PageBySlugQueryResult = {
         hotspot?: SanityImageHotspot;
         crop?: SanityImageCrop;
         alt?: string;
+        aspectRatio?: "auto" | "landscape" | "portrait" | "square";
         _type: "image";
       } | null;
     }> | null;
   } | {
     _key: string;
     _type: "block.politicalAreas";
-    heading: null;
-    description?: string;
+    heading: {
+      title: string | null;
+      subtitle: string | null;
+    } | null;
     items: Array<{
       _id: string;
       name: string | null;
@@ -2346,7 +3419,7 @@ export type PageBySlugQueryResult = {
   } | {
     _key: string;
     _type: "block.politician";
-    heading?: string;
+    heading?: BlockHeading;
     mode: "kommunalrad" | "manual" | null;
     items: Array<{
       _id: string;
@@ -2395,7 +3468,7 @@ export type PageBySlugQueryResult = {
   } | {
     _key: string;
     _type: "block.quote";
-    heading?: string;
+    heading?: BlockHeading;
     quote?: string;
     author?: string;
     authorTitle?: string;
@@ -2415,8 +3488,7 @@ export type PageBySlugQueryResult = {
   } | {
     _key: string;
     _type: "block.stats";
-    heading?: string;
-    description?: string;
+    heading?: BlockHeading;
     stats?: Array<{
       value?: string;
       label?: string;
@@ -2426,7 +3498,7 @@ export type PageBySlugQueryResult = {
   } | {
     _key: string;
     _type: "block.text";
-    heading?: string;
+    heading?: BlockHeading;
     content?: Array<{
       children?: Array<{
         marks?: Array<string>;
@@ -2449,7 +3521,7 @@ export type PageBySlugQueryResult = {
   } | {
     _key: string;
     _type: "block.twoColumn";
-    heading?: string;
+    heading?: BlockHeading;
     image?: {
       asset?: {
         _ref: string;
@@ -2462,6 +3534,7 @@ export type PageBySlugQueryResult = {
       crop?: SanityImageCrop;
       _type: "image";
     };
+    innerTitle?: string;
     content?: Array<{
       children?: Array<{
         marks?: Array<string>;
@@ -2482,10 +3555,11 @@ export type PageBySlugQueryResult = {
     }>;
     imagePosition?: "left" | "right";
     verticalAlignment?: "bottom" | "center" | "top";
+    textAlignment?: "center" | "left" | "right";
   } | {
     _key: string;
     _type: "block.video";
-    heading?: string;
+    heading?: BlockHeading;
     video?: string;
     caption?: string;
   }> | null;
@@ -2499,7 +3573,7 @@ export type AllPageSlugsQueryResult = Array<{
 // Query: *[_type == "listingPage" && key == $key][0]{  _id,  key,  title,  intro,  seo{    title,    description,    image{      ...,      "url": asset->url    }  }}
 export type ListingPageByKeyQueryResult = {
   _id: string;
-  key: "contact" | "events" | "news" | "politicians" | "politics" | null;
+  key: "contact" | "events" | "news" | "politicians" | "politics" | "politikKategori" | "politikOmrade" | "politikSakfragor" | null;
   title: string | null;
   intro: string | null;
   seo: {
@@ -2605,7 +3679,21 @@ export type PoliticianBySlugQueryResult = {
     } | null;
   }> | null;
   socialLinks: SocialLinks | null;
-  pressbilder: null;
+  pressbilder: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    caption?: string;
+    _type: "image";
+    _key: string;
+  }> | null;
   referencedInNews: Array<{
     _id: string;
     title: string | null;
@@ -2624,8 +3712,8 @@ export type PolitikPageQueryResult = {
   featuredPoliticalIssues: Array<{
     _id: string;
     question: string | null;
-    description: null;
-    slug: null;
+    description: string | null;
+    slug: Slug | null;
     featured: true;
     fulfilled: boolean | null;
     politicalAreas: Array<{
@@ -2645,8 +3733,8 @@ export type PolitikPageQueryResult = {
   fulfilledPoliticalIssues: Array<{
     _id: string;
     question: string | null;
-    description: null;
-    slug: null;
+    description: string | null;
+    slug: Slug | null;
     featured: boolean | null;
     fulfilled: true;
     politicalAreas: Array<{
@@ -2684,6 +3772,18 @@ export type PolitikPageQueryResult = {
       level?: number;
       _type: "block";
       _key: string;
+    } | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+      _key: string;
     }> | null;
     image: {
       asset?: {
@@ -2722,6 +3822,18 @@ export type PolitikPageQueryResult = {
       level?: number;
       _type: "block";
       _key: string;
+    } | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+      _key: string;
     }> | null;
     image: {
       asset?: {
@@ -2742,8 +3854,8 @@ export type PolitikPageQueryResult = {
 export type AllPoliticalIssuesQueryResult = Array<{
   _id: string;
   question: string | null;
-  description: null;
-  slug: null;
+  description: string | null;
+  slug: Slug | null;
   featured: boolean | null;
   fulfilled: boolean | null;
   politicalAreas: Array<{
@@ -2772,18 +3884,49 @@ export type AllGeographicalAreaSlugsQueryResult = Array<{
 }>;
 // Variable: allPoliticalIssueSlugsQuery
 // Query: *[_type == "politicalIssue" && defined(slug.current)] {  "slug": slug.current}
-export type AllPoliticalIssueSlugsQueryResult = Array<never>;
+export type AllPoliticalIssueSlugsQueryResult = Array<{
+  slug: string | null;
+}>;
 // Variable: politicalIssuePageQuery
 // Query: *[_type == "politicalIssue" && slug.current == $slug][0] {    _id,    _type,    question,    slug,    content,    featured,    fulfilled,    fulfilledAt,    "politicalAreas": politicalAreas[]->{      _id,      name,      slug,      icon{ name }    },    "geographicalAreas": geographicalAreas[]->{      _id,      name,      slug,      image    },    "responsiblePoliticians": responsiblePoliticians[]->{      _id,      name,      slug,      image    },    "latestNews": *[      _type == "news" &&      references(^._id)    ] | order(      coalesce(dateOverride, _createdAt) desc    )[0...4] {      _id,      title,      slug,      excerpt,      mainImage,      dateOverride,      _createdAt    }  }
 export type PoliticalIssuePageQueryResult = {
   _id: string;
   _type: "politicalIssue";
   question: string | null;
-  slug: null;
-  content: null;
+  slug: Slug | null;
+  content: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
+  }> | null;
   featured: boolean | null;
   fulfilled: boolean | null;
-  fulfilledAt: null;
+  fulfilledAt: string | null;
   politicalAreas: Array<{
     _id: string;
     name: string | null;
@@ -2842,6 +3985,7 @@ export type PoliticalIssuePageQueryResult = {
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
       alt?: string;
+      aspectRatio?: "auto" | "landscape" | "portrait" | "square";
       _type: "image";
     } | null;
     dateOverride: string | null;
@@ -2871,6 +4015,18 @@ export type PoliticalAreaPageQueryResult = {
     }>;
     level?: number;
     _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
     _key: string;
   }> | null;
   image: {
@@ -2904,6 +4060,7 @@ export type PoliticalAreaPageQueryResult = {
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
       alt?: string;
+      aspectRatio?: "auto" | "landscape" | "portrait" | "square";
       _type: "image";
     } | null;
     dateOverride: string | null;
@@ -2912,7 +4069,7 @@ export type PoliticalAreaPageQueryResult = {
   politicalIssues: Array<{
     _id: string;
     question: string | null;
-    slug: null;
+    slug: Slug | null;
     featured: boolean | null;
   }>;
   politicians: Array<{
@@ -2957,6 +4114,18 @@ export type GeographicalAreaPageQueryResult = {
     level?: number;
     _type: "block";
     _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
   }> | null;
   image: {
     asset?: {
@@ -2986,6 +4155,7 @@ export type GeographicalAreaPageQueryResult = {
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
       alt?: string;
+      aspectRatio?: "auto" | "landscape" | "portrait" | "square";
       _type: "image";
     } | null;
     dateOverride: string | null;
@@ -2994,7 +4164,7 @@ export type GeographicalAreaPageQueryResult = {
   politicalIssues: Array<{
     _id: string;
     question: string | null;
-    slug: null;
+    slug: Slug | null;
     featured: boolean | null;
     fulfilled: boolean | null;
   }>;
@@ -3070,6 +4240,18 @@ export type SearchQueryResult = {
       level?: number;
       _type: "block";
       _key: string;
+    } | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+      _key: string;
     }> | null;
     image: {
       asset?: {
@@ -3102,6 +4284,7 @@ export type SearchQueryResult = {
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
       alt?: string;
+      aspectRatio?: "auto" | "landscape" | "portrait" | "square";
       _type: "image";
     } | null;
     searchText: string | " ";
@@ -3127,6 +4310,18 @@ export type SearchQueryResult = {
       }>;
       level?: number;
       _type: "block";
+      _key: string;
+    } | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
       _key: string;
     }> | null;
     icon: {
@@ -3156,6 +4351,18 @@ export type SearchQueryResult = {
       level?: number;
       _type: "block";
       _key: string;
+    } | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+      _key: string;
     }> | null;
     image: {
       asset?: {
@@ -3184,7 +4391,7 @@ declare module "@sanity/client" {
     "{\n  \"items\": *[_type == \"event\" && startDate < now()]\n  | order(startDate desc)[$start...$end] {\n    _id,\n    title,\n    slug,\n    startDate,\n    endDate,\n    image,\n    location,\n    eventType,\n    isPublic\n  },\n  \"total\": count(*[_type == \"event\" && startDate < now()])\n}": PastEventsPaginatedQueryResult;
     "*[_type == \"event\" && defined(slug.current)] {\n  \"slug\": slug.current\n}": AllEventSlugsQueryResult;
     "\n  *[_type == \"event\" && slug.current == $slug][0] {\n    _id,\n    title,\n    slug,\n    startDate,\n    endDate,\n    description,\n    image,\n    location,\n    eventType,\n    registrationUrl,\n    isPublic\n  }\n": SingleEventQueryResult;
-    "\n  *[_type == \"globalSettings\"][0] {\n    companyName,\n    logo,\n    bliMedlemUrl,\n    mainNavigation,\n    contactInfo,\n    pressContactInfo,\n    postAddress,\n    visitingAddress,\n    socialLinks,\n    seo{\n      title,\n      description,\n      keywords,\n      image{\n        ...,\n        \"url\": asset->url\n      }\n    },\n    \"handlingsprogram\": handlingsprogram {\n      ...,\n      \"url\": asset->url,\n      \"originalFilename\": asset->originalFilename\n    }\n  }\n": GlobalSettingsQueryResult;
+    "\n  *[_type == \"globalSettings\"][0] {\n    companyName,\n    logo,\n    bliMedlemUrl,\n    mainNavigation[] {\n      title,\n      linkType,\n      staticRoute,\n      \"internalLink\": internalLink-> {\n        _type,\n        \"slug\": slug.current,\n        title,\n        name\n      },\n      url,\n      children[] {\n        title,\n        linkType,\n        staticRoute,\n        \"internalLink\": internalLink-> {\n          _type,\n          \"slug\": slug.current,\n          title,\n          name\n        },\n        url\n      }\n    },\n    contactInfo,\n    pressContactInfo,\n    postAddress,\n    visitingAddress,\n    socialLinks,\n    seo{\n      title,\n      description,\n      keywords,\n      image{\n        ...,\n        \"url\": asset->url\n      }\n    },\n    \"handlingsprogram\": handlingsprogram {\n      ...,\n      \"url\": asset->url,\n      \"originalFilename\": asset->originalFilename\n    }\n  }\n": GlobalSettingsQueryResult;
     "*[_id == \"navigationHeader\"][0] {\n  _id,\n  title,\n  customMenuItems[] {\n    title,\n    linkType,\n    staticRoute,\n    \"internalLink\": internalLink-> {\n      ...,\n      _type,\n      \"slug\": slug.current,\n      title,\n      name\n    },\n    url,\n    children[] {\n      ...,\n      staticRoute,\n      \"internalLink\": internalLink-> {\n        ...,\n        _type,\n        \"slug\": slug.current,\n        title,\n        name\n      }\n    }\n  }\n}": NavigationQueryResult;
     "*[_id == \"navigationFooter\"][0] {\n  _id,\n  columns[] {\n    title,\n    items[] {\n      title,\n      linkType,\n      staticRoute,\n      \"internalLink\": internalLink-> {\n        ...,\n        _type,\n        \"slug\": slug.current,\n        title,\n        name\n      },\n      url\n    }\n  },\n  footerText,\n  legalText\n}": FooterQueryResult;
     "*[_type == \"geographicalArea\"] | order(name asc) {\n  _id,\n  name,\n  \"slug\": slug.current\n}": NavigationGeographicalAreasQueryResult;
@@ -3194,7 +4401,7 @@ declare module "@sanity/client" {
     "*[_type == \"news\" && defined(slug.current)] {\n  \"slug\": slug.current\n}": AllNewsSlugsQueryResult;
     "{\n  \"items\": *[\n    _type == \"news\"\n    && ($areaSlug == null || $areaSlug == \"\" || $areaSlug in politicalAreas[]->slug.current)\n    && ($variant == null || variant == $variant)\n  ] | order(\n    coalesce(dateOverride, _createdAt) desc\n  )[$start...$end] {\n    _id,\n    title,\n    slug,\n    excerpt,\n    mainImage,\n    variant,\n    _createdAt,\n    _updatedAt,\n    dateOverride,\n    _rev,\n    \"effectiveDate\": coalesce(dateOverride, _createdAt),\n    \"politicalAreas\": politicalAreas[]-> {\n      _id,\n      name,\n      slug,\n      icon{ name }\n    },\n    \"series\": articleSeries->{\n      _id,\n      title,\n      slug\n    }\n  },\n  \"total\": count(*[\n    _type == \"news\"\n    && ($areaSlug == null || $areaSlug == \"\" || $areaSlug in politicalAreas[]->slug.current)\n    && ($variant == null || variant == $variant)\n  ])\n}": NewsListPaginatedQueryResult;
     "\n  *[_type == \"politicalArea\"] | order(name asc) {\n    _id,\n    name,\n    slug,\n    title,\n    icon{ name }\n  }\n": AllPoliticalAreasQueryResult;
-    "*[_type == \"page\" && slug.current == $slug][0] {\n  _id,\n  title,\n  slug,\n  pageHeader{\n    header,\n    description,\n    image{\n      ...,\n      \"url\": asset->url\n    },\n    imageHeight,\n    overlayOpacity,\n    ctaButton{\n      label,\n      href\n    }\n  },\n  seo{\n    title,\n    description,\n    keywords,\n    image{\n      ...,\n      \"url\": asset->url\n    }\n  },\n  pageModal{\n    enabled,\n    onLoadDelayMs,\n    frequency,\n    storageKey,\n    title,\n    content,\n    primaryButton{\n      label,\n      href\n    },\n    secondaryButton{\n      label,\n      href\n    }\n  },\n  blocks[] {\n    ...,\n    // POLITICAN START\n    _type == \"block.politician\" => {\n      mode,\n      \"items\": select(\n        mode == \"kommunalrad\" =>\n          *[_type == \"politician\" && kommunalrad.active == true] | order(name asc){\n            _id,\n            name,\n            slug,\n            image,\n            kommunalrad\n          },\n        items[] {\n          \"politician\": politician->{\n            _id,\n            name,\n            slug,\n            image,\n            kommunalrad\n          },\n          titleOverride\n        }\n      )\n    },\n    // POLITICIAN END\n    // NEWS START\n    _type == \"block.news\" => {\n    heading{ title, subtitle },\n    viewAllLink,\n    mode,\n    politicalArea,\n    geographicArea,\n    items[]->{\n      _id,\n      title,\n      excerpt,\n      publishedAt,\n      slug,\n      mainImage{\n        ...,\n        \"url\": asset->url\n      }\n    },\n\n    // Resolved items depending on mode (limit: 10)\n    \"resolvedItems\": select(\n      // MANUAL\n      mode == \"manual\" => (items[]->{\n        _id,\n        _publishedAt,\n        title,\n        excerpt,\n        publishedAt,\n        dateOverride,\n        _createdAt,\n        \"effectiveDate\": coalesce(dateOverride, _createdAt),\n        slug,\n        mainImage{\n          ...,\n          \"url\": asset->url\n        }\n      })[0...10],\n\n      // LATEST\n      mode == \"latest\" => *[_type == \"news\"] \n        | order(coalesce(dateOverride, publishedAt) desc)\n        [0...10]{\n          _id,\n          _createdAt,\n          title,\n          excerpt,\n          publishedAt,\n          slug,\n          dateOverride,\n          \"effectiveDate\": coalesce(dateOverride, _createdAt),\n          mainImage{\n            ...,\n            \"url\": asset->url\n          }\n        },\n\n      // BY POLITICAL AREA\n      mode == \"byPoliticalArea\" && defined(politicalArea) => *[_type == \"news\" && references(^.politicalArea._ref)]\n        | order(coalesce(dateOverride, publishedAt) desc)\n        [0...10]{\n          _id,\n          _createdAt,\n          title,\n          excerpt,\n          publishedAt,\n          slug,\n          dateOverride,\n          \"effectiveDate\": coalesce(dateOverride, _createdAt),\n          mainImage{\n            ...,\n            \"url\": asset->url\n          }\n        },\n\n      // BY GEOGRAPHIC AREA\n      mode == \"byGeographicArea\" && defined(geographicArea) => *[_type == \"news\" && references(^.geographicArea._ref)]\n        | order(coalesce(dateOverride, publishedAt) desc)\n        [0...10]{\n          _id,\n          _createdAt,\n          title,\n          excerpt,\n          publishedAt,\n          slug,\n          dateOverride,\n          \"effectiveDate\": coalesce(dateOverride, _createdAt),\n          mainImage{\n            ...,\n            \"url\": asset->url\n          }\n        },\n\n      // DEFAULT \u2192 empty array\n       *[_type == \"news\"] \n        | order(coalesce(dateOverride, publishedAt) desc)\n        [0...10]{\n          _id,\n          _createdAt,\n          title,\n          excerpt,\n          publishedAt,\n          slug,\n          dateOverride,\n          \"effectiveDate\": coalesce(dateOverride, _createdAt),\n          mainImage\n        },\n    )\n  },\n    // IMAGE GALLERY START\n    _type == \"block.imageGallery\" => {\n      heading{ title, subtitle },\n      columns,\n      aspectRatio,\n      images[]{\n        _key,\n        asset,\n        alt,\n        caption,\n        aspectRatio\n      }\n    },\n    // IMAGE GALLERY END\n    // POLITICAL AREAS START\n    _type == \"block.politicalAreas\" => {\n      heading{ title, subtitle },\n      \"items\": items[]->{\n        _id,\n        name,\n        slug,\n        icon{ name }\n      }\n    },\n    // POLITICAL AREAS END\n    // GEOGRAPHICAL AREAS START\n    _type == \"block.geographicalAreas\" => {\n      heading{ title, subtitle },\n      \"items\": items[]->{\n        _id,\n        name,\n        slug,\n        image\n      }\n    },\n    // GEOGRAPHICAL AREAS END\n  }\n}": PageBySlugQueryResult;
+    "*[_type == \"page\" && slug.current == $slug][0] {\n  _id,\n  title,\n  slug,\n  pageHeader{\n    header,\n    description,\n    image{\n      ...,\n      \"url\": asset->url\n    },\n    imageHeight,\n    overlayOpacity,\n    ctaButton{\n      label,\n      href\n    }\n  },\n  seo{\n    title,\n    description,\n    keywords,\n    image{\n      ...,\n      \"url\": asset->url\n    }\n  },\n  pageModal{\n    enabled,\n    onLoadDelayMs,\n    frequency,\n    storageKey,\n    title,\n    content,\n    primaryButton{\n      label,\n      href\n    },\n    secondaryButton{\n      label,\n      href\n    }\n  },\n  blocks[] {\n    ...,\n    // POLITICAN START\n    _type == \"block.politician\" => {\n      mode,\n      \"items\": select(\n        mode == \"kommunalrad\" =>\n          *[_type == \"politician\" && kommunalrad.active == true] | order(name asc){\n            _id,\n            name,\n            slug,\n            image,\n            kommunalrad\n          },\n        items[] {\n          \"politician\": politician->{\n            _id,\n            name,\n            slug,\n            image,\n            kommunalrad\n          },\n          titleOverride\n        }\n      )\n    },\n    // POLITICIAN END\n    // NEWS START\n    _type == \"block.news\" => {\n    heading{ title, subtitle },\n    viewAllLink,\n    mode,\n    politicalArea,\n    geographicArea,\n    items[]->{\n      _id,\n      title,\n      excerpt,\n      publishedAt,\n      slug,\n      mainImage{\n        ...,\n        \"url\": asset->url\n      }\n    },\n\n    // Resolved items depending on mode (limit: 10)\n    \"resolvedItems\": select(\n      // MANUAL\n      mode == \"manual\" => (items[]->{\n        _id,\n        _publishedAt,\n        title,\n        excerpt,\n        publishedAt,\n        dateOverride,\n        _createdAt,\n        \"effectiveDate\": coalesce(dateOverride, _createdAt),\n        slug,\n        mainImage{\n          ...,\n          \"url\": asset->url\n        }\n      })[0...10],\n\n      // LATEST\n      mode == \"latest\" => *[_type == \"news\"] \n        | order(coalesce(dateOverride, publishedAt) desc)\n        [0...10]{\n          _id,\n          _createdAt,\n          title,\n          excerpt,\n          publishedAt,\n          slug,\n          dateOverride,\n          \"effectiveDate\": coalesce(dateOverride, _createdAt),\n          mainImage{\n            ...,\n            \"url\": asset->url\n          }\n        },\n\n      // BY POLITICAL AREA\n      mode == \"byPoliticalArea\" && defined(politicalArea) => *[_type == \"news\" && references(^.politicalArea._ref)]\n        | order(coalesce(dateOverride, publishedAt) desc)\n        [0...10]{\n          _id,\n          _createdAt,\n          title,\n          excerpt,\n          publishedAt,\n          slug,\n          dateOverride,\n          \"effectiveDate\": coalesce(dateOverride, _createdAt),\n          mainImage{\n            ...,\n            \"url\": asset->url\n          }\n        },\n\n      // BY GEOGRAPHIC AREA\n      mode == \"byGeographicArea\" && defined(geographicArea) => *[_type == \"news\" && references(^.geographicArea._ref)]\n        | order(coalesce(dateOverride, publishedAt) desc)\n        [0...10]{\n          _id,\n          _createdAt,\n          title,\n          excerpt,\n          publishedAt,\n          slug,\n          dateOverride,\n          \"effectiveDate\": coalesce(dateOverride, _createdAt),\n          mainImage{\n            ...,\n            \"url\": asset->url\n          }\n        },\n\n      // DEFAULT \u2192 empty array\n       *[_type == \"news\"] \n        | order(coalesce(dateOverride, publishedAt) desc)\n        [0...10]{\n          _id,\n          _createdAt,\n          title,\n          excerpt,\n          publishedAt,\n          slug,\n          dateOverride,\n          \"effectiveDate\": coalesce(dateOverride, _createdAt),\n          mainImage\n        },\n    )\n  },\n    // IMAGE GALLERY START\n    _type == \"block.imageGallery\" => {\n      heading{ title, subtitle },\n      columns,\n      aspectRatio,\n      images[]{\n        _key,\n        asset,\n        alt,\n        caption,\n        aspectRatio\n      }\n    },\n    // IMAGE GALLERY END\n    // POLITICAL AREAS START\n    _type == \"block.politicalAreas\" => {\n      heading{ title, subtitle },\n      \"items\": items[]->{\n        _id,\n        name,\n        slug,\n        icon{ name }\n      }\n    },\n    // POLITICAL AREAS END\n    // GEOGRAPHICAL AREAS START\n    _type == \"block.geographicalAreas\" => {\n      heading{ title, subtitle },\n      \"items\": items[]->{\n        _id,\n        name,\n        slug,\n        image\n      }\n    },\n    // GEOGRAPHICAL AREAS END\n    // POLITICAL ISSUES START\n    _type == \"block.politicalIssues\" => {\n      heading{ title, subtitle },\n      mode,\n      politicalArea,\n      filter,\n      limit,\n      \"items\": items[]->{\n        _id,\n        question,\n        description,\n        slug,\n        featured,\n        fulfilled,\n        \"politicalAreas\": politicalAreas[]->{\n          _id,\n          name,\n          slug,\n          icon{ name }\n        },\n        \"geographicalAreas\": geographicalAreas[]->{\n          _id,\n          name,\n          slug\n        }\n      }\n    },\n    // POLITICAL ISSUES END\n  }\n}": PageBySlugQueryResult;
     "*[_type == \"page\" && defined(slug.current)] {\n  \"slug\": slug.current\n}": AllPageSlugsQueryResult;
     "*[_type == \"listingPage\" && key == $key][0]{\n  _id,\n  key,\n  title,\n  intro,\n  seo{\n    title,\n    description,\n    image{\n      ...,\n      \"url\": asset->url\n    }\n  }\n}": ListingPageByKeyQueryResult;
     "*[_type == \"politician\" && defined(slug.current)] {\n  \"slug\": slug.current\n}": AllPoliticianSlugsQueryResult;

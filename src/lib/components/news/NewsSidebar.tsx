@@ -14,7 +14,10 @@ interface NewsSidebarProps {
 }
 
 export function NewsSidebar({ news, currentSlug }: NewsSidebarProps) {
-  const documents = news.documents ?? [];
+  const documents = (news.documents ?? []) as Array<{
+    url?: string;
+    originalFilename?: string;
+  }>;
 
   return (
     <div className="grid gap-4">

@@ -5,14 +5,6 @@ import { BlockHeading, getBlockHeading } from "./BlockHeading";
 import { PoliticalIssueItem } from "../politics/PoliticalIssueItem";
 import { ResponsiveGrid } from "../shared/ResponsiveGrid";
 
-interface PoliticalIssuesBlockProps {
-  _type: "block.politicalIssues";
-  heading?: { title?: string | null; subtitle?: string | null };
-  politicalArea?: { _ref: string } | null;
-  filter?: "all" | "featured" | "fulfilled" | "unfulfilled";
-  limit?: number;
-}
-
 interface PoliticalIssueData {
   _id: string;
   question?: string | null;
@@ -26,6 +18,21 @@ interface PoliticalIssueData {
     slug?: { current?: string } | null;
     icon?: { name?: string | null } | null;
   }>;
+  geographicalAreas?: Array<{
+    _id?: string;
+    name?: string | null;
+    slug?: { current?: string } | null;
+  }>;
+}
+
+interface PoliticalIssuesBlockProps {
+  _type: "block.politicalIssues";
+  heading?: { title?: string | null; subtitle?: string | null };
+  mode?: "manual" | "allFeatured" | "byCategory";
+  items?: PoliticalIssueData[];
+  politicalArea?: { _ref: string } | null;
+  filter?: "all" | "featured" | "fulfilled" | "unfulfilled";
+  limit?: number;
 }
 
 async function fetchPoliticalIssues(
@@ -75,8 +82,20 @@ export async function PoliticalIssuesBlock({
   block: PoliticalIssuesBlockProps;
 }) {
   const { title, subtitle } = getBlockHeading(block);
-  const areaId = block.politicalArea?._ref;
-  const issues = await fetchPoliticalIssues(areaId, block.filter, block.limit);
+
+  let issues: PoliticalIssueData[];
+
+  if (block.mode === "manual" && block.items?.length) {
+    // Use pre-resolved items from query
+    issues = block.items;
+  } else if (block.mode === "allFeatured") {
+    // Fetch all featured (kärnfrågor) issues
+    issues = await fetchPoliticalIssues(undefined, "featured", block.limit);
+  } else {
+    // Fetch by category (default behavior)
+    const areaId = block.politicalArea?._ref;
+    issues = await fetchPoliticalIssues(areaId, block.filter, block.limit);
+  }
 
   if (!issues.length) {
     return null;
@@ -103,6 +122,7 @@ export async function PoliticalIssuesBlock({
             featured={issue.featured}
             fulfilled={issue.fulfilled}
             politicalAreas={issue.politicalAreas}
+            geographicalAreas={issue.geographicalAreas ?? []}
           />
         ))}
       </ResponsiveGrid>

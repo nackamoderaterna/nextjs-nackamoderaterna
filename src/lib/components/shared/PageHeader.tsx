@@ -3,6 +3,7 @@ import Link from "next/link";
 import Block from "../blocks/Block";
 import { Button } from "@/lib/components/ui/button";
 import { SanityImage } from "./SanityImage";
+import { getLucideIcon } from "@/lib/utils/iconUtils";
 import type { PageHeaderData } from "@/lib/types/pages";
 
 export type { PageHeaderData };
@@ -24,7 +25,7 @@ export function PageHeader({ title, pageHeader }: PageHeaderProps) {
   const hasImage = headerImage != null;
 
   const textContent = (
-    <div className="flex flex-col justify-center gap-4">
+    <div className="flex flex-col max-w-sm justify-center gap-4">
       {displayTitle && (
         <h1 className="text-3xl font-bold text-foreground md:text-4xl lg:text-5xl">
           {displayTitle}
@@ -35,28 +36,36 @@ export function PageHeader({ title, pageHeader }: PageHeaderProps) {
           {description}
         </p>
       )}
-      {ctaButton?.label && ctaButton?.href && (
-        <div className="mt-2">
-          <Button asChild size="lg">
-            <Link href={ctaButton.href}>{ctaButton.label}</Link>
-          </Button>
-        </div>
-      )}
+      {ctaButton?.label && ctaButton?.href && (() => {
+        const CtaIcon = getLucideIcon(ctaButton.icon?.name);
+        return (
+          <div className="mt-2">
+            <Button asChild size="lg">
+              <Link href={ctaButton.href}>
+                {CtaIcon && <CtaIcon className="h-4 w-4" />}
+                {ctaButton.label}
+              </Link>
+            </Button>
+          </div>
+        );
+      })()}
     </div>
   );
 
   if (hasImage) {
     return (
-      <Block paddingY="none">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 items-center grid0">
-          {textContent}
-          <div className="rounded order-first md:order-none overflow-hidden relative aspect-[4/3] md:aspect-auto md:col-span-2 md:h-full md:min-h-120">
+      <Block paddingY="medium">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-12 items-stretch min-h-[300px] md:min-h-[400px]">
+          <div className="flex items-center md:flex-shrink-0">
+            {textContent}
+          </div>
+          <div className="relative flex-1 rounded overflow-hidden order-first md:order-none min-h-[200px]">
             <SanityImage
               image={headerImage}
               alt=""
               fill
-              sizes="(max-width: 768px) 100vw, 75vw"
-              className="object-cover h-full"
+              sizes="(max-width: 768px) 100vw, 60vw"
+              className="object-cover"
               priority
             />
           </div>
