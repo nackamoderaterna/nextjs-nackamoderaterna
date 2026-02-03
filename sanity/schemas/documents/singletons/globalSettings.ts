@@ -58,27 +58,12 @@ export default defineType({
       ],
     }),
     defineField({
-      name: "pressContactInfo",
+      name: "pressContact",
       title: "Presskontakt",
-      type: "object",
+      description: "Välj den politiker som är presskontakt. E-post och telefon hämtas automatiskt.",
+      type: "reference",
+      to: [{ type: "politician" }],
       group: "contact",
-      fields: [
-        defineField({
-          name: 'phone',
-          title: 'Telefonnummer',
-          type: 'string',
-        }),
-        defineField({
-          name: 'email',
-          title: 'E-postadress',
-          type: 'string',
-        }),
-        defineField({
-          name: 'contactPerson',
-          title: 'Kontaktperson',
-          type: 'string',
-        }),
-      ],
     }),
 
     //

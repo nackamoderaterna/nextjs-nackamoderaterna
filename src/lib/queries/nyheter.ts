@@ -146,6 +146,7 @@ export const allPoliticalAreasQuery = groq`
     _id,
     name,
     slug,
-    title
+    title,
+    icon{ name }
   }
 `;

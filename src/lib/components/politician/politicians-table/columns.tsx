@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { SanityImage } from "@/lib/components/shared/SanityImage";
@@ -15,7 +16,20 @@ import { ROUTE_BASE } from "@/lib/routes";
 import { cleanInvisibleUnicode } from "@/lib/politicians";
 import type { PoliticianWithNamnd } from "@/lib/politicians";
 import { getLucideIcon } from "@/lib/utils/iconUtils";
-import { Check, Minus, Mail, Phone, User, MoreHorizontal, Tag } from "lucide-react";
+import {
+  Check,
+  Minus,
+  Mail,
+  Phone,
+  User,
+  MoreHorizontal,
+  Tag,
+  MapPin,
+  ChevronDown,
+  ChevronUp,
+  ExternalLink,
+  Link2,
+} from "lucide-react";
 
 function BooleanCell({ value }: { value: boolean }) {
   return value ? (
@@ -31,11 +45,55 @@ function BooleanCell({ value }: { value: boolean }) {
   );
 }
 
+function SortableHeader({
+  column,
+  children,
+  className,
+}: {
+  column: { getCanSort: () => boolean; getIsSorted: () => false | "asc" | "desc"; getToggleSortingHandler: () => ((event: unknown) => void) | undefined };
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const canSort = column.getCanSort();
+  const sorted = column.getIsSorted();
+  const handler = column.getToggleSortingHandler();
+  if (!canSort || !handler) {
+    return <span className={className}>{children}</span>;
+  }
+  return (
+    <button
+      type="button"
+      onClick={handler}
+      className={`inline-flex items-center gap-1.5 text-left hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-sm ${className ?? ""}`}
+    >
+      {children}
+      {sorted === "asc" ? (
+        <ChevronUp className="size-3.5 text-muted-foreground shrink-0" aria-hidden />
+      ) : sorted === "desc" ? (
+        <ChevronDown className="size-3.5 text-muted-foreground shrink-0" aria-hidden />
+      ) : (
+        <ChevronDown className="size-3.5 text-muted-foreground shrink-0 opacity-50" aria-hidden />
+      )}
+    </button>
+  );
+}
+
 export const politiciansColumns: ColumnDef<PoliticianWithNamnd>[] = [
   {
     id: "namn",
     accessorFn: (row) => cleanInvisibleUnicode(row.name ?? ""),
-    header: "Namn",
+    header: ({ column }) => (
+      <SortableHeader column={column}>
+        <User className="size-3.5 text-muted-foreground shrink-0" aria-hidden />
+        Namn
+      </SortableHeader>
+    ),
+    enableSorting: true,
+    sortingFn: (rowA, rowB) => {
+      const a = (rowA.getValue("namn") as string) ?? "";
+      const b = (rowB.getValue("namn") as string) ?? "";
+      return a.localeCompare(b, "sv");
+    },
     cell: ({ row }) => {
       const p = row.original;
       const slug = p.slug?.current ?? "";
@@ -147,7 +205,18 @@ export const politiciansColumns: ColumnDef<PoliticianWithNamnd>[] = [
   {
     id: "boendeomrade",
     accessorFn: (row) => cleanInvisibleUnicode(row.livingArea?.name ?? ""),
-    header: "Boendeområde",
+    header: ({ column }) => (
+      <SortableHeader column={column}>
+        <MapPin className="size-3.5 text-muted-foreground shrink-0" aria-hidden />
+        Boendeområde
+      </SortableHeader>
+    ),
+    enableSorting: true,
+    sortingFn: (rowA, rowB) => {
+      const a = (rowA.getValue("boendeomrade") as string) ?? "";
+      const b = (rowB.getValue("boendeomrade") as string) ?? "";
+      return a.localeCompare(b, "sv");
+    },
     cell: ({ row }) => {
       const name = row.original.livingArea?.name;
       return (
@@ -209,7 +278,7 @@ export const politiciansColumns: ColumnDef<PoliticianWithNamnd>[] = [
   },
   {
     id: "actions",
-    header: () => <span className="sr-only">Kontakt</span>,
+    header: () => <span>Åtg.</span>,
     cell: ({ row }) => {
       const p = row.original;
       const slug = p.slug?.current ?? "";
@@ -218,14 +287,39 @@ export const politiciansColumns: ColumnDef<PoliticianWithNamnd>[] = [
       const hasPhone = !!p.phone?.trim();
       const hasAny = hasEmail || hasPhone;
 
+      const copyProfileLink = () => {
+        const url = typeof window !== "undefined" ? `${window.location.origin}${profileHref}` : profileHref;
+        void navigator.clipboard?.writeText(url);
+      };
+
       if (!hasAny) {
         return (
-          <Button variant="ghost" size="sm" asChild>
-            <Link href={profileHref} className="gap-2">
-              <User className="size-4" />
-              <span className="hidden sm:inline">Profil</span>
-            </Link>
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="size-8">
+                <MoreHorizontal className="size-4" />
+                <span className="sr-only">Åtgärder</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <Link href={profileHref} className="flex items-center gap-2">
+                  <User className="size-4" />
+                  Öppna profil
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <a href={profileHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                  <ExternalLink className="size-4" />
+                  Öppna i ny flik
+                </a>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={copyProfileLink} className="flex items-center gap-2">
+                <Link2 className="size-4" />
+                Kopiera länk
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         );
       }
 
@@ -234,7 +328,7 @@ export const politiciansColumns: ColumnDef<PoliticianWithNamnd>[] = [
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="size-8">
               <MoreHorizontal className="size-4" />
-              <span className="sr-only">Kontaktalternativ</span>
+              <span className="sr-only">Åtgärder</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -243,6 +337,16 @@ export const politiciansColumns: ColumnDef<PoliticianWithNamnd>[] = [
                 <User className="size-4" />
                 Öppna profil
               </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <a href={profileHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                <ExternalLink className="size-4" />
+                Öppna i ny flik
+              </a>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={copyProfileLink} className="flex items-center gap-2">
+              <Link2 className="size-4" />
+              Kopiera länk
             </DropdownMenuItem>
             {hasEmail && (
               <DropdownMenuItem asChild>

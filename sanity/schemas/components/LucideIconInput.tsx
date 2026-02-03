@@ -1,8 +1,48 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { Stack, TextInput, Card, Grid, Box, Text, useTheme } from "@sanity/ui";
 import { set, unset } from "sanity";
 import { StringInputProps } from "sanity";
-import * as LucideIcons from "lucide-react";
+import {
+  // Bo & bygga
+  Home, Building2, Building, Warehouse, HardHat, Hammer, Wrench,
+  // Demokrati
+  Vote, Landmark, Scale, Gavel, Flag, Megaphone,
+  // Ekonomi
+  Banknote, Wallet, PiggyBank, TrendingUp, BarChart3, PieChart, Receipt,
+  // Fritid & idrott
+  Dumbbell, Trophy, Medal, Bike, PersonStanding, Volleyball,
+  // Företagande
+  Briefcase, Store, Handshake, Rocket, Lightbulb,
+  // Jobb
+  GraduationCap, ClipboardList, BadgeCheck, UserCheck,
+  // Kollektivtrafik
+  Bus, Train, Ship, Plane,
+  // Kultur
+  Palette, Music, BookOpen, Theater, Camera, Film,
+  // Miljö & klimat
+  Leaf, Recycle, Sun, CloudSun, Wind, Thermometer, Droplets,
+  // Natur
+  TreePine, Trees, Mountain, Waves, Flower2, Bird,
+  // Omsorg
+  HeartHandshake, Heart, Baby, HandHeart, Smile,
+  // Skola
+  School, BookMarked, PencilLine, Apple,
+  // Trafik & framkomlighet
+  Car, TrafficCone, CircleParking, Route, Footprints, Accessibility,
+  // Trygghet
+  Shield, ShieldCheck, LockKeyhole, Siren, Eye,
+  // Vård
+  Stethoscope, Hospital, HeartPulse, Pill, Cross,
+  // Välfärd
+  Users, Globe, CircleDot, Target,
+  // Äldre
+  Armchair, Clock, Glasses,
+  // Gemensamma / UI
+  User, Settings, Mail, Phone, MapPin, Calendar,
+  FileText, Info, CircleHelp, AlertTriangle, CheckCircle, XCircle,
+  Star, Award, Zap, ExternalLink, ChevronRight, Search,
+  Download, Upload, Link, Wifi,
+} from "lucide-react";
 
 /** @sanity/ui Theme doesn't declare .color; we use it for border/button/card tokens */
 type ThemeColorTokens = {
@@ -18,83 +58,32 @@ interface ThemeWithColor {
   color?: ThemeColorTokens;
 }
 
-// Cache icon names after first load
-let iconNames: string[] = [];
-
-// Function to load and cache icon names
-const loadIcons = (): string[] => {
-  // Return cached icons if already loaded
-  if (iconNames.length > 0) {
-    return iconNames;
-  }
-  
-  try {
-    const allKeys = Object.keys(LucideIcons);
-    const excludeList = [
-      "createLucideIcon",
-      "Icon",
-      "default",
-      "lucideReactNative",
-      "IconNode",
-      "IconProps",
-      "IconTree",
-      "LucideProps",
-      "LucideIcon",
-    ];
-    
-    const seen = new Set<string>();
-    const filtered = allKeys
-      .filter((name) => {
-        // Exclude known non-icon exports
-        if (excludeList.includes(name) || name.startsWith("_") || name.startsWith("Lucide")) {
-          return false;
-        }
-        
-        // Skip Icon-suffixed versions to avoid duplicates (e.g., "HeartIcon" when we have "Heart")
-        if (name.endsWith("Icon")) {
-          const baseName = name.slice(0, -4); // Remove "Icon" suffix
-          if (allKeys.includes(baseName)) {
-            return false; // Skip if base name exists
-          }
-        }
-        
-        const icon = LucideIcons[name as keyof typeof LucideIcons];
-        // Check if it's a valid React component
-        // Lucide icons are objects with a render method, not functions
-        const isFunction = typeof icon === "function";
-        const isObject = typeof icon === "object" && icon !== null;
-        // Check if object has render method (valid React component)
-        const hasRender = isObject && typeof (icon as any).render === "function";
-        
-        const isValidComponent = isFunction || hasRender;
-        
-        if (isValidComponent) {
-          // Use base name if it exists, otherwise use the current name
-          const baseName = name.endsWith("Icon") ? name.slice(0, -4) : name;
-          if (!seen.has(baseName)) {
-            seen.add(baseName);
-            return true;
-          }
-        }
-        return false;
-      })
-      .map((name) => (name.endsWith("Icon") ? name.slice(0, -4) : name))
-      .sort(); // Sort alphabetically for better UX
-    
-    iconNames = filtered;
-    
-    if (iconNames.length === 0) {
-      console.warn("No Lucide icons found after filtering");
-    }
-    
-    return iconNames;
-  } catch (error) {
-    console.error("Error loading Lucide icons:", error);
-    // Return some common icons as fallback
-    iconNames = ["Heart", "Home", "User", "Settings", "Mail", "Phone", "MapPin", "Calendar"];
-    return iconNames;
-  }
+// Only these icons can be selected. Keep in sync with src/lib/utils/iconUtils.ts.
+const ICON_MAP: Record<string, React.ComponentType<any>> = {
+  Home, Building2, Building, Warehouse, HardHat, Hammer, Wrench,
+  Vote, Landmark, Scale, Gavel, Flag, Megaphone,
+  Banknote, Wallet, PiggyBank, TrendingUp, BarChart3, PieChart, Receipt,
+  Dumbbell, Trophy, Medal, Bike, PersonStanding, Volleyball,
+  Briefcase, Store, Handshake, Rocket, Lightbulb,
+  GraduationCap, ClipboardList, BadgeCheck, UserCheck,
+  Bus, Train, Ship, Plane,
+  Palette, Music, BookOpen, Theater, Camera, Film,
+  Leaf, Recycle, Sun, CloudSun, Wind, Thermometer, Droplets,
+  TreePine, Trees, Mountain, Waves, Flower2, Bird,
+  HeartHandshake, Heart, Baby, HandHeart, Smile,
+  School, BookMarked, PencilLine, Apple,
+  Car, TrafficCone, CircleParking, Route, Footprints, Accessibility,
+  Shield, ShieldCheck, LockKeyhole, Siren, Eye,
+  Stethoscope, Hospital, HeartPulse, Pill, Cross,
+  Users, Globe, CircleDot, Target,
+  Armchair, Clock, Glasses,
+  User, Settings, Mail, Phone, MapPin, Calendar,
+  FileText, Info, CircleHelp, AlertTriangle, CheckCircle, XCircle,
+  Star, Award, Zap, ExternalLink, ChevronRight, Search,
+  Download, Upload, Link, Wifi,
 };
+
+const CURATED_ICONS = Object.keys(ICON_MAP);
 
 const LucideIconInput: React.FC<StringInputProps> = (props) => {
   const { value, onChange } = props;
@@ -102,22 +91,10 @@ const LucideIconInput: React.FC<StringInputProps> = (props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const theme = useTheme() as ThemeWithColor;
 
-  // Load icons on mount
-  useEffect(() => {
-    loadIcons();
-  }, []);
-
   const filteredIcons = useMemo(() => {
-    const icons = loadIcons(); // Ensure icons are loaded
-    if (!search) {
-      // Show first 60 icons by default when no search
-      return icons.slice(0, 60);
-    }
-
-    const searchLower = search.toLowerCase();
-    return icons
-      .filter((name) => name.toLowerCase().includes(searchLower))
-      .slice(0, 100); // Limit search results
+    if (!search) return CURATED_ICONS;
+    const lower = search.toLowerCase();
+    return CURATED_ICONS.filter((name) => name.toLowerCase().includes(lower));
   }, [search]);
 
   const handleSelect = (iconName: string) => {
@@ -131,26 +108,11 @@ const LucideIconInput: React.FC<StringInputProps> = (props) => {
     setSearch("");
   };
 
-  // Get the selected icon component
-  const getSelectedIcon = () => {
-    if (!value || typeof value !== "string") return null;
-    
-    // Try the exact name first
-    let Icon = LucideIcons[value as keyof typeof LucideIcons];
-    
-    // If not found, try with "Icon" suffix
-    if (!Icon) {
-      Icon = LucideIcons[`${value}Icon` as keyof typeof LucideIcons];
-    }
-    
-    // Check if it's a valid React component - can be function or object
-    if (Icon && (typeof Icon === "function" || (typeof Icon === "object" && Icon !== null))) {
-      return Icon as React.ComponentType<any>;
-    }
-    return null;
+  const resolveIcon = (name: string): React.ComponentType<any> | null => {
+    return ICON_MAP[name] ?? null;
   };
 
-  const SelectedIcon = getSelectedIcon();
+  const SelectedIcon = value ? resolveIcon(value) : null;
 
   return (
     <Stack space={3}>
@@ -161,13 +123,9 @@ const LucideIconInput: React.FC<StringInputProps> = (props) => {
             setSearch(event.currentTarget.value);
             setIsOpen(true);
           }}
-          onFocus={() => {
-            setIsOpen(true);
-          }}
-          onClick={() => {
-            setIsOpen(true);
-          }}
-          placeholder="Sök efter ikon... (klicka för att se alla ikoner)"
+          onFocus={() => setIsOpen(true)}
+          onClick={() => setIsOpen(true)}
+          placeholder="Sök bland ikoner…"
         />
 
         {value && (
@@ -223,128 +181,88 @@ const LucideIconInput: React.FC<StringInputProps> = (props) => {
               <Box padding={2} marginBottom={2}>
                 <Text size={1} muted>
                   {search
-                    ? `Visar ${filteredIcons.length} ikoner`
-                    : `Visar ${filteredIcons.length} av ${loadIcons().length} ikoner. Skriv för att söka.`}
+                    ? `${filteredIcons.length} träffar`
+                    : `${CURATED_ICONS.length} ikoner`}
                 </Text>
               </Box>
               <Grid columns={[3, 4, 5, 6]} gap={2}>
                 {filteredIcons.map((iconName) => {
-                  try {
-                    // Try the exact name first
-                    let IconComponent = LucideIcons[iconName as keyof typeof LucideIcons];
-                    
-                    // If not found, try with "Icon" suffix
-                    if (!IconComponent) {
-                      IconComponent = LucideIcons[`${iconName}Icon` as keyof typeof LucideIcons];
-                    }
-                    
-                    // Safety check - only render if IconComponent is valid
-                    if (!IconComponent) {
-                      return null;
-                    }
-                    
-                    // Check if it's a valid React component
-                    // Lucide icons are objects with render methods, not plain functions
-                    const isFunction = typeof IconComponent === "function";
-                    const isObject = typeof IconComponent === "object" && IconComponent !== null;
-                    const hasRender = isObject && typeof (IconComponent as any).render === "function";
-                    
-                    // Only render if it's a function or an object with a render method
-                    if (!isFunction && !hasRender) {
-                      return null;
-                    }
-                    
-                    const Icon = IconComponent as React.ComponentType<any>;
-                    
-                    const isSelected = value === iconName;
-                    
-                    // Get theme colors with safe fallbacks
-                    const safeTheme: ThemeColorTokens = theme?.color ?? {};
-                    const safeCard = safeTheme.card ?? {};
-                    const safeBorder = safeTheme.border ?? {};
-                    
-                    const cardBg = isSelected 
-                      ? (safeCard?.selected?.bg || safeCard?.enabled?.bg || undefined)
-                      : (safeCard?.enabled?.bg || undefined);
-                    const cardBorder = isSelected
-                      ? (safeCard?.selected?.border || safeBorder?.enabled || "#ccc")
-                      : (safeBorder?.enabled || "#ccc");
-                    const cardHoverBg = safeCard?.hovered?.bg || safeCard?.enabled?.bg || undefined;
-                    // Use currentColor for icon so it inherits from parent, or get from theme
-                    const iconColor = safeCard?.enabled?.fg || "currentColor";
-                    const hoverBorder = safeBorder?.enabled || "#ccc";
+                  const Icon = resolveIcon(iconName);
+                  if (!Icon) return null;
 
-                    return (
-                      <Card
-                        key={iconName}
-                        as="button"
-                        type="button"
-                        padding={3}
-                        radius={2}
-                        tone={isSelected ? "primary" : "default"}
-                        onClick={() => handleSelect(iconName)}
-                        style={{
-                          cursor: "pointer",
-                          border: `1px solid ${cardBorder}`,
-                          ...(cardBg ? { background: cardBg } : {}),
-                          transition: "all 0.2s",
-                        }}
-                        onMouseEnter={(e) => {
-                          if (!isSelected && cardHoverBg) {
-                            e.currentTarget.style.background = cardHoverBg;
-                            e.currentTarget.style.borderColor = hoverBorder;
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          if (!isSelected) {
-                            if (cardBg) {
-                              e.currentTarget.style.background = cardBg;
-                            } else {
-                              e.currentTarget.style.background = "";
-                            }
-                            e.currentTarget.style.borderColor = cardBorder;
-                          }
-                        }}
-                      >
-                        <Stack space={2} style={{ alignItems: "center" }}>
-                          <Box 
-                            style={{ 
-                              display: "flex", 
-                              alignItems: "center", 
-                              justifyContent: "center",
-                              color: iconColor,
-                            }}
-                          >
-                            {React.createElement(Icon, { size: 24 })}
-                          </Box>
-                          <Text
-                            size={0}
-                            style={{
-                              textAlign: "center",
-                              wordBreak: "break-word",
-                              fontSize: "10px",
-                            }}
-                          >
-                            {iconName}
-                          </Text>
-                        </Stack>
-                      </Card>
-                    );
-                  } catch (error) {
-                    // Skip icons that can't be rendered
-                    return null;
-                  }
+                  const isSelected = value === iconName;
+                  const safeTheme: ThemeColorTokens = theme?.color ?? {};
+                  const safeCard = safeTheme.card ?? {};
+                  const safeBorder = safeTheme.border ?? {};
+                  const cardBg = isSelected
+                    ? safeCard?.selected?.bg || safeCard?.enabled?.bg || undefined
+                    : safeCard?.enabled?.bg || undefined;
+                  const cardBorder = isSelected
+                    ? safeCard?.selected?.border || safeBorder?.enabled || "#ccc"
+                    : safeBorder?.enabled || "#ccc";
+                  const cardHoverBg = safeCard?.hovered?.bg || safeCard?.enabled?.bg || undefined;
+                  const iconColor = safeCard?.enabled?.fg || "currentColor";
+                  const hoverBorder = safeBorder?.enabled || "#ccc";
+
+                  return (
+                    <Card
+                      key={iconName}
+                      as="button"
+                      type="button"
+                      padding={3}
+                      radius={2}
+                      tone={isSelected ? "primary" : "default"}
+                      onClick={() => handleSelect(iconName)}
+                      style={{
+                        cursor: "pointer",
+                        border: `1px solid ${cardBorder}`,
+                        ...(cardBg ? { background: cardBg } : {}),
+                        transition: "all 0.2s",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isSelected && cardHoverBg) {
+                          e.currentTarget.style.background = cardHoverBg;
+                          e.currentTarget.style.borderColor = hoverBorder;
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isSelected) {
+                          e.currentTarget.style.background = cardBg || "";
+                          e.currentTarget.style.borderColor = cardBorder;
+                        }
+                      }}
+                    >
+                      <Stack space={2} style={{ alignItems: "center" }}>
+                        <Box
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: iconColor,
+                          }}
+                        >
+                          {React.createElement(Icon, { size: 24 })}
+                        </Box>
+                        <Text
+                          size={0}
+                          style={{
+                            textAlign: "center",
+                            wordBreak: "break-word",
+                            fontSize: "10px",
+                          }}
+                        >
+                          {iconName}
+                        </Text>
+                      </Stack>
+                    </Card>
+                  );
                 })}
               </Grid>
             </>
           ) : (
             <Box padding={4}>
               <Text align="center" muted>
-                {search
-                  ? `Inga ikoner hittades för "${search}"`
-                  : loadIcons().length === 0
-                  ? "Inga ikoner kunde laddas. Kontrollera att lucide-react är installerat."
-                  : "Inga ikoner tillgängliga"}
+                Inga ikoner hittades för &quot;{search}&quot;
               </Text>
             </Box>
           )}

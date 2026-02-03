@@ -1,5 +1,6 @@
 import { NewsCard } from "@/lib/components/news/NewsCard";
-import { PersonListLink } from "@/lib/components/politician/PersonListLink";
+import { SidebarList, SidebarListItem } from "@/lib/components/shared/SidebarList";
+import { cleanInvisibleUnicode } from "@/lib/politicians";
 import { PolicyList } from "@/lib/components/politics/policyList";
 import { ContentHero } from "@/lib/components/shared/ContentHero";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
@@ -144,16 +145,16 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
       )}
       {data.politicians.length > 0 && (
         <Sidebar heading="Företrädare">
-          <div className="grid gap-1">
+          <SidebarList>
             {data.politicians.map((politician) => (
-              <PersonListLink
+              <SidebarListItem
                 key={politician._id}
-                slug={politician.slug?.current || ""}
+                title={cleanInvisibleUnicode(politician.name?.trim() || "Namn saknas")}
                 image={politician.image}
-                name={politician.name || ""}
+                href={`${ROUTE_BASE.POLITICIANS}/${politician.slug?.current || ""}`}
               />
             ))}
-          </div>
+          </SidebarList>
         </Sidebar>
       )}
        {globalSettings?.handlingsprogram?.url && (

@@ -25,7 +25,9 @@ import { ROUTE_BASE } from "@/lib/routes";
 import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
 import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleContext";
-import { AreaList } from "@/lib/components/politics/AreaList";
+import { SidebarList, SidebarListItem } from "@/lib/components/shared/SidebarList";
+import { Heart } from "lucide-react";
+import { getLucideIcon } from "@/lib/utils/iconUtils";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
@@ -144,10 +146,21 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
   if (data.politicalAreas && data.politicalAreas.length > 0) {
     sidebarItems.push(
       <Sidebar key="category" heading="Tillhör kategori">
-        <AreaList
-          areas={data.politicalAreas}
-          getHref={(slug) => `${ROUTE_BASE.POLITICS_CATEGORY}/${slug}`}
-        />
+        <SidebarList>
+          {data.politicalAreas.map((area) => {
+            const Icon = area.icon?.name ? getLucideIcon(area.icon.name) : null;
+            const AreaIcon = Icon ?? Heart;
+            const areaSlug = area.slug?.current;
+            return (
+              <SidebarListItem
+                key={area._id}
+                title={area.name || ""}
+                href={areaSlug ? `${ROUTE_BASE.POLITICS_CATEGORY}/${areaSlug}` : undefined}
+                icon={<AreaIcon className="h-4 w-4 text-brand-primary" />}
+              />
+            );
+          })}
+        </SidebarList>
       </Sidebar>
     );
   }
@@ -155,14 +168,16 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
   if (data.geographicalAreas && data.geographicalAreas.length > 0) {
     sidebarItems.push(
       <Sidebar key="geographical" heading="Relaterade områden">
-        <AreaList
-          areas={data.geographicalAreas.map((a) => ({
-            _id: a._id,
-            name: a.name,
-            slug: a.slug,
-          }))}
-          getHref={(slug) => `${ROUTE_BASE.POLITICS_AREA}/${slug}`}
-        />
+        <SidebarList>
+          {data.geographicalAreas.map((area) => (
+            <SidebarListItem
+              key={area._id}
+              title={area.name}
+              href={`${ROUTE_BASE.POLITICS_AREA}/${area.slug.current}`}
+              image={area.image}
+            />
+          ))}
+        </SidebarList>
       </Sidebar>
     );
   }

@@ -1,10 +1,7 @@
 "use client";
 
 import type { Table } from "@tanstack/react-table";
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/lib/components/ui/toggle-group";
+import { ToggleGroup, ToggleGroupItem } from "@/lib/components/ui/toggle-group";
 import {
   Popover,
   PopoverContent,
@@ -53,82 +50,91 @@ export function PoliticiansTableFilters<TData>({
     return raw !== "all";
   }).length;
 
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-1.5"
-          aria-label="Filter"
-        >
-          <SlidersHorizontal className="size-3.5 text-muted-foreground" aria-hidden />
-          Filter
-          {activeCount > 0 ? (
-            <span className="text-muted-foreground">({activeCount})</span>
-          ) : null}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        className="w-auto min-w-56 p-3"
-        align="start"
-      >
-        <div className="flex flex-col gap-3">
-          {FILTER_COLUMNS.map(({ id, label }) => {
-            const raw = (table.getColumn(id)?.getFilterValue() as string) ?? "all";
-            const value = FILTER_OPTIONS.includes(raw as (typeof FILTER_OPTIONS)[number])
-              ? (raw as (typeof FILTER_OPTIONS)[number])
-              : "all";
+  const clearAllFilters = () => {
+    for (const { id } of FILTER_COLUMNS) {
+      table.getColumn(id)?.setFilterValue(undefined);
+    }
+  };
 
-            return (
-              <div
-                key={id}
-                className="flex flex-col items-start gap-1.5"
-                role="group"
-                aria-label={label}
-              >
-                <span className="text-muted-foreground text-xs font-medium">
-                  {label}
-                </span>
-                <ToggleGroup
-                  type="single"
-                  value={value}
-                  onValueChange={(v) => {
-                    if (v) {
-                      table.getColumn(id)?.setFilterValue(v === "all" ? undefined : v);
-                    }
-                  }}
-                  variant="outline"
-                  size="sm"
-                  className="inline-flex"
+  return (
+    <div className="flex items-center gap-1.5">
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-1.5"
+            aria-label="Filter"
+          >
+            <SlidersHorizontal
+              className="size-3.5 text-muted-foreground"
+              aria-hidden
+            />
+            Filter
+            {activeCount > 0 ? (
+              <span className="text-muted-foreground">({activeCount})</span>
+            ) : null}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto min-w-56 p-3" align="start">
+          <div className="flex flex-col gap-3">
+            {FILTER_COLUMNS.map(({ id, label }) => {
+              const raw =
+                (table.getColumn(id)?.getFilterValue() as string) ?? "all";
+              const value = FILTER_OPTIONS.includes(
+                raw as (typeof FILTER_OPTIONS)[number],
+              )
+                ? (raw as (typeof FILTER_OPTIONS)[number])
+                : "all";
+
+              return (
+                <div
+                  key={id}
+                  className="flex flex-col items-start gap-1.5"
+                  role="group"
+                  aria-label={label}
                 >
-                  {FILTER_OPTIONS.map((opt) => (
-                    <ToggleGroupItem key={opt} value={opt}>
-                      {FILTER_LABELS[opt]}
-                    </ToggleGroupItem>
-                  ))}
-                </ToggleGroup>
-              </div>
-            );
-          })}
-          {activeCount > 0 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="mt-1 gap-1.5 self-start"
-              onClick={() => {
-                for (const { id } of FILTER_COLUMNS) {
-                  table.getColumn(id)?.setFilterValue(undefined);
-                }
-              }}
-            >
-              <X className="size-3.5" aria-hidden />
-              Rensa filter
-            </Button>
-          )}
-        </div>
-      </PopoverContent>
-    </Popover>
+                  <span className="text-muted-foreground text-xs font-medium">
+                    {label}
+                  </span>
+                  <ToggleGroup
+                    type="single"
+                    value={value}
+                    onValueChange={(v) => {
+                      if (v) {
+                        table
+                          .getColumn(id)
+                          ?.setFilterValue(v === "all" ? undefined : v);
+                      }
+                    }}
+                    variant="outline"
+                    size="sm"
+                    className="inline-flex"
+                  >
+                    {FILTER_OPTIONS.map((opt) => (
+                      <ToggleGroupItem key={opt} value={opt}>
+                        {FILTER_LABELS[opt]}
+                      </ToggleGroupItem>
+                    ))}
+                  </ToggleGroup>
+                </div>
+              );
+            })}
+          </div>
+        </PopoverContent>
+      </Popover>
+      {activeCount > 0 && (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="size-8"
+          onClick={clearAllFilters}
+          aria-label="Rensa filter"
+        >
+          <X className="size-4" />
+        </Button>
+      )}
+    </div>
   );
 }
 
@@ -151,7 +157,9 @@ function CategoryItemContent({
   const Icon = getLucideIcon(iconName ?? undefined);
   return (
     <span className={`inline-flex items-center gap-1.5 ${className}`}>
-      {Icon ? <Icon className="size-3.5 shrink-0 text-muted-foreground" aria-hidden /> : null}
+      {Icon ? (
+        <Icon className="size-3.5 shrink-0 text-muted-foreground" aria-hidden />
+      ) : null}
       {name}
     </span>
   );
@@ -162,7 +170,9 @@ export function PoliticiansTableFiltersCategory<TData>({
   categories,
 }: PoliticiansTableFiltersCategoryProps<TData>) {
   const selectedCategories =
-    (table.getColumn(KATEGORI_COLUMN_ID)?.getFilterValue() as string[] | undefined) ?? [];
+    (table.getColumn(KATEGORI_COLUMN_ID)?.getFilterValue() as
+      | string[]
+      | undefined) ?? [];
 
   const handleValueChange = (value: string[] | null) => {
     const next = Array.isArray(value) && value.length > 0 ? value : undefined;

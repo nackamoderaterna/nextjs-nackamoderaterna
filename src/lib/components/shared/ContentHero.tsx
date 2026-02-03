@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { type ReactNode } from "react";
 import { SanityImage } from "@/lib/components/shared/SanityImage";
 import { getLucideIcon } from "@/lib/utils/iconUtils";
 
@@ -10,6 +11,8 @@ interface ContentHeroProps {
   icon?: { name?: string | null } | null;
   subtitle?: string;
   subtitleHref?: string;
+  /** Rendered below the hero block, inside the section and above the border */
+  children?: ReactNode;
 }
 
 export function ContentHero({
@@ -19,6 +22,7 @@ export function ContentHero({
   icon,
   subtitle,
   subtitleHref,
+  children,
 }: ContentHeroProps) {
   const Icon = icon?.name ? getLucideIcon(icon.name) : null;
   const showImage = !!image;
@@ -65,6 +69,7 @@ export function ContentHero({
           ) : null}
         </div>
       </div>
+      {children}
     </section>
   );
 }

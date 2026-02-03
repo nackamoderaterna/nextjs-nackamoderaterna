@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
+import { SidebarList, SidebarListItem } from "@/lib/components/shared/SidebarList";
 
 export interface Role {
   title: string;
@@ -15,23 +15,16 @@ interface RoleSidebarProps {
 export function RoleSidebar({ heading, roles }: RoleSidebarProps) {
   return (
     <Sidebar heading={heading}>
-      <div className="space-y-4">
+      <SidebarList>
         {roles.map((role, index) => (
-          <div key={index}>
-            <h3 className="font-semibold">{role.title}</h3>
-            {role.href ? (
-              <Link
-                href={role.href}
-                className="text-sm  hover:text-foreground transition-colors"
-              >
-                {role.description}
-              </Link>
-            ) : (
-              <p className="text-muted-foreground">{role.description}</p>
-            )}
-          </div>
+          <SidebarListItem
+            key={index}
+            title={role.title}
+            description={role.description}
+            href={role.href}
+          />
         ))}
-      </div>
+      </SidebarList>
     </Sidebar>
   );
 }

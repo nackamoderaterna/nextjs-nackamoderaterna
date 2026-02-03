@@ -1,13 +1,12 @@
 import Link from "next/link";
-import { SanityImage } from "@/lib/components/shared/SanityImage";
-import { PersonListLink } from "@/lib/components/politician/PersonListLink";
+import { SidebarList, SidebarListItem } from "@/lib/components/shared/SidebarList";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
-import { SidebarNewsItem } from "@/lib/components/shared/SidebarListItem";
 import { NewsExpanded } from "@/lib/types/news";
 import { Button } from "@/lib/components/ui/button";
 import { FileDown, Facebook, Instagram } from "lucide-react";
 import { formatDate } from "@/lib/utils/dateUtils";
 import { ROUTE_BASE } from "@/lib/routes";
+import { cleanInvisibleUnicode } from "@/lib/politicians";
 
 interface NewsSidebarProps {
   news: NewsExpanded;
@@ -57,42 +56,36 @@ export function NewsSidebar({ news, currentSlug }: NewsSidebarProps) {
         )}
       {documents.length > 0 && (
         <Sidebar heading="Dokument">
-         <ul className="grid gap-4"> {documents
-            .filter((doc) => doc?.url)
-            .map((doc, index) => (
-              <Link
-                key={index}
-                href={doc.url!}
-                target="_blank"
-                rel="noopener noreferrer"
-                download={doc.originalFilename}
-                className="flex items-center gap-3 group hover:bg-muted rounded p-2 -m-2 transition-colors"
-              >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-muted-foreground/10 text-muted-foreground group-hover:text-foreground">
-                  <FileDown className="h-5 w-5" />
-                </span>
-                <span className="text-sm font-medium text-foreground">
-                  {doc.originalFilename ?? "Ladda ner dokument"}
-                </span>
-              </Link>
-            ))}
-            </ul>
+          <SidebarList>
+            {documents
+              .filter((doc) => doc?.url)
+              .map((doc, index) => (
+                <SidebarListItem
+                  key={index}
+                  title={doc.originalFilename ?? "Ladda ner dokument"}
+                  href={doc.url!}
+                  external
+                  download={doc.originalFilename}
+                  icon={<FileDown className="h-4 w-4 text-brand-primary" />}
+                />
+              ))}
+          </SidebarList>
         </Sidebar>
       )}
 
       {news.referencedPoliticians && news.referencedPoliticians.length > 0 && (
         <Sidebar heading="Omnämnda">
           <nav aria-label="Lista över omnämnda företrädare">
-            <div className="grid gap-4">
+            <SidebarList>
               {news.referencedPoliticians.map((politician) => (
-                <PersonListLink
+                <SidebarListItem
                   key={politician._id}
+                  title={cleanInvisibleUnicode(politician.name?.trim() || "Namn saknas")}
                   image={politician.image}
-                  name={politician.name}
-                  slug={politician.slug?.current || ""}
+                  href={`${ROUTE_BASE.POLITICIANS}/${politician.slug?.current || ""}`}
                 />
               ))}
-            </div>
+            </SidebarList>
           </nav>
         </Sidebar>
       )}
@@ -100,35 +93,18 @@ export function NewsSidebar({ news, currentSlug }: NewsSidebarProps) {
       {news.politicalIssues && news.politicalIssues.length > 0 && (
         <Sidebar heading="Politiska frågor">
           <nav aria-label="Lista över politiska frågor">
-            <div className="grid gap-4">
+            <SidebarList>
               {news.politicalIssues.map((issue: { _id: string; question?: string | null; slug?: { current?: string } | null }) => {
-                const issueSlug = (issue as { slug?: { current?: string } }).slug?.current;
-                return issueSlug ? (
-                  <Link
+                const issueSlug = issue.slug?.current;
+                return (
+                  <SidebarListItem
                     key={issue._id}
-                    href={`${ROUTE_BASE.POLITICS_ISSUES}/${issueSlug}`}
-                    className="flex items-center gap-3 group hover:bg-muted rounded p-2 -m-2 transition-colors"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-foreground text-sm leading-tight">
-                        {issue.question}
-                      </h3>
-                    </div>
-                  </Link>
-                ) : (
-                  <div
-                    key={issue._id}
-                    className="flex items-center gap-3 rounded p-2"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-foreground text-sm leading-tight">
-                        {issue.question}
-                      </h3>
-                    </div>
-                  </div>
+                    title={issue.question || ""}
+                    href={issueSlug ? `${ROUTE_BASE.POLITICS_ISSUES}/${issueSlug}` : undefined}
+                  />
                 );
               })}
-            </div>
+            </SidebarList>
           </nav>
         </Sidebar>
       )}
@@ -136,32 +112,16 @@ export function NewsSidebar({ news, currentSlug }: NewsSidebarProps) {
       {news.geographicalAreas && news.geographicalAreas.length > 0 && (
         <Sidebar heading="Geografiska områden">
           <nav aria-label="Lista över geografiska områden">
-              <div className="grid gap-4">
+            <SidebarList>
               {news.geographicalAreas.map((area) => (
-                <Link
+                <SidebarListItem
                   key={area._id}
+                  title={area.name || ""}
+                  image={area.image}
                   href={`${ROUTE_BASE.POLITICS_AREA}/${area.slug?.current || ""}`}
-                  className="flex items-center gap-3 group hover:bg-muted rounded p-2 -m-2 transition-colors"
-                >
-                  {area.image && (
-                    <div className="relative w-12 h-12 flex-shrink-0 rounded overflow-hidden bg-muted">
-                      <SanityImage
-                        image={area.image}
-                        fill
-                        alt={area.name || ""}
-                        sizes="48px"
-                        loading="lazy"
-                      />
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-foreground text-sm leading-tight">
-                      {area.name}
-                    </h3>
-                  </div>
-                </Link>
+                />
               ))}
-            </div>
+            </SidebarList>
           </nav>
         </Sidebar>
       )}
@@ -169,24 +129,28 @@ export function NewsSidebar({ news, currentSlug }: NewsSidebarProps) {
       {news.seriesNews && news.seriesNews.length > 0 && (
         <Sidebar heading={news.series?.title ?? "Artikelserie"}>
           <nav aria-label="Artikelserie">
-              <ul className="grid gap-6">
-                {news.seriesNews.map((item) => {
-                  const itemSlug = item.slug?.current ?? "";
-                  const isCurrent = itemSlug === currentSlug;
-                  return (
-                    <li key={item._id}>
-                      <SidebarNewsItem
-                        title={item.title ?? ""}
-                        secondaryText={item.effectiveDate ? formatDate(item.effectiveDate) : undefined}
-                        secondaryDateTime={item.effectiveDate}
-                        href={isCurrent ? undefined : `${ROUTE_BASE.NEWS}/${itemSlug}`}
-                        isCurrent={isCurrent}
-                      />
-                    </li>
-                  );
-                })}
-              </ul>
-            </nav>
+            <SidebarList>
+              {news.seriesNews.map((item) => {
+                const itemSlug = item.slug?.current ?? "";
+                const isCurrent = itemSlug === currentSlug;
+                return (
+                  <SidebarListItem
+                    key={item._id}
+                    title={item.title ?? ""}
+                    description={
+                      item.effectiveDate ? (
+                        <time dateTime={item.effectiveDate}>
+                          {formatDate(item.effectiveDate)}
+                        </time>
+                      ) : undefined
+                    }
+                    href={isCurrent ? undefined : `${ROUTE_BASE.NEWS}/${itemSlug}`}
+                    isCurrent={isCurrent}
+                  />
+                );
+              })}
+            </SidebarList>
+          </nav>
         </Sidebar>
       )}
 
