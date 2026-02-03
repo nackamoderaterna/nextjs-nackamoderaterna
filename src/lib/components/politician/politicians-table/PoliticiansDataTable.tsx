@@ -211,8 +211,10 @@ export function PoliticiansDataTable({ data }: PoliticiansDataTableProps) {
           value={globalFilter ?? ""}
           onChange={handleGlobalFilterChange}
         />
-        <PoliticiansTableFiltersCategory table={table} categories={categories} />
-        <PoliticiansTableFilters table={table} />
+        <div className="flex items-end gap-2">
+          <PoliticiansTableFiltersCategory table={table} categories={categories} />
+          <PoliticiansTableFilters table={table} />
+        </div>
       </div>
 
       <div className="overflow-hidden rounded-md">
