@@ -45,9 +45,7 @@ export function SidebarListItem({
     <span className={`flex items-center gap-3${leading ? "" : ""}`}>
       {leading}
       <span className="min-w-0 flex-1">
-        <span className="block text-base font-medium text-foreground">
-          {title}
-        </span>
+        <span className="block text-base text-foreground">{title}</span>
         {description && (
           <span className="block text-sm text-muted-foreground">
             {description}
