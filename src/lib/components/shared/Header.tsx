@@ -1,5 +1,5 @@
 import Link from "next/link";
-mport { MainNav } from "../navigation/MainNav";
+import { MainNav } from "../navigation/MainNav";
 import { MobileNav } from "../navigation/MobileNav";
 import { SearchBar } from "../search/SearchBar";
 import { Button } from "@/lib/components/ui/button";

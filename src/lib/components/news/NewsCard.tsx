@@ -64,7 +64,7 @@ export function NewsCard({
 
           <div className="md:col-span-8 space-y-3">
             <div className="space-y-2">
-              <Heading className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight text-balance group-hover:text-primary transition-colors min-w-0">
+              <Heading className="text-2xl md:text-3xl lg:text-4xl font-light text-balance group-hover:text-primary transition-colors min-w-0">
                 {title}
               </Heading>
               {variant && variant !== "default" && (
@@ -77,7 +77,9 @@ export function NewsCard({
               {politicalAreas && politicalAreas.length > 0 && (
                 <div className="text-xs uppercase text-muted-foreground mt-4 flex flex-wrap gap-4">
                   {[...politicalAreas]
-                    .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "", "sv"))
+                    .sort((a, b) =>
+                      (a.name ?? "").localeCompare(b.name ?? "", "sv"),
+                    )
                     .map((a) => {
                       const href = `${ROUTE_BASE.POLITICS_CATEGORY}/${a.slug?.current || ""}`;
                       return (

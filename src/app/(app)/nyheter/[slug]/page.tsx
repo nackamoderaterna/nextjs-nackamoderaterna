@@ -12,7 +12,10 @@ import { NewsVariantBadge } from "@/lib/components/news/NewsVariantBadge";
 import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
 import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
-import { generateMetadata as generateSEOMetadata, getDefaultOgImage } from "@/lib/utils/seo";
+import {
+  generateMetadata as generateSEOMetadata,
+  getDefaultOgImage,
+} from "@/lib/utils/seo";
 import { ROUTE_BASE } from "@/lib/routes";
 import Link from "next/link";
 import { NewsCard } from "@/lib/components/news/NewsCard";
@@ -20,10 +23,8 @@ import { getLucideIcon } from "@/lib/utils/iconUtils";
 
 // Generate static params for all news articles at build time
 export async function generateStaticParams() {
-  const news = await sanityClient.fetch<{ slug: string }[]>(
-    allNewsSlugsQuery
-  );
-  
+  const news = await sanityClient.fetch<{ slug: string }[]>(allNewsSlugsQuery);
+
   return news.map((article) => ({
     slug: article.slug,
   }));
@@ -75,7 +76,7 @@ export default async function NewsArticlePage({
     { slug },
     {
       next: { revalidate: 300 },
-    }
+    },
   );
 
   if (!news) {
@@ -98,7 +99,7 @@ export default async function NewsArticlePage({
             const Icon = area.icon?.name ? getLucideIcon(area.icon.name) : null;
             return (
               <Link
-                href={`${ROUTE_BASE.POLITICS}/${area.slug?.current || ""}`}
+                href={`${ROUTE_BASE.POLITICS_CATEGORY}/${area.slug?.current || ""}`}
                 key={area._id}
                 className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/20 transition-colors text-sm"
               >
@@ -144,28 +145,29 @@ export default async function NewsArticlePage({
         </aside>
       </div>
 
-      {news.relatedByPoliticalArea && news.relatedByPoliticalArea.length > 0 && (
-        <Section
-          title="Relaterade nyheter"
-          className="mt-16"
-          aria-label="Relaterade nyheter"
-        >
-          <div className="rounded-lg overflow-hidden">
-            <div className="grid">
-              {news.relatedByPoliticalArea.map((item, index) => (
-                <NewsCard
-                  key={item._id}
-                  title={item.title || ""}
-                  isLast={index === news.relatedByPoliticalArea!.length - 1}
-                  date={item.effectiveDate}
-                  slug={item.slug?.current || ""}
-                  excerpt={item.excerpt || ""}
-                />
-              ))}
+      {news.relatedByPoliticalArea &&
+        news.relatedByPoliticalArea.length > 0 && (
+          <Section
+            title="Relaterade nyheter"
+            className="mt-16"
+            aria-label="Relaterade nyheter"
+          >
+            <div className="rounded-lg overflow-hidden">
+              <div className="grid">
+                {news.relatedByPoliticalArea.map((item, index) => (
+                  <NewsCard
+                    key={item._id}
+                    title={item.title || ""}
+                    isLast={index === news.relatedByPoliticalArea!.length - 1}
+                    date={item.effectiveDate}
+                    slug={item.slug?.current || ""}
+                    excerpt={item.excerpt || ""}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        </Section>
-      )}
+          </Section>
+        )}
     </div>
   );
 }

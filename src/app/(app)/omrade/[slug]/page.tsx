@@ -5,13 +5,21 @@ import { PolicyList } from "@/lib/components/politics/policyList";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { Section } from "@/lib/components/shared/Section";
-import { geographicalAreaPageQuery, allGeographicalAreaSlugsQuery } from "@/lib/queries/politik";
+import {
+  geographicalAreaPageQuery,
+  allGeographicalAreaSlugsQuery,
+} from "@/lib/queries/politik";
 import { sanityClient } from "@/lib/sanity/client";
 import { buildImageUrl } from "@/lib/sanity/image";
 import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { PortableText } from "next-sanity";
-import { News, GeographicalArea, Politician, PoliticalIssue } from "~/sanity.types";
+import {
+  News,
+  GeographicalArea,
+  Politician,
+  PoliticalIssue,
+} from "~/sanity.types";
 import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
 import { cleanPoliticianData, PoliticianWithNamnd } from "@/lib/politicians";
 import { ROUTE_BASE } from "@/lib/routes";
@@ -24,7 +32,7 @@ import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleConte
 // Generate static params for all geographical areas at build time
 export async function generateStaticParams() {
   const areas = await sanityClient.fetch<{ slug: string }[]>(
-    allGeographicalAreaSlugsQuery
+    allGeographicalAreaSlugsQuery,
   );
 
   return areas.map((area) => ({
@@ -44,13 +52,11 @@ interface Props {
   }>;
 }
 
-export async function generateMetadata({
-  params,
-}: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const data = await sanityClient.fetch<GeographicalAreaPage>(
     geographicalAreaPageQuery,
-    { slug }
+    { slug },
   );
 
   if (!data) {
@@ -66,7 +72,7 @@ export async function generateMetadata({
 
   const firstBlock = data.description?.find(
     (b): b is typeof b & { children: { text?: string }[] } =>
-      "children" in b && Array.isArray(b.children)
+      "children" in b && Array.isArray(b.children),
   );
   const descriptionText = firstBlock?.children?.[0]?.text?.substring(0, 150);
 
@@ -89,7 +95,7 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
     { slug },
     {
       next: { revalidate: 3600 },
-    }
+    },
   );
 
   if (!data) {
@@ -117,14 +123,19 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
     return (a.name || "").localeCompare(b.name || "", "sv");
   });
 
-  const main = data.description  ? (<div className="prose md:prose-lg">
-    <PortableText value={data.description} components={portableTextComponents} />
-  </div>) : null;
+  const main = data.description ? (
+    <div className="prose md:prose-lg">
+      <PortableText
+        value={data.description}
+        components={portableTextComponents}
+      />
+    </div>
+  ) : null;
 
   const sidebar =
     data.politicalIssues?.length > 0 ? (
-      <Sidebar heading="Våra politiska mål">
-      <PolicyList policies={data.politicalIssues} />
+      <Sidebar heading="Politiska mål">
+        <PolicyList policies={data.politicalIssues} />
       </Sidebar>
     ) : null;
 
@@ -140,10 +151,7 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
             imagePosition={data.image ? "right" : undefined}
           />
 
-          <ContentWithSidebar
-            mainContent={main}
-            sidebarContent={sidebar}
-          />
+          <ContentWithSidebar mainContent={main} sidebarContent={sidebar} />
 
           {/* Current News Section */}
           {data.latestNews.length > 0 && (
