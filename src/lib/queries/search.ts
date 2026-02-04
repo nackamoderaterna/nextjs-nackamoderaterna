@@ -49,6 +49,16 @@ export const searchQuery = groq`
     description,
     image{ ..., hotspot, crop },
     "searchText": coalesce(name, "") + " " + coalesce(description, "")
+  },
+  "politicalIssues": *[_type == "politicalIssue"] {
+    _id,
+    _type,
+    question,
+    slug,
+    description,
+    featured,
+    fulfilled,
+    "searchText": coalesce(question, "") + " " + coalesce(description, "")
   }
 }
 `;

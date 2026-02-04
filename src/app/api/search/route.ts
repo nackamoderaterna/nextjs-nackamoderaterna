@@ -11,6 +11,7 @@ interface SearchResult {
   _type: string;
   name?: string;
   title?: string;
+  question?: string;
   slug?: {
     current: string;
   };
@@ -31,6 +32,8 @@ interface SearchResult {
     };
     _type: "image";
   };
+  featured?: boolean;
+  fulfilled?: boolean;
 }
 
 interface SearchData {
@@ -39,6 +42,7 @@ interface SearchData {
   news: SearchResult[];
   politicalAreas: SearchResult[];
   geographicalAreas: SearchResult[];
+  politicalIssues: SearchResult[];
 }
 
 const fuseOptions = {
@@ -60,7 +64,8 @@ export async function GET(request: NextRequest) {
     const data = await sanityClient.fetch<SearchData>(searchQuery);
 
     // Combine all items with type labels
-    const allItems: Array<SearchResult & { category: string; url: string }> = [];
+    const allItems: Array<SearchResult & { category: string; url: string }> =
+      [];
 
     // Add politicians
     data.politicians.forEach((item) => {
@@ -107,6 +112,22 @@ export async function GET(request: NextRequest) {
       });
     });
 
+    // Add political issues (sakfrågor)
+    data.politicalIssues.forEach((item) => {
+      const iconName = item.fulfilled
+        ? "Trophy"
+        : item.featured
+          ? "Star"
+          : "CheckCircle";
+      allItems.push({
+        ...item,
+        name: item.question,
+        icon: { name: iconName },
+        category: "Sakfråga",
+        url: `${ROUTE_BASE.POLITICS_ISSUES}/${item.slug?.current || ""}`,
+      });
+    });
+
     // Configure Fuse.js
     const fuse = new Fuse(allItems, {
       ...fuseOptions,
@@ -114,8 +135,8 @@ export async function GET(request: NextRequest) {
         { name: "name", weight: 0.5 },
         { name: "title", weight: 0.5 },
         { name: "searchText", weight: 0.3 },
-        { name: "excerpt", weight: 0.2 },
-        { name: "description", weight: 0.2 },
+        { name: "excerpt", weight: 0.1 },
+        { name: "description", weight: 0.1 },
       ],
     });
 
@@ -132,9 +153,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error("Search error:", error);
-    return NextResponse.json(
-      { error: "Search failed" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Search failed" }, { status: 500 });
   }
 }

@@ -1,42 +1,48 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { Search, X, Loader2 } from "lucide-react";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { Search, X } from "lucide-react";
+import Fuse from "fuse.js";
 import Link from "next/link";
 import Image from "next/image";
 import { Input } from "@/lib/components/ui/input";
-import { ROUTE_BASE } from "@/lib/routes";
 import { buildImageUrl } from "@/lib/sanity/image";
 import { getLucideIcon } from "@/lib/utils/iconUtils";
 
-interface SearchResult {
+export interface SearchItem {
   _id: string;
-  _type: string;
-  name?: string;
-  title?: string;
-  slug?: {
-    current: string;
-  };
-  excerpt?: string;
+  name: string;
+  description?: string;
   category: string;
   url: string;
-  icon?: { name?: string | null } | null;
+  searchText?: string;
+  iconName?: string | null;
   image?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-    };
+    asset?: { _ref: string };
     _type: "image";
-  };
+    [key: string]: unknown;
+  } | null;
 }
 
-export function SearchBar() {
+const fuseOptions = {
+  threshold: 0.3,
+  minMatchCharLength: 2,
+  includeScore: true,
+  keys: [
+    { name: "name", weight: 0.5 },
+    { name: "searchText", weight: 0.3 },
+    { name: "description", weight: 0.2 },
+  ],
+};
+
+export function SearchBar({ items = [] }: { items?: SearchItem[] }) {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<SearchResult[]>([]);
+  const [results, setResults] = useState<SearchItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const fuse = useMemo(() => new Fuse(items, fuseOptions), [items]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -67,27 +73,13 @@ export function SearchBar() {
   useEffect(() => {
     if (query.length < 2) {
       setResults([]);
-      setIsLoading(false);
       return;
     }
 
-    const searchTimeout = setTimeout(async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(`${ROUTE_BASE.API_SEARCH}?q=${encodeURIComponent(query)}`);
-        const data = await response.json();
-        setResults(data.results || []);
-        setIsOpen(true);
-      } catch (error) {
-        console.error("Search error:", error);
-        setResults([]);
-      } finally {
-        setIsLoading(false);
-      }
-    }, 300);
-
-    return () => clearTimeout(searchTimeout);
-  }, [query]);
+    const hits = fuse.search(query).slice(0, 10);
+    setResults(hits.map((r) => r.item));
+    setIsOpen(true);
+  }, [query, fuse]);
 
   const handleResultClick = () => {
     setIsOpen(false);
@@ -129,19 +121,14 @@ export function SearchBar() {
             <X className="w-4 h-4 text-muted-foreground hover:text-foreground" />
           </button>
         )}
-        {isLoading && (
-          <div className="absolute right-10 top-1/2 transform -translate-y-1/2">
-            <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
-          </div>
-        )}
       </div>
 
-      {isOpen && (results.length > 0 || (query.length >= 2 && !isLoading)) && (
+      {isOpen && (results.length > 0 || query.length >= 2) && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-background border border-border rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
           {results.length > 0 ? (
             <div className="p-2">
               {results.map((result) => {
-                const Icon = result.icon?.name ? getLucideIcon(result.icon.name) : null;
+                const Icon = result.iconName ? getLucideIcon(result.iconName) : null;
                 const imageUrl = result.image ? buildImageUrl(result.image, { width: 150, height: 150 }) : null;
                 return (
                   <Link
@@ -152,11 +139,11 @@ export function SearchBar() {
                   >
                     <div className="flex-1 min-w-0">
                       <div className="font-semibold text-sm">
-                        {result.name || result.title}
+                        {result.name}
                       </div>
-                      {result.excerpt && (
+                      {result.description && (
                         <div className="text-xs text-muted-foreground mt-1 line-clamp-1">
-                          {result.excerpt}
+                          {result.description}
                         </div>
                       )}
                       <div className="text-xs text-muted-foreground mt-1">
@@ -171,7 +158,7 @@ export function SearchBar() {
                       <div className="flex-shrink-0">
                         <Image
                           src={imageUrl}
-                          alt={result.name || result.title || ""}
+                          alt={result.name}
                           width={50}
                           height={50}
                           className="rounded object-cover"
@@ -182,7 +169,7 @@ export function SearchBar() {
                 );
               })}
             </div>
-          ) : query.length >= 2 && !isLoading ? (
+          ) : query.length >= 2 ? (
             <div className="p-4 text-center text-sm text-muted-foreground">
               Inga resultat hittades
             </div>
