@@ -122,6 +122,7 @@ export async function NewsListing({
                 variant={news.variant}
                 politicalAreas={news.politicalAreas}
                 series={news.series}
+                headingLevel="h2"
               />
             ))}
           </div>

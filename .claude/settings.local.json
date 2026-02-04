@@ -7,7 +7,11 @@
       "Bash(head:*)",
       "Bash(npm run build:*)",
       "Bash(npx sanity schema:*)",
-      "Bash(npx sanity typegen:*)"
+      "Bash(npx sanity typegen:*)",
+      "Bash(npx eslint:*)",
+      "Bash(git -C /Users/nsld/workspace/nextjs-nackamoderaterna-agent log --grep=\"title\\\\|all\\\\|solution\" --oneline)",
+      "Bash(git -C /Users/nsld/workspace/nextjs-nackamoderaterna-agent log --all -p)",
+      "Bash(npx next lint:*)"
     ]
   }
 }

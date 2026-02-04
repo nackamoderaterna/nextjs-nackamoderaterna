@@ -31,6 +31,7 @@ interface NewsCardProps {
   variant?: NewsVariant | null;
   politicalAreas?: PoliticalAreaRef[] | null;
   series?: SeriesRef | null;
+  headingLevel?: "h2" | "h3";
 }
 
 export function NewsCard({
@@ -42,6 +43,7 @@ export function NewsCard({
   variant,
   politicalAreas,
   series,
+  headingLevel: Heading = "h3",
 }: NewsCardProps) {
   const router = useRouter();
 
@@ -62,9 +64,9 @@ export function NewsCard({
 
           <div className="md:col-span-8 space-y-3">
             <div className="space-y-2">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight text-balance group-hover:text-primary transition-colors min-w-0">
+              <Heading className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight text-balance group-hover:text-primary transition-colors min-w-0">
                 {title}
-              </h2>
+              </Heading>
               {variant && variant !== "default" && (
                 <NewsVariantBadge
                   variant={variant}

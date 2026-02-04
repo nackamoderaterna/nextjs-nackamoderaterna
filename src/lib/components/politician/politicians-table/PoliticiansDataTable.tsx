@@ -23,6 +23,13 @@ import {
   TableRow,
 } from "@/lib/components/ui/table";
 import { Button } from "@/lib/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/lib/components/ui/select";
 import { politiciansColumns } from "./columns";
 import {
   PoliticiansTableFilters,
@@ -36,7 +43,8 @@ interface PoliticiansDataTableProps {
   data: PoliticianWithNamnd[];
 }
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE_OPTIONS = [10, 25, 50, 100] as const;
+const DEFAULT_PAGE_SIZE = 10;
 
 const COLUMN_WIDTH_CLASSES: Record<string, string> = {
   namn: "min-w-[220px]",
@@ -108,6 +116,7 @@ function syncParamsFromState(
       params.set("categories", (f.value as string[]).join(","));
     }
   }
+
   return params;
 }
 
@@ -128,17 +137,27 @@ export function PoliticiansDataTable({ data }: PoliticiansDataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const categories = React.useMemo(() => getUniqueCategories(data), [data]);
 
+  // Use a ref to store the latest searchParams to avoid recreating updateUrl on every URL change
+  const searchParamsRef = React.useRef(searchParams);
+  React.useEffect(() => {
+    searchParamsRef.current = searchParams;
+  }, [searchParams]);
+
   // Debounced URL sync — update table state immediately, batch URL updates
   const pendingUrl = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const updateUrl = React.useCallback(
     (nextGlobal: string, nextColumnFilters: ColumnFiltersState) => {
       if (pendingUrl.current) clearTimeout(pendingUrl.current);
       pendingUrl.current = setTimeout(() => {
-        const params = syncParamsFromState(searchParams, nextGlobal, nextColumnFilters);
+        const params = syncParamsFromState(
+          searchParamsRef.current,
+          nextGlobal,
+          nextColumnFilters
+        );
         router.replace(buildUrl(params), { scroll: false });
       }, 300);
     },
-    [searchParams, router]
+    [router]
   );
 
   const handleGlobalFilterChange = React.useCallback(
@@ -176,7 +195,7 @@ export function PoliticiansDataTable({ data }: PoliticiansDataTableProps) {
       sorting,
     },
     initialState: {
-      pagination: { pageSize: PAGE_SIZE },
+      pagination: { pageSize: DEFAULT_PAGE_SIZE },
       columnVisibility: {
         kommunalrad: false,
         partistyrelse: false,
@@ -273,33 +292,53 @@ export function PoliticiansDataTable({ data }: PoliticiansDataTableProps) {
       </div>
 
       {rows.length > 0 && (
-        <div className="flex items-center justify-between px-2">
+        <div className="flex flex-col gap-4 px-2 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-muted-foreground">
             {table.getFilteredRowModel().rows.length} politiker
             {globalFilter ? " (efter sökning/filter)" : ""}
           </p>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <ChevronLeft className="size-4" />
-              Föregående
-            </Button>
-            <span className="text-sm text-muted-foreground">
-              Sida {table.getState().pagination.pageIndex + 1} av {pageCount || 1}
-            </span>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Nästa
-              <ChevronRight className="size-4" />
-            </Button>
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">Visa</span>
+              <Select
+                value={String(table.getState().pagination.pageSize)}
+                onValueChange={(value) => table.setPageSize(Number(value))}
+              >
+                <SelectTrigger className="h-8 w-[70px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {PAGE_SIZE_OPTIONS.map((size) => (
+                    <SelectItem key={size} value={String(size)}>
+                      {size}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                <ChevronLeft className="size-4" />
+                Föregående
+              </Button>
+              <span className="text-sm text-muted-foreground">
+                Sida {table.getState().pagination.pageIndex + 1} av {pageCount || 1}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                Nästa
+                <ChevronRight className="size-4" />
+              </Button>
+            </div>
           </div>
         </div>
       )}

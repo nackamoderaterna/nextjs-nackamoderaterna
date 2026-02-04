@@ -78,7 +78,7 @@ export function ExpandableNewsList({
               overflow-hidden transition-[max-height] duration-300 ease-in-out
               ${isExpanded ? "max-h-[5000px]" : "max-h-0"}
             `}
-            aria-hidden={!isExpanded}
+            {...(!isExpanded ? { inert: true } : undefined)}
           >
             <div className="grid border-t border-border">
               {moreItems.map((item, index) => (

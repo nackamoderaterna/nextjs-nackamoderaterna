@@ -11,6 +11,8 @@ interface ContentHeroProps {
   icon?: { name?: string | null } | null;
   subtitle?: string;
   subtitleHref?: string;
+  /** Controls whether the image appears to the left (default) or right of the text */
+  imagePosition?: "left" | "right";
   /** Rendered below the hero block, inside the section and above the border */
   children?: ReactNode;
 }
@@ -22,26 +24,28 @@ export function ContentHero({
   icon,
   subtitle,
   subtitleHref,
+  imagePosition = "left",
   children,
 }: ContentHeroProps) {
   const Icon = icon?.name ? getLucideIcon(icon.name) : null;
   const showImage = !!image;
   const showIcon = !showImage && !!Icon;
+  const isRight = imagePosition === "right";
 
   return (
     <section className="border-b border-border rounded-lg pb-6 mb-6 flex flex-col gap-4">
-      <div className="flex flex-col md:flex-row items-start justify-start md:justify-center md:items-center gap-4">
+      <div className={`flex flex-col ${isRight ? "md:flex-row-reverse" : "md:flex-row"} items-start justify-start md:justify-center md:items-center gap-4`}>
         {showImage ? (
-          <div className="relative h-auto aspect-square max-w-sm w-full lg:w-64 lg:h-64 rounded overflow-hidden shrink-0">
+          <div className={`relative rounded overflow-hidden shrink-0 ${isRight ? "aspect-[4/3] max-w-md w-full lg:w-80 lg:h-auto" : "h-auto aspect-square max-w-sm w-full lg:w-64 lg:h-64"}`}>
             <SanityImage
               image={image}
               alt=""
               fill
               priority
-              sourceWidth={512}
-              sourceHeight={512}
+              sourceWidth={isRight ? 640 : 512}
+              sourceHeight={isRight ? 480 : 512}
               className="object-cover rounded"
-              sizes="(max-width: 1023px) 384px, 256px"
+              sizes={isRight ? "(max-width: 1023px) 448px, 320px" : "(max-width: 1023px) 384px, 256px"}
             />
           </div>
         ) : showIcon ? (

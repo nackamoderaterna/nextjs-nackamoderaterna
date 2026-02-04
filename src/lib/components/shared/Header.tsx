@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MainNav } from "../navigation/MainNav";
+mport { MainNav } from "../navigation/MainNav";
 import { MobileNav } from "../navigation/MobileNav";
 import { SearchBar } from "../search/SearchBar";
 import { Button } from "@/lib/components/ui/button";
@@ -63,9 +63,9 @@ export default async function Header() {
               />
             </Link>
           )}
-          <h2 className="text-xl font-bold">
+          <p className="text-xl font-bold">
             <Link href={ROUTE_BASE.HOME}>{companyName}</Link>
-          </h2>
+          </p>
         </div>
         <div className="flex-1 min-w-0" />
         <div className="flex items-center justify-end gap-2  w-full max-w-lg">

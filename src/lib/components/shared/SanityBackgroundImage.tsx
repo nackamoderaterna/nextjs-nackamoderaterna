@@ -41,7 +41,7 @@ export function SanityBackgroundImage({
   return (
     <div className={`relative w-full ${height} overflow-hidden`}>
       {/* Background Image */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 bg-cover bg-no-repeat">
         <Image
           src={imageUrl}
           loader={sanityLoader}

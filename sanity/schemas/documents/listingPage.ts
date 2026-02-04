@@ -55,23 +55,93 @@ export const listingPage = defineType({
       description: "Anpassa rubrikerna för olika sektioner på sidan. Lämna tomt för standardvärden.",
       fields: [
         // Politik page sections
-        { name: "featuredIssues", title: "Kärnfrågor (Politik)", type: "string" },
-        { name: "categories", title: "Kategorier (Politik)", type: "string" },
-        { name: "areas", title: "Områden (Politik)", type: "string" },
-        { name: "fulfilledPromises", title: "Uppfyllda vallöften (Politik)", type: "string" },
+        {
+          name: "featuredIssues",
+          title: "Kärnfrågor",
+          type: "string",
+          hidden: ({ document }) => document?.key !== "politics",
+        },
+        {
+          name: "categories",
+          title: "Kategorier",
+          type: "string",
+          hidden: ({ document }) => document?.key !== "politics",
+        },
+        {
+          name: "areas",
+          title: "Områden",
+          type: "string",
+          hidden: ({ document }) => document?.key !== "politics",
+        },
+        {
+          name: "fulfilledPromises",
+          title: "Uppfyllda vallöften",
+          type: "string",
+          hidden: ({ document }) => document?.key !== "politics",
+        },
         // Events page sections
-        { name: "upcoming", title: "Kommande (Evenemang)", type: "string" },
-        { name: "past", title: "Tidigare (Evenemang)", type: "string" },
+        {
+          name: "upcoming",
+          title: "Kommande",
+          type: "string",
+          hidden: ({ document }) => document?.key !== "events",
+        },
+        {
+          name: "past",
+          title: "Tidigare",
+          type: "string",
+          hidden: ({ document }) => document?.key !== "events",
+        },
         // Politicians page sections
-        { name: "kommunalrad", title: "Kommunalråd (Politiker)", type: "string" },
-        { name: "groupLeaders", title: "Gruppledare (Politiker)", type: "string" },
-        { name: "partyBoard", title: "Föreningsstyrelsen (Politiker)", type: "string" },
-        { name: "kommunfullmaktige", title: "Kommunfullmäktige (Politiker)", type: "string" },
-        { name: "otherPoliticians", title: "Övriga politiker (Politiker)", type: "string" },
+        {
+          name: "kommunalrad",
+          title: "Kommunalråd",
+          type: "string",
+          hidden: ({ document }) => document?.key !== "politicians",
+        },
+        {
+          name: "groupLeaders",
+          title: "Gruppledare",
+          type: "string",
+          hidden: ({ document }) => document?.key !== "politicians",
+        },
+        {
+          name: "partyBoard",
+          title: "Föreningsstyrelsen",
+          type: "string",
+          hidden: ({ document }) => document?.key !== "politicians",
+        },
+        {
+          name: "kommunfullmaktige",
+          title: "Kommunfullmäktige",
+          type: "string",
+          hidden: ({ document }) => document?.key !== "politicians",
+        },
+        {
+          name: "otherPoliticians",
+          title: "Övriga politiker",
+          type: "string",
+          hidden: ({ document }) => document?.key !== "politicians",
+        },
         // Sakfrågor page sections
-        { name: "sakfragorFeatured", title: "Kärnfrågor (Sakfrågor)", type: "string" },
-        { name: "sakfragorFulfilled", title: "Genomförda vallöften (Sakfrågor)", type: "string" },
-        { name: "sakfragorAll", title: "Sakfrågor (Sakfrågor)", type: "string" },
+        {
+          name: "sakfragorFeatured",
+          title: "Kärnfrågor",
+          type: "string",
+          hidden: ({ document }) => document?.key !== "politikSakfragor",
+        },
+        {
+          name: "sakfragorFulfilled",
+          title: "Genomförda vallöften",
+          type: "string",
+          hidden: ({ document }) => document?.key !== "politikSakfragor",
+        },
+        {
+          name: "sakfragorAll",
+          title: "Sakfrågor",
+          type: "string",
+          hidden: ({ document }) => document?.key !== "politikSakfragor",
+        },
       ],
     }),
     defineField({
