@@ -5,7 +5,7 @@ export default defineType({
   title: "Footer Navigation",
   type: "document",
   groups: [
-    { name: "structure", title: "Struktur", default: true },
+    { name: "structure", title: "Struktur" },
     { name: "content", title: "Innehåll" },
   ],
   fields: [
@@ -16,20 +16,20 @@ export default defineType({
       group: "structure",
       of: [
         {
-          type: 'object',
-          name: 'footerColumn',
-          title: 'Footer Column',
+          type: "object",
+          name: "footerColumn",
+          title: "Footer Column",
           fields: [
             defineField({
-              name: 'title',
-              title: 'Column Title',
-              type: 'string',
+              name: "title",
+              title: "Column Title",
+              type: "string",
             }),
             defineField({
-              name: 'items',
-              title: 'Menu Items',
-              type: 'array',
-              of: [{type: 'menuItem'}],
+              name: "items",
+              title: "Menu Items",
+              type: "array",
+              of: [{ type: "menuItem" }],
             }),
           ],
         },

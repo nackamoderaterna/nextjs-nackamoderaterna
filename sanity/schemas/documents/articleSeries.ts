@@ -4,9 +4,7 @@ export const articleSeries = defineType({
   name: "articleSeries",
   title: "Artikelserie",
   type: "document",
-  groups: [
-    { name: "content", title: "Innehåll", default: true },
-  ],
+  groups: [{ name: "content", title: "Innehåll" }],
   fields: [
     defineField({
       name: "title",
@@ -44,4 +42,3 @@ export const articleSeries = defineType({
     },
   },
 });
-

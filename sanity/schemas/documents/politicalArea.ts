@@ -5,7 +5,7 @@ export const politicalArea = defineType({
   title: "Politiskt område",
   type: "document",
   groups: [
-    { name: "content", title: "Innehåll", default: true },
+    { name: "content", title: "Innehåll" },
     { name: "media", title: "Media" },
   ],
   fields: [
@@ -20,7 +20,8 @@ export const politicalArea = defineType({
     defineField({
       name: "slug",
       title: "Slug",
-      description: "URL-vänlig identifierare för området. Genereras automatiskt från namnet.",
+      description:
+        "URL-vänlig identifierare för området. Genereras automatiskt från namnet.",
       type: "slug",
       options: {
         source: "name",
@@ -32,7 +33,8 @@ export const politicalArea = defineType({
     defineField({
       name: "description",
       title: "Beskrivning",
-      description: "Beskrivning av det politiska området. Visas på områdets sida.",
+      description:
+        "Beskrivning av det politiska området. Visas på områdets sida.",
       type: "array",
       group: "content",
       of: [{ type: "block" }, { type: "image" }],
@@ -45,12 +47,13 @@ export const politicalArea = defineType({
       group: "media",
       options: {
         hotspot: true,
-      }, 
+      },
     }),
     defineField({
       name: "icon",
       title: "Ikon",
-      description: "Ikon som visas i listningar av politiska områden. Välj en ikon från Lucide-biblioteket.",
+      description:
+        "Ikon som visas i listningar av politiska områden. Välj en ikon från Lucide-biblioteket.",
       type: "lucideIcon",
       group: "media",
     }),

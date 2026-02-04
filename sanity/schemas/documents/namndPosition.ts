@@ -5,7 +5,7 @@ export const namndPosition = defineType({
   title: "Bolag/Nämnd-position",
   type: "document",
   groups: [
-    { name: "assignment", title: "Uppdrag", default: true },
+    { name: "assignment", title: "Uppdrag" },
     { name: "dates", title: "Tidsperiod" },
     { name: "extra", title: "Övrigt" },
   ],
@@ -56,16 +56,16 @@ export const namndPosition = defineType({
   ],
   preview: {
     select: {
-      politician: 'politician.name',
-      bolagNamnd: 'bolagNamnd.name',
-      title: 'title',
+      politician: "politician.name",
+      bolagNamnd: "bolagNamnd.name",
+      title: "title",
     },
     prepare(selection) {
-      const {politician, bolagNamnd, title} = selection
+      const { politician, bolagNamnd, title } = selection;
       return {
         title: `${politician} - ${title}`,
         subtitle: bolagNamnd,
-      }
+      };
     },
   },
-})
+});

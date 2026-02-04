@@ -5,7 +5,7 @@ export const news = defineType({
   title: "Nyheter",
   type: "document",
   groups: [
-    { name: "content", title: "Innehåll", default: true },
+    { name: "content", title: "Innehåll" },
     { name: "media", title: "Media" },
     { name: "relations", title: "Relationer" },
     { name: "metadata", title: "Metadata" },
@@ -21,7 +21,8 @@ export const news = defineType({
     defineField({
       name: "slug",
       title: "Slug",
-      description: "URL-vänlig identifierare för nyheten. Genereras automatiskt från rubriken.",
+      description:
+        "URL-vänlig identifierare för nyheten. Genereras automatiskt från rubriken.",
       type: "slug",
       options: {
         source: "title",
@@ -49,7 +50,8 @@ export const news = defineType({
     defineField({
       name: "excerpt",
       title: "Ingress",
-      description: "Kort sammanfattning som visas i listningar och förhandsvisningar.",
+      description:
+        "Kort sammanfattning som visas i listningar och förhandsvisningar.",
       type: "text",
       rows: 3,
       group: "content",
@@ -57,7 +59,8 @@ export const news = defineType({
     defineField({
       name: "body",
       title: "Innehåll",
-      description: "Huvudinnehållet i nyheten. Kan innehålla text, bilder och annat innehåll.",
+      description:
+        "Huvudinnehållet i nyheten. Kan innehålla text, bilder och annat innehåll.",
       type: "array",
       group: "content",
       validation: (Rule) => Rule.required().min(1),
@@ -87,7 +90,8 @@ export const news = defineType({
         defineField({
           name: "aspectRatio",
           title: "Bildförhållande (sidebar)",
-          description: "Förhållande i sidofältet. Porträtt (4:5) passar Instagram-inlägg. Kvadrat för kvadratiska bilder.",
+          description:
+            "Förhållande i sidofältet. Porträtt (4:5) passar Instagram-inlägg. Kvadrat för kvadratiska bilder.",
           type: "string",
           options: {
             list: [
@@ -104,7 +108,8 @@ export const news = defineType({
     defineField({
       name: "documents",
       title: "Bifogade dokument",
-      description: "Valfria dokument (PDF, Word, etc.) som bifogas till nyheten.",
+      description:
+        "Valfria dokument (PDF, Word, etc.) som bifogas till nyheten.",
       type: "array",
       group: "media",
       of: [{ type: "file" }],
@@ -112,14 +117,16 @@ export const news = defineType({
     defineField({
       name: "instagramUrl",
       title: "Instagram-länk",
-      description: "Länk till diskussionen på Instagram. Visar en knapp under bilden för att delta i diskussionen.",
+      description:
+        "Länk till diskussionen på Instagram. Visar en knapp under bilden för att delta i diskussionen.",
       type: "url",
       group: "media",
     }),
     defineField({
       name: "facebookUrl",
       title: "Facebook-länk",
-      description: "Länk till diskussionen på Facebook. Visar en knapp under bilden för att delta i diskussionen.",
+      description:
+        "Länk till diskussionen på Facebook. Visar en knapp under bilden för att delta i diskussionen.",
       type: "url",
       group: "media",
     }),

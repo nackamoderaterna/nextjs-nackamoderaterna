@@ -4,9 +4,7 @@ export const namnd = defineType({
   name: "namnd",
   title: "Nämnd",
   type: "document",
-  groups: [
-    { name: "content", title: "Innehåll", default: true },
-  ],
+  groups: [{ name: "content", title: "Innehåll" }],
   fields: [
     defineField({
       name: "title",

@@ -4,9 +4,7 @@ export default defineType({
   name: "navigationHeader",
   title: "Header Navigation",
   type: "document",
-  groups: [
-    { name: "menu", title: "Meny", default: true },
-  ],
+  groups: [{ name: "menu", title: "Meny" }],
   fields: [
     defineField({
       name: "title",

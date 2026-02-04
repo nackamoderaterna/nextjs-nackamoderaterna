@@ -5,7 +5,7 @@ export const listingPage = defineType({
   title: "Listingsidor",
   type: "document",
   groups: [
-    { name: "content", title: "Innehåll", default: true },
+    { name: "content", title: "Innehåll" },
     { name: "seo", title: "SEO" },
   ],
   fields: [
@@ -52,7 +52,8 @@ export const listingPage = defineType({
       title: "Sektionsrubriker",
       type: "object",
       group: "content",
-      description: "Anpassa rubrikerna för olika sektioner på sidan. Lämna tomt för standardvärden.",
+      description:
+        "Anpassa rubrikerna för olika sektioner på sidan. Lämna tomt för standardvärden.",
       fields: [
         // Politik page sections
         {
@@ -160,4 +161,3 @@ export const listingPage = defineType({
     },
   },
 });
-

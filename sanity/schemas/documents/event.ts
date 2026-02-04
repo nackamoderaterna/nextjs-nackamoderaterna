@@ -5,7 +5,7 @@ export const eventDocument = defineType({
   title: "Evenemang",
   type: "document",
   groups: [
-    { name: "content", title: "Innehåll", default: true },
+    { name: "content", title: "Innehåll" },
     { name: "when", title: "Tid" },
     { name: "where", title: "Plats" },
     { name: "settings", title: "Inställningar" },
@@ -22,7 +22,8 @@ export const eventDocument = defineType({
     defineField({
       name: "slug",
       title: "Slug",
-      description: "URL-vänlig identifierare för evenemanget. Genereras automatiskt från titeln.",
+      description:
+        "URL-vänlig identifierare för evenemanget. Genereras automatiskt från titeln.",
       type: "slug",
       options: {
         source: "title",
@@ -60,7 +61,8 @@ export const eventDocument = defineType({
     defineField({
       name: "endDate",
       title: "Slutdatum",
-      description: "Valfritt: datum och tid när evenemanget slutar. Om tomt är evenemanget en punkt i tiden.",
+      description:
+        "Valfritt: datum och tid när evenemanget slutar. Om tomt är evenemanget en punkt i tiden.",
       type: "datetime",
       group: "when",
     }),
@@ -71,9 +73,24 @@ export const eventDocument = defineType({
       type: "object",
       group: "where",
       fields: [
-        { name: "venue", title: "Lokal", type: "string", description: "Namn på lokalen eller platsen." },
-        { name: "address", title: "Adress", type: "string", description: "Gatuadress." },
-        { name: "city", title: "Stad", type: "string", description: "Stad där evenemanget äger rum." },
+        {
+          name: "venue",
+          title: "Lokal",
+          type: "string",
+          description: "Namn på lokalen eller platsen.",
+        },
+        {
+          name: "address",
+          title: "Adress",
+          type: "string",
+          description: "Gatuadress.",
+        },
+        {
+          name: "city",
+          title: "Stad",
+          type: "string",
+          description: "Stad där evenemanget äger rum.",
+        },
       ],
     }),
     defineField({
@@ -102,7 +119,8 @@ export const eventDocument = defineType({
     defineField({
       name: "isPublic",
       title: "Öppet för allmänheten",
-      description: "Om markerat är evenemanget öppet för allmänheten. Annars är det endast för medlemmar.",
+      description:
+        "Om markerat är evenemanget öppet för allmänheten. Annars är det endast för medlemmar.",
       type: "boolean",
       group: "settings",
       initialValue: false,

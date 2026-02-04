@@ -5,7 +5,7 @@ export const politician = defineType({
   title: "Politiker",
   type: "document",
   groups: [
-    { name: "base", title: "Bas", default: true },
+    { name: "base", title: "Bas" },
     { name: "uppdrag", title: "Uppdrag" },
     { name: "relations", title: "Relationer" },
   ],
@@ -20,7 +20,8 @@ export const politician = defineType({
     {
       name: "slug",
       title: "Slug",
-      description: "URL-vänlig identifierare för politikern. Genereras automatiskt från namnet. Används för att skapa politikerns sida.",
+      description:
+        "URL-vänlig identifierare för politikern. Genereras automatiskt från namnet. Används för att skapa politikerns sida.",
       type: "slug",
       options: {
         source: "name",
@@ -228,7 +229,8 @@ export const politician = defineType({
               name: "showOnPoliticalAreaPage",
               title: "Visa på hjärtefrågans sida",
               type: "boolean",
-              description: "Om markerad visas politiken på hjärtefrågans sida. Annars visas den endast på politikerns sida.",
+              description:
+                "Om markerad visas politiken på hjärtefrågans sida. Annars visas den endast på politikerns sida.",
               initialValue: false,
             },
           ],
@@ -240,7 +242,9 @@ export const politician = defineType({
             prepare({ title, showOnPage }) {
               return {
                 title: title || "–",
-                subtitle: showOnPage ? "Syns på hjärtefrågans sida" : "Endast på politikerns sida",
+                subtitle: showOnPage
+                  ? "Syns på hjärtefrågans sida"
+                  : "Endast på politikerns sida",
               };
             },
           },
@@ -250,7 +254,8 @@ export const politician = defineType({
     defineField({
       name: "pressbilder",
       title: "Pressbilder",
-      description: "Bilder för press och medier. Varje bild kan ha en bildtext och visas med nedladdningslänk.",
+      description:
+        "Bilder för press och medier. Varje bild kan ha en bildtext och visas med nedladdningslänk.",
       type: "array",
       group: "base",
       of: [

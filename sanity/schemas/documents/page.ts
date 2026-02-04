@@ -5,7 +5,7 @@ export const page = defineType({
   title: "Sidor",
   type: "document",
   groups: [
-    { name: "content", title: "Innehåll", default: true },
+    { name: "content", title: "Innehåll" },
     { name: "header", title: "Sidhuvud" },
     { name: "seo", title: "SEO" },
     { name: "modal", title: "Modal" },

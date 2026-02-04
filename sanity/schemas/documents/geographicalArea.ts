@@ -5,7 +5,7 @@ export const geographicalArea = defineType({
   title: "Geografiskt område",
   type: "document",
   groups: [
-    { name: "content", title: "Innehåll", default: true },
+    { name: "content", title: "Innehåll" },
     { name: "media", title: "Media" },
   ],
   fields: [
@@ -19,7 +19,8 @@ export const geographicalArea = defineType({
     defineField({
       name: "slug",
       title: "Slug",
-      description: "URL-vänlig identifierare för området. Genereras automatiskt från namnet.",
+      description:
+        "URL-vänlig identifierare för området. Genereras automatiskt från namnet.",
       type: "slug",
       options: {
         source: "name",
@@ -31,7 +32,8 @@ export const geographicalArea = defineType({
     defineField({
       name: "description",
       title: "Beskrivning",
-      description: "Beskrivning av det geografiska området. Visas på områdets sida.",
+      description:
+        "Beskrivning av det geografiska området. Visas på områdets sida.",
       type: "array",
       group: "content",
       of: [{ type: "block" }, { type: "image", options: { hotspot: true } }],

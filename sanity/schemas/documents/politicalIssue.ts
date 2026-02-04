@@ -5,7 +5,7 @@ export const politicalIssue = defineType({
   title: "Politisk Fråga",
   type: "document",
   groups: [
-    { name: "content", title: "Innehåll", default: true },
+    { name: "content", title: "Innehåll" },
     { name: "relations", title: "Relationer" },
   ],
   fields: [
@@ -29,7 +29,8 @@ export const politicalIssue = defineType({
     defineField({
       name: "slug",
       title: "Slug",
-      description: "URL-vänlig identifierare. Genereras automatiskt från frågan.",
+      description:
+        "URL-vänlig identifierare. Genereras automatiskt från frågan.",
       type: "slug",
       options: {
         source: "question",
@@ -66,14 +67,16 @@ export const politicalIssue = defineType({
       name: "fulfilledAt",
       title: "Uppfylld datum",
       type: "date",
-      description: "När vallöftet uppfylldes. Visas i sidofältet när uppfyllt är markerat.",
+      description:
+        "När vallöftet uppfylldes. Visas i sidofältet när uppfyllt är markerat.",
       group: "content",
       hidden: ({ parent }) => !parent?.fulfilled,
     }),
     defineField({
       name: "politicalAreas",
       title: "Politiska områden",
-      description: "Politiska områden som denna fråga tillhör. Minst ett område måste väljas.",
+      description:
+        "Politiska områden som denna fråga tillhör. Minst ett område måste väljas.",
       type: "array",
       group: "relations",
       of: [{ type: "reference", to: [{ type: "politicalArea" }] }],
@@ -82,7 +85,8 @@ export const politicalIssue = defineType({
     defineField({
       name: "geographicalAreas",
       title: "Geografiska områden",
-      description: "Valfritt: geografiska områden som denna fråga är relaterad till.",
+      description:
+        "Valfritt: geografiska områden som denna fråga är relaterad till.",
       type: "array",
       group: "relations",
       of: [{ type: "reference", to: [{ type: "geographicalArea" }] }],
