@@ -35,7 +35,7 @@ export function ContactInfoItem({
         <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
           {label}
         </p>
-        <span className="text-sm text-foreground">{children}</span>
+        <span className=" text-foreground">{children}</span>
       </div>
     </>
   );
