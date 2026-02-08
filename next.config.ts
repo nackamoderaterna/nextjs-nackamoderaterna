@@ -1,6 +1,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/val-2026-mobile",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/val-2026",
+        destination: "/",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     formats: ["image/avif", "image/webp"],
 
