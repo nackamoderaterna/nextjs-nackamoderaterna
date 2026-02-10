@@ -10,13 +10,13 @@ import { generatePageMetadata } from "@/lib/utils/pageSeo";
 import type { PageData } from "@/lib/types/pages";
 import { PageContainer } from "@/lib/components/shared/PageContainer";
 
-export const revalidate = 300;
+export const revalidate = 86400;
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await sanityClient.fetch<PageData>(
     pageBySlugQuery,
     { slug: "hem" },
-    { next: { revalidate: 300 } },
+    { next: { revalidate: 86400 } },
   );
 
   return generatePageMetadata(page, "Nackamoderaterna");
@@ -27,7 +27,7 @@ export default async function Home() {
     pageBySlugQuery,
     { slug: "hem" },
     {
-      next: { revalidate: 300 },
+      next: { revalidate: 86400 },
     },
   );
 

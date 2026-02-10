@@ -33,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 type PoliticsPageData = {
   politicalAreas: Array<
@@ -48,10 +48,10 @@ type PoliticsPageData = {
 export default async function PolitikKategoriPage() {
   const [data, listing] = await Promise.all([
     sanityClient.fetch<PoliticsPageData>(politikPageQuery, {}, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 86400 },
     }),
     sanityClient.fetch<ListingPage>(listingPageByKeyQuery, { key: "politikKategori" }, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 86400 },
     }),
   ]);
 

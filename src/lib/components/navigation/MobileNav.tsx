@@ -58,7 +58,7 @@ export function MobileNav({
           </nav>
           {/* Search last in DOM (last in tab order), but visually first */}
           <div className="order-first px-4 pb-4">
-            <SearchBar items={searchItems} />
+            <SearchBar items={searchItems} onResultClick={() => setOpen(false)} />
           </div>
         </div>
         {bliMedlemUrl && (

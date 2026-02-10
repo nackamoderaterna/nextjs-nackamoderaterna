@@ -88,7 +88,7 @@ export async function generateMetadata({
   });
 }
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export default async function PoliticalAreaSinglePage({ params }: Props) {
   const { slug } = await params;

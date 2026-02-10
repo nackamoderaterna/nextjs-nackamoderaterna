@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export const revalidate = 300;
+export const revalidate = 86400;
 
 interface NewsPageProps {
   searchParams: Promise<{ page?: string; area?: string; type?: string }>;

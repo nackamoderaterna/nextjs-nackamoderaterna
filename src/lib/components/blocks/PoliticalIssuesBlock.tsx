@@ -72,7 +72,7 @@ async function fetchPoliticalIssues(
   `;
 
   return sanityClient.fetch<PoliticalIssueData[]>(query, {}, {
-    next: { revalidate: 3600 },
+    next: { revalidate: 86400 },
   });
 }
 

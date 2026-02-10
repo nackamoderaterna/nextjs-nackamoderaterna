@@ -23,7 +23,7 @@ import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { Section } from "@/lib/components/shared/Section";
 
 const ITEMS_PER_PAGE = 10;
-const EVENTS_CACHE_SECONDS = 300;
+const EVENTS_CACHE_SECONDS = 86400;
 
 export async function generateMetadata(): Promise<Metadata> {
   const listing = await sanityClient.fetch<ListingPage>(
@@ -43,7 +43,7 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export const dynamic = "force-dynamic";
+export const revalidate = 86400;
 
 function renderEventCard(
   event: Event,

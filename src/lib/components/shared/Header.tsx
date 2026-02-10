@@ -109,9 +109,15 @@ function buildSearchItems(data: SearchData): SearchItem[] {
 
 export default async function Header() {
   const [navigation, globalSettings, searchData] = await Promise.all([
-    sanityClient.fetch<NavigationData>(navigationQuery),
-    sanityClient.fetch<GlobalSettingsData>(globalSettingsQuery),
-    sanityClient.fetch<SearchData>(searchQuery),
+    sanityClient.fetch<NavigationData>(navigationQuery, {}, {
+      next: { revalidate: 86400 },
+    }),
+    sanityClient.fetch<GlobalSettingsData>(globalSettingsQuery, {}, {
+      next: { revalidate: 86400 },
+    }),
+    sanityClient.fetch<SearchData>(searchQuery, {}, {
+      next: { revalidate: 86400 },
+    }),
   ]);
 
   const searchItems = buildSearchItems(searchData);

@@ -29,18 +29,18 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export default async function ContactPage() {
   const [settings, listing] = await Promise.all([
     sanityClient.fetch<GlobalSettings | null>(globalSettingsQuery, {}, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 86400 },
     }),
     sanityClient.fetch<ListingPage>(
       listingPageByKeyQuery,
       { key: "contact" },
       {
-        next: { revalidate: 3600 },
+        next: { revalidate: 86400 },
       }
     ),
   ]);

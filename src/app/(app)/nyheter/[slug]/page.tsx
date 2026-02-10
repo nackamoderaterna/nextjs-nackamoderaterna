@@ -62,7 +62,7 @@ export async function generateMetadata({
   });
 }
 
-export const revalidate = 300;
+export const revalidate = 86400;
 
 export default async function NewsArticlePage({
   params,
@@ -75,7 +75,7 @@ export default async function NewsArticlePage({
     newsQuery,
     { slug },
     {
-      next: { revalidate: 300 },
+      next: { revalidate: 86400 },
     },
   );
 

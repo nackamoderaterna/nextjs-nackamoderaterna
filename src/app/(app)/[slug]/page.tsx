@@ -10,7 +10,7 @@ import { sanityClient } from "@/lib/sanity/client";
 import { generatePageMetadata } from "@/lib/utils/pageSeo";
 import type { PageData } from "@/lib/types/pages";
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 // Generate static params for all pages at build time
 export async function generateStaticParams() {
@@ -32,7 +32,7 @@ export async function generateMetadata({
   const page = await sanityClient.fetch<PageData>(
     pageBySlugQuery,
     { slug },
-    { next: { revalidate: 3600 } }
+    { next: { revalidate: 86400 } }
   );
 
   return generatePageMetadata(page, "Sidan hittades inte");
@@ -49,7 +49,7 @@ export default async function SanityPage({
     pageBySlugQuery,
     { slug },
     {
-      next: { revalidate: 3600 },
+      next: { revalidate: 86400 },
     }
   );
 

@@ -21,7 +21,7 @@ const LISTING_KEY_TO_PATH: Record<string, string> = {
   politics: "/politik",
   politikOmrade: "/omrade",
   news: "/nyheter",
-  events: "/event",
+  events: "/evenemang",
   contact: "/kontakt",
 };
 

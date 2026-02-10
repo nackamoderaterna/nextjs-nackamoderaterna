@@ -35,7 +35,7 @@ const fuseOptions = {
   ],
 };
 
-export function SearchBar({ items = [] }: { items?: SearchItem[] }) {
+export function SearchBar({ items = [], onResultClick }: { items?: SearchItem[]; onResultClick?: () => void }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -84,6 +84,7 @@ export function SearchBar({ items = [] }: { items?: SearchItem[] }) {
   const handleResultClick = () => {
     setIsOpen(false);
     setQuery("");
+    onResultClick?.();
   };
 
   return (

@@ -73,7 +73,7 @@ export async function generateMetadata({
   });
 }
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export default async function PoliticianPage({
   params,
@@ -85,7 +85,7 @@ export default async function PoliticianPage({
     politicianBySlugQuery,
     { slug },
     {
-      next: { revalidate: 3600 },
+      next: { revalidate: 86400 },
     }
   );
 
