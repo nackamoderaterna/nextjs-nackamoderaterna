@@ -19,7 +19,8 @@ import Link from "next/link";
 export async function generateMetadata(): Promise<Metadata> {
   const listing = await sanityClient.fetch<ListingPage>(
     listingPageByKeyQuery,
-    { key: "politics" }
+    { key: "politics" },
+    { next: { revalidate: 86400 } }
   );
 
   const title =

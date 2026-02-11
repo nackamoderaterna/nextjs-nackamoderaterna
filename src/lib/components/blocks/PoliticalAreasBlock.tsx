@@ -25,7 +25,7 @@ export function PoliticalAreasBlock({ block }: { block: PoliticalAreasBlockProps
   }
 
   return (
-    <Block paddingY="large" maxWidth="7xl">
+    <Block paddingY="large">
       <BlockHeading title={title} subtitle={subtitle} />
       
       <ResponsiveGrid cols={3}>

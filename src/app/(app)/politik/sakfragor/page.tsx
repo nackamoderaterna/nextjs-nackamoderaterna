@@ -14,7 +14,8 @@ import type { ListingPage } from "@/lib/types/pages";
 export async function generateMetadata(): Promise<Metadata> {
   const listing = await sanityClient.fetch<ListingPage>(
     listingPageByKeyQuery,
-    { key: "politikSakfragor" }
+    { key: "politikSakfragor" },
+    { next: { revalidate: 86400 } }
   );
 
   const title =

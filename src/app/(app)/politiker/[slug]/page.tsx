@@ -46,7 +46,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const [politicianRaw, fallbackImage] = await Promise.all([
-    sanityClient.fetch<PoliticianWithNamnd>(politicianBySlugQuery, { slug }),
+    sanityClient.fetch<PoliticianWithNamnd>(politicianBySlugQuery, { slug }, { next: { revalidate: 86400 } }),
     getDefaultOgImage(),
   ]);
 

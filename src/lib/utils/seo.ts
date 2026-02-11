@@ -16,7 +16,9 @@ interface GenerateMetadataParams {
 /** Fetches globalSettings logo and returns OG image URL, or undefined if no logo. */
 export async function getDefaultOgImage(): Promise<string | undefined> {
   const settings = await sanityClient.fetch<{ logo?: unknown } | null>(
-    groq`*[_type == "globalSettings"][0] { logo }`
+    groq`*[_type == "globalSettings"][0] { logo }`,
+    {},
+    { next: { revalidate: 86400 } }
   );
   if (!settings?.logo) return undefined;
   return buildImageUrl(settings.logo, { width: 1200, height: 630 });

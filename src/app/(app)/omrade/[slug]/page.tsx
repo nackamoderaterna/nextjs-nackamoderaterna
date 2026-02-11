@@ -57,6 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const data = await sanityClient.fetch<GeographicalAreaPage>(
     geographicalAreaPageQuery,
     { slug },
+    { next: { revalidate: 86400 } }
   );
 
   if (!data) {

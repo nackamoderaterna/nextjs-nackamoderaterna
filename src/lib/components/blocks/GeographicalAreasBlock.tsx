@@ -23,7 +23,7 @@ export function GeographicalAreasBlock({ block }: { block: GeographicalAreasBloc
   }
 
   return (
-    <Block paddingY="large" maxWidth="7xl">
+    <Block paddingY="large">
       <BlockHeading title={title} subtitle={subtitle} />
       <ResponsiveGrid cols={3}>
         {items.map((area) => {

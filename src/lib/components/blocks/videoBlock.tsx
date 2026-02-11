@@ -1,4 +1,3 @@
-import React from "react";
 import { VideoBlockUtils } from "@/lib/utils/videoBlock";
 import Block from "./Block";
 import { BlockHeading, getBlockHeading } from "./BlockHeading";
@@ -35,11 +34,13 @@ export default function VideoBlock({ block }: VideoBlockProps) {
   };
 
   return (
-    <Block maxWidth="3xl">
+    <Block>
+      <div className="max-w-3xl mx-auto">
         <BlockHeading title={title} />
         <div className={`rounded bg-gray-100 aspect-16/9`}>{renderVideo()}</div>
 
         {caption && <p className="mt-2 text-sm text-center text-muted-foreground">{caption}</p>}
+      </div>
     </Block>
   );
 }

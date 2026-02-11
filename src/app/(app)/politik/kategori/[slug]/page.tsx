@@ -58,7 +58,8 @@ export async function generateMetadata({
   const { slug } = await params;
   const data = await sanityClient.fetch<PoliticalAreaPage>(
     politicalAreaPageQuery,
-    { slug, areaId: "" }
+    { slug, areaId: "" },
+    { next: { revalidate: 86400 } }
   );
 
   if (!data) {
@@ -95,13 +96,15 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
   // First get the political area to get its ID for the politician query
   const area = await sanityClient.fetch<{ _id: string } | null>(
     groq`*[_type == "politicalArea" && slug.current == $slug][0] { _id }`,
-    { slug }
+    { slug },
+    { next: { revalidate: 86400 } }
   );
   const data = await sanityClient.fetch<PoliticalAreaPage>(
     politicalAreaPageQuery,
     { slug, areaId: area?._id || "" },
+    { next: { revalidate: 86400 } }
   );
-  const globalSettings = await sanityClient.fetch(globalSettingsQuery);
+  const globalSettings = await sanityClient.fetch(globalSettingsQuery, {}, { next: { revalidate: 86400 } });
 
 
   const newsSection = data.latestNews?.length > 0 && (

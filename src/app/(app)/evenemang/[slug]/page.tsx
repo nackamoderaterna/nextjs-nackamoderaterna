@@ -45,7 +45,7 @@ export async function generateMetadata({
 }: Props): Promise<Metadata> {
   const { slug } = await params;
   const [event, fallbackImage] = await Promise.all([
-    sanityClient.fetch<Event | null>(singleEventQuery, { slug }),
+    sanityClient.fetch<Event | null>(singleEventQuery, { slug }, { next: { revalidate: 86400 } }),
     getDefaultOgImage(),
   ]);
 

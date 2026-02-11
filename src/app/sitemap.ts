@@ -13,7 +13,10 @@ import {
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL || "https://nackamoderaterna.se";
 
+export const revalidate = 86400;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const cacheOpts = { next: { revalidate: 86400 } } as const;
   const [
     pages,
     news,
@@ -23,13 +26,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     geographicalAreas,
     politicalIssues,
   ] = await Promise.all([
-    sanityClient.fetch<{ slug: string }[]>(allPageSlugsQuery),
-    sanityClient.fetch<{ slug: string }[]>(allNewsSlugsQuery),
-    sanityClient.fetch<{ slug: string }[]>(allPoliticianSlugsQuery),
-    sanityClient.fetch<{ slug: string }[]>(allEventSlugsQuery),
-    sanityClient.fetch<{ slug: string }[]>(allPoliticalAreaSlugsQuery),
-    sanityClient.fetch<{ slug: string }[]>(allGeographicalAreaSlugsQuery),
-    sanityClient.fetch<{ slug: string }[]>(allPoliticalIssueSlugsQuery),
+    sanityClient.fetch<{ slug: string }[]>(allPageSlugsQuery, {}, cacheOpts),
+    sanityClient.fetch<{ slug: string }[]>(allNewsSlugsQuery, {}, cacheOpts),
+    sanityClient.fetch<{ slug: string }[]>(allPoliticianSlugsQuery, {}, cacheOpts),
+    sanityClient.fetch<{ slug: string }[]>(allEventSlugsQuery, {}, cacheOpts),
+    sanityClient.fetch<{ slug: string }[]>(allPoliticalAreaSlugsQuery, {}, cacheOpts),
+    sanityClient.fetch<{ slug: string }[]>(allGeographicalAreaSlugsQuery, {}, cacheOpts),
+    sanityClient.fetch<{ slug: string }[]>(allPoliticalIssueSlugsQuery, {}, cacheOpts),
   ]);
 
   const staticRoutes: MetadataRoute.Sitemap = [

@@ -58,7 +58,7 @@ export default async function SanityPage({
   }
 
   return (
-    <div className="w-full mx-auto">
+    <>
       <SetBreadcrumbTitle title={page.title ?? ""} />
       <PageModal modal={page.pageModal} pageSlug={page.slug?.current || slug} />
       <PageHeader
@@ -66,7 +66,7 @@ export default async function SanityPage({
         pageHeader={page.pageHeader ?? undefined}
       />
       <PageBuilder blocks={page.blocks || []} />
-    </div>
+    </>
   );
 }
 

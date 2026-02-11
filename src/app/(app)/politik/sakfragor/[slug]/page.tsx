@@ -85,7 +85,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const [data, fallbackImage] = await Promise.all([
-    sanityClient.fetch<PoliticalIssuePage>(politicalIssuePageQuery, { slug }),
+    sanityClient.fetch<PoliticalIssuePage>(politicalIssuePageQuery, { slug }, { next: { revalidate: 86400 } }),
     getDefaultOgImage(),
   ]);
 

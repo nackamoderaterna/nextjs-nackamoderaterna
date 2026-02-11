@@ -8,7 +8,8 @@ import { listingPageByKeyQuery } from "@/lib/queries/pages";
 export async function generateMetadata(): Promise<Metadata> {
   const listing = await sanityClient.fetch<ListingPage>(
     listingPageByKeyQuery,
-    { key: "news" }
+    { key: "news" },
+    { next: { revalidate: 86400 } }
   );
 
   const title =

@@ -20,6 +20,13 @@ interface PageBuilderProps {
   blocks: PageBlock[];
 }
 
+function isFullBleed(block: PageBlock): boolean {
+  return (
+    block._type === "block.cta" &&
+    ((block as any).layout ?? "fullWidth") === "fullWidth"
+  );
+}
+
 function renderBlock(block: PageBlock) {
   switch (block._type) {
     case "block.text":
@@ -63,16 +70,24 @@ export function PageBuilder({ blocks }: PageBuilderProps) {
   }
 
   return (
-    <div className="w-full mx-auto">
+    <div className="flex flex-col gap-8 md:gap-12">
       {blocks.map((block, index) => {
         const key = (block as any)._id || `${block._type}-${index}`;
         const content = renderBlock(block);
 
         if (!content) return null;
 
+        const fullBleed = isFullBleed(block);
+
         return (
           <AnimateOnScroll key={key}>
-            {content}
+            {fullBleed ? (
+              content
+            ) : (
+              <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {content}
+              </div>
+            )}
           </AnimateOnScroll>
         );
       })}

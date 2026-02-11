@@ -54,8 +54,6 @@ export function CTABlock({ block }: { block: CTABlockProps }) {
     return null;
   }
 
-  const maxWidth = layout === "fullWidth" ? "7xl" : "3xl";
-
   const alignmentClasses = {
     left: "text-left",
     center: "text-center",
@@ -68,67 +66,80 @@ export function CTABlock({ block }: { block: CTABlockProps }) {
     right: "justify-end",
   };
 
-  return (
-    <Block
-      paddingY="xlarge"
-      paddingX="standard"
-      maxWidth={maxWidth}
-      containerClassName="rounded-xl p-12 md:p-16 border border-border bg-brand-primary text-white shadow-sm"
+  const content = (
+    <div
+      className={cn(
+        "mx-auto flex-col max-w-3xl flex",
+        flexAlignmentClasses[alignment],
+        alignmentClasses[alignment],
+      )}
     >
+      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-balance mb-6">
+        {title ?? ""}
+      </h2>
+      {subtitle && (
+        <p className="text-lg text-white/80 leading-relaxed text-pretty mb-8">
+          {subtitle}
+        </p>
+      )}
       <div
         className={cn(
-          "mx-auto flex-col max-w-3xl flex",
+          "flex flex-col sm:flex-row gap-4",
           flexAlignmentClasses[alignment],
-          alignmentClasses[alignment],
         )}
       >
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-balance mb-6">
-          {title ?? ""}
-        </h2>
-        {subtitle && (
-          <p className="text-lg text-white/80 leading-relaxed text-pretty mb-8">
-            {subtitle}
-          </p>
-        )}
-        <div
-          className={cn(
-            "flex flex-col sm:flex-row gap-4",
-            flexAlignmentClasses[alignment],
-          )}
-        >
-          {(() => {
-            const PrimaryIcon = getLucideIcon(primaryAction.icon?.name);
+        {(() => {
+          const PrimaryIcon = getLucideIcon(primaryAction.icon?.name);
+          return (
+            <Button
+              size="lg"
+              className="group text-foreground"
+              variant="secondary"
+              asChild
+            >
+              <Link href={primaryAction.href}>
+                {PrimaryIcon && <PrimaryIcon className="h-4 w-4" />}
+                {primaryAction.label}
+                {!PrimaryIcon && (
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                )}
+              </Link>
+            </Button>
+          );
+        })()}
+        {secondaryAction?.label &&
+          secondaryAction?.href &&
+          (() => {
+            const SecondaryIcon = getLucideIcon(secondaryAction.icon?.name);
             return (
-              <Button
-                size="lg"
-                className="group text-foreground"
-                variant="secondary"
-                asChild
-              >
-                <Link href={primaryAction.href}>
-                  {PrimaryIcon && <PrimaryIcon className="h-4 w-4" />}
-                  {primaryAction.label}
-                  {!PrimaryIcon && (
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  )}
+              <Button size="lg" variant="outline" asChild>
+                <Link href={secondaryAction.href}>
+                  {SecondaryIcon && <SecondaryIcon className="h-4 w-4" />}
+                  {secondaryAction.label}
                 </Link>
               </Button>
             );
           })()}
-          {secondaryAction?.label &&
-            secondaryAction?.href &&
-            (() => {
-              const SecondaryIcon = getLucideIcon(secondaryAction.icon?.name);
-              return (
-                <Button size="lg" variant="outline" asChild>
-                  <Link href={secondaryAction.href}>
-                    {SecondaryIcon && <SecondaryIcon className="h-4 w-4" />}
-                    {secondaryAction.label}
-                  </Link>
-                </Button>
-              );
-            })()}
+      </div>
+    </div>
+  );
+
+  if (layout === "fullWidth") {
+    // Full-bleed: background extends edge-to-edge, content constrained internally
+    return (
+      <Block paddingY="xlarge" className="bg-brand-primary text-white">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {content}
         </div>
+      </Block>
+    );
+  }
+
+  // Contained: card-style with rounded corners and border
+  return (
+    <Block paddingY="none">
+      <div className="rounded-xl p-12 md:p-16 border border-border bg-brand-primary text-white shadow-sm">
+        {content}
       </div>
     </Block>
   );

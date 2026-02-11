@@ -8,7 +8,6 @@ import { pageBySlugQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
 import { generatePageMetadata } from "@/lib/utils/pageSeo";
 import type { PageData } from "@/lib/types/pages";
-import { PageContainer } from "@/lib/components/shared/PageContainer";
 
 export const revalidate = 86400;
 
@@ -45,9 +44,7 @@ export default async function Home() {
         title={page.title ?? undefined}
         pageHeader={page.pageHeader ?? undefined}
       />
-      <PageContainer>
-        <PageBuilder blocks={page.blocks || []} />
-      </PageContainer>
+      <PageBuilder blocks={page.blocks || []} />
     </>
   );
 }

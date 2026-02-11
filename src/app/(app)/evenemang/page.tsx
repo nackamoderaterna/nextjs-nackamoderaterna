@@ -28,7 +28,8 @@ const EVENTS_CACHE_SECONDS = 86400;
 export async function generateMetadata(): Promise<Metadata> {
   const listing = await sanityClient.fetch<ListingPage>(
     listingPageByKeyQuery,
-    { key: "events" }
+    { key: "events" },
+    { next: { revalidate: EVENTS_CACHE_SECONDS } }
   );
 
   const title =
@@ -149,11 +150,13 @@ export default async function EventsPage({
             )}
         </Section>
 
-        <Block maxWidth="3xl" paddingY="large" background="muted">
+        <Block paddingY="large" background="muted">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <ContactForm
             heading="Kontakta oss"
             description="Har du frågor eller vill engagera dig? Fyll i formuläret nedan så återkommer vi så snart som möjligt."
           />
+          </div>
         </Block>
       </ListingPageLayout>
     );
@@ -212,11 +215,13 @@ export default async function EventsPage({
               </>
             )}
         </Section>
-        <Block maxWidth="3xl" paddingY="large" background="muted">
+        <Block paddingY="large" background="muted">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <ContactForm
             heading="Kontakta oss"
             description="Har du frågor eller vill engagera dig? Fyll i formuläret nedan så återkommer vi så snart som möjligt."
           />
+          </div>
         </Block>
       </ListingPageLayout>
     );
@@ -294,11 +299,13 @@ export default async function EventsPage({
         </Section>
       )}
 
-      <Block maxWidth="3xl" paddingY="large" background="muted">
+      <Block paddingY="large" background="muted">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <ContactForm
           heading="Kontakta oss"
           description="Har du frågor eller vill engagera dig? Fyll i formuläret nedan så återkommer vi så snart som möjligt."
         />
+        </div>
       </Block>
     </ListingPageLayout>
   );

@@ -110,7 +110,7 @@ export async function PoliticalIssuesBlock({
   ];
 
   return (
-    <Block paddingY="large" maxWidth="7xl">
+    <Block paddingY="large">
       <BlockHeading title={title} subtitle={subtitle} />
       <ResponsiveGrid cols={3}>
         {sorted.map((issue) => (

@@ -21,7 +21,8 @@ import { PeopleCard } from "@/lib/components/politician/PeopleCard";
 export async function generateMetadata(): Promise<Metadata> {
   const listing = await sanityClient.fetch<ListingPage>(
     listingPageByKeyQuery,
-    { key: "politicians" }
+    { key: "politicians" },
+    { next: { revalidate: 86400 } }
   );
 
   const title =

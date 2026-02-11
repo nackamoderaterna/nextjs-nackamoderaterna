@@ -9,29 +9,10 @@ export type BlockProps = {
    */
   paddingY?: "none" | "small" | "medium" | "large" | "xlarge";
   /**
-   * Horizontal padding size
-   * @default "standard"
-   */
-  paddingX?: "none" | "standard";
-  /**
-   * Maximum width of the content container
-   * @default "7xl"
-   */
-  maxWidth?: "3xl" | "7xl";
-  /**
    * Background color variant
    * @default "default"
    */
   background?: "default" | "muted" | "primary" | "transparent";
-  /**
-   * Whether to apply full-width styling (removes max-width constraint)
-   * @default false
-   */
-  fullWidth?: boolean;
-  /**
-   * Additional className for the container
-   */
-  containerClassName?: string;
   /**
    * Additional className for custom styling
    */
@@ -51,16 +32,6 @@ const paddingYClasses = {
   xlarge: "py-10 md:py-16",
 };
 
-const paddingXClasses = {
-  none: "px-0",
-  standard: "px-4 sm:px-6 lg:px-8",
-};
-
-const maxWidthClasses = {
-  "3xl": "max-w-3xl",
-  "7xl": "max-w-7xl",
-};
-
 const backgroundClasses = {
   default: "",
   muted: "bg-muted/50",
@@ -69,23 +40,13 @@ const backgroundClasses = {
 };
 
 /**
- * Standardized Block component for consistent spacing and layout across all block types
- * 
- * @example
- * ```tsx
- * <Block paddingY="large" maxWidth="7xl">
- *   <h2>Content</h2>
- * </Block>
- * ```
+ * Lightweight semantic/styling wrapper for page blocks.
+ * Layout (padding-x, max-width, spacing) is controlled by PageBuilder.
  */
 export default function Block({
   children,
   paddingY = "medium",
-  paddingX = "standard",
-  maxWidth = "7xl",
   background = "default",
-  fullWidth = false,
-  containerClassName,
   className,
   asSection = true,
 }: BlockProps) {
@@ -94,22 +55,13 @@ export default function Block({
   return (
     <Component
       className={cn(
-        "w-full mb-8 md:mb-12",
+        "w-full",
         paddingYClasses[paddingY],
         backgroundClasses[background],
         className
       )}
     >
-      <div
-        className={cn(
-          "w-full mx-auto",
-          !fullWidth && maxWidthClasses[maxWidth],
-          paddingXClasses[paddingX],
-          containerClassName
-        )}
-      >
-        {children}
-      </div>
+      {children}
     </Component>
   );
 }

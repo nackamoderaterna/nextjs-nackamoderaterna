@@ -29,7 +29,8 @@ export function AccordionBlock({ block }: { block: AccordionBlockProps }) {
   const { title, subtitle } = getBlockHeading(block);
 
   return (
-    <Block maxWidth="3xl">
+    <Block>
+      <div className="max-w-3xl mx-auto">
       <BlockHeading
         title={title}
         subtitle={subtitle}
@@ -38,7 +39,7 @@ export function AccordionBlock({ block }: { block: AccordionBlockProps }) {
       />
       <Accordion
         type={allowMultiple ? "multiple" : "single"}
-        collapsible
+        {...(!allowMultiple && { collapsible: true })}
         className="space-y-0"
       >
         {block.items?.map((item, index) => (
@@ -61,6 +62,7 @@ export function AccordionBlock({ block }: { block: AccordionBlockProps }) {
           </AccordionItem>
         ))}
       </Accordion>
+      </div>
     </Block>
   );
 }

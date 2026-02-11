@@ -1,8 +1,5 @@
-"use client";
-
 import { IconMail, IconMapPin, IconPhone } from "@tabler/icons-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
 import Block from "./Block";
 import { sanityClient } from "@/lib/sanity/client";
 import { globalSettingsQuery } from "@/lib/queries/globalSettings";
@@ -17,18 +14,15 @@ interface ContactBlockProps {
   showContactInfo?: boolean;
 }
 
-export function ContactBlock({ block }: { block: ContactBlockProps }) {
-  const [contactInfo, setContactInfo] = useState<GlobalSettings | null>(null);
-
-  // Fetch contact info if needed
-  useEffect(() => {
-    if (block.showContactInfo) {
-      sanityClient
-        .fetch<GlobalSettings>(globalSettingsQuery)
-        .then(setContactInfo)
-        .catch(console.error);
-    }
-  }, [block.showContactInfo]);
+export async function ContactBlock({ block }: { block: ContactBlockProps }) {
+  let contactInfo: GlobalSettings | null = null;
+  if (block.showContactInfo) {
+    contactInfo = await sanityClient.fetch<GlobalSettings>(
+      globalSettingsQuery,
+      {},
+      { next: { revalidate: 86400 } }
+    );
+  }
 
   const formatAddress = (address: {
     street?: string;
@@ -47,13 +41,11 @@ export function ContactBlock({ block }: { block: ContactBlockProps }) {
     return parts.length > 0 ? parts : null;
   };
 
-  const showContactInfo = block.showContactInfo && contactInfo;
-
   return (
-    <Block paddingY="large" maxWidth="7xl">
+    <Block paddingY="large">
       <div
         className={
-          showContactInfo
+          contactInfo
             ? "grid grid-cols-1 lg:grid-cols-3 gap-8 mx-auto"
             : "flex justify-center"
         }
@@ -61,7 +53,7 @@ export function ContactBlock({ block }: { block: ContactBlockProps }) {
         {/* Contact Form */}
         <div
           className={
-            showContactInfo
+            contactInfo
               ? "lg:col-span-2"
               : "w-full max-w-2xl"
           }
@@ -75,7 +67,7 @@ export function ContactBlock({ block }: { block: ContactBlockProps }) {
         </div>
 
         {/* Contact Information */}
-        {showContactInfo && (
+        {contactInfo && (
           <div className="space-y-6">
             <div className="bg-card p-6 rounded-lg border border-border">
               <h3 className="font-bold text-lg mb-4">Kontaktuppgifter</h3>

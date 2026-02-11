@@ -1,6 +1,6 @@
 import { PortableText } from "next-sanity";
 import Block from "./Block";
-import { BlockHeading, getBlockHeading } from "./BlockHeading";
+import { getBlockHeading } from "./BlockHeading";
 import { BlockText } from "~/sanity.types";
 import { portableTextComponents } from "../shared/PortableTextComponents";
 
@@ -19,25 +19,27 @@ export function TextBlock({ block }: TextBlockProps) {
   const { title } = getBlockHeading(blockWithColumns);
 
   return (
-    <Block maxWidth="3xl">
-      {title && (
-        <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
-          {title}
-        </h2>
-      )}
-      <div 
-        className={`prose prose-neutral md:prose-lg ${
-          columns === 2 
-            ? "columns-1 md:columns-2 gap-8" 
-            : "columns-1"
-        }`}
-      >
-        {block.content && (
-          <PortableText 
-            value={block.content} 
-            components={portableTextComponents} 
-          />
+    <Block>
+      <div className="max-w-3xl mx-auto">
+        {title && (
+          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
+            {title}
+          </h2>
         )}
+        <div
+          className={`prose prose-neutral md:prose-lg ${
+            columns === 2
+              ? "columns-1 md:columns-2 gap-8"
+              : "columns-1"
+          }`}
+        >
+          {block.content && (
+            <PortableText
+              value={block.content}
+              components={portableTextComponents}
+            />
+          )}
+        </div>
       </div>
     </Block>
   );
