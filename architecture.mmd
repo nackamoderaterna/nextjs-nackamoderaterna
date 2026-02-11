@@ -1,0 +1,26 @@
+flowchart LR
+    %% Editor(("Redaktör"))
+    %% Sanity["Sanity"]
+    %% Vercel["Vercel", "Bygger och hostar sidan"]
+    %% Website(("nackamoderaterna.se"))
+    %% Visitor(("Besökare"))
+
+    subgraph sanity
+        direction TB
+        adminpanel["Adminpanel"]--> ["Lägger till data"] dataLake["Data lake"]
+    end
+    %% Editor -->|"Skriver & redigerar innehall"| Sanity
+    %% Sanity -->|"Skickar text, bilder & data"| Vercel
+    %% Vercel -->|"Publicerar"| Website
+    %% Visitor -->|"Besöker"| Website
+    %% Sanity -.->|"Meddelar vid ändringar så sidan uppdateras"| Vercel
+
+    %% classDef platform fill:#111,color:#fff,stroke:#444,stroke-width:2px
+    %% classDef sanity fill:#f36458,color:#fff,stroke:#c44b40,stroke-width:2px
+    %% classDef person fill:#4a90d9,color:#fff,stroke:#3a7bc8,stroke-width:2px
+    %% classDef site fill:#22c55e,color:#fff,stroke:#16a34a,stroke-width:2px
+
+    %% class Sanity sanity
+    %% class Vercel platform
+    %% class Editor,Visitor person
+    %% class Website site

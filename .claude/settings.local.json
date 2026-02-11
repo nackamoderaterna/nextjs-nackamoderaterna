@@ -11,7 +11,8 @@
       "Bash(npx eslint:*)",
       "Bash(git -C /Users/nsld/workspace/nextjs-nackamoderaterna-agent log --grep=\"title\\\\|all\\\\|solution\" --oneline)",
       "Bash(git -C /Users/nsld/workspace/nextjs-nackamoderaterna-agent log --all -p)",
-      "Bash(npx next lint:*)"
+      "Bash(npx next lint:*)",
+      "mcp__Sanity__query_documents"
     ]
   }
 }
