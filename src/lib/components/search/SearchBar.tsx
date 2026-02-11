@@ -35,12 +35,23 @@ const fuseOptions = {
   ],
 };
 
-export function SearchBar({ items = [], onResultClick }: { items?: SearchItem[]; onResultClick?: () => void }) {
+export function SearchBar({ items: itemsProp, onResultClick }: { items?: SearchItem[]; onResultClick?: () => void }) {
+  const [fetchedItems, setFetchedItems] = useState<SearchItem[]>([]);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const items = itemsProp ?? fetchedItems;
+
+  useEffect(() => {
+    if (itemsProp) return;
+    fetch("/api/search-index")
+      .then((res) => res.json())
+      .then((data: SearchItem[]) => setFetchedItems(data))
+      .catch(() => {});
+  }, [itemsProp]);
 
   const fuse = useMemo(() => new Fuse(items, fuseOptions), [items]);
 

@@ -15,16 +15,14 @@ import {
 import { Button } from "@/lib/components/ui/button";
 import { Separator } from "@/lib/components/ui/separator";
 import { Heart, Menu } from "lucide-react";
-import { SearchBar, SearchItem } from "../search/SearchBar";
+import { SearchBar } from "../search/SearchBar";
 
 export function MobileNav({
   items,
   bliMedlemUrl,
-  searchItems,
 }: {
   items: MenuItemWithReference[];
   bliMedlemUrl?: string | null;
-  searchItems?: SearchItem[];
 }) {
   const [open, setOpen] = useState(false);
 
@@ -58,7 +56,7 @@ export function MobileNav({
           </nav>
           {/* Search last in DOM (last in tab order), but visually first */}
           <div className="order-first px-4 pb-4">
-            <SearchBar items={searchItems} onResultClick={() => setOpen(false)} />
+            <SearchBar onResultClick={() => setOpen(false)} />
           </div>
         </div>
         {bliMedlemUrl && (
