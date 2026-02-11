@@ -11,8 +11,9 @@ interface EventCardProps {
   location: string;
   href: string;
   isPublic?: boolean;
-  /** When true, card and badge use muted styling (e.g. past events). */
+  /** When true, card uses subdued styling (e.g. past events). */
   muted?: boolean;
+  eventTypeName?: string;
   className?: string;
 }
 
@@ -25,13 +26,15 @@ export function EventCard({
   href,
   isPublic = false,
   muted = false,
+  eventTypeName,
   className,
 }: EventCardProps) {
   return (
     <Link
       href={`${ROUTE_BASE.EVENTS}/${href}`}
       className={cn(
-        "block bg-brand-primary/5 rounded-lg p-6 hover:bg-brand-primary/10 transition-colors group relative",
+        "block border border-brand-primary rounded-lg p-6 hover:bg-brand-primary/10 transition-colors group relative",
+        muted && "opacity-60",
         className,
       )}
     >
@@ -60,14 +63,19 @@ export function EventCard({
 
       {/* Event Info */}
       <div>
-        <h3 className="font-semibold text-brand-primary group-hover:text-brand-primary transition-colors mb-1">
+        {eventTypeName ? (
+          <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">
+            {eventTypeName}
+          </p>
+        ) : null}
+        <h3 className="font-semibold group-hover:text-brand-primary transition-colors mb-1">
           {title}
         </h3>
         {time ? (
-          <p className="text-sm text-brand-primary">{time}</p>
+          <p className="text-sm text-muted-foreground">{time}</p>
         ) : null}
         {location?.trim() ? (
-          <p className="text-sm text-brand-primary">@ {location.trim()}</p>
+          <p className="text-sm text-muted-foreground">@ {location.trim()}</p>
         ) : null}
       </div>
     </Link>

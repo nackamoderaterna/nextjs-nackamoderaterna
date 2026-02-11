@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { DateTimeInput } from "../components/DateTimeInput";
 
 export const eventDocument = defineType({
   name: "event",
@@ -23,10 +24,19 @@ export const eventDocument = defineType({
       name: "slug",
       title: "Slug",
       description:
-        "URL-vänlig identifierare för evenemanget. Genereras automatiskt från titeln.",
+        "URL-vänlig identifierare för evenemanget. Genereras automatiskt från titel och datum.",
       type: "slug",
       options: {
-        source: "title",
+        source: (doc) => {
+          const title = (doc.title as string) || "";
+          const startDate = doc.startDate as string | undefined;
+          if (!startDate) return title;
+          const d = new Date(startDate);
+          const dd = String(d.getDate()).padStart(2, "0");
+          const mm = String(d.getMonth() + 1).padStart(2, "0");
+          const yy = String(d.getFullYear()).slice(-2);
+          return `${title}-${dd}-${mm}-${yy}`;
+        },
         maxLength: 96,
       },
       group: "content",
@@ -56,6 +66,9 @@ export const eventDocument = defineType({
       description: "Datum och tid när evenemanget börjar.",
       type: "datetime",
       group: "when",
+      components: {
+        input: DateTimeInput,
+      },
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -65,6 +78,9 @@ export const eventDocument = defineType({
         "Valfritt: datum och tid när evenemanget slutar. Om tomt är evenemanget en punkt i tiden.",
       type: "datetime",
       group: "when",
+      components: {
+        input: DateTimeInput,
+      },
     }),
     defineField({
       name: "location",
@@ -97,16 +113,9 @@ export const eventDocument = defineType({
       name: "eventType",
       title: "Typ av evenemang",
       description: "Kategoriserar evenemanget för filtrering och visning.",
-      type: "string",
+      type: "reference",
       group: "settings",
-      options: {
-        list: [
-          { title: "Möte", value: "meeting" },
-          { title: "Konferens", value: "conference" },
-          { title: "Kampanj", value: "campaign" },
-          { title: "Övrigt", value: "other" },
-        ],
-      },
+      to: [{ type: "eventType" }],
       validation: (Rule) => Rule.required(),
     }),
     defineField({

@@ -1,5 +1,6 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
+import { svSELocale } from "@sanity/locale-sv-se";
 import { deskStructure } from "./sanity/sanity.desk.structure";
 import { schemas } from "./sanity/schemas";
 import { createProtectHemDeleteAction } from "./sanity/sanity.documentActions";
@@ -12,7 +13,7 @@ export default defineConfig({
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production",
   basePath: "/studio",
 
-  plugins: [structureTool({ structure: deskStructure })],
+  plugins: [structureTool({ structure: deskStructure }), svSELocale()],
   schema: {
     types: schemas,
   },

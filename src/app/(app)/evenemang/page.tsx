@@ -8,8 +8,8 @@ import { Pagination } from "@/lib/components/news/Pagination";
 import Link from "next/link";
 import {
   allEventsQuery,
-  upcomingEventsPaginatedQuery,
-  pastEventsPaginatedQuery,
+  eventTypesQuery,
+  buildPaginatedEventsQuery,
 } from "@/lib/queries/events";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
@@ -22,7 +22,7 @@ import { ROUTE_BASE } from "@/lib/routes";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { Section } from "@/lib/components/shared/Section";
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 12;
 const EVENTS_CACHE_SECONDS = 86400;
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -46,11 +46,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export const revalidate = 86400;
 
-function renderEventCard(
-  event: Event,
-  className?: string,
-  muted?: boolean
-) {
+function renderEventCard(event: Event, muted?: boolean) {
   const location = formatAddress(event.location ?? undefined);
 
   return (
@@ -64,19 +60,25 @@ function renderEventCard(
       href={event.slug?.current || ""}
       isPublic={event.isPublic ?? false}
       muted={muted}
-      className={className}
+      eventTypeName={(event.eventType as unknown as EventTypeDoc | null)?.name || ""}
     />
   );
 }
 
 type PaginatedResult = { items: Event[]; total: number };
 
+interface EventTypeDoc {
+  _id: string;
+  name: string;
+  slug: { current: string };
+}
+
 const VALID_VIEWS = ["all", "kommande", "tidigare"] as const;
 
 export default async function EventsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string; view?: string }>;
+  searchParams: Promise<{ page?: string; view?: string; type?: string; public?: string }>;
 }) {
   const params = await searchParams;
   const viewParam = params.view || "all";
@@ -86,12 +88,21 @@ export default async function EventsPage({
   const currentPage = Math.max(1, parseInt(params.page || "1", 10));
   const start = (currentPage - 1) * ITEMS_PER_PAGE;
   const end = start + ITEMS_PER_PAGE;
+  const typeSlug = params.type || "";
+  const publicOnly = params.public === "true";
 
-  const listing = await sanityClient.fetch<ListingPage>(
-    listingPageByKeyQuery,
-    { key: "events" },
-    { next: { revalidate: EVENTS_CACHE_SECONDS } }
-  );
+  const [listing, eventTypes] = await Promise.all([
+    sanityClient.fetch<ListingPage>(
+      listingPageByKeyQuery,
+      { key: "events" },
+      { next: { revalidate: EVENTS_CACHE_SECONDS } }
+    ),
+    sanityClient.fetch<EventTypeDoc[]>(
+      eventTypesQuery,
+      {},
+      { next: { revalidate: EVENTS_CACHE_SECONDS } }
+    ),
+  ]);
 
   // Section titles from CMS with fallbacks
   const titles = {
@@ -100,9 +111,16 @@ export default async function EventsPage({
   };
 
   if (view === "kommande") {
+    const query = buildPaginatedEventsQuery("upcoming", {
+      typeFilter: !!typeSlug,
+      publicOnly,
+    });
+    const queryParams: Record<string, unknown> = { start, end };
+    if (typeSlug) queryParams.eventTypeSlug = typeSlug;
+
     const result = await sanityClient.fetch<PaginatedResult>(
-      upcomingEventsPaginatedQuery,
-      { start, end },
+      query,
+      queryParams,
       { next: { revalidate: EVENTS_CACHE_SECONDS } }
     );
     const { items, total } = result;
@@ -117,11 +135,15 @@ export default async function EventsPage({
           paddingY="top"
           as="main"
         >
-          <EventFilters />
+          <EventFilters eventTypes={eventTypes} />
           <EmptyState message="Sidan kunde inte hittas." />
         </ListingPageLayout>
       );
     }
+
+    const preserveParams: Record<string, string> = { view: "kommande" };
+    if (typeSlug) preserveParams.type = typeSlug;
+    if (publicOnly) preserveParams.public = "true";
 
     return (
       <ListingPageLayout
@@ -131,7 +153,7 @@ export default async function EventsPage({
         paddingY="top"
         as="main"
       >
-        <EventFilters />
+        <EventFilters eventTypes={eventTypes} />
         <Section title={titles.upcoming}>
         {items.length === 0 ? (
               <EmptyState message="Inga kommande evenemang för tillfället." />
@@ -144,7 +166,7 @@ export default async function EventsPage({
                   currentPage={currentPage}
                   totalPages={totalPages}
                   basePath={ROUTE_BASE.EVENTS}
-                  preserveParams={{ view: "kommande" }}
+                  preserveParams={preserveParams}
                 />
               </>
             )}
@@ -163,9 +185,16 @@ export default async function EventsPage({
   }
 
   if (view === "tidigare") {
+    const query = buildPaginatedEventsQuery("past", {
+      typeFilter: !!typeSlug,
+      publicOnly,
+    });
+    const queryParams: Record<string, unknown> = { start, end };
+    if (typeSlug) queryParams.eventTypeSlug = typeSlug;
+
     const result = await sanityClient.fetch<PaginatedResult>(
-      pastEventsPaginatedQuery,
-      { start, end },
+      query,
+      queryParams,
       { next: { revalidate: EVENTS_CACHE_SECONDS } }
     );
     const { items, total } = result;
@@ -180,14 +209,15 @@ export default async function EventsPage({
           paddingY="top"
           as="main"
         >
-          <EventFilters />
+          <EventFilters eventTypes={eventTypes} />
           <EmptyState message="Sidan kunde inte hittas." />
         </ListingPageLayout>
       );
     }
 
-    const mutedClass =
-      "bg-muted hover:bg-muted/50 text-muted-foreground [&_.text-brand-primary]:text-muted-foreground";
+    const preserveParams: Record<string, string> = { view: "tidigare" };
+    if (typeSlug) preserveParams.type = typeSlug;
+    if (publicOnly) preserveParams.public = "true";
 
     return (
       <ListingPageLayout
@@ -197,20 +227,20 @@ export default async function EventsPage({
         paddingY="top"
         as="main"
       >
-        <EventFilters />
+        <EventFilters eventTypes={eventTypes} />
         <Section title={titles.past}>
           {items.length === 0 ? (
               <EmptyState message="Inga tidigare evenemang." />
             ) : (
               <>
                 <ResponsiveGrid cols={3} gap="large">
-                  {items.map((event) => renderEventCard(event, mutedClass, true))}
+                  {items.map((event) => renderEventCard(event, true))}
                 </ResponsiveGrid>
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}
                   basePath={ROUTE_BASE.EVENTS}
-                  preserveParams={{ view: "tidigare" }}
+                  preserveParams={preserveParams}
                 />
               </>
             )}
@@ -227,7 +257,7 @@ export default async function EventsPage({
     );
   }
 
-  // view === "all": show 8 events (4 upcoming + 4 past), links to filtered views
+  // view === "all": show 12 events (6 upcoming + 6 past), links to filtered views
   const [events] = await Promise.all([
     sanityClient.fetch<Event[]>(allEventsQuery, {}, {
       next: { revalidate: EVENTS_CACHE_SECONDS },
@@ -235,13 +265,29 @@ export default async function EventsPage({
   ]);
 
   const now = new Date().toISOString();
-  const upcoming = events.filter((e) => (e.startDate || "") >= now);
-  const past = events
+  let upcoming = events.filter((e) => (e.startDate || "") >= now);
+  let past = events
     .filter((e) => (e.startDate || "") < now)
     .reverse();
 
-  const upcomingDisplay = upcoming.slice(0, 4);
-  const pastDisplay = past.slice(0, 4);
+  // Apply type filter on the "all" view
+  if (typeSlug) {
+    upcoming = upcoming.filter(
+      (e) => (e.eventType as unknown as EventTypeDoc | null)?.slug?.current === typeSlug
+    );
+    past = past.filter(
+      (e) => (e.eventType as unknown as EventTypeDoc | null)?.slug?.current === typeSlug
+    );
+  }
+
+  // Apply public filter on the "all" view
+  if (publicOnly) {
+    upcoming = upcoming.filter((e) => e.isPublic);
+    past = past.filter((e) => e.isPublic);
+  }
+
+  const upcomingDisplay = upcoming.slice(0, 6);
+  const pastDisplay = past.slice(0, 6);
 
   return (
     <ListingPageLayout
@@ -251,7 +297,7 @@ export default async function EventsPage({
       paddingY="top"
       as="main"
     >
-      <EventFilters />
+      <EventFilters eventTypes={eventTypes} />
       <Section title={titles.upcoming}>
       {upcomingDisplay.length === 0 ? (
             <EmptyState message="Inga kommande evenemang för tillfället." />
@@ -260,10 +306,10 @@ export default async function EventsPage({
               <ResponsiveGrid cols={3} gap="large">
                 {upcomingDisplay.map((event) => renderEventCard(event))}
               </ResponsiveGrid>
-              {upcoming.length > 4 && (
+              {upcoming.length > 6 && (
                 <p className="mt-6">
                   <Link
-                    href={`${ROUTE_BASE.EVENTS}?view=kommande`}
+                    href={`${ROUTE_BASE.EVENTS}?view=kommande${typeSlug ? `&type=${typeSlug}` : ""}${publicOnly ? "&public=true" : ""}`}
                     className="text-primary font-medium hover:underline"
                   >
                     Visa alla kommande
@@ -279,17 +325,13 @@ export default async function EventsPage({
         <Section title={titles.past}>
             <ResponsiveGrid cols={3} gap="large">
               {pastDisplay.map((event) =>
-                renderEventCard(
-                  event,
-                  "bg-muted hover:bg-muted/50 text-muted-foreground [&_.text-brand-primary]:text-muted-foreground",
-                  true
-                )
+                renderEventCard(event, true)
               )}
             </ResponsiveGrid>
-            {past.length > 4 && (
+            {past.length > 6 && (
               <p className="mt-6">
                 <Link
-                  href={`${ROUTE_BASE.EVENTS}?view=tidigare`}
+                  href={`${ROUTE_BASE.EVENTS}?view=tidigare${typeSlug ? `&type=${typeSlug}` : ""}${publicOnly ? "&public=true" : ""}`}
                   className="text-primary font-medium hover:underline"
                 >
                   Visa alla tidigare

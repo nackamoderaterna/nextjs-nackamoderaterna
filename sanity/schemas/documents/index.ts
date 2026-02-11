@@ -1,4 +1,5 @@
 import { eventDocument } from "./event";
+import { eventType } from "./eventType";
 import { geographicalArea } from "./geographicalArea";
 import { listingPage } from "./listingPage";
 import { namnd } from "./namnd";
@@ -17,6 +18,7 @@ export const documents = [
   articleSeries,
   page,
   eventDocument,
+  eventType,
   namnd,
   politician,
   namndPosition,

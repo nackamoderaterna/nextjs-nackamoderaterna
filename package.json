@@ -11,7 +11,8 @@
     "migrate:political-areas": "node scripts/migrate-political-areas.js",
     "migrate:news-variant": "npx tsx scripts/set-news-variant-default.ts",
     "migrate:politician-social-links": "npx tsx scripts/migrate-politician-social-links.ts",
-    "migrate:political-issue-slugs": "npx tsx scripts/migrate-political-issue-slugs.ts"
+    "migrate:political-issue-slugs": "npx tsx scripts/migrate-political-issue-slugs.ts",
+    "migrate:event-types": "npx tsx --env-file=.env scripts/migrate-event-types.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",
@@ -29,6 +30,7 @@
     "@sanity/client": "^7.13.0",
     "@sanity/eslint-config-studio": "^6.0.0",
     "@sanity/image-url": "^1.2.0",
+    "@sanity/locale-sv-se": "^1.2.28",
     "@sanity/ui": "^3.1.11",
     "@sanity/vision": "^4.22.0",
     "@tabler/icons-react": "^3.35.0",

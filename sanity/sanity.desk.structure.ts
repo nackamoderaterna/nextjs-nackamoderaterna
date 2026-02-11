@@ -7,6 +7,7 @@ export const deskStructure: StructureResolver = (S) =>
       S.documentTypeListItem("page"),
       S.documentTypeListItem("news"),
       S.documentTypeListItem("event").title("Evenemang"),
+      S.documentTypeListItem("eventType").title("Evenemangstyper"),
 
       S.documentTypeListItem("politician"),
 

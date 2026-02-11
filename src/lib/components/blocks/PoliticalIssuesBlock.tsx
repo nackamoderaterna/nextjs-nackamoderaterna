@@ -38,7 +38,7 @@ interface PoliticalIssuesBlockProps {
 async function fetchPoliticalIssues(
   areaId?: string,
   filter?: string,
-  limit?: number
+  limit?: number,
 ): Promise<PoliticalIssueData[]> {
   const conditions = ['_type == "politicalIssue"'];
 
@@ -71,9 +71,13 @@ async function fetchPoliticalIssues(
     }
   `;
 
-  return sanityClient.fetch<PoliticalIssueData[]>(query, {}, {
-    next: { revalidate: 86400 },
-  });
+  return sanityClient.fetch<PoliticalIssueData[]>(
+    query,
+    {},
+    {
+      next: { revalidate: 86400 },
+    },
+  );
 }
 
 export async function PoliticalIssuesBlock({
@@ -120,7 +124,7 @@ export async function PoliticalIssuesBlock({
             description={issue.description}
             issueSlug={issue.slug?.current}
             featured={issue.featured}
-            fulfilled={issue.fulfilled}
+            fulfilled={block.mode == "allFeatured" ? false : issue.fulfilled}
             politicalAreas={issue.politicalAreas}
             geographicalAreas={issue.geographicalAreas ?? []}
           />
