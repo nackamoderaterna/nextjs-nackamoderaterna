@@ -42,3 +42,11 @@ next-env.d.ts
 
 # optimization log
 optimization-log.md
+
+# sanity build artifacts
+.sanity/
+/dist/
+
+# misc artifacts
+architecture.*
+render-diagram.sh
