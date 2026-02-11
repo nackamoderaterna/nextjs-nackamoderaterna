@@ -12,7 +12,8 @@
     "migrate:news-variant": "npx tsx scripts/set-news-variant-default.ts",
     "migrate:politician-social-links": "npx tsx scripts/migrate-politician-social-links.ts",
     "migrate:political-issue-slugs": "npx tsx scripts/migrate-political-issue-slugs.ts",
-    "migrate:event-types": "npx tsx --env-file=.env scripts/migrate-event-types.ts"
+    "migrate:event-types": "npx tsx --env-file=.env scripts/migrate-event-types.ts",
+    "migrate:political-area-display": "npx tsx --env-file=.env scripts/migrate-political-area-display.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",

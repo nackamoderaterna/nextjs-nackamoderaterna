@@ -13,7 +13,7 @@ export const politikPageQuery = groq`
     featured,
     fulfilled,
 
-    "politicalAreas": politicalAreas[]->{
+    "politicalAreas": politicalAreas[].area->{
       _id,
       name,
       slug,
@@ -38,7 +38,7 @@ export const politikPageQuery = groq`
     featured,
     fulfilled,
 
-    "politicalAreas": politicalAreas[]->{
+    "politicalAreas": politicalAreas[].area->{
       _id,
       name,
       slug,
@@ -82,7 +82,7 @@ export const allPoliticalIssuesQuery = groq`*[_type == "politicalIssue"] | order
   featured,
   fulfilled,
 
-  "politicalAreas": politicalAreas[]->{
+  "politicalAreas": politicalAreas[].area->{
     _id,
     name,
     slug,
@@ -122,7 +122,7 @@ export const politicalIssuePageQuery = groq`
     fulfilled,
     fulfilledAt,
 
-    "politicalAreas": politicalAreas[]->{
+    "politicalAreas": politicalAreas[].area->{
       _id,
       name,
       slug,
@@ -187,7 +187,7 @@ export const politicalAreaPageQuery = groq`
 
     "politicalIssues": *[
       _type == "politicalIssue" &&
-      references(^._id)
+      count(politicalAreas[area._ref == ^._id && display == true]) > 0
     ] {
       _id,
       question,

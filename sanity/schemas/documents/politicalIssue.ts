@@ -79,7 +79,37 @@ export const politicalIssue = defineType({
         "Politiska områden som denna fråga tillhör. Minst ett område måste väljas.",
       type: "array",
       group: "relations",
-      of: [{ type: "reference", to: [{ type: "politicalArea" }] }],
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({
+              name: "area",
+              title: "Område",
+              type: "reference",
+              to: [{ type: "politicalArea" }],
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "display",
+              title: "Visa på kategorisida",
+              description:
+                "Om markerat visas denna sakfråga på kategorisidan för det valda området.",
+              type: "boolean",
+              initialValue: false,
+            }),
+          ],
+          preview: {
+            select: { title: "area.name", display: "display" },
+            prepare({ title, display }) {
+              return {
+                title: title || "Okänt område",
+                subtitle: display ? "Visas" : "Dold",
+              };
+            },
+          },
+        },
+      ],
       validation: (Rule) => Rule.required().min(1),
     }),
     defineField({

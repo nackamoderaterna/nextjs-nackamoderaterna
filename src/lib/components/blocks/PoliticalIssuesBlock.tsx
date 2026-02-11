@@ -62,7 +62,7 @@ async function fetchPoliticalIssues(
       slug,
       featured,
       fulfilled,
-      "politicalAreas": politicalAreas[]->{
+      "politicalAreas": politicalAreas[].area->{
         _id,
         name,
         slug,
