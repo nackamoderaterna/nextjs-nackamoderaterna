@@ -187,7 +187,7 @@ export const politicalAreaPageQuery = groq`
 
     "politicalIssues": *[
       _type == "politicalIssue" &&
-      count(politicalAreas[area._ref == ^._id && display == true]) > 0
+      count(politicalAreas[area._ref == ^.^._id && display == true]) > 0
     ] {
       _id,
       question,

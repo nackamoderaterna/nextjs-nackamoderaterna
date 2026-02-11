@@ -1,4 +1,5 @@
 import { defineType } from "sanity";
+import LucideIconInput from "../components/LucideIconInput";
 
 export default defineType({
   name: "lucideIcon",
@@ -11,11 +12,7 @@ export default defineType({
       type: "string",
       description: "Välj en ikon från Lucide-biblioteket",
       components: {
-        input: (props: any) => {
-          // Lazy load the component
-          const LucideIconInput = require("../components/LucideIconInput").default;
-          return LucideIconInput(props);
-        },
+        input: LucideIconInput,
       },
     },
   ],

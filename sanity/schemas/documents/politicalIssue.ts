@@ -96,7 +96,7 @@ export const politicalIssue = defineType({
               description:
                 "Om markerat visas denna sakfråga på kategorisidan för det valda området.",
               type: "boolean",
-              initialValue: false,
+              initialValue: true,
             }),
           ],
           preview: {

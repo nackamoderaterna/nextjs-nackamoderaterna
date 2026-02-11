@@ -33,8 +33,10 @@ export function EventCard({
     <Link
       href={`${ROUTE_BASE.EVENTS}/${href}`}
       className={cn(
-        "block border border-brand-primary rounded-lg p-6 hover:bg-brand-primary/10 transition-colors group relative",
-        muted && "opacity-60",
+        "block rounded border p-6 transition-colors group relative",
+        muted
+          ? "border-muted hover:bg-muted-background"
+          : "border-border hover:border-brand-primary hover:bg-brand-primary/10",
         className,
       )}
     >
@@ -44,7 +46,7 @@ export function EventCard({
             "absolute top-4 right-4 bg-muted-background",
             muted
               ? "text-muted-foreground bg-muted-background hover:bg-muted/90"
-              : "bg-brand-primary hover:bg-blue-700 text-white"
+              : "bg-brand-primary hover:bg-blue-700 text-white",
           )}
         >
           Publikt
@@ -71,9 +73,7 @@ export function EventCard({
         <h3 className="font-semibold group-hover:text-brand-primary transition-colors mb-1">
           {title}
         </h3>
-        {time ? (
-          <p className="text-sm text-muted-foreground">{time}</p>
-        ) : null}
+        {time ? <p className="text-sm text-muted-foreground">{time}</p> : null}
         {location?.trim() ? (
           <p className="text-sm text-muted-foreground">@ {location.trim()}</p>
         ) : null}

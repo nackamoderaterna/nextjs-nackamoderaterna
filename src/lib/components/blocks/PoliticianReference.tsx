@@ -5,30 +5,27 @@ import { Politician } from "~/sanity.types";
 import { cleanInvisibleUnicode } from "@/lib/politicians";
 import { PeopleCard } from "../politician/PeopleCard";
 
-const KOMMUNALRAD_ROLE_TITLES: Record<string, string> = {
-  president: "Kommunstyrelsens ordförande",
-  ordinary: "Kommunalråd",
+type PoliticianWithLivingArea = Politician & {
+  livingArea?: { _id: string; name: string; slug?: { current: string } } | null;
 };
 
 function getDefaultTitle(
-  politician: Politician,
+  politician: PoliticianWithLivingArea,
   mode: "manual" | "kommunalrad"
 ): string {
-  if (mode === "kommunalrad" && politician.kommunalrad?.active) {
-    const rawRole = politician.kommunalrad?.role ?? "ordinary";
-    const role = cleanInvisibleUnicode(rawRole) as "president" | "ordinary";
-    return KOMMUNALRAD_ROLE_TITLES[role] ?? "Kommunalråd";
+  if (mode === "kommunalrad") {
+    return politician.livingArea?.name ?? "";
   }
   return "Ledamot";
 }
 
-type ManualItem = { politician: Politician; titleOverride?: string };
+type ManualItem = { politician: PoliticianWithLivingArea; titleOverride?: string };
 
 export interface BlockPoliticianDereferenced {
   _type: "block.politician";
   heading?: { title?: string | null; subtitle?: string | null } | string;
   mode: "manual" | "kommunalrad";
-  items: Politician[] | ManualItem[];
+  items: PoliticianWithLivingArea[] | ManualItem[];
 }
 
 export interface PoliticianReferenceBlockProps {
@@ -55,7 +52,7 @@ export const PoliticianReferenceBlock = ({
     }
 
     // For kommunalråd mode, sort to ensure president is first
-    const kommunalradItems = [...(items as Politician[])];
+    const kommunalradItems = [...(items as PoliticianWithLivingArea[])];
     kommunalradItems.sort((a, b) => {
       const aRole = cleanInvisibleUnicode(a.kommunalrad?.role ?? "ordinary");
       const bRole = cleanInvisibleUnicode(b.kommunalrad?.role ?? "ordinary");

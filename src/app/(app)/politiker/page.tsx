@@ -105,11 +105,7 @@ export default async function PoliticiansPage() {
               ...grouped.kommunalrad.ordinary,
             ]}
             cardType="large"
-            getTitle={(p) =>
-              p.kommunalrad?.role === "president"
-                ? "Kommunstyrelsens ordförande"
-                : "Kommunalråd"
-            }
+            getTitle={(p) => p.livingArea?.name ?? ""}
           />
         )}
 
