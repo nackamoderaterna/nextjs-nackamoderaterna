@@ -22,7 +22,6 @@ import {
   Link2,
   ChevronDown,
   ChevronUp,
-  CheckCircle,
 } from "lucide-react";
 import type { PoliticalIssueWithAreas } from "./types";
 
@@ -105,32 +104,6 @@ export const politicalIssuesColumns: ColumnDef<PoliticalIssueWithAreas>[] = [
       if (filterValue === "ja") return featured;
       if (filterValue === "nej") return !featured;
       return true;
-    },
-  },
-  {
-    id: "status",
-    accessorFn: (row) => !!row.fulfilled,
-    header: "Status",
-    enableSorting: false,
-    enableColumnFilter: true,
-    filterFn: (row, _columnId, filterValue: string) => {
-      if (!filterValue || filterValue === "all") return true;
-      const fulfilled = !!row.original.fulfilled;
-      if (filterValue === "fulfilled") return fulfilled;
-      if (filterValue === "not_fulfilled") return !fulfilled;
-      return true;
-    },
-    cell: ({ row }) => {
-      const fulfilled = !!row.original.fulfilled;
-      if (fulfilled) {
-        return (
-          <Badge variant="secondary" className="gap-1 text-green-700 dark:text-green-400">
-            <CheckCircle className="size-3" aria-hidden />
-            Uppfyllt
-          </Badge>
-        );
-      }
-      return <span className="text-muted-foreground">—</span>;
     },
   },
   {

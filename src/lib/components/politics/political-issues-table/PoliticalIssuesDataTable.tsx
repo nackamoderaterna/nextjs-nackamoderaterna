@@ -33,7 +33,6 @@ import {
   PoliticalIssuesTableFiltersCategory,
   PoliticalIssuesTableFiltersGeo,
   PoliticalIssuesTableFiltersFeatured,
-  PoliticalIssuesTableFiltersStatus,
   type CategoryWithIcon,
 } from "./PoliticalIssuesTableFilters";
 import { PoliticalIssuesTableSearch } from "./PoliticalIssuesTableSearch";
@@ -48,7 +47,6 @@ const DEFAULT_PAGE_SIZE = 10;
 
 const COLUMN_WIDTH_CLASSES: Record<string, string> = {
   fraga: "min-w-[260px]",
-  status: "min-w-[100px]",
   politiskaOmraden: "min-w-[260px]",
   actions: "w-0 min-w-0 whitespace-nowrap",
 };
@@ -113,7 +111,6 @@ export function PoliticalIssuesDataTable({
       pagination: { pageSize: DEFAULT_PAGE_SIZE },
       columnVisibility: {
         kernfraga: false,
-        status: false,
         geografiskaOmraden: false,
       },
     },
@@ -153,10 +150,7 @@ export function PoliticalIssuesDataTable({
           />
           <PoliticalIssuesTableFiltersGeo table={table} areas={geoAreas} />
         </div>
-        <div className="flex gap-2">
-          <PoliticalIssuesTableFiltersFeatured table={table} />
-          <PoliticalIssuesTableFiltersStatus table={table} />
-        </div>
+        <PoliticalIssuesTableFiltersFeatured table={table} />
       </div>
 
       <div className="overflow-hidden rounded-md">

@@ -1,7 +1,7 @@
 import { groq } from "next-sanity";
 
 export const eventTypesQuery = groq`
-  *[_type == "eventType"] | order(name asc) { _id, name, slug }
+  *[_type == "eventType"] | order(name asc) { _id, name, slug, color }
 `;
 
 export const upcomingEventsQuery = groq`
@@ -14,7 +14,7 @@ export const upcomingEventsQuery = groq`
     endDate,
     image{ ..., hotspot, crop },
     location,
-    eventType->{ _id, name, slug }
+    eventType->{ _id, name, slug, color }
   }
 `;
 
@@ -28,7 +28,7 @@ export const allEventsQuery = groq`
     endDate,
     image{ ..., hotspot, crop },
     location,
-    eventType->{ _id, name, slug },
+    eventType->{ _id, name, slug, color },
     isPublic
   }
 `;
@@ -43,7 +43,7 @@ export const upcomingEventsPaginatedQuery = groq`{
     endDate,
     image{ ..., hotspot, crop },
     location,
-    eventType->{ _id, name, slug },
+    eventType->{ _id, name, slug, color },
     isPublic
   },
   "total": count(*[_type == "event" && startDate >= now()])
@@ -59,7 +59,7 @@ export const pastEventsPaginatedQuery = groq`{
     endDate,
     image{ ..., hotspot, crop },
     location,
-    eventType->{ _id, name, slug },
+    eventType->{ _id, name, slug, color },
     isPublic
   },
   "total": count(*[_type == "event" && startDate < now()])
@@ -75,7 +75,7 @@ export const upcomingEventsPaginatedFilteredQuery = groq`{
     endDate,
     image{ ..., hotspot, crop },
     location,
-    eventType->{ _id, name, slug },
+    eventType->{ _id, name, slug, color },
     isPublic
   },
   "total": count(*[_type == "event" && startDate >= now() && eventType->slug.current == $eventTypeSlug])
@@ -91,7 +91,7 @@ export const pastEventsPaginatedFilteredQuery = groq`{
     endDate,
     image{ ..., hotspot, crop },
     location,
-    eventType->{ _id, name, slug },
+    eventType->{ _id, name, slug, color },
     isPublic
   },
   "total": count(*[_type == "event" && startDate < now() && eventType->slug.current == $eventTypeSlug])
@@ -105,8 +105,9 @@ const eventProjection = `{
   endDate,
   image{ ..., hotspot, crop },
   location,
-  eventType->{ _id, name, slug },
-  isPublic
+  eventType->{ _id, name, slug, color },
+  isPublic,
+  "plainDescription": pt::text(description)
 }`;
 
 /**
@@ -134,6 +135,44 @@ export function buildPaginatedEventsQuery(
 }`;
 }
 
+/**
+ * Build a query to fetch upcoming events from today with a $limit, no month constraint.
+ * Returns { items, total }.
+ */
+export function buildUpcomingEventsQuery(options?: {
+  typeFilter?: boolean;
+  publicOnly?: boolean;
+}): string {
+  const typeCondition = options?.typeFilter
+    ? " && eventType->slug.current == $eventTypeSlug"
+    : "";
+  const publicCondition = options?.publicOnly ? " && isPublic == true" : "";
+
+  const filter = `_type == "event" && startDate >= now()${typeCondition}${publicCondition}`;
+
+  return `{
+  "items": *[${filter}] | order(startDate asc) [0...$limit] ${eventProjection},
+  "total": count(*[${filter}])
+}`;
+}
+
+/**
+ * Build a query to fetch all events within a month range, with optional filters.
+ */
+export function buildMonthEventsQuery(options?: {
+  typeFilter?: boolean;
+  publicOnly?: boolean;
+}): string {
+  const typeCondition = options?.typeFilter
+    ? " && eventType->slug.current == $eventTypeSlug"
+    : "";
+  const publicCondition = options?.publicOnly ? " && isPublic == true" : "";
+
+  const filter = `_type == "event" && startDate >= $monthStart && startDate <= $monthEnd${typeCondition}${publicCondition}`;
+
+  return `*[${filter}] | order(startDate asc) ${eventProjection}`;
+}
+
 // Query to get all event slugs for static generation
 export const allEventSlugsQuery = groq`*[_type == "event" && defined(slug.current)] {
   "slug": slug.current
@@ -149,7 +188,7 @@ export const singleEventQuery = groq`
     description,
     image{ ..., hotspot, crop },
     location,
-    eventType->{ _id, name, slug },
+    eventType->{ _id, name, slug, color },
     registrationUrl,
     isPublic
   }

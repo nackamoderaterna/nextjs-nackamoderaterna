@@ -5,7 +5,7 @@ import { ROUTE_BASE } from "@/lib/routes";
 
 interface EventCardProps {
   day: string;
-  month: string;
+  month?: string;
   title: string;
   time: string;
   location: string;
@@ -63,16 +63,18 @@ export function EventCard({
         >
           {day}
         </span>
-        <span
-          className={cn(
-            "block text-sm font-medium uppercase tracking-wide transition-colors",
-            muted
-              ? "text-muted-foreground group-hover:text-primary"
-              : "text-brand-primary",
-          )}
-        >
-          {month}
-        </span>
+        {month && (
+          <span
+            className={cn(
+              "block text-sm font-medium uppercase tracking-wide transition-colors",
+              muted
+                ? "text-muted-foreground group-hover:text-primary"
+                : "text-brand-primary",
+            )}
+          >
+            {month}
+          </span>
+        )}
       </div>
 
       {/* Event Info */}
