@@ -57,7 +57,9 @@ function getColumnClassName(columnId: string): string | undefined {
   return COLUMN_WIDTH_CLASSES[columnId];
 }
 
-function getUniqueCategories(data: PoliticalIssueWithAreas[]): CategoryWithIcon[] {
+function getUniqueCategories(
+  data: PoliticalIssueWithAreas[],
+): CategoryWithIcon[] {
   const byName = new Map<string, string | null>();
   for (const issue of data) {
     for (const area of issue.politicalAreas ?? []) {
@@ -81,9 +83,13 @@ function getUniqueGeoAreas(data: PoliticalIssueWithAreas[]): string[] {
   return Array.from(names).sort((a, b) => a.localeCompare(b, "sv"));
 }
 
-export function PoliticalIssuesDataTable({ data }: PoliticalIssuesDataTableProps) {
+export function PoliticalIssuesDataTable({
+  data,
+}: PoliticalIssuesDataTableProps) {
   const [globalFilter, setGlobalFilter] = React.useState("");
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const categories = React.useMemo(() => getUniqueCategories(data), [data]);
   const geoAreas = React.useMemo(() => getUniqueGeoAreas(data), [data]);
@@ -135,18 +141,19 @@ export function PoliticalIssuesDataTable({ data }: PoliticalIssuesDataTableProps
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-end">
-        <div className="flex flex-col gap-3 md:flex-row md:items-end lg:contents">
-          <PoliticalIssuesTableSearch
-            value={globalFilter ?? ""}
-            onChange={setGlobalFilter}
+      <div className="flex flex-wrap w-full items-end gap-2 gap-y-4">
+        <PoliticalIssuesTableSearch
+          value={globalFilter ?? ""}
+          onChange={setGlobalFilter}
+        />
+        <div className="flex gap-2 w-full max-w-lg">
+          <PoliticalIssuesTableFiltersCategory
+            table={table}
+            categories={categories}
           />
-          <div className="flex items-end gap-3">
-            <PoliticalIssuesTableFiltersCategory table={table} categories={categories} />
-            <PoliticalIssuesTableFiltersGeo table={table} areas={geoAreas} />
-          </div>
+          <PoliticalIssuesTableFiltersGeo table={table} areas={geoAreas} />
         </div>
-        <div className="flex items-end gap-3 shrink-0">
+        <div className="flex gap-2">
           <PoliticalIssuesTableFiltersFeatured table={table} />
           <PoliticalIssuesTableFiltersStatus table={table} />
         </div>
@@ -166,7 +173,7 @@ export function PoliticalIssuesDataTable({ data }: PoliticalIssuesDataTableProps
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -196,7 +203,7 @@ export function PoliticalIssuesDataTable({ data }: PoliticalIssuesDataTableProps
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

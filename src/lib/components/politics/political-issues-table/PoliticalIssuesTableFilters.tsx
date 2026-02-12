@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import type { Table } from "@tanstack/react-table";
 import { ToggleGroup, ToggleGroupItem } from "@/lib/components/ui/toggle-group";
 import {
@@ -59,6 +60,7 @@ export function PoliticalIssuesTableFiltersCategory<TData>({
   table,
   categories,
 }: PoliticalIssuesTableFiltersCategoryProps<TData>) {
+  const chipsRef = useRef<HTMLDivElement>(null);
   const selectedCategories =
     (table.getColumn(KATEGORI_COLUMN_ID)?.getFilterValue() as
       | string[]
@@ -76,7 +78,7 @@ export function PoliticalIssuesTableFiltersCategory<TData>({
 
   return (
     <div
-      className="flex flex-col items-start gap-1.5 min-w-0 flex-1 sm:flex-none"
+      className="flex flex-col w-full items-start gap-1.5"
       role="group"
       aria-label="Kategori"
     >
@@ -90,7 +92,7 @@ export function PoliticalIssuesTableFiltersCategory<TData>({
         value={selectedCategories}
         onValueChange={handleValueChange}
       >
-        <ComboboxChips className="w-full min-w-0 max-w-md sm:min-w-48">
+        <ComboboxChips ref={chipsRef} className="w-full max-w-sm">
           <ComboboxValue>
             {selectedCategories.map((item) => {
               const cat = getCategory(item);
@@ -103,7 +105,7 @@ export function PoliticalIssuesTableFiltersCategory<TData>({
           </ComboboxValue>
           <ComboboxChipsInput placeholder="Välj kategori..." />
         </ComboboxChips>
-        <ComboboxContent className="min-w-72 sm:min-w-80">
+        <ComboboxContent anchor={chipsRef} className="min-w-72 sm:min-w-80">
           <ComboboxEmpty>Inga kategorier hittades.</ComboboxEmpty>
           <ComboboxList>
             {(item: string) => {
@@ -136,8 +138,11 @@ export function PoliticalIssuesTableFiltersGeo<TData>({
   table,
   areas,
 }: PoliticalIssuesTableFiltersGeoProps<TData>) {
+  const chipsRef = useRef<HTMLDivElement>(null);
   const selectedAreas =
-    (table.getColumn(GEO_COLUMN_ID)?.getFilterValue() as string[] | undefined) ?? [];
+    (table.getColumn(GEO_COLUMN_ID)?.getFilterValue() as
+      | string[]
+      | undefined) ?? [];
 
   const handleValueChange = (value: string[] | null) => {
     const next = Array.isArray(value) && value.length > 0 ? value : undefined;
@@ -148,7 +153,7 @@ export function PoliticalIssuesTableFiltersGeo<TData>({
 
   return (
     <div
-      className="flex flex-col items-start gap-1.5 min-w-0 flex-1 sm:flex-none"
+      className="flex flex-col w-full items-start gap-1.5"
       role="group"
       aria-label="Område"
     >
@@ -162,7 +167,7 @@ export function PoliticalIssuesTableFiltersGeo<TData>({
         value={selectedAreas}
         onValueChange={handleValueChange}
       >
-        <ComboboxChips className="w-full min-w-0 max-w-md sm:min-w-40">
+        <ComboboxChips ref={chipsRef} className="w-full max-w-md">
           <ComboboxValue>
             {selectedAreas.map((item) => (
               <ComboboxChip key={item}>{item}</ComboboxChip>
@@ -170,7 +175,7 @@ export function PoliticalIssuesTableFiltersGeo<TData>({
           </ComboboxValue>
           <ComboboxChipsInput placeholder="Välj område..." />
         </ComboboxChips>
-        <ComboboxContent className="min-w-56 sm:min-w-64">
+        <ComboboxContent anchor={chipsRef} className="min-w-56 sm:min-w-64">
           <ComboboxEmpty>Inga områden hittades.</ComboboxEmpty>
           <ComboboxList>
             {(item: string) => (
@@ -206,7 +211,9 @@ export function PoliticalIssuesTableFiltersFeatured<TData>({
 }: PoliticalIssuesTableFiltersFeaturedProps<TData>) {
   const raw =
     (table.getColumn(KERNFRAGA_COLUMN_ID)?.getFilterValue() as string) ?? "all";
-  const value = KERNFRAGA_OPTIONS.includes(raw as (typeof KERNFRAGA_OPTIONS)[number])
+  const value = KERNFRAGA_OPTIONS.includes(
+    raw as (typeof KERNFRAGA_OPTIONS)[number],
+  )
     ? (raw as (typeof KERNFRAGA_OPTIONS)[number])
     : "all";
 
