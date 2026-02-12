@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { SanityImage } from "@/lib/components/shared/SanityImage";
+import { BookOpen } from "lucide-react";
 
 interface SidebarListProps {
   children: ReactNode;
@@ -61,6 +62,10 @@ export function SidebarListItem({
     return (
       <li>
         <div aria-current="page" className={`${padding} text-muted-foreground`}>
+          <span className="flex items-center gap-1.5 text-xs text-primary mb-1">
+            <BookOpen className="size-3" />
+            Läser nu
+          </span>
           {content}
         </div>
       </li>

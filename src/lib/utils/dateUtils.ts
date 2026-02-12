@@ -4,18 +4,18 @@ export function formatDate(timestamp: string | Date) {
   const day = String(date.getDate()).padStart(2, "0");
 
   const months = [
-    "JAN",
-    "FEB",
-    "MAR",
-    "APR",
-    "MAJ",
-    "JUN",
-    "JUL",
-    "AUG",
-    "SEP",
-    "OKT",
-    "NOV",
-    "DEC",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "Maj",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Okt",
+    "Nov",
+    "Dec",
   ];
   const month = months[date.getMonth()];
 
