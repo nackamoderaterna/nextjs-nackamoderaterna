@@ -61,6 +61,8 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
             slug,
             image{ ..., hotspot, crop },
             kommunalrad,
+            email,
+            phone,
             "livingArea": livingArea->{ _id, name, slug }
           },
         items[] {
@@ -70,6 +72,8 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
             slug,
             image{ ..., hotspot, crop },
             kommunalrad,
+            email,
+            phone,
             "livingArea": livingArea->{ _id, name, slug }
           },
           titleOverride

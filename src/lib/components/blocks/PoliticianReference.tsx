@@ -7,6 +7,8 @@ import { PeopleCard } from "../politician/PeopleCard";
 
 type PoliticianWithLivingArea = Politician & {
   livingArea?: { _id: string; name: string; slug?: { current: string } } | null;
+  email?: string | null;
+  phone?: string | null;
 };
 
 function getDefaultTitle(
@@ -92,6 +94,8 @@ export const PoliticianReferenceBlock = ({
               name={p.name}
               title={title}
               size="large"
+              email={p.email}
+              phone={p.phone}
             />
           ))}
         </div>
