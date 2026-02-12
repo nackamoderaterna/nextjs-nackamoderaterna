@@ -1,31 +1,28 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo,
+  createContext,
+  useContext,
+} from "react";
 import Link from "next/link";
 import {
+  format,
+  parseISO,
   startOfMonth,
   endOfMonth,
-  startOfWeek,
-  endOfWeek,
-  eachDayOfInterval,
-  isSameMonth,
   isSameDay,
-  isToday,
-  format,
-  addMonths,
-  subMonths,
-  parseISO,
 } from "date-fns";
 import { sv } from "date-fns/locale";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronDown,
-  MapPin,
-  Loader2,
-} from "lucide-react";
+import { getDefaultClassNames, type DayButton } from "react-day-picker";
+import { ChevronDown, MapPin, Loader2 } from "lucide-react";
 import { Button } from "@/lib/components/ui/button";
 import { Badge } from "@/lib/components/ui/badge";
+import { Calendar } from "@/lib/components/ui/calendar";
 import { ROUTE_BASE } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { formatAddress, formatTimeRange } from "@/lib/utils/dateUtils";
@@ -35,8 +32,6 @@ import {
   buildUpcomingEventsQuery,
 } from "@/lib/queries/events";
 import type { Event } from "~/sanity.types";
-
-const WEEKDAYS = ["Mån", "Tis", "Ons", "Tor", "Fre", "Lör", "Sön"];
 
 const DEFAULT_EVENT_COLOR = "#0072CE";
 const PAGE_SIZE = 10;
@@ -66,55 +61,6 @@ function getEventColor(event: Event): string {
 
 function getEventType(event: Event): EventTypeDoc | null {
   return event.eventType as unknown as EventTypeDoc | null;
-}
-
-/* ------------------------------------------------------------------ */
-/*  Day timeline builder                                              */
-/* ------------------------------------------------------------------ */
-
-type DayTimelineEntry =
-  | { kind: "hour"; hour: number }
-  | { kind: "event"; event: Event };
-
-function buildDayTimeline(events: Event[]): DayTimelineEntry[] {
-  const sorted = [...events]
-    .filter((e) => e.startDate)
-    .sort(
-      (a, b) =>
-        new Date(a.startDate!).getTime() - new Date(b.startDate!).getTime(),
-    );
-
-  if (sorted.length === 0) return [];
-
-  const firstHour = new Date(sorted[0].startDate!).getHours();
-  const lastEvent = sorted[sorted.length - 1];
-  const lastHour = lastEvent.endDate
-    ? new Date(lastEvent.endDate).getHours()
-    : new Date(lastEvent.startDate!).getHours() + 1;
-
-  const startHour = Math.max(0, firstHour - 1);
-  const endHour = Math.min(23, lastHour + 1);
-
-  const eventsByHour = new Map<number, Event[]>();
-  for (const event of sorted) {
-    const h = new Date(event.startDate!).getHours();
-    if (!eventsByHour.has(h)) eventsByHour.set(h, []);
-    eventsByHour.get(h)!.push(event);
-  }
-
-  const entries: DayTimelineEntry[] = [];
-  for (let h = startHour; h <= endHour; h++) {
-    const hourEvents = eventsByHour.get(h);
-    if (hourEvents) {
-      for (const event of hourEvents) {
-        entries.push({ kind: "event", event });
-      }
-    } else {
-      entries.push({ kind: "hour", hour: h });
-    }
-  }
-
-  return entries;
 }
 
 /* ------------------------------------------------------------------ */
@@ -173,7 +119,7 @@ function TimelineEventItem({
   return (
     <Link
       href={`${ROUTE_BASE.EVENTS}/${event.slug?.current || ""}`}
-      className="block hover:bg-muted/40 transition-colors p-2 -mx-1 rounded-md"
+      className="block hover:bg-muted/40 transition-colors p-2 -mx-1 rounded-md flex flex-col gap-1"
     >
       <p className="font-semibold text-sm text-foreground truncate">
         {event.title}
@@ -223,107 +169,85 @@ function TimelineEventItem({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Compact calendar (used inside EventSidebar)                       */
+/*  Custom calendar day button with event dots                        */
 /* ------------------------------------------------------------------ */
 
-function CompactCalendar({
-  days,
-  currentMonth,
-  events,
-  selectedDay,
-  onSelectDay,
-}: {
-  days: Date[];
-  currentMonth: Date;
-  events: Event[];
-  selectedDay: Date | null;
-  onSelectDay: (day: Date | null) => void;
-}) {
+const DayEventColorsContext = createContext<Map<string, string[]>>(new Map());
+
+function EventDayButton({
+  className,
+  day,
+  modifiers,
+  children,
+  ...props
+}: React.ComponentProps<typeof DayButton>) {
+  const dayEventColors = useContext(DayEventColorsContext);
+  const defaultClassNames = getDefaultClassNames();
+  const ref = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (modifiers.focused) ref.current?.focus();
+  }, [modifiers.focused]);
+
+  const dateKey = format(day.date, "yyyy-MM-dd");
+  const colors = dayEventColors.get(dateKey) || [];
+  const hasEvents = colors.length > 0;
+
   return (
-    <div>
-      <div className="grid grid-cols-7 mb-1">
-        {WEEKDAYS.map((d) => (
-          <div
-            key={d}
-            className="py-1 text-center text-[10px] font-medium text-muted-foreground uppercase"
-          >
-            {d}
-          </div>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-7">
-        {days.map((day) => {
-          const inMonth = isSameMonth(day, currentMonth);
-          const today = isToday(day);
-          const dayEvents = getEventsForDay(events, day);
-          const hasEvents = dayEvents.length > 0;
-          const isSelected = selectedDay ? isSameDay(day, selectedDay) : false;
-
-          return (
-            <button
-              key={day.toISOString()}
-              type="button"
-              onClick={() => {
-                if (!hasEvents) return;
-                onSelectDay(isSelected ? null : day);
-              }}
-              className={cn(
-                "relative flex flex-col items-center py-1.5 rounded transition-colors",
-                !inMonth && "text-muted-foreground/30",
-                inMonth && "text-foreground",
-                hasEvents && "cursor-pointer hover:bg-muted/60",
-                !hasEvents && "cursor-default",
-                isSelected && "bg-brand-primary/10 ring-1 ring-brand-primary",
-              )}
-            >
-              <span
-                className={cn(
-                  "text-xs leading-none",
-                  today &&
-                    "bg-brand-primary text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px]",
-                )}
-              >
-                {format(day, "d")}
-              </span>
-              {hasEvents && (
-                <div className="flex gap-px mt-0.5">
-                  {dayEvents.slice(0, 3).map((e) => (
-                    <span
-                      key={e._id}
-                      className="w-1 h-1 rounded-full"
-                      style={{ backgroundColor: getEventColor(e) }}
-                    />
-                  ))}
-                </div>
-              )}
-            </button>
-          );
-        })}
-      </div>
-    </div>
+    <Button
+      ref={ref}
+      variant="ghost"
+      size="icon"
+      data-day={day.date.toLocaleDateString()}
+      data-selected-single={
+        modifiers.selected &&
+        !modifiers.range_start &&
+        !modifiers.range_end &&
+        !modifiers.range_middle
+      }
+      className={cn(
+        "data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&>span]:text-xs [&>span]:opacity-70",
+        defaultClassNames.day,
+        className,
+        !hasEvents && !modifiers.outside && "text-muted-foreground",
+      )}
+      {...props}
+    >
+      {children}
+      {hasEvents && (
+        <div className="flex gap-0.5 justify-center">
+          {colors.slice(0, 4).map((color, i) => (
+            <span
+              key={i}
+              className="size-1 rounded-full"
+              style={{ backgroundColor: color }}
+            />
+          ))}
+        </div>
+      )}
+    </Button>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/*  EventSidebar — compact calendar + inline day timeline              */
+/*  EventSidebar — shadcn Calendar + popover day events               */
 /* ------------------------------------------------------------------ */
 
 export function EventSidebar() {
   const [sidebarMonth, setSidebarMonth] = useState(() => new Date());
-  const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+  const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined);
   const [monthEvents, setMonthEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchMonthEvents = useCallback(async (month: Date) => {
     setLoading(true);
     try {
-      const monthStart = format(startOfMonth(month), "yyyy-MM-dd");
-      const monthEnd = format(endOfMonth(month), "yyyy-MM-dd");
+      const ms = format(startOfMonth(month), "yyyy-MM-dd");
+      const me = format(endOfMonth(month), "yyyy-MM-dd");
       const query = buildMonthEventsQuery();
       const data = await sanityClient.fetch<Event[]>(query, {
-        monthStart,
-        monthEnd,
+        monthStart: ms,
+        monthEnd: me,
       });
       setMonthEvents(data || []);
     } catch {
@@ -337,107 +261,71 @@ export function EventSidebar() {
     fetchMonthEvents(sidebarMonth);
   }, [sidebarMonth, fetchMonthEvents]);
 
-  const monthStart = startOfMonth(sidebarMonth);
-  const monthEnd = endOfMonth(sidebarMonth);
-  const calendarStart = startOfWeek(monthStart, { weekStartsOn: 1 });
-  const calendarEnd = endOfWeek(monthEnd, { weekStartsOn: 1 });
-  const days = eachDayOfInterval({ start: calendarStart, end: calendarEnd });
+  const dayEventColors = useMemo(() => {
+    const map = new Map<string, string[]>();
+    for (const event of monthEvents) {
+      if (!event.startDate) continue;
+      const dateKey = format(parseISO(event.startDate), "yyyy-MM-dd");
+      const color = getEventColor(event);
+      if (!map.has(dateKey)) map.set(dateKey, []);
+      const colors = map.get(dateKey)!;
+      if (!colors.includes(color)) colors.push(color);
+    }
+    return map;
+  }, [monthEvents]);
 
   const selectedDayEvents = selectedDay
     ? getEventsForDay(monthEvents, selectedDay)
     : [];
-  const dayTimeline = buildDayTimeline(selectedDayEvents);
 
   return (
-    <div className="border border-border rounded-lg p-4 md:p-6 w-full lg:sticky lg:top-8">
-      <h2 className="text-lg font-semibold text-foreground mb-3 md:mb-4 border-b border-border pb-2">
-        Kalender
-      </h2>
-
-      {/* Month navigation */}
-      <div className="flex items-center justify-between mb-3">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-7 w-7"
-          onClick={() => {
-            setSelectedDay(null);
-            setSidebarMonth((m) => subMonths(m, 1));
-          }}
-          aria-label="Föregående månad"
-        >
-          <ChevronLeft className="size-4" />
-        </Button>
-        <span className="text-sm font-semibold capitalize">
-          {format(sidebarMonth, "LLLL yyyy", { locale: sv })}
-        </span>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-7 w-7"
-          onClick={() => {
-            setSelectedDay(null);
-            setSidebarMonth((m) => addMonths(m, 1));
-          }}
-          aria-label="Nästa månad"
-        >
-          <ChevronRight className="size-4" />
-        </Button>
+    <div className="w-full lg:sticky lg:top-8">
+      <div className="flex justify-center">
+        {loading ? (
+          <div className="flex justify-center py-8">
+            <Loader2 className="size-5 animate-spin text-muted-foreground" />
+          </div>
+        ) : (
+          <DayEventColorsContext.Provider value={dayEventColors}>
+            <Calendar
+              locale={sv}
+              mode="single"
+              selected={selectedDay}
+              onSelect={(day) => {
+                if (day && selectedDay && isSameDay(day, selectedDay)) {
+                  setSelectedDay(undefined);
+                } else {
+                  setSelectedDay(day);
+                }
+              }}
+              month={sidebarMonth}
+              onMonthChange={(month) => {
+                setSelectedDay(undefined);
+                setSidebarMonth(month);
+              }}
+              weekStartsOn={1}
+              components={{
+                DayButton: EventDayButton,
+              }}
+            />
+          </DayEventColorsContext.Provider>
+        )}
       </div>
 
-      {/* Calendar grid */}
-      {loading ? (
-        <div className="flex justify-center py-8">
-          <Loader2 className="size-5 animate-spin text-muted-foreground" />
-        </div>
-      ) : (
-        <CompactCalendar
-          days={days}
-          currentMonth={sidebarMonth}
-          events={monthEvents}
-          selectedDay={selectedDay}
-          onSelectDay={setSelectedDay}
-        />
-      )}
-
-      {/* Inline day timeline (below calendar, no sheet) */}
       {selectedDay && selectedDayEvents.length > 0 && (
         <div className="mt-4 pt-4 border-t border-border">
-          <h3 className="text-sm font-semibold capitalize mb-3">
+          <p className="text-sm font-semibold capitalize mb-3">
             {format(selectedDay, "EEEE d MMMM", { locale: sv })}
-          </h3>
-          <ol className="relative border-l border-border/60 ml-8">
-            {dayTimeline.map((entry) => {
-              if (entry.kind === "hour") {
-                return (
-                  <li key={`hour-${entry.hour}`} className="relative pl-5 py-3">
-                    <span className="absolute -left-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-muted-foreground/20" />
-                    <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 text-[11px] text-muted-foreground/40 tabular-nums whitespace-nowrap">
-                      {String(entry.hour).padStart(2, "0")}:00
-                    </span>
-                  </li>
-                );
-              }
-
-              const color = getEventColor(entry.event);
-              const startTime = entry.event.startDate
-                ? format(parseISO(entry.event.startDate), "HH:mm")
-                : "";
-
-              return (
-                <li key={entry.event._id} className="relative pl-5 pb-2">
-                  <span
-                    className="absolute -left-[5px] top-[13px] w-2.5 h-2.5 rounded-full z-10"
-                    style={{ backgroundColor: color }}
-                  />
-                  <span className="absolute right-full mr-3 top-[12px] text-[11px] text-muted-foreground/60 tabular-nums whitespace-nowrap">
-                    {startTime}
-                  </span>
-                  <TimelineEventItem event={entry.event} />
-                </li>
-              );
-            })}
-          </ol>
+          </p>
+          <div className="space-y-1">
+            {selectedDayEvents.map((event) => (
+              <TimelineEventItem
+                key={event._id}
+                event={event}
+                showTime
+              />
+            ))}
+          </div>
         </div>
       )}
     </div>
@@ -445,7 +333,7 @@ export function EventSidebar() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  EventList — paginated month-grouped timeline (main content)       */
+/*  EventList — paginated date-grouped timeline (main content)        */
 /* ------------------------------------------------------------------ */
 
 interface EventListProps {
@@ -502,16 +390,12 @@ export function EventList({
 
   return (
     <div>
-      <ol className="relative border-l border-border/60 ml-4">
+      <ol>
         {timeline.map((entry, i) => {
           if (entry.kind === "date") {
             return (
-              <li
-                key={`date-${i}`}
-                className={cn("relative pl-6 pb-1", i > 0 && "mt-5")}
-              >
-                <span className="absolute -left-[5px] top-[5px] w-2.5 h-2.5 rounded-full bg-muted-foreground/20 z-10" />
-                <p className="text-sm font-medium text-muted-foreground capitalize">
+              <li key={`date-${i}`} className={cn(i > 0 && "mt-6")}>
+                <p className="text-sm font-medium text-muted-foreground capitalize pb-2 border-b border-border mb-1">
                   {entry.label}
                 </p>
               </li>
@@ -521,9 +405,9 @@ export function EventList({
           const color = getEventColor(entry.event);
 
           return (
-            <li key={entry.event._id} className="relative pl-6 pb-1">
+            <li key={entry.event._id} className="relative pl-5">
               <span
-                className="absolute -left-1 top-[13px] w-2 h-2 rounded-full z-10"
+                className="absolute left-0 top-[13px] w-2 h-2 rounded-full"
                 style={{ backgroundColor: color }}
               />
               <TimelineEventItem event={entry.event} showTime />

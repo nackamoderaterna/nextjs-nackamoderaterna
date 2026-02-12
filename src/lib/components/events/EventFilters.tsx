@@ -1,14 +1,23 @@
 "use client";
 
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/lib/components/ui/select";
+import { Toggle } from "@/lib/components/ui/toggle";
+import { Button } from "@/lib/components/ui/button";
 import { ROUTE_BASE } from "@/lib/routes";
-import { cn } from "@/lib/utils";
+import { X } from "lucide-react";
 
 interface EventType {
   _id: string;
   name: string;
   slug: { current: string };
+  color?: string;
 }
 
 interface EventFiltersProps {
@@ -24,56 +33,73 @@ function buildHref(typeSlug?: string, publicOnly?: boolean): string {
 }
 
 export function EventFilters({ eventTypes = [] }: EventFiltersProps) {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const activeType = searchParams.get("type") || "";
   const publicOnly = searchParams.get("public") === "true";
+  const hasActiveFilters = !!activeType || publicOnly;
+
+  const handleTypeChange = (value: string) => {
+    const slug = value === "all" ? undefined : value;
+    router.push(buildHref(slug, publicOnly || undefined));
+  };
+
+  const handlePublicToggle = (pressed: boolean) => {
+    router.push(buildHref(activeType || undefined, pressed || undefined));
+  };
+
+  const clearFilters = () => {
+    router.push(ROUTE_BASE.EVENTS);
+  };
 
   return (
-    <div className="mb-8">
-      <div className="flex flex-wrap items-center gap-2">
-        <Link
-          href={buildHref(activeType || undefined, publicOnly ? undefined : true)}
-          className={cn(
-            "inline-flex items-center rounded-full px-3 py-1 text-sm font-medium transition-colors no-underline",
-            publicOnly
-              ? "bg-brand-primary text-white"
-              : "bg-muted text-muted-foreground hover:bg-muted/80"
-          )}
+    <div className="mb-8 flex flex-wrap items-center gap-4">
+      {eventTypes.length > 0 && (
+        <Select
+          value={activeType || "all"}
+          onValueChange={handleTypeChange}
+          aria-label="Filtrera på typ"
         >
-          Publika
-        </Link>
-
-        {eventTypes.length > 0 && (
-          <>
-            <span className="mx-1 h-5 w-px bg-border" aria-hidden />
-            <Link
-              href={buildHref(undefined, publicOnly || undefined)}
-              className={cn(
-                "inline-flex items-center rounded-full px-3 py-1 text-sm font-medium transition-colors no-underline",
-                !activeType
-                  ? "bg-brand-primary text-white"
-                  : "bg-muted text-muted-foreground hover:bg-muted/80"
-              )}
-            >
-              Alla typer
-            </Link>
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="Alla typer" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Alla typer</SelectItem>
             {eventTypes.map((et) => (
-              <Link
-                key={et._id}
-                href={buildHref(et.slug.current, publicOnly || undefined)}
-                className={cn(
-                  "inline-flex items-center rounded-full px-3 py-1 text-sm font-medium transition-colors no-underline",
-                  activeType === et.slug.current
-                    ? "bg-brand-primary text-white"
-                    : "bg-muted text-muted-foreground hover:bg-muted/80"
-                )}
-              >
-                {et.name}
-              </Link>
+              <SelectItem key={et._id} value={et.slug.current}>
+                <span className="flex items-center gap-2">
+                  <span
+                    className="size-2.5 rounded-full shrink-0"
+                    style={{ backgroundColor: et.color || "#0072CE" }}
+                  />
+                  {et.name}
+                </span>
+              </SelectItem>
             ))}
-          </>
-        )}
-      </div>
+          </SelectContent>
+        </Select>
+      )}
+
+      <Toggle
+        variant="outline"
+        pressed={publicOnly}
+        onPressedChange={handlePublicToggle}
+        aria-label="Visa bara öppna evenemang"
+      >
+        Öppna för allmänheten
+      </Toggle>
+
+      {hasActiveFilters && (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={clearFilters}
+          className="gap-2"
+        >
+          <X className="size-4" />
+          Rensa filter
+        </Button>
+      )}
     </div>
   );
 }

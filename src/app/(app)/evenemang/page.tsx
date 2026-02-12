@@ -42,6 +42,7 @@ interface EventTypeDoc {
   _id: string;
   name: string;
   slug: { current: string };
+  color?: string;
 }
 
 export default async function EventsPage({
