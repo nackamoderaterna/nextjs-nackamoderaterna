@@ -19,21 +19,29 @@ import { PageContainer } from "@/lib/components/shared/PageContainer";
 import { Section } from "@/lib/components/shared/Section";
 import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleContext";
 import { mapPoliticianRoles } from "@/lib/utils/mapPoliticianRoles";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Mail, Phone } from "lucide-react";
+import { formatPhoneNumber } from "@/lib/utils/phoneUtils";
 import { ExpandableNewsList } from "@/lib/components/news/ExpandableNewsList";
 import { PressGallery } from "@/lib/components/politician/PressGallery";
-import { politicianBySlugQuery, allPoliticianSlugsQuery } from "@/lib/queries/politicians";
-import { generateMetadata as generateSEOMetadata, getDefaultOgImage } from "@/lib/utils/seo";
+import {
+  politicianBySlugQuery,
+  allPoliticianSlugsQuery,
+} from "@/lib/queries/politicians";
+import {
+  generateMetadata as generateSEOMetadata,
+  getDefaultOgImage,
+} from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
 import { ROUTE_BASE } from "@/lib/routes";
+import { Button } from "@/lib/components/ui/button";
 
 // Generate static params for all politicians at build time
 export async function generateStaticParams() {
   const politicians = await sanityClient.fetch<{ slug: string }[]>(
-    allPoliticianSlugsQuery
+    allPoliticianSlugsQuery,
   );
-  
+
   return politicians.map((politician) => ({
     slug: politician.slug,
   }));
@@ -46,7 +54,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const [politicianRaw, fallbackImage] = await Promise.all([
-    sanityClient.fetch<PoliticianWithNamnd>(politicianBySlugQuery, { slug }, { next: { revalidate: 86400 } }),
+    sanityClient.fetch<PoliticianWithNamnd>(
+      politicianBySlugQuery,
+      { slug },
+      { next: { revalidate: 86400 } },
+    ),
     getDefaultOgImage(),
   ]);
 
@@ -56,7 +68,7 @@ export async function generateMetadata({
       description: "Den begärda politikern kunde inte hittas",
     });
   }
-  
+
   const politician = cleanPoliticianData(politicianRaw);
 
   const imageUrl = politician.image
@@ -86,22 +98,19 @@ export default async function PoliticianPage({
     { slug },
     {
       next: { revalidate: 86400 },
-    }
+    },
   );
 
   if (!politicianRaw) {
     notFound();
   }
-  
+
   // Clean all invisible Unicode characters from politician data
   const politician = cleanPoliticianData(politicianRaw);
   const roles = mapPoliticianRoles({ politician });
 
   const hasSidebar =
-    politician.email ||
-    politician.phone ||
-    politician.socialLinks ||
-    (politician.politicalAreas?.length ?? 0) > 0;
+    politician.socialLinks || (politician.politicalAreas?.length ?? 0) > 0;
 
   const tocEntries: { id: string; label: string }[] = [];
   if (politician.bio) tocEntries.push({ id: "biografi", label: "Biografi" });
@@ -145,9 +154,31 @@ export default async function PoliticianPage({
             : undefined
         }
       >
-        {tocEntries.length > 1 ? (
-          <InPageNav entries={tocEntries} showLabel={false} />
-        ) : null}
+        <div className="flex flex-col gap-4">
+          {(politician.email || politician.phone) && (
+            <div className="flex flex-wrap gap-2">
+              {politician.email && (
+                <Button variant="outline" asChild>
+                  <Link href={`mailto:${politician.email}`}>
+                    <Mail className="size-4" />
+                    {politician.email}
+                  </Link>
+                </Button>
+              )}
+              {politician.phone && (
+                <Button variant="outline" asChild>
+                  <Link href={`tel:${politician.phone.replace(/\D/g, "")}`}>
+                    <Phone className="size-4" />
+                    {formatPhoneNumber(politician.phone)}
+                  </Link>
+                </Button>
+              )}
+            </div>
+          )}
+          {tocEntries.length > 1 ? (
+            <InPageNav entries={tocEntries} showLabel={false} />
+          ) : null}
+        </div>
       </ContentHero>
       <div className="mt-8 ">
         <ContentWithSidebar
@@ -155,8 +186,6 @@ export default async function PoliticianPage({
           sidebarContent={
             hasSidebar ? (
               <PoliticianSidebar
-                email={politician.email}
-                phone={politician.phone}
                 socialLinks={politician.socialLinks}
                 politicalAreas={politician.politicalAreas}
               />
@@ -197,11 +226,11 @@ export default async function PoliticianPage({
                     )}
                   </ItemContent>
                 </Item>
-              )
+              ),
             )}
           </ResponsiveGrid>
         </Section>
-      )} 
+      )}
 
       {politician.referencedInNews &&
         politician.referencedInNews.length > 0 && (

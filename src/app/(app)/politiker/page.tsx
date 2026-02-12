@@ -3,7 +3,6 @@ import {
   groupPoliticiansByRole,
   politiciansDirectoryQuery,
   PoliticianWithNamnd,
-  positionTitles,
   sectionTitles as defaultSectionTitles,
 } from "@/lib/politicians";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
@@ -155,10 +154,7 @@ export default async function PoliticiansPage() {
                 title={sectionTitles.kommunfullmaktige}
                 politicians={kommunfullmaktigeOrdinary}
                 cardType="small"
-                getTitle={(p) =>
-                  p.kommunfullmaktige?.title ||
-                  positionTitles.ordinary
-                }
+                getTitle={(p) => p.livingArea?.name ?? ""}
               />
             )}
             {kommunfullmaktigeSubstitute.length > 0 && (
@@ -166,10 +162,7 @@ export default async function PoliticiansPage() {
                 title=""
                 politicians={kommunfullmaktigeSubstitute}
                 cardType="small"
-                getTitle={(p) =>
-                  p.kommunfullmaktige?.title ||
-                  positionTitles.substitute
-                }
+                getTitle={(p) => p.livingArea?.name ?? ""}
               />
             )}
           </>

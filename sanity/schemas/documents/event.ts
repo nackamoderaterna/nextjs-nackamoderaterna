@@ -10,7 +10,6 @@ export const eventDocument = defineType({
     { name: "when", title: "Tid" },
     { name: "where", title: "Plats" },
     { name: "settings", title: "Inställningar" },
-    { name: "relations", title: "Relationer" },
   ],
   fields: [
     defineField({
@@ -140,22 +139,6 @@ export const eventDocument = defineType({
       type: "boolean",
       group: "settings",
       initialValue: false,
-    }),
-    defineField({
-      name: "geographicalArea",
-      title: "Geografiskt område",
-      description: "Valfritt: geografiskt område där evenemanget äger rum.",
-      type: "reference",
-      group: "relations",
-      to: [{ type: "geographicalArea" }],
-    }),
-    defineField({
-      name: "politicalAreas",
-      title: "Politiska områden",
-      description: "Politiska områden som evenemanget är relaterat till.",
-      type: "array",
-      group: "relations",
-      of: [{ type: "reference", to: [{ type: "politicalArea" }] }],
     }),
   ],
   orderings: [

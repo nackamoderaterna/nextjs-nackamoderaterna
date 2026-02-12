@@ -1,8 +1,6 @@
-import Link from "next/link";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { PeopleCard } from "./PeopleCard";
 import { PoliticianWithNamnd } from "@/lib/politicians";
-import { ROUTE_BASE } from "@/lib/routes";
 
 interface PoliticianSectionProps {
   title: string;
@@ -45,6 +43,8 @@ export function PoliticianSection({
                 name={politician.name}
                 title={roleTitle}
                 size="large"
+                email={politician.email}
+                phone={politician.phone}
               />
             );
           }
