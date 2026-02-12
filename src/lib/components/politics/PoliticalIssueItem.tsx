@@ -48,7 +48,7 @@ export function PoliticalIssueItem({
   const hasBadges =
     politicalAreaItems.length > 0 || geographicalAreaItems.length > 0;
 
-  const itemClassName = `h-full flex-col items-stretch rounded-lg ${
+  const itemClassName = `h-full flex-col items-stretch rounded-lg overflow-hidden ${
     fulfilled ? "hover:border-green-600/60" : "hover:border-brand-primary/50"
   }`;
 
@@ -72,8 +72,8 @@ export function PoliticalIssueItem({
         {description && <ItemDescription>{description}</ItemDescription>}
       </ItemContent>
       {hasBadges && (
-        <ItemDescription>
-          <span className="flex flex-wrap items-center gap-2">
+        <ItemDescription className="w-full min-w-0 overflow-hidden">
+          <span className="flex flex-nowrap items-center gap-2 overflow-hidden [&>*]:shrink-0 mask-r-from-90%">
             {[...politicalAreaItems]
               .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "", "sv"))
               .map((a) => (

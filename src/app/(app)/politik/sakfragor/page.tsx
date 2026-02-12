@@ -1,4 +1,4 @@
-import { PoliticalIssuesDataTable } from "@/lib/components/politics/political-issues-table/PoliticalIssuesDataTable";
+import { PoliticalIssuesViewSwitcher } from "@/lib/components/politics/political-issues-table/PoliticalIssuesViewSwitcher";
 import { allPoliticalIssuesQuery } from "@/lib/queries/politik";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
@@ -56,7 +56,7 @@ export default async function PolitikSakfragorPage() {
       >
         {allIssues.length > 0 && (
           <Section title={title} titleSize="large">
-            <PoliticalIssuesDataTable data={allIssues} />
+            <PoliticalIssuesViewSwitcher data={allIssues} />
           </Section>
         )}
       </ListingPageLayout>

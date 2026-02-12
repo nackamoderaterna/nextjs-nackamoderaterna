@@ -33,10 +33,8 @@ export function EventCard({
     <Link
       href={`${ROUTE_BASE.EVENTS}/${href}`}
       className={cn(
-        "block rounded border p-6 transition-colors group relative",
-        muted
-          ? "border-muted hover:bg-muted-background"
-          : "border-border hover:border-brand-primary hover:bg-brand-primary/10",
+        "block rounded border p-6 transition-colors group relative hover:bg-muted",
+        muted ? "border-muted" : "border-border",
         className,
       )}
     >
@@ -55,28 +53,49 @@ export function EventCard({
 
       {/* Date */}
       <div className="mb-8">
-        <span className="block text-4xl md:text-5xl font-bold text-brand-primary">
+        <span
+          className={cn(
+            "block text-4xl md:text-5xl font-bold transition-colors",
+            muted ? "text-muted group-hover:text-primary" : "text-brand-primary",
+          )}
+        >
           {day}
         </span>
-        <span className="block text-sm font-medium text-brand-primary uppercase tracking-wide">
+        <span
+          className={cn(
+            "block text-sm font-medium uppercase tracking-wide transition-colors",
+            muted ? "text-muted group-hover:text-primary" : "text-brand-primary",
+          )}
+        >
           {month}
         </span>
       </div>
 
       {/* Event Info */}
       <div>
-        {eventTypeName ? (
-          <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">
+        {eventTypeName && (
+          <p
+            className={cn(
+              "text-xs uppercase tracking-wide text-muted-foreground mb-1",
+            )}
+          >
             {eventTypeName}
           </p>
-        ) : null}
-        <h3 className="font-semibold group-hover:text-brand-primary transition-colors mb-1">
+        )}
+        <h3
+          className={cn(
+            "font-semibold transition-colors mb-1",
+            "group-hover:text-primary",
+          )}
+        >
           {title}
         </h3>
-        {time ? <p className="text-sm text-muted-foreground">{time}</p> : null}
-        {location?.trim() ? (
-          <p className="text-sm text-muted-foreground">@ {location.trim()}</p>
-        ) : null}
+        {time && <p className={cn("text-sm text-muted-foreground")}>{time}</p>}
+        {location?.trim() && (
+          <p className={cn("text-sm text-muted-foreground")}>
+            @ {location.trim()}
+          </p>
+        )}
       </div>
     </Link>
   );

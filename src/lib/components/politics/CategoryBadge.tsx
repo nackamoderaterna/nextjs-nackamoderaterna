@@ -33,13 +33,13 @@ export function CategoryBadge({
   return (
     <span
       className={cn(
-        "inline-flex w-fit shrink-0 items-center justify-center whitespace-nowrap rounded-full capitalize tracking-wider",
+        "inline-flex items-center rounded-full capitalize tracking-wider min-w-0 max-w-full",
         sizeClasses[size],
         variantClasses[variant]
       )}
     >
       {Icon && <Icon className="shrink-0" />}
-      <span>{name}</span>
+      <span className="truncate">{name}</span>
     </span>
   );
 }
