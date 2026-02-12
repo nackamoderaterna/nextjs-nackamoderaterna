@@ -16,6 +16,7 @@ import { getLucideIcon } from "@/lib/utils/iconUtils";
 import {
   HelpCircle,
   Tag,
+  MapPin,
   MoreHorizontal,
   ExternalLink,
   Link2,
@@ -172,6 +173,46 @@ export const politicalIssuesColumns: ColumnDef<PoliticalIssueWithAreas>[] = [
               </Badge>
             );
           })}
+        </div>
+      );
+    },
+  },
+  {
+    id: "geografiskaOmraden",
+    accessorFn: (row) =>
+      (row.geographicalAreas ?? [])
+        .map((a: { name: string }) => a.name)
+        .filter(Boolean)
+        .join(", "),
+    header: () => (
+      <span className="inline-flex items-center gap-1.5">
+        <MapPin className="size-3.5 text-muted-foreground" aria-hidden />
+        Områden
+      </span>
+    ),
+    enableColumnFilter: true,
+    filterFn: (row, _columnId, filterValue: unknown) => {
+      const selected = Array.isArray(filterValue) ? (filterValue as string[]) : [];
+      if (selected.length === 0) return true;
+      const rowNames = (row.original.geographicalAreas ?? [])
+        .map((a: { name: string }) => a.name)
+        .filter(Boolean) as string[];
+      return selected.every((name) => rowNames.includes(name));
+    },
+    cell: ({ row }) => {
+      const areas = row.original.geographicalAreas ?? [];
+      if (areas.length === 0) return <span className="text-muted-foreground">–</span>;
+      return (
+        <div className="flex flex-wrap gap-1 max-w-[240px]">
+          {areas.map((area: { _id: string; name: string }) => (
+            <Badge
+              key={area._id}
+              variant="secondary"
+              className="text-muted-foreground inline-flex items-center gap-1 text-xs font-normal py-0 px-1.5"
+            >
+              {area.name}
+            </Badge>
+          ))}
         </div>
       );
     },

@@ -107,6 +107,13 @@ export const eventDocument = defineType({
           type: "string",
           description: "Stad där evenemanget äger rum.",
         },
+        {
+          name: "mapsUrl",
+          title: "Kartlänk",
+          type: "url",
+          description:
+            "Valfritt: länk till Google Maps eller annan karttjänst. Om tom genereras en länk automatiskt från adressen.",
+        },
       ],
     }),
     defineField({

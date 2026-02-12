@@ -31,6 +31,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { politicalIssuesColumns } from "./columns";
 import {
   PoliticalIssuesTableFiltersCategory,
+  PoliticalIssuesTableFiltersGeo,
   PoliticalIssuesTableFiltersFeatured,
   PoliticalIssuesTableFiltersStatus,
   type CategoryWithIcon,
@@ -49,6 +50,7 @@ const COLUMN_WIDTH_CLASSES: Record<string, string> = {
   fraga: "min-w-[260px]",
   status: "min-w-[100px]",
   politiskaOmraden: "min-w-[260px]",
+  geografiskaOmraden: "min-w-[180px]",
   actions: "w-0 min-w-0 whitespace-nowrap",
 };
 
@@ -70,11 +72,22 @@ function getUniqueCategories(data: PoliticalIssueWithAreas[]): CategoryWithIcon[
     .sort((a, b) => a.name.localeCompare(b.name, "sv"));
 }
 
+function getUniqueGeoAreas(data: PoliticalIssueWithAreas[]): string[] {
+  const names = new Set<string>();
+  for (const issue of data) {
+    for (const area of issue.geographicalAreas ?? []) {
+      if (area.name) names.add(area.name);
+    }
+  }
+  return Array.from(names).sort((a, b) => a.localeCompare(b, "sv"));
+}
+
 export function PoliticalIssuesDataTable({ data }: PoliticalIssuesDataTableProps) {
   const [globalFilter, setGlobalFilter] = React.useState("");
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const categories = React.useMemo(() => getUniqueCategories(data), [data]);
+  const geoAreas = React.useMemo(() => getUniqueGeoAreas(data), [data]);
 
   const table = useReactTable({
     data,
@@ -129,6 +142,7 @@ export function PoliticalIssuesDataTable({ data }: PoliticalIssuesDataTableProps
         />
         <div className="flex items-end gap-2">
           <PoliticalIssuesTableFiltersCategory table={table} categories={categories} />
+          <PoliticalIssuesTableFiltersGeo table={table} areas={geoAreas} />
           <PoliticalIssuesTableFiltersFeatured table={table} />
           <PoliticalIssuesTableFiltersStatus table={table} />
         </div>

@@ -20,7 +20,7 @@ import {
   ComboboxValue,
 } from "@/lib/components/ui/combobox";
 import { getLucideIcon } from "@/lib/utils/iconUtils";
-import { Tag, SlidersHorizontal, X } from "lucide-react";
+import { Tag, MapPin, SlidersHorizontal, X } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
 /*  Category filter                                                    */
@@ -114,6 +114,70 @@ export function PoliticalIssuesTableFiltersCategory<TData>({
                 </ComboboxItem>
               );
             }}
+          </ComboboxList>
+        </ComboboxContent>
+      </Combobox>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Geographical area filter                                           */
+/* ------------------------------------------------------------------ */
+
+const GEO_COLUMN_ID = "geografiskaOmraden";
+
+interface PoliticalIssuesTableFiltersGeoProps<TData> {
+  table: Table<TData>;
+  areas: string[];
+}
+
+export function PoliticalIssuesTableFiltersGeo<TData>({
+  table,
+  areas,
+}: PoliticalIssuesTableFiltersGeoProps<TData>) {
+  const selectedAreas =
+    (table.getColumn(GEO_COLUMN_ID)?.getFilterValue() as string[] | undefined) ?? [];
+
+  const handleValueChange = (value: string[] | null) => {
+    const next = Array.isArray(value) && value.length > 0 ? value : undefined;
+    table.getColumn(GEO_COLUMN_ID)?.setFilterValue(next);
+  };
+
+  if (areas.length === 0) return null;
+
+  return (
+    <div
+      className="flex flex-col items-start gap-1.5"
+      role="group"
+      aria-label="Område"
+    >
+      <span className="text-muted-foreground flex items-center gap-1.5 text-xs font-medium">
+        <MapPin className="size-3.5" aria-hidden />
+        Område
+      </span>
+      <Combobox
+        items={areas}
+        multiple
+        value={selectedAreas}
+        onValueChange={handleValueChange}
+      >
+        <ComboboxChips className="w-full min-w-48 max-w-md sm:min-w-64">
+          <ComboboxValue>
+            {selectedAreas.map((item) => (
+              <ComboboxChip key={item}>{item}</ComboboxChip>
+            ))}
+          </ComboboxValue>
+          <ComboboxChipsInput placeholder="Välj område..." />
+        </ComboboxChips>
+        <ComboboxContent>
+          <ComboboxEmpty>Inga områden hittades.</ComboboxEmpty>
+          <ComboboxList>
+            {(item: string) => (
+              <ComboboxItem key={item} value={item}>
+                {item}
+              </ComboboxItem>
+            )}
           </ComboboxList>
         </ComboboxContent>
       </Combobox>

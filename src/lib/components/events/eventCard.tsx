@@ -41,7 +41,7 @@ export function EventCard({
       {isPublic && (
         <Badge
           className={cn(
-            "absolute top-4 right-4 bg-muted-background",
+            "absolute top-4 right-4",
             muted
               ? "text-muted-foreground bg-muted-background hover:bg-muted/90"
               : "bg-brand-primary hover:bg-blue-700 text-white",
@@ -56,7 +56,9 @@ export function EventCard({
         <span
           className={cn(
             "block text-4xl md:text-5xl font-bold transition-colors",
-            muted ? "text-muted group-hover:text-primary" : "text-brand-primary",
+            muted
+              ? "text-muted-foreground group-hover:text-primary"
+              : "text-brand-primary",
           )}
         >
           {day}
@@ -64,7 +66,9 @@ export function EventCard({
         <span
           className={cn(
             "block text-sm font-medium uppercase tracking-wide transition-colors",
-            muted ? "text-muted group-hover:text-primary" : "text-brand-primary",
+            muted
+              ? "text-muted-foreground group-hover:text-primary"
+              : "text-brand-primary",
           )}
         >
           {month}
@@ -74,25 +78,23 @@ export function EventCard({
       {/* Event Info */}
       <div>
         {eventTypeName && (
-          <p
-            className={cn(
-              "text-xs uppercase tracking-wide text-muted-foreground mb-1",
-            )}
-          >
+          <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">
             {eventTypeName}
           </p>
         )}
         <h3
           className={cn(
             "font-semibold transition-colors mb-1",
-            "group-hover:text-primary",
+            muted
+              ? "text-muted-foreground group-hover:text-primary"
+              : "group-hover:text-primary",
           )}
         >
           {title}
         </h3>
-        {time && <p className={cn("text-sm text-muted-foreground")}>{time}</p>}
+        {time && <p className="text-sm text-muted-foreground">{time}</p>}
         {location?.trim() && (
-          <p className={cn("text-sm text-muted-foreground")}>
+          <p className="text-sm text-muted-foreground">
             @ {location.trim()}
           </p>
         )}

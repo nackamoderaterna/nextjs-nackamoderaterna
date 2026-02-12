@@ -2,6 +2,7 @@ import { PortableTextComponents } from "@portabletext/react";
 import { PortableText } from "@portabletext/react";
 import { SanityImage } from "./SanityImage";
 import Link from "next/link";
+import { Button } from "../ui/button";
 
 // Base components without circular dependency for nested PortableText
 const basePortableTextComponents: PortableTextComponents = {
@@ -42,7 +43,7 @@ export const portableTextComponents: PortableTextComponents = {
       if (!value || !value.asset) {
         return null;
       }
-      
+
       return (
         <div className="my-4">
           <SanityImage
@@ -79,12 +80,13 @@ export const portableTextComponents: PortableTextComponents = {
             <div className="w-2 bg-brand-primary flex-shrink-0" />
             {/* Quote content */}
             <div className="flex-1">
-                <p className="!mt-0 text-3xl md:text-4xl font-serif italic text-gray-900 leading-relaxed">
-                  {value.quote}
-                  </p>
+              <p className="!mt-0 text-3xl md:text-4xl font-serif italic text-gray-900 leading-relaxed">
+                {value.quote}
+              </p>
               <div className="mt-6 pr-8">
                 {value.link ? (
-                  value.link.startsWith("http") || value.link.startsWith("//") ? (
+                  value.link.startsWith("http") ||
+                  value.link.startsWith("//") ? (
                     <a
                       href={value.link}
                       target="_blank"
@@ -129,14 +131,20 @@ export const portableTextComponents: PortableTextComponents = {
             </p>
           )}
           {value.linkUrl && value.linkText && (
-            <a
-              href={value.linkUrl}
-              target={value.linkUrl.startsWith("http") ? "_blank" : undefined}
-              rel={value.linkUrl.startsWith("http") ? "noopener noreferrer" : undefined}
-              className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium text-base transition-colors"
-            >
-              {value.linkText} →
-            </a>
+            <Button asChild>
+              <Link
+                href={value.linkUrl}
+                target={value.linkUrl.startsWith("http") ? "_blank" : undefined}
+                rel={
+                  value.linkUrl.startsWith("http")
+                    ? "noopener noreferrer"
+                    : undefined
+                }
+                className="text-brand-primary no-underline"
+              >
+                {value.linkText} →
+              </Link>
+            </Button>
           )}
         </div>
       );

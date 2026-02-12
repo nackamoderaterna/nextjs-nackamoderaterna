@@ -157,7 +157,7 @@ export default async function EventPage({ params }: Props) {
                   Adress
                 </p>
                 <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cleanInvisibleUnicode(address))}}`}
+                  href={(event.location as { mapsUrl?: string } | undefined)?.mapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cleanInvisibleUnicode(address))}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-foreground hover:text-primary hover:underline transition-colors"
