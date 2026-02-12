@@ -120,7 +120,12 @@ function TimelineEventItem({
   const hasActions = !!registrationUrl;
 
   return (
-    <div className={cn(hasActions && "flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2")}>
+    <div
+      className={cn(
+        hasActions &&
+          "flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2",
+      )}
+    >
       <Link
         href={`${ROUTE_BASE.EVENTS}/${event.slug?.current || ""}`}
         className="block hover:bg-muted/40 transition-colors p-2 -mx-1 rounded-md flex flex-col gap-1 min-w-0 flex-1"
@@ -134,7 +139,7 @@ function TimelineEventItem({
           </p>
         )}
         {description && (
-          <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+          <p className="text-xs max-w-md text-muted-foreground mt-0.5 line-clamp-2">
             {description}
           </p>
         )}
@@ -172,11 +177,7 @@ function TimelineEventItem({
       {hasActions && (
         <div className="flex items-center gap-2 shrink-0 pl-2 sm:pl-0 sm:pt-2">
           <Button asChild variant="outline" size="sm">
-            <a
-              href={registrationUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={registrationUrl} target="_blank" rel="noopener noreferrer">
               <UserPlus className="size-3.5" />
               Anmäl dig
             </a>
@@ -228,7 +229,8 @@ function EventDayButton({
         "data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&>span]:text-xs [&>span]:opacity-70",
         defaultClassNames.day,
         className,
-        !hasEvents && !modifiers.outside && "text-muted-foreground",
+        !hasEvents && !modifiers.outside && "text-muted-foreground/50 pointer-events-none hover:bg-transparent",
+        modifiers.outside && "text-muted-foreground/50 pointer-events-none hover:bg-transparent",
       )}
       {...props}
     >
@@ -338,11 +340,7 @@ export function EventSidebar() {
           </p>
           <div className="space-y-1">
             {selectedDayEvents.map((event) => (
-              <TimelineEventItem
-                key={event._id}
-                event={event}
-                showTime
-              />
+              <TimelineEventItem key={event._id} event={event} showTime />
             ))}
           </div>
         </div>
