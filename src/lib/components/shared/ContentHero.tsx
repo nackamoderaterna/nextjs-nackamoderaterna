@@ -9,7 +9,7 @@ interface ContentHeroProps {
   pageType?: string | null;
   image?: unknown;
   icon?: { name?: string | null } | null;
-  subtitle?: string;
+  subtitle?: ReactNode;
   subtitleHref?: string;
   /** Controls whether the image appears to the left (default) or right of the text */
   imagePosition?: "left" | "right";
@@ -60,7 +60,7 @@ export function ContentHero({
             </p>
           ) : null}
           <h1 className="text-4xl font-bold text-foreground">{title}</h1>
-          {subtitle && subtitleHref ? (
+          {subtitle && subtitleHref && typeof subtitle === "string" ? (
             <Link
               href={subtitleHref}
               className="text-base text-muted-foreground hover:text-primary transition-colors"
@@ -68,7 +68,7 @@ export function ContentHero({
               {subtitle}
             </Link>
           ) : subtitle ? (
-            <p className="text-base text-muted-foreground">{subtitle}</p>
+            <div className="text-base text-muted-foreground">{subtitle}</div>
           ) : null}
         </div>
       </div>

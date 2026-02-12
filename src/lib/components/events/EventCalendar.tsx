@@ -19,7 +19,7 @@ import {
 } from "date-fns";
 import { sv } from "date-fns/locale";
 import { getDefaultClassNames, type DayButton } from "react-day-picker";
-import { ChevronDown, MapPin, Loader2 } from "lucide-react";
+import { ChevronDown, MapPin, Loader2, UserPlus } from "lucide-react";
 import { Button } from "@/lib/components/ui/button";
 import { Badge } from "@/lib/components/ui/badge";
 import { Calendar } from "@/lib/components/ui/calendar";
@@ -177,6 +177,7 @@ function TimelineEventItem({
               target="_blank"
               rel="noopener noreferrer"
             >
+              <UserPlus className="size-3.5" />
               Anmäl dig
             </a>
           </Button>
