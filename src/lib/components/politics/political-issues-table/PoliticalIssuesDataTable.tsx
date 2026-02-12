@@ -50,7 +50,6 @@ const COLUMN_WIDTH_CLASSES: Record<string, string> = {
   fraga: "min-w-[260px]",
   status: "min-w-[100px]",
   politiskaOmraden: "min-w-[260px]",
-  geografiskaOmraden: "min-w-[180px]",
   actions: "w-0 min-w-0 whitespace-nowrap",
 };
 
@@ -109,6 +108,7 @@ export function PoliticalIssuesDataTable({ data }: PoliticalIssuesDataTableProps
       columnVisibility: {
         kernfraga: false,
         status: false,
+        geografiskaOmraden: false,
       },
     },
     globalFilterFn: (row, _columnId, filterValue: string) => {
@@ -135,14 +135,18 @@ export function PoliticalIssuesDataTable({ data }: PoliticalIssuesDataTableProps
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:gap-4">
-        <PoliticalIssuesTableSearch
-          value={globalFilter ?? ""}
-          onChange={setGlobalFilter}
-        />
-        <div className="flex items-end gap-2">
-          <PoliticalIssuesTableFiltersCategory table={table} categories={categories} />
-          <PoliticalIssuesTableFiltersGeo table={table} areas={geoAreas} />
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-end">
+        <div className="flex flex-col gap-3 md:flex-row md:items-end lg:contents">
+          <PoliticalIssuesTableSearch
+            value={globalFilter ?? ""}
+            onChange={setGlobalFilter}
+          />
+          <div className="flex items-end gap-3">
+            <PoliticalIssuesTableFiltersCategory table={table} categories={categories} />
+            <PoliticalIssuesTableFiltersGeo table={table} areas={geoAreas} />
+          </div>
+        </div>
+        <div className="flex items-end gap-3 shrink-0">
           <PoliticalIssuesTableFiltersFeatured table={table} />
           <PoliticalIssuesTableFiltersStatus table={table} />
         </div>

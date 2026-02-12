@@ -159,7 +159,7 @@ export const politicalIssuesColumns: ColumnDef<PoliticalIssueWithAreas>[] = [
       const areas = row.original.politicalAreas ?? [];
       if (areas.length === 0) return <span className="text-muted-foreground">–</span>;
       return (
-        <div className="flex flex-wrap gap-1 max-w-[320px]">
+        <div className="flex flex-wrap gap-1">
           {areas.map((area: { _id: string; name: string; icon?: { name?: string } | null }) => {
             const Icon = getLucideIcon(area.icon?.name ?? undefined);
             return (

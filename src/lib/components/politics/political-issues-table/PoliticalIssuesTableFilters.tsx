@@ -76,7 +76,7 @@ export function PoliticalIssuesTableFiltersCategory<TData>({
 
   return (
     <div
-      className="flex flex-col items-start gap-1.5"
+      className="flex flex-col items-start gap-1.5 min-w-0 flex-1 sm:flex-none"
       role="group"
       aria-label="Kategori"
     >
@@ -90,7 +90,7 @@ export function PoliticalIssuesTableFiltersCategory<TData>({
         value={selectedCategories}
         onValueChange={handleValueChange}
       >
-        <ComboboxChips className="w-full min-w-64 max-w-md sm:min-w-80">
+        <ComboboxChips className="w-full min-w-0 max-w-md sm:min-w-48">
           <ComboboxValue>
             {selectedCategories.map((item) => {
               const cat = getCategory(item);
@@ -103,7 +103,7 @@ export function PoliticalIssuesTableFiltersCategory<TData>({
           </ComboboxValue>
           <ComboboxChipsInput placeholder="Välj kategori..." />
         </ComboboxChips>
-        <ComboboxContent>
+        <ComboboxContent className="min-w-72 sm:min-w-80">
           <ComboboxEmpty>Inga kategorier hittades.</ComboboxEmpty>
           <ComboboxList>
             {(item: string) => {
@@ -148,7 +148,7 @@ export function PoliticalIssuesTableFiltersGeo<TData>({
 
   return (
     <div
-      className="flex flex-col items-start gap-1.5"
+      className="flex flex-col items-start gap-1.5 min-w-0 flex-1 sm:flex-none"
       role="group"
       aria-label="Område"
     >
@@ -162,7 +162,7 @@ export function PoliticalIssuesTableFiltersGeo<TData>({
         value={selectedAreas}
         onValueChange={handleValueChange}
       >
-        <ComboboxChips className="w-full min-w-48 max-w-md sm:min-w-64">
+        <ComboboxChips className="w-full min-w-0 max-w-md sm:min-w-40">
           <ComboboxValue>
             {selectedAreas.map((item) => (
               <ComboboxChip key={item}>{item}</ComboboxChip>
@@ -170,7 +170,7 @@ export function PoliticalIssuesTableFiltersGeo<TData>({
           </ComboboxValue>
           <ComboboxChipsInput placeholder="Välj område..." />
         </ComboboxChips>
-        <ComboboxContent>
+        <ComboboxContent className="min-w-56 sm:min-w-64">
           <ComboboxEmpty>Inga områden hittades.</ComboboxEmpty>
           <ComboboxList>
             {(item: string) => (
