@@ -37,7 +37,7 @@ export function EventFilters({ eventTypes = [] }: EventFiltersProps) {
   const searchParams = useSearchParams();
   const activeType = searchParams.get("type") || "";
   const publicOnly = searchParams.get("public") === "true";
-  const hasActiveFilters = !!activeType || publicOnly;
+  const hasActiveFilters = !!activeType;
 
   const handleTypeChange = (value: string) => {
     const slug = value === "all" ? undefined : value;
@@ -86,7 +86,7 @@ export function EventFilters({ eventTypes = [] }: EventFiltersProps) {
         onPressedChange={handlePublicToggle}
         aria-label="Visa bara öppna evenemang"
       >
-        Öppna för allmänheten
+        Öppet evenemang
       </Toggle>
 
       {hasActiveFilters && (
