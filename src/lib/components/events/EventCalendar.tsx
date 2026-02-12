@@ -17,14 +17,23 @@ import {
   parseISO,
 } from "date-fns";
 import { sv } from "date-fns/locale";
-import { ChevronLeft, ChevronRight, ChevronDown, MapPin, Loader2 } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
+  MapPin,
+  Loader2,
+} from "lucide-react";
 import { Button } from "@/lib/components/ui/button";
 import { Badge } from "@/lib/components/ui/badge";
 import { ROUTE_BASE } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { formatAddress, formatTimeRange } from "@/lib/utils/dateUtils";
 import { sanityClient } from "@/lib/sanity/client";
-import { buildMonthEventsQuery, buildUpcomingEventsQuery } from "@/lib/queries/events";
+import {
+  buildMonthEventsQuery,
+  buildUpcomingEventsQuery,
+} from "@/lib/queries/events";
 import type { Event } from "~/sanity.types";
 
 const WEEKDAYS = ["Mån", "Tis", "Ons", "Tor", "Fre", "Lör", "Sön"];
@@ -249,9 +258,7 @@ function CompactCalendar({
           const today = isToday(day);
           const dayEvents = getEventsForDay(events, day);
           const hasEvents = dayEvents.length > 0;
-          const isSelected = selectedDay
-            ? isSameDay(day, selectedDay)
-            : false;
+          const isSelected = selectedDay ? isSameDay(day, selectedDay) : false;
 
           return (
             <button
@@ -342,7 +349,7 @@ export function EventSidebar() {
   const dayTimeline = buildDayTimeline(selectedDayEvents);
 
   return (
-    <div className="border border-border rounded-lg p-4 md:p-6 w-full">
+    <div className="border border-border rounded-lg p-4 md:p-6 w-full lg:sticky lg:top-8">
       <h2 className="text-lg font-semibold text-foreground mb-3 md:mb-4 border-b border-border pb-2">
         Kalender
       </h2>
@@ -403,10 +410,7 @@ export function EventSidebar() {
             {dayTimeline.map((entry) => {
               if (entry.kind === "hour") {
                 return (
-                  <li
-                    key={`hour-${entry.hour}`}
-                    className="relative pl-5 py-3"
-                  >
+                  <li key={`hour-${entry.hour}`} className="relative pl-5 py-3">
                     <span className="absolute -left-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-muted-foreground/20" />
                     <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 text-[11px] text-muted-foreground/40 tabular-nums whitespace-nowrap">
                       {String(entry.hour).padStart(2, "0")}:00
@@ -421,10 +425,7 @@ export function EventSidebar() {
                 : "";
 
               return (
-                <li
-                  key={entry.event._id}
-                  className="relative pl-5 pb-2"
-                >
+                <li key={entry.event._id} className="relative pl-5 pb-2">
                   <span
                     className="absolute -left-[5px] top-[13px] w-2.5 h-2.5 rounded-full z-10"
                     style={{ backgroundColor: color }}
@@ -507,10 +508,7 @@ export function EventList({
             return (
               <li
                 key={`date-${i}`}
-                className={cn(
-                  "relative pl-6 pb-1",
-                  i > 0 && "mt-5",
-                )}
+                className={cn("relative pl-6 pb-1", i > 0 && "mt-5")}
               >
                 <span className="absolute -left-[5px] top-[5px] w-2.5 h-2.5 rounded-full bg-muted-foreground/20 z-10" />
                 <p className="text-sm font-medium text-muted-foreground capitalize">
