@@ -159,18 +159,18 @@ export default async function PoliticianPage({
             <div className="flex flex-wrap gap-2">
               {politician.email && (
                 <Button variant="outline" asChild>
-                  <Link href={`mailto:${politician.email}`}>
+                  <a href={`mailto:${politician.email}`}>
                     <Mail className="size-4" />
                     {politician.email}
-                  </Link>
+                  </a>
                 </Button>
               )}
               {politician.phone && (
                 <Button variant="outline" asChild>
-                  <Link href={`tel:${politician.phone.replace(/\D/g, "")}`}>
+                  <a href={`tel:${politician.phone.replace(/\D/g, "")}`}>
                     <Phone className="size-4" />
                     {formatPhoneNumber(politician.phone)}
-                  </Link>
+                  </a>
                 </Button>
               )}
             </div>

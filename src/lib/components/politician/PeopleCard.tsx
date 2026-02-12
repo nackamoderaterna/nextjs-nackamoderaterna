@@ -103,18 +103,18 @@ export function PeopleCard({
           <div className="flex items-start w-full gap-2">
             {email && (
               <Button variant="outline" asChild>
-                <Link href={`mailto:${email}`}>
+                <a href={`mailto:${email}`}>
                   <Mail className="size-3.5" />
                   E-post
-                </Link>
+                </a>
               </Button>
             )}
             {phone && (
               <Button variant="outline" asChild>
-                <Link href={`tel:${phone.replace(/\D/g, "")}`}>
+                <a href={`tel:${phone.replace(/\D/g, "")}`}>
                   <Phone className="size-3.5" />
                   {formatPhoneNumber(phone)}
-                </Link>
+                </a>
               </Button>
             )}
           </div>
