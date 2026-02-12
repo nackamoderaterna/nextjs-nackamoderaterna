@@ -115,56 +115,74 @@ function TimelineEventItem({
   const address = formatAddress(event.location ?? undefined);
   const description = (event as Event & { plainDescription?: string })
     .plainDescription;
+  const registrationUrl = (event as Event & { registrationUrl?: string })
+    .registrationUrl;
+  const hasActions = !!registrationUrl;
 
   return (
-    <Link
-      href={`${ROUTE_BASE.EVENTS}/${event.slug?.current || ""}`}
-      className="block hover:bg-muted/40 transition-colors p-2 -mx-1 rounded-md flex flex-col gap-1"
-    >
-      <p className="font-semibold text-sm text-foreground truncate">
-        {event.title}
-      </p>
-      {showTime && event.startDate && (
-        <p className="text-xs text-muted-foreground mt-0.5">
-          {formatTimeRange(event.startDate, event.endDate ?? undefined)}
+    <div className={cn(hasActions && "flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2")}>
+      <Link
+        href={`${ROUTE_BASE.EVENTS}/${event.slug?.current || ""}`}
+        className="block hover:bg-muted/40 transition-colors p-2 -mx-1 rounded-md flex flex-col gap-1 min-w-0 flex-1"
+      >
+        <p className="font-semibold text-sm text-foreground truncate">
+          {event.title}
         </p>
-      )}
-      {description && (
-        <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
-          {description}
-        </p>
-      )}
-      {address && (
-        <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-          <MapPin className="size-3 shrink-0" />
-          <span className="truncate">{address}</span>
-        </p>
-      )}
-      <div className="flex items-center gap-1.5 mt-1.5">
-        {event.isPublic && (
-          <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
-            Öppen
-          </Badge>
+        {showTime && event.startDate && (
+          <p className="text-xs text-muted-foreground mt-0.5">
+            {formatTimeRange(event.startDate, event.endDate ?? undefined)}
+          </p>
         )}
-        {eventType?.name && (
-          <Badge
-            variant="outline"
-            className="text-[10px] px-1.5 py-0"
-            style={
-              eventType.color
-                ? {
-                    borderColor: eventType.color,
-                    backgroundColor: `${eventType.color}15`,
-                    color: eventType.color,
-                  }
-                : undefined
-            }
-          >
-            {eventType.name}
-          </Badge>
+        {description && (
+          <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+            {description}
+          </p>
         )}
-      </div>
-    </Link>
+        {address && (
+          <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+            <MapPin className="size-3 shrink-0" />
+            <span className="truncate">{address}</span>
+          </p>
+        )}
+        <div className="flex items-center gap-1.5 mt-1.5">
+          {event.isPublic && (
+            <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+              Öppen
+            </Badge>
+          )}
+          {eventType?.name && (
+            <Badge
+              variant="outline"
+              className="text-[10px] px-1.5 py-0"
+              style={
+                eventType.color
+                  ? {
+                      borderColor: eventType.color,
+                      backgroundColor: `${eventType.color}15`,
+                      color: eventType.color,
+                    }
+                  : undefined
+              }
+            >
+              {eventType.name}
+            </Badge>
+          )}
+        </div>
+      </Link>
+      {hasActions && (
+        <div className="flex items-center gap-2 shrink-0 pl-2 sm:pl-0 sm:pt-2">
+          <Button asChild variant="outline" size="sm">
+            <a
+              href={registrationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Anmäl dig
+            </a>
+          </Button>
+        </div>
+      )}
+    </div>
   );
 }
 

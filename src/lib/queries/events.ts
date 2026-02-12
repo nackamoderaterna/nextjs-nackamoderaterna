@@ -107,6 +107,7 @@ const eventProjection = `{
   location,
   eventType->{ _id, name, slug, color },
   isPublic,
+  registrationUrl,
   "plainDescription": pt::text(description)
 }`;
 
