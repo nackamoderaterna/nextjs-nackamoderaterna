@@ -73,7 +73,7 @@ export function PageHeader({ title, pageHeader }: PageHeaderProps) {
               {textContent}
             </div>
             <div
-              className={`relative flex-1 rounded overflow-hidden order-first md:order-none ${heightClass} animate-in fade-in slide-in-from-bottom-6 duration-700 sm:max-h-96 `}
+              className={`relative flex-1 rounded overflow-hidden order-first md:order-none ${heightClass} sm:max-h-46 animate-in fade-in slide-in-from-bottom-6 duration-700 sm:max-h-96 `}
             >
               <SanityImage
                 image={headerImage}
