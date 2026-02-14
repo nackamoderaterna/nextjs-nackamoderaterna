@@ -45,7 +45,7 @@ export function EventCard({
         className,
       )}
     >
-      <div className="flex flex-col @md:flex-row @md:items-start p-6">
+      <div className="flex flex-col @md:flex-row @md:items-start p-6 pb-0">
         {/* Content */}
         <Link
           href={`${ROUTE_BASE.EVENTS}/${href}`}
@@ -130,14 +130,6 @@ export function EventCard({
                 {location.trim()}
               </p>
             )}
-            {description && (
-              <>
-                <hr className="my-3 border-border" />
-                <p className="text-sm text-muted-foreground line-clamp-2">
-                  {description}
-                </p>
-              </>
-            )}
           </div>
         </Link>
 
@@ -153,6 +145,16 @@ export function EventCard({
           </div>
         )}
       </div>
+
+      {/* Description – full width */}
+      {description && (
+        <div className="px-6 pb-6">
+          <hr className="my-3 border-border" />
+          <p className="text-sm text-muted-foreground line-clamp-2">
+            {description}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
