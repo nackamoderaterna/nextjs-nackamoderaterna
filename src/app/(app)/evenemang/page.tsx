@@ -1,10 +1,9 @@
-import { EventSidebar, EventList } from "@/lib/components/events/EventCalendar";
 import { EventFilters } from "@/lib/components/events/EventFilters";
-import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
+import { EventTabs } from "@/lib/components/events/EventTabs";
 import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
 import {
   eventTypesQuery,
-  buildUpcomingEventsQuery,
+  buildPaginatedEventsQuery,
 } from "@/lib/queries/events";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
@@ -15,7 +14,7 @@ import type { ListingPage } from "@/lib/types/pages";
 import { ROUTE_BASE } from "@/lib/routes";
 
 const EVENTS_CACHE_SECONDS = 86400;
-const INITIAL_LIMIT = 10;
+const PAGE_SIZE = 9;
 
 export async function generateMetadata(): Promise<Metadata> {
   const listing = await sanityClient.fetch<ListingPage>(
@@ -54,15 +53,19 @@ export default async function EventsPage({
   const typeSlug = params.type || "";
   const publicOnly = params.public === "true";
 
-  const query = buildUpcomingEventsQuery({
+  const upcomingQuery = buildPaginatedEventsQuery("upcoming", {
+    typeFilter: !!typeSlug,
+    publicOnly,
+  });
+  const pastQuery = buildPaginatedEventsQuery("past", {
     typeFilter: !!typeSlug,
     publicOnly,
   });
 
-  const queryParams: Record<string, unknown> = { limit: INITIAL_LIMIT };
+  const queryParams: Record<string, unknown> = { start: 0, end: PAGE_SIZE };
   if (typeSlug) queryParams.eventTypeSlug = typeSlug;
 
-  const [listing, eventTypes, eventsData] = await Promise.all([
+  const [listing, eventTypes, upcomingData, pastData] = await Promise.all([
     sanityClient.fetch<ListingPage>(
       listingPageByKeyQuery,
       { key: "events" },
@@ -74,7 +77,12 @@ export default async function EventsPage({
       { next: { revalidate: EVENTS_CACHE_SECONDS } }
     ),
     sanityClient.fetch<{ items: Event[]; total: number }>(
-      query,
+      upcomingQuery,
+      queryParams,
+      { next: { revalidate: EVENTS_CACHE_SECONDS } }
+    ),
+    sanityClient.fetch<{ items: Event[]; total: number }>(
+      pastQuery,
       queryParams,
       { next: { revalidate: EVENTS_CACHE_SECONDS } }
     ),
@@ -89,17 +97,14 @@ export default async function EventsPage({
       as="main"
     >
       <EventFilters eventTypes={eventTypes} />
-      <ContentWithSidebar
-        mainContent={
-          <EventList
-            key={`${typeSlug}-${publicOnly}`}
-            initialEvents={eventsData.items}
-            total={eventsData.total}
-            typeSlug={typeSlug || undefined}
-            publicOnly={publicOnly || undefined}
-          />
-        }
-        sidebarContent={<EventSidebar />}
+      <EventTabs
+        key={`${typeSlug}-${publicOnly}`}
+        initialUpcoming={upcomingData.items}
+        upcomingTotal={upcomingData.total}
+        initialPast={pastData.items}
+        pastTotal={pastData.total}
+        typeSlug={typeSlug || undefined}
+        publicOnly={publicOnly || undefined}
       />
     </ListingPageLayout>
   );
