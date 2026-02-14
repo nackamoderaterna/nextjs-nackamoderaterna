@@ -14,7 +14,12 @@
       "Bash(npx next lint:*)",
       "mcp__Sanity__query_documents",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(git diff:*)",
+      "Bash(git stash:*)",
+      "Bash(npx next build:*)"
     ]
   }
 }

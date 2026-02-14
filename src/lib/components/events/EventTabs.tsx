@@ -1,7 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/lib/components/ui/tabs";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from "@/lib/components/ui/tabs";
 import { Button } from "@/lib/components/ui/button";
 import { EventCard } from "@/lib/components/events/eventCard";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
@@ -29,29 +34,35 @@ interface EventTabsProps {
   publicOnly?: boolean;
 }
 
-function EventGrid({
-  events,
-  muted,
-}: {
-  events: Event[];
-  muted?: boolean;
-}) {
+function EventGrid({ events, muted }: { events: Event[]; muted?: boolean }) {
   if (events.length === 0) {
     return (
       <p className="text-muted-foreground text-sm py-8">
-        {muted ? "Inga tidigare evenemang hittades." : "Inga kommande evenemang hittades."}
+        {muted
+          ? "Inga tidigare evenemang hittades."
+          : "Inga kommande evenemang hittades."}
       </p>
     );
   }
 
   return (
-    <ResponsiveGrid cols={3} gap="large">
+    <ResponsiveGrid cols={2} gap="large">
       {events.map((event) => {
         const date = event.startDate ? new Date(event.startDate) : null;
         const day = date ? String(date.getDate()) : "";
         const months = [
-          "Januari", "Februari", "Mars", "April", "Maj", "Juni",
-          "Juli", "Augusti", "September", "Oktober", "November", "December",
+          "Januari",
+          "Februari",
+          "Mars",
+          "April",
+          "Maj",
+          "Juni",
+          "Juli",
+          "Augusti",
+          "September",
+          "Oktober",
+          "November",
+          "December",
         ];
         const month = date ? months[date.getMonth()] : "";
         const time = event.startDate
@@ -59,8 +70,10 @@ function EventGrid({
           : "";
         const location = formatAddress(event.location ?? undefined);
         const eventType = event.eventType as unknown as EventTypeDoc | null;
-        const description = (event as Event & { plainDescription?: string }).plainDescription;
-        const registrationUrl = (event as Event & { registrationUrl?: string }).registrationUrl;
+        const description = (event as Event & { plainDescription?: string })
+          .plainDescription;
+        const registrationUrl = (event as Event & { registrationUrl?: string })
+          .registrationUrl;
 
         return (
           <EventCard
@@ -137,10 +150,16 @@ export function EventTabs({
     <Tabs defaultValue="kommande">
       <TabsList variant="line" className="mb-8">
         <TabsTrigger value="kommande">
-          Kommande {upTotal > 0 && <span className="text-muted-foreground ml-1">({upTotal})</span>}
+          Kommande{" "}
+          {upTotal > 0 && (
+            <span className="text-muted-foreground ml-1">({upTotal})</span>
+          )}
         </TabsTrigger>
         <TabsTrigger value="tidigare">
-          Tidigare {pTotal > 0 && <span className="text-muted-foreground ml-1">({pTotal})</span>}
+          Tidigare{" "}
+          {pTotal > 0 && (
+            <span className="text-muted-foreground ml-1">({pTotal})</span>
+          )}
         </TabsTrigger>
       </TabsList>
 

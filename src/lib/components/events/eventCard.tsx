@@ -45,18 +45,15 @@ export function EventCard({
         className,
       )}
     >
-      <Link
-        href={`${ROUTE_BASE.EVENTS}/${href}`}
-        className="block p-6 flex-1"
-      >
-        {/* Top badges */}
-        <div className="flex items-center gap-1.5 mb-4">
+      {/* Badges – outside the link so they don't overlap */}
+      {(isPublic || eventTypeName) && (
+        <div className="flex items-center gap-1.5 px-6 pt-6">
           {isPublic && (
             <Badge
               className={cn(
                 muted
-                  ? "text-muted-foreground bg-muted-background hover:bg-muted/90"
-                  : "bg-brand-primary hover:bg-blue-700 text-white",
+                  ? "text-muted-foreground bg-muted-background"
+                  : "bg-brand-primary text-white",
               )}
             >
               Öppen
@@ -80,7 +77,12 @@ export function EventCard({
             </Badge>
           )}
         </div>
+      )}
 
+      <Link
+        href={`${ROUTE_BASE.EVENTS}/${href}`}
+        className="block px-6 pb-6 pt-4 flex-1"
+      >
         {/* Date */}
         <div className="mb-4">
           <span
@@ -113,8 +115,8 @@ export function EventCard({
             className={cn(
               "font-semibold transition-colors mb-1",
               muted
-                ? "text-muted-foreground group-hover:text-primary"
-                : "group-hover:text-primary",
+                ? "text-muted-foreground group-hover:text-brand-primary"
+                : "text-foreground",
             )}
           >
             {title}
@@ -135,13 +137,9 @@ export function EventCard({
       </Link>
 
       {registrationUrl && !muted && (
-        <div className="px-6 pb-4">
+        <div className="px-6 pb-6">
           <Button asChild variant="outline" size="sm" className="gap-1.5">
-            <a
-              href={registrationUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={registrationUrl} target="_blank" rel="noopener noreferrer">
               <UserPlus className="size-3.5" />
               Anmäl dig
             </a>
