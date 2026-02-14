@@ -14,7 +14,7 @@ import type { ListingPage } from "@/lib/types/pages";
 import { ROUTE_BASE } from "@/lib/routes";
 
 const EVENTS_CACHE_SECONDS = 86400;
-const PAGE_SIZE = 9;
+const PAGE_SIZE = 10;
 
 export async function generateMetadata(): Promise<Metadata> {
   const listing = await sanityClient.fetch<ListingPage>(

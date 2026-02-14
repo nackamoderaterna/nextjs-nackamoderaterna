@@ -16,7 +16,7 @@ import { formatTimeRange, formatAddress } from "@/lib/utils/dateUtils";
 import { ChevronDown, Loader2 } from "lucide-react";
 import type { Event } from "~/sanity.types";
 
-const PAGE_SIZE = 9;
+const PAGE_SIZE = 10;
 
 interface EventTypeDoc {
   _id: string;
