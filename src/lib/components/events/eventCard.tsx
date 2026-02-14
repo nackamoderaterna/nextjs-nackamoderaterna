@@ -40,112 +40,119 @@ export function EventCard({
   return (
     <div
       className={cn(
-        "rounded border transition-colors group relative hover:bg-muted flex flex-col",
+        "@container rounded border transition-colors group relative hover:bg-muted flex flex-col",
         muted ? "border-muted" : "border-border",
         className,
       )}
     >
-      {/* Badges – outside the link so they don't overlap */}
-      {(isPublic || eventTypeName) && (
-        <div className="flex items-center gap-1.5 px-6 pt-6">
-          {isPublic && (
-            <Badge
-              className={cn(
-                muted
-                  ? "text-muted-foreground bg-muted-background"
-                  : "bg-brand-primary text-white",
+      <div className="flex flex-col @md:flex-row @md:items-start p-6">
+        {/* Content */}
+        <Link
+          href={`${ROUTE_BASE.EVENTS}/${href}`}
+          className="block flex-1 min-w-0"
+        >
+          {/* Badges */}
+          {(isPublic || eventTypeName) && (
+            <div className="flex items-center gap-1.5 mb-4">
+              {isPublic && (
+                <Badge
+                  className={cn(
+                    muted
+                      ? "text-muted-foreground bg-muted-background"
+                      : "bg-brand-primary text-white",
+                  )}
+                >
+                  Öppen
+                </Badge>
               )}
-            >
-              Öppen
-            </Badge>
+              {eventTypeName && (
+                <Badge
+                  variant="outline"
+                  className="text-xs"
+                  style={
+                    eventTypeColor
+                      ? {
+                          borderColor: eventTypeColor,
+                          backgroundColor: `${eventTypeColor}15`,
+                          color: eventTypeColor,
+                        }
+                      : undefined
+                  }
+                >
+                  {eventTypeName}
+                </Badge>
+              )}
+            </div>
           )}
-          {eventTypeName && (
-            <Badge
-              variant="outline"
-              className="text-xs"
-              style={
-                eventTypeColor
-                  ? {
-                      borderColor: eventTypeColor,
-                      backgroundColor: `${eventTypeColor}15`,
-                      color: eventTypeColor,
-                    }
-                  : undefined
-              }
-            >
-              {eventTypeName}
-            </Badge>
-          )}
-        </div>
-      )}
 
-      <Link
-        href={`${ROUTE_BASE.EVENTS}/${href}`}
-        className="block px-6 pb-6 pt-4 flex-1"
-      >
-        {/* Date */}
-        <div className="mb-4">
-          <span
-            className={cn(
-              "block text-4xl md:text-5xl font-bold transition-colors",
-              muted
-                ? "text-muted-foreground group-hover:text-primary"
-                : "text-brand-primary",
-            )}
-          >
-            {day}
-          </span>
-          {month && (
+          {/* Date */}
+          <div className="mb-4">
             <span
               className={cn(
-                "block text-sm font-medium uppercase tracking-wide transition-colors",
+                "block text-4xl md:text-5xl font-bold transition-colors",
                 muted
                   ? "text-muted-foreground group-hover:text-primary"
                   : "text-brand-primary",
               )}
             >
-              {month}
+              {day}
             </span>
-          )}
-        </div>
-
-        {/* Event Info */}
-        <div>
-          <h3
-            className={cn(
-              "font-semibold transition-colors mb-1",
-              muted
-                ? "text-muted-foreground group-hover:text-brand-primary"
-                : "text-foreground",
+            {month && (
+              <span
+                className={cn(
+                  "block text-sm font-medium uppercase tracking-wide transition-colors",
+                  muted
+                    ? "text-muted-foreground group-hover:text-primary"
+                    : "text-brand-primary",
+                )}
+              >
+                {month}
+              </span>
             )}
-          >
-            {title}
-          </h3>
-          {time && <p className="text-sm text-muted-foreground">{time}</p>}
-          {location?.trim() && (
-            <p className="text-sm text-muted-foreground flex items-center gap-1 mt-0.5">
-              <MapPin className="size-3 shrink-0" />
-              {location.trim()}
-            </p>
-          )}
-          {description && (
-            <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
-              {description}
-            </p>
-          )}
-        </div>
-      </Link>
+          </div>
 
-      {registrationUrl && !muted && (
-        <div className="px-6 pb-6">
-          <Button asChild variant="outline" size="sm" className="gap-1.5">
-            <a href={registrationUrl} target="_blank" rel="noopener noreferrer">
-              <UserPlus className="size-3.5" />
-              Anmäl dig
-            </a>
-          </Button>
-        </div>
-      )}
+          {/* Event Info */}
+          <div>
+            <h3
+              className={cn(
+                "font-semibold transition-colors mb-1",
+                muted
+                  ? "text-muted-foreground group-hover:text-brand-primary"
+                  : "text-foreground",
+              )}
+            >
+              {title}
+            </h3>
+            {time && <p className="text-sm text-muted-foreground">{time}</p>}
+            {location?.trim() && (
+              <p className="text-sm text-muted-foreground flex items-center gap-1 mt-0.5">
+                <MapPin className="size-3 shrink-0" />
+                {location.trim()}
+              </p>
+            )}
+            {description && (
+              <>
+                <hr className="my-3 border-border" />
+                <p className="text-sm text-muted-foreground line-clamp-2">
+                  {description}
+                </p>
+              </>
+            )}
+          </div>
+        </Link>
+
+        {/* Registration button */}
+        {registrationUrl && !muted && (
+          <div className="mt-4 @md:mt-0 @md:ml-4 shrink-0">
+            <Button asChild variant="outline" size="sm" className="gap-1.5">
+              <a href={registrationUrl} target="_blank" rel="noopener noreferrer">
+                <UserPlus className="size-3.5" />
+                Anmäl dig
+              </a>
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
