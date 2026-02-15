@@ -149,7 +149,8 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
             pageType="Område"
             title={data.name || ""}
             image={data.image}
-            imagePosition={data.image ? "right" : undefined}
+            variant="wide"
+            imagePosition="right"
           />
 
           <ContentWithSidebar mainContent={main} sidebarContent={sidebar} />
