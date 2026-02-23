@@ -49,7 +49,7 @@ export const portableTextComponents: PortableTextComponents = {
           <SanityImage
             image={value}
             alt={value.alt || ""}
-            className="w-full rounded-lg"
+            className="w-full max-h-[32rem] object-contain rounded-lg"
             sizes="(max-width: 768px) 100vw, 800px"
           />
           {value.caption && (
