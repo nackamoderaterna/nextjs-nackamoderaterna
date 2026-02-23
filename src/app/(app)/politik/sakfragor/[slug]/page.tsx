@@ -73,6 +73,8 @@ export type PoliticalIssuePage = Omit<
     name?: string | null;
     slug?: { current?: string } | null;
     image?: unknown;
+    email?: string | null;
+    phone?: string | null;
   }>;
   latestNews: News[];
 };
@@ -244,6 +246,8 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
                       name?: string | null;
                       slug?: { current?: string } | null;
                       image?: unknown;
+                      email?: string | null;
+                      phone?: string | null;
                     }>
                   ).map((politician) => (
                     <PeopleCard
@@ -252,6 +256,8 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
                       image={politician.image}
                       slug={politician.slug?.current || ""}
                       size="large"
+                      email={politician.email}
+                      phone={politician.phone}
                     />
                   ))}
                 </ResponsiveGrid>

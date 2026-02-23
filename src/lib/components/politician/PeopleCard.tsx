@@ -123,6 +123,70 @@ export function PeopleCard({
     );
   }
 
+  // Horizontal layout (small / medium)
+  if (hasContact) {
+    return (
+      <Item
+        variant="outline"
+        size={config.itemSize}
+        className={cn(
+          "h-full rounded-lg flex-col items-start group",
+          className,
+        )}
+      >
+        <Link
+          href={href}
+          className="flex items-center gap-4 w-full hover:opacity-90 transition-opacity"
+        >
+          <ItemMedia
+            variant="image"
+            className={cn(
+              "relative shrink-0 overflow-hidden rounded-md",
+              config.imageClass,
+            )}
+          >
+            {image ? (
+              <SanityImage
+                image={image}
+                fill
+                className="object-cover"
+                sizes="96px"
+              />
+            ) : (
+              <div className="size-full bg-muted" />
+            )}
+          </ItemMedia>
+          <ItemContent>
+            <ItemTitle className="text-foreground">{displayName}</ItemTitle>
+            {displayTitle && (
+              <p className="text-sm text-muted-foreground mt-0.5">
+                {displayTitle}
+              </p>
+            )}
+          </ItemContent>
+        </Link>
+        <div className="flex flex-wrap items-center gap-2 mt-1">
+          {email && (
+            <Button variant="outline" size="sm" asChild>
+              <a href={`mailto:${email}`}>
+                <Mail className="size-3.5" />
+                E-post
+              </a>
+            </Button>
+          )}
+          {phone && (
+            <Button variant="outline" size="sm" asChild>
+              <a href={`tel:${phone.replace(/\D/g, "")}`}>
+                <Phone className="size-3.5" />
+                {formatPhoneNumber(phone)}
+              </a>
+            </Button>
+          )}
+        </div>
+      </Item>
+    );
+  }
+
   return (
     <Item
       asChild

@@ -183,6 +183,8 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
                     image={politician.image}
                     slug={politician.slug?.current || ""}
                     size="large"
+                    email={politician.email}
+                    phone={politician.phone}
                   />
                 ))}
               </ResponsiveGrid>

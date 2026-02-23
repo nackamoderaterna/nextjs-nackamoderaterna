@@ -143,7 +143,9 @@ export const politicalIssuePageQuery = groq`
       _id,
       name,
       slug,
-      image{ ..., hotspot, crop }
+      image{ ..., hotspot, crop },
+      email,
+      phone
     },
 
     "latestNews": *[
@@ -257,7 +259,9 @@ export const geographicalAreaPageQuery = groq`
       _id,
       name,
       slug,
-      image{ ..., hotspot, crop }
+      image{ ..., hotspot, crop },
+      email,
+      phone
     }
   }
 `;

@@ -49,15 +49,16 @@ export function PoliticianSection({
             );
           }
           return (
-          
-              <PeopleCard
-                key={politician._id}
-                slug={politician.slug?.current || ""}
-                name={politician.name}
-                title={roleTitle}
-                size="small"
-                image={politician.image}
-              />
+            <PeopleCard
+              key={politician._id}
+              slug={politician.slug?.current || ""}
+              name={politician.name}
+              title={roleTitle}
+              size="small"
+              image={politician.image}
+              email={politician.email}
+              phone={politician.phone}
+            />
           );
         })}
       </ResponsiveGrid>

@@ -125,6 +125,8 @@ export default async function PoliticiansPage() {
                   name={politician.name}
                   title={namndTitle}
                   size="medium"
+                  email={politician.email}
+                  phone={politician.phone}
                 />
               ))}
             </ResponsiveGrid>
