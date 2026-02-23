@@ -135,7 +135,7 @@ export default async function PoliticiansPage() {
                   image={politician.image}
                   name={politician.name}
                   title={namndTitle}
-                  size="medium"
+                  size="small"
                   email={politician.email}
                   phone={politician.phone}
                 />
