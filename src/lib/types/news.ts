@@ -8,6 +8,7 @@ import {
 import { Dereferenced, WithDereferencedFields, WithEffectiveDate } from "./shared";
 
 export type NewsDocumentWithUrl = {
+  title?: string;
   url?: string;
   originalFilename?: string;
 };

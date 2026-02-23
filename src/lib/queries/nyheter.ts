@@ -8,14 +8,11 @@ export const newsQuery = groq`
   ...,
   "effectiveDate": coalesce(dateOverride, _createdAt),
 
-  "documents": coalesce(
-    documents[]{
-      ...,
-      "url": asset->url,
-      "originalFilename": asset->originalFilename
-    },
-    select(defined(document) => [document{..., "url": asset->url, "originalFilename": asset->originalFilename}], [])
-  ),
+  "documents": documents[]{
+    title,
+    "url": file.asset->url,
+    "originalFilename": file.asset->originalFilename
+  },
 
   "referencedPoliticians": referencedPolitician[]->{
     _id,

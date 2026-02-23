@@ -15,6 +15,7 @@ interface NewsSidebarProps {
 
 export function NewsSidebar({ news, currentSlug }: NewsSidebarProps) {
   const documents = (news.documents ?? []) as Array<{
+    title?: string;
     url?: string;
     originalFilename?: string;
   }>;
@@ -65,7 +66,7 @@ export function NewsSidebar({ news, currentSlug }: NewsSidebarProps) {
               .map((doc, index) => (
                 <SidebarListItem
                   key={index}
-                  title={doc.originalFilename ?? "Ladda ner dokument"}
+                  title={doc.title ?? doc.originalFilename ?? "Ladda ner dokument"}
                   href={doc.url!}
                   external
                   download={doc.originalFilename}

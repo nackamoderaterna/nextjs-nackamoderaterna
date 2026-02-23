@@ -112,7 +112,29 @@ export const news = defineType({
         "Valfria dokument (PDF, Word, etc.) som bifogas till nyheten.",
       type: "array",
       group: "media",
-      of: [{ type: "file" }],
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({
+              name: "title",
+              title: "Visningsnamn",
+              description: "Namnet som visas i sidomenyn.",
+              type: "string",
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "file",
+              title: "Fil",
+              type: "file",
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
+          preview: {
+            select: { title: "title" },
+          },
+        },
+      ],
     }),
     defineField({
       name: "instagramUrl",
