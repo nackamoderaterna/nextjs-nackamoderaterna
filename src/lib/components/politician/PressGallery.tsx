@@ -34,7 +34,7 @@ export function PressGallery({ images }: PressGalleryProps) {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
         {validImages.map((image, index) => {
           const downloadUrl = buildOriginalImageUrl(image);
           return (
@@ -42,7 +42,7 @@ export function PressGallery({ images }: PressGalleryProps) {
               <button
                 type="button"
                 onClick={() => setLightboxIndex(index)}
-                className="relative w-full aspect-[4/5] rounded-lg overflow-hidden bg-muted block text-left focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                className="relative w-full aspect-[4/3] rounded-lg overflow-hidden bg-muted block text-left focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 aria-label={image.caption ?? image.alt ?? "Visa bild i full storlek"}
               >
                 <SanityImage
