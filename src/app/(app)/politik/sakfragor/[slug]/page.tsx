@@ -26,6 +26,7 @@ import {
 } from "~/sanity.types";
 import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
 import { ROUTE_BASE } from "@/lib/routes";
+import { buildBreadcrumbJsonLd } from "@/lib/utils/breadcrumbJsonLd";
 import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
 import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleContext";
@@ -208,8 +209,20 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
 
   const sidebar = <div className="grid gap-4">{sidebarItems}</div>;
 
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Hem", url: "/" },
+    { name: "Politik", url: ROUTE_BASE.POLITICS },
+    { name: "Sakfrågor", url: ROUTE_BASE.POLITICS_ISSUES },
+    { name: data.question ?? slug },
+  ]);
+
   return (
-    <div className="bg-background flex flex-col">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <div className="bg-background flex flex-col">
       <main className="flex-1">
         <PageContainer paddingY="default">
           <SetBreadcrumbTitle title={data.question || ""} />
@@ -266,5 +279,6 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
         </PageContainer>
       </main>
     </div>
+    </>
   );
 }

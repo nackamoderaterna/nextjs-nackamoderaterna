@@ -12,6 +12,7 @@ import { Metadata } from "next";
 import { Event } from "~/sanity.types";
 import type { ListingPage } from "@/lib/types/pages";
 import { ROUTE_BASE } from "@/lib/routes";
+import { buildBreadcrumbJsonLd } from "@/lib/utils/breadcrumbJsonLd";
 
 const EVENTS_CACHE_SECONDS = 86400;
 const PAGE_SIZE = 10;
@@ -92,24 +93,35 @@ export default async function EventsPage({
     ),
   ]);
 
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Hem", url: "/" },
+    { name: "Evenemang" },
+  ]);
+
   return (
-    <ListingPageLayout
-      title={listing?.title}
-      intro={listing?.intro}
-      fallbackTitle="Evenemang"
-      paddingY="top"
-      as="main"
-    >
-      <EventFilters eventTypes={eventTypes} />
-      <EventTabs
-        key={`${typeSlug}-${publicOnly}`}
-        initialUpcoming={upcomingData.items}
-        upcomingTotal={upcomingData.total}
-        initialPast={pastData.items}
-        pastTotal={pastData.total}
-        typeSlug={typeSlug || undefined}
-        publicOnly={publicOnly || undefined}
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-    </ListingPageLayout>
+      <ListingPageLayout
+        title={listing?.title}
+        intro={listing?.intro}
+        fallbackTitle="Evenemang"
+        paddingY="top"
+        as="main"
+      >
+        <EventFilters eventTypes={eventTypes} />
+        <EventTabs
+          key={`${typeSlug}-${publicOnly}`}
+          initialUpcoming={upcomingData.items}
+          upcomingTotal={upcomingData.total}
+          initialPast={pastData.items}
+          pastTotal={pastData.total}
+          typeSlug={typeSlug || undefined}
+          publicOnly={publicOnly || undefined}
+        />
+      </ListingPageLayout>
+    </>
   );
 }

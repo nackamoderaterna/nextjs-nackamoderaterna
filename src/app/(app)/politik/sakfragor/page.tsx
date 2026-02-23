@@ -5,6 +5,7 @@ import { sanityClient } from "@/lib/sanity/client";
 import { generateMetadata as buildMetadata, getGlobalSeoDefaults } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ROUTE_BASE } from "@/lib/routes";
+import { buildBreadcrumbJsonLd } from "@/lib/utils/breadcrumbJsonLd";
 import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
 import { Section } from "@/lib/components/shared/Section";
 import type { ListingPage } from "@/lib/types/pages";
@@ -51,8 +52,19 @@ export default async function PolitikSakfragorPage() {
   // Section title from CMS with fallback
   const title = listing?.sectionTitles?.sakfragorAll || "Alla sakfrågor";
 
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Hem", url: "/" },
+    { name: "Politik", url: ROUTE_BASE.POLITICS },
+    { name: "Sakfrågor" },
+  ]);
+
   return (
-    <div className="bg-background">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <div className="bg-background">
       <ListingPageLayout
         title={listing?.title}
         intro={listing?.intro}
@@ -65,5 +77,6 @@ export default async function PolitikSakfragorPage() {
         )}
       </ListingPageLayout>
     </div>
+    </>
   );
 }

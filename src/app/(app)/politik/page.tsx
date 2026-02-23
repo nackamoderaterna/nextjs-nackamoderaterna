@@ -9,6 +9,7 @@ import { getLucideIcon } from "@/lib/utils/iconUtils";
 import { generateMetadata as buildMetadata, getGlobalSeoDefaults } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ROUTE_BASE } from "@/lib/routes";
+import { buildBreadcrumbJsonLd } from "@/lib/utils/breadcrumbJsonLd";
 import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { Section } from "@/lib/components/shared/Section";
@@ -101,8 +102,18 @@ export default async function PoliticsPage() {
     fulfilled: listing?.sectionTitles?.fulfilledPromises || "Uppfyllda vallöften",
   };
 
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Hem", url: "/" },
+    { name: "Politik" },
+  ]);
+
   return (
-    <div className="bg-background">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <div className="bg-background">
       <ListingPageLayout
         title={listing?.title}
         intro={listing?.intro}
@@ -181,5 +192,6 @@ export default async function PoliticsPage() {
         )}
       </ListingPageLayout>
     </div>
+    </>
   );
 }

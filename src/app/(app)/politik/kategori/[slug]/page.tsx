@@ -24,6 +24,7 @@ import {
 import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
 import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 import { ROUTE_BASE } from "@/lib/routes";
+import { buildBreadcrumbJsonLd } from "@/lib/utils/breadcrumbJsonLd";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
 import { Section } from "@/lib/components/shared/Section";
 import { PageContainer } from "@/lib/components/shared/PageContainer";
@@ -184,8 +185,20 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
     </div>
   );
 
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Hem", url: "/" },
+    { name: "Politik", url: ROUTE_BASE.POLITICS },
+    { name: "Kategorier", url: ROUTE_BASE.POLITICS_CATEGORY },
+    { name: data.name ?? slug },
+  ]);
+
   return (
-    <div className="bg-background flex flex-col">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <div className="bg-background flex flex-col">
       <main className="flex-1">
         <PageContainer paddingY="default">
           <SetBreadcrumbTitle title={data.name || ""} />
@@ -201,5 +214,6 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
         </PageContainer>
       </main>
     </div>
+    </>
   );
 }

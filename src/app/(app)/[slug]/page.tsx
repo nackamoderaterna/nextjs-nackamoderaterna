@@ -8,6 +8,7 @@ import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleConte
 import { pageBySlugQuery, allPageSlugsQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
 import { generatePageMetadata } from "@/lib/utils/pageSeo";
+import { buildBreadcrumbJsonLd } from "@/lib/utils/breadcrumbJsonLd";
 import type { PageData } from "@/lib/types/pages";
 
 export const revalidate = 86400;
@@ -57,8 +58,17 @@ export default async function SanityPage({
     notFound();
   }
 
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Hem", url: "/" },
+    { name: page.title ?? slug },
+  ]);
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <SetBreadcrumbTitle title={page.title ?? ""} />
       <PageModal modal={page.pageModal} pageSlug={page.slug?.current || slug} />
       <PageHeader

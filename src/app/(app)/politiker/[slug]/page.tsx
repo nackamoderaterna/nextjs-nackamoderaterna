@@ -34,6 +34,7 @@ import {
 import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
 import { ROUTE_BASE } from "@/lib/routes";
+import { buildBreadcrumbJsonLd } from "@/lib/utils/breadcrumbJsonLd";
 import { Button } from "@/lib/components/ui/button";
 import { portableTextToPlainText } from "@/lib/utils/portableText";
 
@@ -146,6 +147,12 @@ export default async function PoliticianPage({
     ? buildImageUrl(politician.image, { width: 1200, height: 630 })
     : undefined;
 
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Hem", url: "/" },
+    { name: "Politiker", url: ROUTE_BASE.POLITICIANS },
+    { name: politician.name ?? slug },
+  ]);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -160,6 +167,10 @@ export default async function PoliticianPage({
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

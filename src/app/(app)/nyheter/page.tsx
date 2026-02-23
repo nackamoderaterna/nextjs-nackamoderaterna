@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import type { ListingPage } from "@/lib/types/pages";
 import { sanityClient } from "@/lib/sanity/client";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
+import { buildBreadcrumbJsonLd } from "@/lib/utils/breadcrumbJsonLd";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [listing, defaults] = await Promise.all([
@@ -41,7 +42,18 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
   const type = params.type || null;
   const currentPage = Math.max(1, parseInt(params.page ?? "1", 10));
 
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Hem", url: "/" },
+    { name: "Nyheter" },
+  ]);
+
   return (
-    <NewsListing areaSlug={area} typeParam={type} currentPage={currentPage} />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <NewsListing areaSlug={area} typeParam={type} currentPage={currentPage} />
+    </>
   );
 }

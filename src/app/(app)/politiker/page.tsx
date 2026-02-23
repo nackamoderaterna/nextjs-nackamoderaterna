@@ -7,6 +7,7 @@ import {
 } from "@/lib/politicians";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
+import { buildBreadcrumbJsonLd } from "@/lib/utils/breadcrumbJsonLd";
 import { PoliticianSection } from "@/lib/components/politician/PoliticianSection";
 import { PoliticiansViewSwitcher } from "@/lib/components/politician/politicians-table/PoliticiansViewSwitcher";
 import { generateMetadata as buildMetadata, getGlobalSeoDefaults } from "@/lib/utils/seo";
@@ -89,8 +90,18 @@ export default async function PoliticiansPage() {
     other: listing?.sectionTitles?.otherPoliticians || defaultSectionTitles.other,
   };
 
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Hem", url: "/" },
+    { name: "Politiker" },
+  ]);
+
   return (
-    <div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <div>
       <ListingPageLayout
         title={listing?.title}
         intro={listing?.intro}
@@ -179,5 +190,6 @@ export default async function PoliticiansPage() {
         </PoliticiansViewSwitcher>
       </ListingPageLayout>
     </div>
+    </>
   );
 }

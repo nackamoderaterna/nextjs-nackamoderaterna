@@ -24,6 +24,7 @@ import {
 import { portableTextComponents } from "@/lib/components/shared/PortableTextComponents";
 import { cleanPoliticianData, PoliticianWithNamnd } from "@/lib/politicians";
 import { ROUTE_BASE } from "@/lib/routes";
+import { buildBreadcrumbJsonLd } from "@/lib/utils/breadcrumbJsonLd";
 import { getEffectiveDate } from "@/lib/utils/getEffectiveDate";
 import { PeopleCard } from "@/lib/components/politician/PeopleCard";
 import { Sidebar } from "@/lib/components/shared/Sidebar";
@@ -139,8 +140,19 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
       </Sidebar>
     ) : null;
 
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Hem", url: "/" },
+    { name: "Områden", url: ROUTE_BASE.AREAS },
+    { name: data.name ?? slug },
+  ]);
+
   return (
-    <div className="bg-background flex flex-col">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <div className="bg-background flex flex-col">
       <main className="flex-1">
         <PageContainer paddingY="default">
           <SetBreadcrumbTitle title={data.name || ""} />
@@ -193,5 +205,6 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
         </PageContainer>
       </main>
     </div>
+    </>
   );
 }

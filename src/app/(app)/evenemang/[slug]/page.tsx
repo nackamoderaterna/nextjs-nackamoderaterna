@@ -22,6 +22,7 @@ import Link from "next/link";
 import { CalendarDays, CalendarPlus, Clock, MapPin, UserPlus } from "lucide-react";
 import { Button } from "@/lib/components/ui/button";
 import { ROUTE_BASE } from "@/lib/routes";
+import { buildBreadcrumbJsonLd } from "@/lib/utils/breadcrumbJsonLd";
 import { ContentHero } from "@/lib/components/shared/ContentHero";
 import { PageContainer } from "@/lib/components/shared/PageContainer";
 import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleContext";
@@ -140,6 +141,12 @@ export default async function EventPage({ params }: Props) {
     ? buildImageUrl(event.image, { width: 1200, height: 630 })
     : undefined;
 
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Hem", url: "/" },
+    { name: "Evenemang", url: ROUTE_BASE.EVENTS },
+    { name: event.title ?? slug },
+  ]);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Event",
@@ -164,6 +171,10 @@ export default async function EventPage({ params }: Props) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

@@ -17,6 +17,7 @@ import {
   getGlobalSeoDefaults,
 } from "@/lib/utils/seo";
 import { ROUTE_BASE } from "@/lib/routes";
+import { buildBreadcrumbJsonLd } from "@/lib/utils/breadcrumbJsonLd";
 import Link from "next/link";
 import { NewsCard } from "@/lib/components/news/NewsCard";
 import { getLucideIcon } from "@/lib/utils/iconUtils";
@@ -95,6 +96,12 @@ export default async function NewsArticlePage({
       ? buildImageUrl(news.mainImage, { width: 1200, height: 630 })
       : undefined;
 
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Hem", url: "/" },
+    { name: "Nyheter", url: ROUTE_BASE.NEWS },
+    { name: news.title ?? slug },
+  ]);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
@@ -168,6 +175,10 @@ export default async function NewsArticlePage({
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

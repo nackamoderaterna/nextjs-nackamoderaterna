@@ -6,6 +6,7 @@ import { getLucideIcon } from "@/lib/utils/iconUtils";
 import { generateMetadata as buildMetadata, getGlobalSeoDefaults } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ROUTE_BASE } from "@/lib/routes";
+import { buildBreadcrumbJsonLd } from "@/lib/utils/breadcrumbJsonLd";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { Section } from "@/lib/components/shared/Section";
 import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
@@ -60,8 +61,19 @@ export default async function PolitikKategoriPage() {
     }),
   ]);
 
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Hem", url: "/" },
+    { name: "Politik", url: ROUTE_BASE.POLITICS },
+    { name: "Kategorier" },
+  ]);
+
   return (
-    <div className="bg-background">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <div className="bg-background">
       <ListingPageLayout
         title={listing?.title}
         intro={listing?.intro}
@@ -84,5 +96,6 @@ export default async function PolitikKategoriPage() {
         </Section>
       </ListingPageLayout>
     </div>
+    </>
   );
 }

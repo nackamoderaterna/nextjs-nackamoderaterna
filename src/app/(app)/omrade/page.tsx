@@ -5,6 +5,7 @@ import { sanityClient } from "@/lib/sanity/client";
 import { generateMetadata as buildMetadata, getGlobalSeoDefaults } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ROUTE_BASE } from "@/lib/routes";
+import { buildBreadcrumbJsonLd } from "@/lib/utils/breadcrumbJsonLd";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { Section } from "@/lib/components/shared/Section";
 import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
@@ -53,8 +54,18 @@ export default async function OmradePage() {
     }),
   ]);
 
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Hem", url: "/" },
+    { name: "Områden" },
+  ]);
+
   return (
-    <div className="bg-background">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <div className="bg-background">
       <ListingPageLayout
         title={listing?.title}
         intro={listing?.intro}
@@ -74,5 +85,6 @@ export default async function OmradePage() {
         </Section>
       </ListingPageLayout>
     </div>
+    </>
   );
 }

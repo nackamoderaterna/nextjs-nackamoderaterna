@@ -1,6 +1,7 @@
 import { globalSettingsQuery } from "@/lib/queries/globalSettings";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
+import { buildBreadcrumbJsonLd } from "@/lib/utils/breadcrumbJsonLd";
 import type { Metadata } from "next";
 import { GlobalSettings } from "~/sanity.types";
 import { ContactPageClient } from "./ContactPageClient";
@@ -54,5 +55,18 @@ export default async function ContactPage() {
     return null;
   }
 
-  return <ContactPageClient settings={settings} listing={listing} />;
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Hem", url: "/" },
+    { name: "Kontakt" },
+  ]);
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <ContactPageClient settings={settings} listing={listing} />
+    </>
+  );
 }
