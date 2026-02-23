@@ -141,8 +141,8 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
 
   const main =
     data.content && data.content.length > 0 ? (
-      <div className="space-y-8 prose md:prose-lg">
-        <div className="prose md:prose-lg">
+      <div className="space-y-8">
+        <div>
           <PortableText
             value={data.content as Parameters<typeof PortableText>[0]["value"]}
             components={portableTextComponents}

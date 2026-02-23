@@ -90,7 +90,8 @@ export default async function NewsArticlePage({
     notFound();
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://nackamoderaterna.se";
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://nackamoderaterna.se";
   const imageUrl =
     news.mainImage && (news.mainImage as { asset?: unknown }).asset
       ? buildImageUrl(news.mainImage, { width: 1200, height: 630 })
@@ -107,7 +108,9 @@ export default async function NewsArticlePage({
     "@type": "NewsArticle",
     headline: news.title,
     datePublished: news.effectiveDate,
-    dateModified: (news as unknown as { _updatedAt?: string })._updatedAt || news.effectiveDate,
+    dateModified:
+      (news as unknown as { _updatedAt?: string })._updatedAt ||
+      news.effectiveDate,
     image: imageUrl,
     description: news.excerpt || undefined,
     url: `${siteUrl}${ROUTE_BASE.NEWS}/${slug}`,
@@ -155,21 +158,14 @@ export default async function NewsArticlePage({
         {formatDate(news.effectiveDate)}
       </time>
 
-      <h2 className="text-xl font-medium text-foreground mt-8">
+      <h2 className="text-xl max-w-3xl font-medium text-foreground mt-8">
         {news.excerpt}
       </h2>
       {news.body && (
-        <div className="prose md:prose-lg mt-8">
+        <div className="mt-8 max-w-3xl">
           <PortableText value={news.body} components={portableTextComponents} />
         </div>
       )}
-    </div>
-  );
-
-  const sidebarContent = (
-    <div className="grid gap-4">
-      {news.mainImage && <NewsArticleImage news={news} />}
-      <NewsSidebar news={news} currentSlug={slug} />
     </div>
   );
 
@@ -186,9 +182,19 @@ export default async function NewsArticlePage({
       <div className="max-w-7xl mx-auto mt-8 px-4">
         <SetBreadcrumbTitle title={news.title ?? ""} />
         <div className="mb-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="order-2 lg:order-1 lg:col-span-2">{mainContent}</div>
-          <aside className="order-1 lg:order-2 lg:col-span-1">
-            {sidebarContent}
+          {/* Image: top on mobile, top of right column on desktop */}
+          {news.mainImage && (
+            <div className="order-1 lg:col-start-3 lg:row-start-1">
+              <NewsArticleImage news={news} />
+            </div>
+          )}
+          {/* Article body: second on mobile, left two columns spanning both rows on desktop */}
+          <div className="order-2 lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:row-span-2">
+            {mainContent}
+          </div>
+          {/* Sidebar: below article on mobile, below image on desktop */}
+          <aside className="order-3 lg:col-start-3 lg:row-start-2">
+            <NewsSidebar news={news} currentSlug={slug} />
           </aside>
         </div>
 

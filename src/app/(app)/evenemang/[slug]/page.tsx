@@ -122,7 +122,7 @@ export default async function EventPage({ params }: Props) {
 
   const mainContent =
     event.description && event.description.length > 0 ? (
-      <div className="prose md:prose-lg max-w-3xl">
+      <div className="max-w-3xl">
         <PortableText
           value={event.description}
           components={portableTextComponents}

@@ -1,36 +1,7 @@
 import { PortableTextComponents } from "@portabletext/react";
-import { PortableText } from "@portabletext/react";
 import { SanityImage } from "./SanityImage";
 import Link from "next/link";
 import { Button } from "../ui/button";
-
-// Base components without circular dependency for nested PortableText
-const basePortableTextComponents: PortableTextComponents = {
-  types: {},
-  marks: {
-    link: ({ value, children }: any) => {
-      const target = (value?.href || "").startsWith("http")
-        ? "_blank"
-        : undefined;
-      return (
-        <a
-          href={value?.href}
-          target={target}
-          rel={target === "_blank" ? "noopener noreferrer" : undefined}
-          className="text-blue-600 hover:text-blue-700 underline"
-        >
-          {children}
-        </a>
-      );
-    },
-  },
-  block: {
-    h1: ({ children }: any) => <h1>{children}</h1>,
-    h2: ({ children }: any) => <h2>{children}</h2>,
-    h3: ({ children }: any) => <h3>{children}</h3>,
-    normal: ({ children }: any) => <p>{children}</p>,
-  },
-};
 
 /**
  * Shared PortableText components configuration for handling all block types
@@ -45,7 +16,7 @@ export const portableTextComponents: PortableTextComponents = {
       }
 
       return (
-        <div className="my-4">
+        <div className="my-6">
           <SanityImage
             image={value}
             alt={value.alt || ""}
@@ -53,19 +24,19 @@ export const portableTextComponents: PortableTextComponents = {
             sizes="(max-width: 768px) 100vw, 800px"
           />
           {value.caption && (
-            <p className="text-sm text-gray-500 text-center mt-2">
+            <p className="text-sm text-muted-foreground text-center mt-2 my-0">
               {value.caption}
             </p>
           )}
           {value.alt && !value.caption && (
-            <p className="text-sm text-gray-500 text-center mt-2">
+            <p className="text-sm text-muted-foreground text-center mt-2 my-0">
               {value.alt}
             </p>
           )}
         </div>
       );
     },
-    // Handle rich text quote blocks
+    // Handle rich text quote blocks (pull quote)
     richTextQuote: ({ value }: any) => {
       if (!value) return null;
 
@@ -74,44 +45,44 @@ export const portableTextComponents: PortableTextComponents = {
         : value.name;
 
       return (
-        <div className="my-6">
-          <div className="flex gap-6">
-            {/* Blue vertical bar - thicker to match design */}
-            <div className="w-2 bg-brand-primary flex-shrink-0" />
-            {/* Quote content */}
-            <div className="flex-1">
-              <p className="!mt-0 text-3xl md:text-4xl font-serif italic text-gray-900 leading-relaxed">
-                {value.quote}
-              </p>
-              <div className="mt-6 pr-8">
-                {value.link ? (
-                  value.link.startsWith("http") ||
-                  value.link.startsWith("//") ? (
-                    <a
-                      href={value.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-foreground font-serif text-base hover:text-brand-primary transition-colors"
-                    >
-                      – {attribution}
-                    </a>
-                  ) : (
-                    <Link
-                      href={value.link}
-                      className="text-foreground font-serif text-base hover:text-brand-primary transition-colors"
-                    >
-                      – {attribution}
-                    </Link>
-                  )
+        <figure className="relative my-10 pl-10 md:pl-14">
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute left-0 -top-2 select-none font-serif text-[4.5rem] md:text-[5.5rem] leading-none text-brand-primary/25"
+          >
+            &ldquo;
+          </span>
+          <blockquote>
+            <p className="text-xl md:text-2xl italic leading-snug text-foreground">
+              {value.quote}
+            </p>
+          </blockquote>
+          {attribution && (
+            <figcaption className="mt-4 text-sm text-muted-foreground">
+              {value.link ? (
+                value.link.startsWith("http") || value.link.startsWith("//") ? (
+                  <a
+                    href={value.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    — {attribution}
+                  </a>
                 ) : (
-                  <span className="text-gray-900 font-serif text-base">
-                    – {attribution}
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+                  <Link
+                    href={value.link}
+                    className="hover:text-foreground transition-colors"
+                  >
+                    — {attribution}
+                  </Link>
+                )
+              ) : (
+                <span>— {attribution}</span>
+              )}
+            </figcaption>
+          )}
+        </figure>
       );
     },
     // Handle highlighted link blocks
@@ -121,12 +92,12 @@ export const portableTextComponents: PortableTextComponents = {
       return (
         <div className="my-6 border border-border rounded p-6 bg-white">
           {value.title && (
-            <h3 className="!mt-0 text-xl font-bold text-foreground mb-3">
+            <h3 className="text-xl font-bold text-foreground mb-3 mt-0">
               {value.title}
             </h3>
           )}
           {value.description && (
-            <p className="text-muted-foreground mb-4 leading-relaxed text-base">
+            <p className="text-muted-foreground mb-4 leading-relaxed text-base my-0">
               {value.description}
             </p>
           )}
@@ -169,7 +140,6 @@ export const portableTextComponents: PortableTextComponents = {
     return null;
   },
   marks: {
-    // Add link support if needed
     link: ({ value, children }: any) => {
       const target = (value?.href || "").startsWith("http")
         ? "_blank"
@@ -179,28 +149,67 @@ export const portableTextComponents: PortableTextComponents = {
           href={value?.href}
           target={target}
           rel={target === "_blank" ? "noopener noreferrer" : undefined}
-          className="text-brand-primary hover:text-brand-primary/80 transition-colors underline"
+          className="text-brand-primary hover:text-brand-primary/80 underline underline-offset-2 transition-colors"
         >
           {children}
         </a>
       );
     },
+    strong: ({ children }: any) => (
+      <strong className="font-semibold">{children}</strong>
+    ),
+    em: ({ children }: any) => <em className="italic">{children}</em>,
+  },
+  list: {
+    bullet: ({ children }: any) => (
+      <ul className="list-disc list-outside pl-6 my-5 space-y-1.5">
+        {children}
+      </ul>
+    ),
+    number: ({ children }: any) => (
+      <ol className="list-decimal list-outside pl-6 my-5 space-y-1.5">
+        {children}
+      </ol>
+    ),
+  },
+  listItem: {
+    bullet: ({ children }: any) => (
+      <li className="text-base md:text-lg leading-relaxed pl-1">{children}</li>
+    ),
+    number: ({ children }: any) => (
+      <li className="text-base md:text-lg leading-relaxed pl-1">{children}</li>
+    ),
   },
   block: {
-    // Customize block styles if needed
     h1: ({ children }: any) => (
-      <h1 className="text-4xl font-bold mt-8 mb-4">{children}</h1>
+      <h1 className="text-4xl md:text-5xl font-bold leading-tight tracking-tight text-foreground mt-12 mb-5 first:mt-0">
+        {children}
+      </h1>
     ),
     h2: ({ children }: any) => (
-      <h2 className="text-3xl font-bold mt-6 mb-3">{children}</h2>
+      <h2 className="text-3xl md:text-4xl font-bold leading-tight tracking-tight text-foreground mt-10 mb-4">
+        {children}
+      </h2>
     ),
     h3: ({ children }: any) => (
-      <h3 className="text-2xl font-bold mt-4 mb-2">{children}</h3>
+      <h3 className="text-2xl md:text-3xl font-semibold leading-snug text-foreground mt-8 mb-3">
+        {children}
+      </h3>
+    ),
+    h4: ({ children }: any) => (
+      <h4 className="text-xl md:text-2xl font-semibold leading-snug text-foreground mt-6 mb-2">
+        {children}
+      </h4>
     ),
     blockquote: ({ children }: any) => (
-      <blockquote className="border-l-4 border-gray-300 pl-4 italic my-4">
+      <blockquote className="my-7 ml-2 border-l border-foreground/20 pl-5 italic text-foreground/70 text-base md:text-lg leading-relaxed">
         {children}
       </blockquote>
+    ),
+    normal: ({ children }: any) => (
+      <p className="text-base md:text-lg leading-relaxed text-foreground my-5">
+        {children}
+      </p>
     ),
   },
 };

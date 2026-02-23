@@ -27,11 +27,9 @@ export function TextBlock({ block }: TextBlockProps) {
           </h2>
         )}
         <div
-          className={`prose prose-neutral md:prose-lg ${
-            columns === 2
-              ? "columns-1 md:columns-2 gap-8"
-              : "columns-1"
-          }`}
+          className={
+            columns === 2 ? "columns-1 md:columns-2 gap-8" : ""
+          }
         >
           {block.content && (
             <PortableText

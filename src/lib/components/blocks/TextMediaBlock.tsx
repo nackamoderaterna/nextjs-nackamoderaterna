@@ -56,7 +56,7 @@ export function TextMediaBlock({ block }: { block: TwoColumnBlockProps }) {
         </h3>
       )}
       <div
-        className={`prose prose-neutral max-w-none ${textAlignment === "center" ? "mx-auto" : ""}`}
+        className={textAlignment === "center" ? "mx-auto" : ""}
       >
         <PortableText
           value={block.content}

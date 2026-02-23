@@ -10,7 +10,7 @@ export function FooterContent({ content }: FooterContentProps) {
 
   return (
     <div className="mt-8 pt-8 border-t border-border">
-      <div className="prose prose-sm prose-neutral max-w-none">
+      <div className="text-sm">
         <PortableText value={content} components={portableTextComponents} />
       </div>
     </div>

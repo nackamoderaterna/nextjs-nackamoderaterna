@@ -109,7 +109,7 @@ export function PageModal({
           {modal.title ? <DialogTitle>{modal.title}</DialogTitle> : null}
           {modal.content?.length ? (
             <DialogDescription asChild>
-              <div className="prose prose-neutral max-w-none">
+              <div>
                 <PortableText value={modal.content} components={portableTextComponents} />
               </div>
             </DialogDescription>
