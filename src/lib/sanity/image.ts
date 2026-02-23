@@ -11,7 +11,7 @@ export function buildImageUrl(
     fit?: "max" | "scale" | "min";
   },
 ) {
-  if (!image) return "";
+  if (!image || !(image as { asset?: unknown }).asset) return "";
   const builder = imageUrlBuilder(sanityClient);
 
   let url = builder

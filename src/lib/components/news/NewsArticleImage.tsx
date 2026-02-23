@@ -17,8 +17,8 @@ interface NewsArticleImageProps {
  * first (order-1), on desktop in the sidebar (order-2). Single network request.
  */
 export function NewsArticleImage({ news }: NewsArticleImageProps) {
-  const mainImage = news.mainImage as { aspectRatio?: string; alt?: string } | undefined;
-  if (!mainImage) return null;
+  const mainImage = news.mainImage as { aspectRatio?: string; alt?: string; asset?: unknown } | undefined;
+  if (!mainImage?.asset) return null;
 
   const aspectRatio =
     mainImage?.aspectRatio && mainImage.aspectRatio in SIDEBAR_ASPECT_CLASSES

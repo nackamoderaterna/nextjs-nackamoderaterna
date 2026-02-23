@@ -52,9 +52,10 @@ export async function generateMetadata({
     });
   }
 
-  const imageUrl = news.mainImage
-    ? buildImageUrl(news.mainImage, { width: 1200, height: 630 })
-    : fallbackImage;
+  const imageUrl =
+    news.mainImage && (news.mainImage as { asset?: unknown }).asset
+      ? buildImageUrl(news.mainImage, { width: 1200, height: 630 })
+      : fallbackImage;
 
   return generateSEOMetadata({
     title: `${news.title} | Nackamoderaterna`,
