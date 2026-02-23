@@ -36,7 +36,7 @@ export const portableTextComponents: PortableTextComponents = {
         </div>
       );
     },
-    // Handle rich text quote blocks
+    // Handle rich text quote blocks (pull quote)
     richTextQuote: ({ value }: any) => {
       if (!value) return null;
 
@@ -45,15 +45,20 @@ export const portableTextComponents: PortableTextComponents = {
         : value.name;
 
       return (
-        <div className="my-8">
-          <span className="block text-6xl leading-none text-muted-foreground/40 font-serif select-none mb-2">
+        <figure className="relative my-10 pl-10 md:pl-14">
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute left-0 -top-2 select-none font-serif text-[4.5rem] md:text-[5.5rem] leading-none text-brand-primary/25"
+          >
             &ldquo;
           </span>
-          <p className="text-xl md:text-2xl font-serif italic text-foreground leading-relaxed mt-0">
-            {value.quote}
-          </p>
+          <blockquote>
+            <p className="text-xl md:text-2xl italic leading-snug text-foreground">
+              {value.quote}
+            </p>
+          </blockquote>
           {attribution && (
-            <div className="mt-4 text-sm text-muted-foreground">
+            <figcaption className="mt-4 text-sm text-muted-foreground">
               {value.link ? (
                 value.link.startsWith("http") || value.link.startsWith("//") ? (
                   <a
@@ -75,9 +80,9 @@ export const portableTextComponents: PortableTextComponents = {
               ) : (
                 <span>— {attribution}</span>
               )}
-            </div>
+            </figcaption>
           )}
-        </div>
+        </figure>
       );
     },
     // Handle highlighted link blocks
@@ -197,7 +202,7 @@ export const portableTextComponents: PortableTextComponents = {
       </h4>
     ),
     blockquote: ({ children }: any) => (
-      <blockquote className="border-l-4 border-brand-primary/30 pl-5 py-1 my-6 italic text-muted-foreground">
+      <blockquote className="my-7 ml-2 border-l border-foreground/20 pl-5 italic text-foreground/70 text-base md:text-lg leading-relaxed">
         {children}
       </blockquote>
     ),
