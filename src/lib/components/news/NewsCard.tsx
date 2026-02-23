@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { formatDate } from "@/lib/utils/dateUtils";
 import { ArrowRight } from "lucide-react";
 import { NewsVariantBadge } from "./NewsVariantBadge";
@@ -45,16 +42,25 @@ export function NewsCard({
   series,
   headingLevel: Heading = "h3",
 }: NewsCardProps) {
-  const router = useRouter();
+  const articleHref = `${ROUTE_BASE.NEWS}/${slug}`;
 
   return (
     <article
-      className={`group relative ${!isLast ? "border-b border-border" : ""}`}
+      className={`group relative transition-colors hover:bg-accent/50 ${!isLast ? "border-b border-border" : ""}`}
     >
+      {/*
+        Stretched link covers the whole card for mouse/touch users.
+        aria-hidden + tabIndex={-1} keeps it out of the a11y tree —
+        the heading link below is the real accessible link.
+      */}
       <Link
-        href={`${ROUTE_BASE.NEWS}/${slug}`}
-        className="block py-5 md:py-6 lg:py-8 transition-colors hover:bg-accent/50"
-      >
+        href={articleHref}
+        className="absolute inset-0"
+        aria-hidden="true"
+        tabIndex={-1}
+      />
+
+      <div className="py-5 md:py-6 lg:py-8">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
           <div className="md:col-span-2 flex flex-col gap-2 items-start">
             <time className="text-xs md:text-sm font-mono tracking-wider text-muted-foreground">
@@ -64,8 +70,14 @@ export function NewsCard({
 
           <div className="md:col-span-8 space-y-3">
             <div className="space-y-2">
-              <Heading className="text-2xl md:text-3xl lg:text-4xl font-light text-balance group-hover:text-primary transition-colors min-w-0">
-                {title}
+              <Heading className="text-2xl md:text-3xl lg:text-4xl font-light text-balance min-w-0">
+                {/* Accessible link on the heading title */}
+                <Link
+                  href={articleHref}
+                  className="group-hover:text-primary transition-colors"
+                >
+                  {title}
+                </Link>
               </Heading>
               {variant && variant !== "default" && (
                 <NewsVariantBadge
@@ -80,39 +92,15 @@ export function NewsCard({
                     .sort((a, b) =>
                       (a.name ?? "").localeCompare(b.name ?? "", "sv"),
                     )
-                    .map((a) => {
-                      const href = `${ROUTE_BASE.POLITICS_CATEGORY}/${a.slug?.current || ""}`;
-                      return (
-                        <span
-                          key={a._id}
-                          role="link"
-                          tabIndex={0}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            if (a.slug?.current) router.push(href);
-                          }}
-                          onKeyDown={(e) => {
-                            if (
-                              (e.key === "Enter" || e.key === " ") &&
-                              a.slug?.current
-                            ) {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              router.push(href);
-                            }
-                          }}
-                          className="cursor-pointer"
-                        >
-                          <CategoryBadge
-                            name={a.name ?? ""}
-                            icon={a.icon}
-                            size="default"
-                            variant="brand"
-                          />
-                        </span>
-                      );
-                    })}
+                    .map((a) => (
+                      <CategoryBadge
+                        key={a._id}
+                        name={a.name ?? ""}
+                        icon={a.icon}
+                        size="default"
+                        variant="brand"
+                      />
+                    ))}
                 </div>
               )}
             </div>
@@ -132,7 +120,7 @@ export function NewsCard({
             </div>
           </div>
         </div>
-      </Link>
+      </div>
     </article>
   );
 }

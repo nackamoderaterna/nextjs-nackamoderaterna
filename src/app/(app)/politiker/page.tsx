@@ -17,6 +17,8 @@ import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { EmptyState } from "@/lib/components/shared/EmptyState";
 import type { ListingPage } from "@/lib/types/pages";
 import { PeopleCard } from "@/lib/components/politician/PeopleCard";
+import { Suspense } from "react";
+import { Skeleton } from "@/lib/components/ui/skeleton";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [listing, defaults] = await Promise.all([
@@ -108,6 +110,18 @@ export default async function PoliticiansPage() {
         fallbackTitle="Våra politiker"
         paddingY="compact"
       >
+        <Suspense fallback={
+          <div className="space-y-4">
+            <div className="flex gap-2 mb-6">
+              <Skeleton className="h-9 w-24" />
+              <Skeleton className="h-9 w-24" />
+            </div>
+            <Skeleton className="h-8 w-48 mb-4" />
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-40 rounded-lg" />)}
+            </div>
+          </div>
+        }>
         <PoliticiansViewSwitcher politicians={politicians}>
         {/* 1. Kommunalråd */}
         {(grouped.kommunalrad.president.length > 0 ||
@@ -188,6 +202,7 @@ export default async function PoliticiansPage() {
           <EmptyState message="Inga politiker tillgängliga för tillfället." />
         )}
         </PoliticiansViewSwitcher>
+        </Suspense>
       </ListingPageLayout>
     </div>
     </>

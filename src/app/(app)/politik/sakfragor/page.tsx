@@ -1,4 +1,6 @@
 import { PoliticalIssuesViewSwitcher } from "@/lib/components/politics/political-issues-table/PoliticalIssuesViewSwitcher";
+import { Suspense } from "react";
+import { Skeleton } from "@/lib/components/ui/skeleton";
 import { allPoliticalIssuesQuery } from "@/lib/queries/politik";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
@@ -72,7 +74,17 @@ export default async function PolitikSakfragorPage() {
       >
         {allIssues.length > 0 && (
           <Section title={title} titleSize="large">
-            <PoliticalIssuesViewSwitcher data={allIssues} />
+            <Suspense fallback={
+              <div className="space-y-4">
+                <div className="flex gap-2">
+                  <Skeleton className="h-9 w-24" />
+                  <Skeleton className="h-9 w-24" />
+                </div>
+                <Skeleton className="h-[400px] w-full rounded-md" />
+              </div>
+            }>
+              <PoliticalIssuesViewSwitcher data={allIssues} />
+            </Suspense>
           </Section>
         )}
       </ListingPageLayout>

@@ -1,6 +1,13 @@
 import { IconMail, IconMapPin, IconPhone, IconUser } from "@tabler/icons-react";
 import { GlobalSettings } from "~/sanity.types";
-import { ContactForm } from "@/lib/components/shared/ContactForm";
+import dynamic from "next/dynamic";
+
+const ContactForm = dynamic(
+  () => import("@/lib/components/shared/ContactForm").then((m) => m.ContactForm),
+  {
+    loading: () => <div className="h-96 animate-pulse rounded-lg bg-muted" />,
+  }
+);
 import { ContactInfoItem } from "@/lib/components/shared/ContactInfoItem";
 import { ContentWithSidebar } from "@/lib/components/shared/ContentWithSidebar";
 import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";

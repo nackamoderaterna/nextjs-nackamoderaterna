@@ -2,13 +2,31 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useCallback } from "react";
+import dynamic from "next/dynamic";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/lib/components/ui/tabs";
 import { LayoutGrid, Table } from "lucide-react";
-import { PoliticalIssuesDataTable } from "./PoliticalIssuesDataTable";
+import { Skeleton } from "@/lib/components/ui/skeleton";
 import { PoliticalIssueItem } from "../PoliticalIssueItem";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
 import { ROUTE_BASE } from "@/lib/routes";
 import type { PoliticalIssueWithAreas } from "./types";
+
+const PoliticalIssuesDataTable = dynamic(
+  () => import("./PoliticalIssuesDataTable").then((mod) => mod.PoliticalIssuesDataTable),
+  {
+    loading: () => (
+      <div className="space-y-4">
+        <div className="flex gap-4 flex-wrap">
+          <Skeleton className="h-9 w-64" />
+          <Skeleton className="h-9 w-48" />
+          <Skeleton className="h-9 w-48" />
+        </div>
+        <Skeleton className="h-[400px] w-full rounded-md" />
+      </div>
+    ),
+    ssr: false,
+  }
+);
 
 interface PoliticalIssuesViewSwitcherProps {
   data: PoliticalIssueWithAreas[];
