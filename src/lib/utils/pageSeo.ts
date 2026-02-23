@@ -2,38 +2,19 @@ import { Metadata } from "next";
 import { generateMetadata as generateBaseMetadata } from "./seo";
 import { buildImageUrl } from "@/lib/sanity/image";
 import type { PageData } from "@/lib/types/pages";
+import { portableTextToPlainText } from "./portableText";
 
 /**
  * Extracts a plain text description from page blocks for SEO fallback.
  * Looks for text content in the first text block.
  */
 function extractDescriptionFromBlocks(blocks: any[] = []): string | undefined {
-  // Look for first text block with content
   const textBlock = blocks.find(
     (block) => block._type === "block.text" && block.content
   );
   if (textBlock?.content) {
-    // Extract plain text from PortableText blocks
-    const extractText = (content: any[]): string => {
-      return content
-        .map((item) => {
-          if (item._type === "block") {
-            return item.children
-              ?.map((child: any) => child.text || "")
-              .join("") || "";
-          }
-          return "";
-        })
-        .join(" ")
-        .trim();
-    };
-    const text = extractText(textBlock.content);
-    if (text) {
-      // Return first 160 characters for SEO description
-      return text.length > 160 ? text.substring(0, 157) + "..." : text;
-    }
+    return portableTextToPlainText(textBlock.content, 160);
   }
-
   return undefined;
 }
 

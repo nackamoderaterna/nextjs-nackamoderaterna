@@ -15,6 +15,8 @@ const siteUrl =
 
 export const revalidate = 86400;
 
+type SlugEntry = { slug: string; lastModified?: string };
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const cacheOpts = { next: { revalidate: 86400 } } as const;
   const [
@@ -26,13 +28,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     geographicalAreas,
     politicalIssues,
   ] = await Promise.all([
-    sanityClient.fetch<{ slug: string }[]>(allPageSlugsQuery, {}, cacheOpts),
-    sanityClient.fetch<{ slug: string }[]>(allNewsSlugsQuery, {}, cacheOpts),
-    sanityClient.fetch<{ slug: string }[]>(allPoliticianSlugsQuery, {}, cacheOpts),
-    sanityClient.fetch<{ slug: string }[]>(allEventSlugsQuery, {}, cacheOpts),
-    sanityClient.fetch<{ slug: string }[]>(allPoliticalAreaSlugsQuery, {}, cacheOpts),
-    sanityClient.fetch<{ slug: string }[]>(allGeographicalAreaSlugsQuery, {}, cacheOpts),
-    sanityClient.fetch<{ slug: string }[]>(allPoliticalIssueSlugsQuery, {}, cacheOpts),
+    sanityClient.fetch<SlugEntry[]>(allPageSlugsQuery, {}, cacheOpts),
+    sanityClient.fetch<SlugEntry[]>(allNewsSlugsQuery, {}, cacheOpts),
+    sanityClient.fetch<SlugEntry[]>(allPoliticianSlugsQuery, {}, cacheOpts),
+    sanityClient.fetch<SlugEntry[]>(allEventSlugsQuery, {}, cacheOpts),
+    sanityClient.fetch<SlugEntry[]>(allPoliticalAreaSlugsQuery, {}, cacheOpts),
+    sanityClient.fetch<SlugEntry[]>(allGeographicalAreaSlugsQuery, {}, cacheOpts),
+    sanityClient.fetch<SlugEntry[]>(allPoliticalIssueSlugsQuery, {}, cacheOpts),
   ]);
 
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -46,6 +48,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.6,
     },
+    {
+      url: `${siteUrl}/omrade`,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
+      url: `${siteUrl}/kontakt`,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: `${siteUrl}/politik/kategori`,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
   ];
 
   const pageRoutes: MetadataRoute.Sitemap = pages.map(({ slug }) => ({
@@ -54,46 +71,52 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  const newsRoutes: MetadataRoute.Sitemap = news.map(({ slug }) => ({
+  const newsRoutes: MetadataRoute.Sitemap = news.map(({ slug, lastModified }) => ({
     url: `${siteUrl}/nyheter/${slug}`,
     changeFrequency: "monthly",
     priority: 0.6,
+    ...(lastModified && { lastModified }),
   }));
 
   const politicianRoutes: MetadataRoute.Sitemap = politicians.map(
-    ({ slug }) => ({
+    ({ slug, lastModified }) => ({
       url: `${siteUrl}/politiker/${slug}`,
       changeFrequency: "monthly",
       priority: 0.5,
+      ...(lastModified && { lastModified }),
     })
   );
 
-  const eventRoutes: MetadataRoute.Sitemap = events.map(({ slug }) => ({
+  const eventRoutes: MetadataRoute.Sitemap = events.map(({ slug, lastModified }) => ({
     url: `${siteUrl}/evenemang/${slug}`,
     changeFrequency: "weekly",
     priority: 0.5,
+    ...(lastModified && { lastModified }),
   }));
 
   const politicalAreaRoutes: MetadataRoute.Sitemap = politicalAreas.map(
-    ({ slug }) => ({
+    ({ slug, lastModified }) => ({
       url: `${siteUrl}/politik/kategori/${slug}`,
       changeFrequency: "monthly",
       priority: 0.6,
+      ...(lastModified && { lastModified }),
     })
   );
 
   const geographicalAreaRoutes: MetadataRoute.Sitemap =
-    geographicalAreas.map(({ slug }) => ({
+    geographicalAreas.map(({ slug, lastModified }) => ({
       url: `${siteUrl}/omrade/${slug}`,
       changeFrequency: "monthly",
       priority: 0.5,
+      ...(lastModified && { lastModified }),
     }));
 
   const politicalIssueRoutes: MetadataRoute.Sitemap = politicalIssues.map(
-    ({ slug }) => ({
+    ({ slug, lastModified }) => ({
       url: `${siteUrl}/politik/sakfragor/${slug}`,
       changeFrequency: "monthly",
       priority: 0.5,
+      ...(lastModified && { lastModified }),
     })
   );
 

@@ -7,7 +7,7 @@ import {
 } from "@/lib/queries/events";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
-import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
+import { generateMetadata as buildMetadata, getGlobalSeoDefaults } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { Event } from "~/sanity.types";
 import type { ListingPage } from "@/lib/types/pages";
@@ -17,11 +17,14 @@ const EVENTS_CACHE_SECONDS = 86400;
 const PAGE_SIZE = 10;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const listing = await sanityClient.fetch<ListingPage>(
-    listingPageByKeyQuery,
-    { key: "events" },
-    { next: { revalidate: EVENTS_CACHE_SECONDS } }
-  );
+  const [listing, defaults] = await Promise.all([
+    sanityClient.fetch<ListingPage>(
+      listingPageByKeyQuery,
+      { key: "events" },
+      { next: { revalidate: EVENTS_CACHE_SECONDS } }
+    ),
+    getGlobalSeoDefaults(),
+  ]);
 
   const title =
     listing?.seo?.title || listing?.title || "Evenemang | Nackamoderaterna";
@@ -31,6 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title,
     description,
+    image: listing?.seo?.image?.url ?? defaults.image,
     url: ROUTE_BASE.EVENTS,
   });
 }

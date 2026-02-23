@@ -9,7 +9,7 @@ import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
 import { PoliticianSection } from "@/lib/components/politician/PoliticianSection";
 import { PoliticiansViewSwitcher } from "@/lib/components/politician/politicians-table/PoliticiansViewSwitcher";
-import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
+import { generateMetadata as buildMetadata, getGlobalSeoDefaults } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
@@ -18,11 +18,14 @@ import type { ListingPage } from "@/lib/types/pages";
 import { PeopleCard } from "@/lib/components/politician/PeopleCard";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const listing = await sanityClient.fetch<ListingPage>(
-    listingPageByKeyQuery,
-    { key: "politicians" },
-    { next: { revalidate: 86400 } }
-  );
+  const [listing, defaults] = await Promise.all([
+    sanityClient.fetch<ListingPage>(
+      listingPageByKeyQuery,
+      { key: "politicians" },
+      { next: { revalidate: 86400 } }
+    ),
+    getGlobalSeoDefaults(),
+  ]);
 
   const title =
     listing?.seo?.title ||
@@ -35,6 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title,
     description,
+    image: listing?.seo?.image?.url ?? defaults.image,
     url: "/politiker",
   });
 }

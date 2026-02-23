@@ -79,5 +79,8 @@ export type ListingPage = {
   seo?: {
     title?: string;
     description?: string;
+    image?: {
+      url?: string;
+    };
   };
 };

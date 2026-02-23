@@ -13,8 +13,9 @@ import { sanityClient } from "@/lib/sanity/client";
 import { buildImageUrl } from "@/lib/sanity/image";
 import {
   generateMetadata as generateSEOMetadata,
-  getDefaultOgImage,
+  getGlobalSeoDefaults,
 } from "@/lib/utils/seo";
+import { portableTextToPlainText } from "@/lib/utils/portableText";
 import { Metadata } from "next";
 import { PortableText } from "next-sanity";
 import {
@@ -84,9 +85,9 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const [data, fallbackImage] = await Promise.all([
+  const [data, defaults] = await Promise.all([
     sanityClient.fetch<PoliticalIssuePage>(politicalIssuePageQuery, { slug }, { next: { revalidate: 86400 } }),
-    getDefaultOgImage(),
+    getGlobalSeoDefaults(),
   ]);
 
   if (!data) {
@@ -102,13 +103,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         width: 1200,
         height: 630,
       })
-    : fallbackImage;
+    : defaults.image;
 
-  const contentBlock = data.content?.[0] as
-    | { children?: Array<{ text?: string }> }
-    | undefined;
-  const description = contentBlock?.children?.[0]?.text
-    ? `${data.question} - ${contentBlock.children[0].text.substring(0, 150)}...`
+  const contentText = data.content
+    ? portableTextToPlainText(data.content as unknown[], 150)
+    : undefined;
+  const description = contentText
+    ? `${data.question} - ${contentText}`
     : `Läs mer om ${data.question}`;
 
   return generateSEOMetadata({

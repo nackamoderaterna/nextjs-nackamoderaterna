@@ -1,16 +1,19 @@
 import { NewsListing } from "@/app/(app)/nyheter/NewsListing";
-import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
+import { generateMetadata as buildMetadata, getGlobalSeoDefaults } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import type { ListingPage } from "@/lib/types/pages";
 import { sanityClient } from "@/lib/sanity/client";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const listing = await sanityClient.fetch<ListingPage>(
-    listingPageByKeyQuery,
-    { key: "news" },
-    { next: { revalidate: 86400 } }
-  );
+  const [listing, defaults] = await Promise.all([
+    sanityClient.fetch<ListingPage>(
+      listingPageByKeyQuery,
+      { key: "news" },
+      { next: { revalidate: 86400 } }
+    ),
+    getGlobalSeoDefaults(),
+  ]);
 
   const title =
     listing?.seo?.title || listing?.title || "Nyheter | Nackamoderaterna";
@@ -21,6 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title,
     description,
+    image: listing?.seo?.image?.url ?? defaults.image,
     url: "/nyheter",
   });
 }

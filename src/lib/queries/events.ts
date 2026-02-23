@@ -176,7 +176,8 @@ export function buildMonthEventsQuery(options?: {
 
 // Query to get all event slugs for static generation
 export const allEventSlugsQuery = groq`*[_type == "event" && defined(slug.current)] {
-  "slug": slug.current
+  "slug": slug.current,
+  "lastModified": _updatedAt
 }`;
 
 export const singleEventQuery = groq`

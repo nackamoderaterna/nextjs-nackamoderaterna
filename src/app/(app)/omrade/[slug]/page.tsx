@@ -12,6 +12,7 @@ import {
 import { sanityClient } from "@/lib/sanity/client";
 import { buildImageUrl } from "@/lib/sanity/image";
 import { generateMetadata as generateSEOMetadata } from "@/lib/utils/seo";
+import { portableTextToPlainText } from "@/lib/utils/portableText";
 import { Metadata } from "next";
 import { PortableText } from "next-sanity";
 import {
@@ -71,16 +72,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? buildImageUrl(data.image, { width: 1200, height: 630 })
     : undefined;
 
-  const firstBlock = data.description?.find(
-    (b): b is typeof b & { children: { text?: string }[] } =>
-      "children" in b && Array.isArray(b.children),
-  );
-  const descriptionText = firstBlock?.children?.[0]?.text?.substring(0, 150);
+  const descriptionText = data.description
+    ? portableTextToPlainText(data.description as unknown[], 150)
+    : undefined;
 
   return generateSEOMetadata({
     title: `${data.name} | Nackamoderaterna`,
     description: descriptionText
-      ? `${data.name} - ${descriptionText}...`
+      ? `${data.name} - ${descriptionText}`
       : `Läs mer om ${data.name}`,
     image: imageUrl,
     url: `${ROUTE_BASE.AREAS}/${slug}`,

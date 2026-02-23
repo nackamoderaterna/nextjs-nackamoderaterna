@@ -97,7 +97,8 @@ export const newsListQuery = groq`*[_type == "news"] | order(
 
 // Query to get all news slugs for static generation
 export const allNewsSlugsQuery = groq`*[_type == "news" && defined(slug.current)] {
-  "slug": slug.current
+  "slug": slug.current,
+  "lastModified": _updatedAt
 }`;
 
 export const newsListPaginatedQuery = groq`{

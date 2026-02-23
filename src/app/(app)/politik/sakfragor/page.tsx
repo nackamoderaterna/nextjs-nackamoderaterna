@@ -2,7 +2,7 @@ import { PoliticalIssuesViewSwitcher } from "@/lib/components/politics/political
 import { allPoliticalIssuesQuery } from "@/lib/queries/politik";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
-import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
+import { generateMetadata as buildMetadata, getGlobalSeoDefaults } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ROUTE_BASE } from "@/lib/routes";
 import { ListingPageLayout } from "@/lib/components/shared/ListingPageLayout";
@@ -11,11 +11,14 @@ import type { ListingPage } from "@/lib/types/pages";
 import type { PoliticalIssueWithAreas } from "@/lib/components/politics/political-issues-table/types";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const listing = await sanityClient.fetch<ListingPage>(
-    listingPageByKeyQuery,
-    { key: "politikSakfragor" },
-    { next: { revalidate: 86400 } }
-  );
+  const [listing, defaults] = await Promise.all([
+    sanityClient.fetch<ListingPage>(
+      listingPageByKeyQuery,
+      { key: "politikSakfragor" },
+      { next: { revalidate: 86400 } }
+    ),
+    getGlobalSeoDefaults(),
+  ]);
 
   const title =
     listing?.seo?.title ||
@@ -28,6 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title,
     description,
+    image: listing?.seo?.image?.url ?? defaults.image,
     url: ROUTE_BASE.POLITICS_ISSUES,
   });
 }

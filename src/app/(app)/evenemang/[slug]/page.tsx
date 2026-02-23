@@ -14,7 +14,7 @@ import {
 } from "@/lib/utils/dateUtils";
 import {
   generateMetadata as generateSEOMetadata,
-  getDefaultOgImage,
+  getGlobalSeoDefaults,
 } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
@@ -25,6 +25,7 @@ import { ROUTE_BASE } from "@/lib/routes";
 import { ContentHero } from "@/lib/components/shared/ContentHero";
 import { PageContainer } from "@/lib/components/shared/PageContainer";
 import { SetBreadcrumbTitle } from "@/lib/components/shared/BreadcrumbTitleContext";
+import { portableTextToPlainText } from "@/lib/utils/portableText";
 
 // Generate static params for all events at build time
 export async function generateStaticParams() {
@@ -44,13 +45,13 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const [event, fallbackImage] = await Promise.all([
+  const [event, defaults] = await Promise.all([
     sanityClient.fetch<Event | null>(
       singleEventQuery,
       { slug },
       { next: { revalidate: 86400 } },
     ),
-    getDefaultOgImage(),
+    getGlobalSeoDefaults(),
   ]);
 
   if (!event) {
@@ -62,18 +63,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const imageUrl = event.image
     ? buildImageUrl(event.image, { width: 1200, height: 630 })
-    : fallbackImage;
+    : defaults.image;
 
-  const firstBlock = event.description?.find(
-    (b): b is typeof b & { children: { text?: string }[] } =>
-      "children" in b && Array.isArray(b.children),
-  );
-  const descriptionText = firstBlock?.children?.[0]?.text?.substring(0, 150);
+  const descriptionText = event.description
+    ? portableTextToPlainText(event.description as unknown[], 150)
+    : undefined;
 
   return generateSEOMetadata({
     title: `${event.title} | Nackamoderaterna`,
     description: descriptionText
-      ? `${event.title} - ${descriptionText}...`
+      ? `${event.title} - ${descriptionText}`
       : `Läs mer om evenemanget ${event.title}`,
     image: imageUrl,
     url: `${ROUTE_BASE.EVENTS}/${slug}`,
@@ -136,83 +135,116 @@ export default async function EventPage({ params }: Props) {
       ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cleanInvisibleUnicode(address))}`
       : undefined);
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://nackamoderaterna.se";
+  const imageUrl = event.image
+    ? buildImageUrl(event.image, { width: 1200, height: 630 })
+    : undefined;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: event.title,
+    startDate: event.startDate,
+    endDate: event.endDate,
+    url: `${siteUrl}${ROUTE_BASE.EVENTS}/${slug}`,
+    image: imageUrl,
+    description: descriptionText || undefined,
+    location: address
+      ? {
+          "@type": "Place",
+          name: address,
+          address: address,
+        }
+      : undefined,
+    organizer: {
+      "@type": "Organization",
+      name: "Nackamoderaterna",
+    },
+  };
+
   return (
-    <PageContainer as="main" paddingY="default">
-      <SetBreadcrumbTitle title={event.title ?? "Evenemang"} />
-      <ContentHero
-        pageType={`Evenemang${event.isPublic ? " · Publikt" : ""}`}
-        title={event.title ?? "Evenemang"}
-        image={event.image ?? undefined}
-        subtitle={
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
-              {eventDate && (
-                <span className="flex items-center gap-1.5">
-                  <CalendarDays className="size-4" />
-                  {eventDate}
-                </span>
-              )}
-              {eventTime && (
-                <span className="flex items-center gap-1.5">
-                  <Clock className="size-4" />
-                  {eventTime}
-                </span>
-              )}
-              {address && (
-                <a
-                  href={mapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 hover:text-primary transition-colors"
-                >
-                  <MapPin className="size-4" />
-                  {address}
-                </a>
-              )}
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {event.registrationUrl && (
-                <Button asChild>
-                  <Link
-                    href={event.registrationUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <UserPlus className="size-4" />
-                    Anmäl dig
-                  </Link>
-                </Button>
-              )}
-              <Button variant="outline" asChild>
-                <Link
-                  href={calendarLink}
-                  download={calendarFilename(
-                    cleanInvisibleUnicode(event.title) ?? "evenemang",
-                  )}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <CalendarPlus className="size-4" />
-                  Lägg till i kalender
-                </Link>
-              </Button>
-              {mapsUrl && address && (
-                <Button variant="outline" asChild>
-                  <Link
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <PageContainer as="main" paddingY="default">
+        <SetBreadcrumbTitle title={event.title ?? "Evenemang"} />
+        <ContentHero
+          pageType={`Evenemang${event.isPublic ? " · Publikt" : ""}`}
+          title={event.title ?? "Evenemang"}
+          image={event.image ?? undefined}
+          subtitle={
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+                {eventDate && (
+                  <span className="flex items-center gap-1.5">
+                    <CalendarDays className="size-4" />
+                    {eventDate}
+                  </span>
+                )}
+                {eventTime && (
+                  <span className="flex items-center gap-1.5">
+                    <Clock className="size-4" />
+                    {eventTime}
+                  </span>
+                )}
+                {address && (
+                  <a
                     href={mapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 hover:text-primary transition-colors"
                   >
                     <MapPin className="size-4" />
-                    Visa på karta
+                    {address}
+                  </a>
+                )}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {event.registrationUrl && (
+                  <Button asChild>
+                    <Link
+                      href={event.registrationUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <UserPlus className="size-4" />
+                      Anmäl dig
+                    </Link>
+                  </Button>
+                )}
+                <Button variant="outline" asChild>
+                  <Link
+                    href={calendarLink}
+                    download={calendarFilename(
+                      cleanInvisibleUnicode(event.title) ?? "evenemang",
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <CalendarPlus className="size-4" />
+                    Lägg till i kalender
                   </Link>
                 </Button>
-              )}
+                {mapsUrl && address && (
+                  <Button variant="outline" asChild>
+                    <Link
+                      href={mapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <MapPin className="size-4" />
+                      Visa på karta
+                    </Link>
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
-        }
-      />
-      {mainContent}
-    </PageContainer>
+          }
+        />
+        {mainContent}
+      </PageContainer>
+    </>
   );
 }

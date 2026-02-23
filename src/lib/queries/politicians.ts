@@ -2,7 +2,8 @@ import { groq } from "next-sanity";
 
 // Query to get all politician slugs for static generation
 export const allPoliticianSlugsQuery = groq`*[_type == "politician" && defined(slug.current)] {
-  "slug": slug.current
+  "slug": slug.current,
+  "lastModified": _updatedAt
 }`;
 
 export const politicianBySlugQuery = groq`*[_type == "politician" && slug.current == $slug][0] {

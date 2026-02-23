@@ -14,7 +14,7 @@ import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
 import {
   generateMetadata as generateSEOMetadata,
-  getDefaultOgImage,
+  getGlobalSeoDefaults,
 } from "@/lib/utils/seo";
 import { ROUTE_BASE } from "@/lib/routes";
 import Link from "next/link";
@@ -36,13 +36,13 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const [news, fallbackImage] = await Promise.all([
+  const [news, defaults] = await Promise.all([
     sanityClient.fetch<NewsExpanded>(
       newsQuery,
       { slug },
       { next: { revalidate: 86400 } },
     ),
-    getDefaultOgImage(),
+    getGlobalSeoDefaults(),
   ]);
 
   if (!news) {
@@ -55,7 +55,7 @@ export async function generateMetadata({
   const imageUrl =
     news.mainImage && (news.mainImage as { asset?: unknown }).asset
       ? buildImageUrl(news.mainImage, { width: 1200, height: 630 })
-      : fallbackImage;
+      : defaults.image;
 
   return generateSEOMetadata({
     title: `${news.title} | Nackamoderaterna`,
@@ -64,6 +64,7 @@ export async function generateMetadata({
     url: `${ROUTE_BASE.NEWS}/${slug}`,
     type: "article",
     publishedTime: news.effectiveDate,
+    modifiedTime: (news as unknown as { _updatedAt?: string })._updatedAt,
   });
 }
 
@@ -87,6 +88,31 @@ export default async function NewsArticlePage({
   if (!news) {
     notFound();
   }
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://nackamoderaterna.se";
+  const imageUrl =
+    news.mainImage && (news.mainImage as { asset?: unknown }).asset
+      ? buildImageUrl(news.mainImage, { width: 1200, height: 630 })
+      : undefined;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: news.title,
+    datePublished: news.effectiveDate,
+    dateModified: (news as unknown as { _updatedAt?: string })._updatedAt || news.effectiveDate,
+    image: imageUrl,
+    description: news.excerpt || undefined,
+    url: `${siteUrl}${ROUTE_BASE.NEWS}/${slug}`,
+    author: {
+      "@type": "Organization",
+      name: "Nackamoderaterna",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Nackamoderaterna",
+    },
+  };
 
   const mainContent = (
     <div>
@@ -141,38 +167,44 @@ export default async function NewsArticlePage({
   );
 
   return (
-    <div className="max-w-7xl mx-auto mt-8 px-4">
-      <SetBreadcrumbTitle title={news.title ?? ""} />
-      <div className="mb-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="order-2 lg:order-1 lg:col-span-2">{mainContent}</div>
-        <aside className="order-1 lg:order-2 lg:col-span-1">
-          {sidebarContent}
-        </aside>
-      </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="max-w-7xl mx-auto mt-8 px-4">
+        <SetBreadcrumbTitle title={news.title ?? ""} />
+        <div className="mb-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="order-2 lg:order-1 lg:col-span-2">{mainContent}</div>
+          <aside className="order-1 lg:order-2 lg:col-span-1">
+            {sidebarContent}
+          </aside>
+        </div>
 
-      {news.relatedByPoliticalArea &&
-        news.relatedByPoliticalArea.length > 0 && (
-          <Section
-            title="Relaterade nyheter"
-            className="mt-16"
-            aria-label="Relaterade nyheter"
-          >
-            <div className="rounded-lg overflow-hidden">
-              <div className="grid">
-                {news.relatedByPoliticalArea.map((item, index) => (
-                  <NewsCard
-                    key={item._id}
-                    title={item.title || ""}
-                    isLast={index === news.relatedByPoliticalArea!.length - 1}
-                    date={item.effectiveDate}
-                    slug={item.slug?.current || ""}
-                    excerpt={item.excerpt || ""}
-                  />
-                ))}
+        {news.relatedByPoliticalArea &&
+          news.relatedByPoliticalArea.length > 0 && (
+            <Section
+              title="Relaterade nyheter"
+              className="mt-16"
+              aria-label="Relaterade nyheter"
+            >
+              <div className="rounded-lg overflow-hidden">
+                <div className="grid">
+                  {news.relatedByPoliticalArea.map((item, index) => (
+                    <NewsCard
+                      key={item._id}
+                      title={item.title || ""}
+                      isLast={index === news.relatedByPoliticalArea!.length - 1}
+                      date={item.effectiveDate}
+                      slug={item.slug?.current || ""}
+                      excerpt={item.excerpt || ""}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          </Section>
-        )}
-    </div>
+            </Section>
+          )}
+      </div>
+    </>
   );
 }

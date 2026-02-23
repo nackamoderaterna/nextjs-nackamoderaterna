@@ -2,7 +2,7 @@ import { GeographicalAreaCard } from "@/lib/components/politics/geographicalArea
 import { politikPageQuery } from "@/lib/queries/politik";
 import { listingPageByKeyQuery } from "@/lib/queries/pages";
 import { sanityClient } from "@/lib/sanity/client";
-import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
+import { generateMetadata as buildMetadata, getGlobalSeoDefaults } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { ROUTE_BASE } from "@/lib/routes";
 import { ResponsiveGrid } from "@/lib/components/shared/ResponsiveGrid";
@@ -12,11 +12,14 @@ import { GeographicalArea } from "~/sanity.types";
 import type { ListingPage } from "@/lib/types/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const listing = await sanityClient.fetch<ListingPage>(
-    listingPageByKeyQuery,
-    { key: "politikOmrade" },
-    { next: { revalidate: 86400 } }
-  );
+  const [listing, defaults] = await Promise.all([
+    sanityClient.fetch<ListingPage>(
+      listingPageByKeyQuery,
+      { key: "politikOmrade" },
+      { next: { revalidate: 86400 } }
+    ),
+    getGlobalSeoDefaults(),
+  ]);
 
   const title =
     listing?.seo?.title ||
@@ -29,6 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title,
     description,
+    image: listing?.seo?.image?.url ?? defaults.image,
     url: ROUTE_BASE.AREAS,
   });
 }

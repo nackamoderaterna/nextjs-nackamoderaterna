@@ -4,16 +4,19 @@ import { sanityClient } from "@/lib/sanity/client";
 import type { Metadata } from "next";
 import { GlobalSettings } from "~/sanity.types";
 import { ContactPageClient } from "./ContactPageClient";
-import { generateMetadata as buildMetadata } from "@/lib/utils/seo";
+import { generateMetadata as buildMetadata, getGlobalSeoDefaults } from "@/lib/utils/seo";
 import { ROUTE_BASE } from "@/lib/routes";
 import type { ListingPage } from "@/lib/types/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const listing = await sanityClient.fetch<ListingPage>(
-    listingPageByKeyQuery,
-    { key: "contact" },
-    { next: { revalidate: 86400 } }
-  );
+  const [listing, defaults] = await Promise.all([
+    sanityClient.fetch<ListingPage>(
+      listingPageByKeyQuery,
+      { key: "contact" },
+      { next: { revalidate: 86400 } }
+    ),
+    getGlobalSeoDefaults(),
+  ]);
 
   const title =
     listing?.seo?.title ||
@@ -26,6 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title,
     description,
+    image: listing?.seo?.image?.url ?? defaults.image,
     url: "/kontakt",
   });
 }

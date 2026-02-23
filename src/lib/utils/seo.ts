@@ -11,17 +11,45 @@ interface GenerateMetadataParams {
   type?: "website" | "article";
   publishedTime?: string;
   modifiedTime?: string;
+  keywords?: string[];
 }
 
-/** Fetches globalSettings logo and returns OG image URL, or undefined if no logo. */
-export async function getDefaultOgImage(): Promise<string | undefined> {
-  const settings = await sanityClient.fetch<{ logo?: unknown } | null>(
-    groq`*[_type == "globalSettings"][0] { logo }`,
+export interface GlobalSeoDefaults {
+  description?: string;
+  image?: string;
+}
+
+/** Fetches globalSettings seo.image (with logo fallback) and seo.description. */
+export async function getGlobalSeoDefaults(): Promise<GlobalSeoDefaults> {
+  const settings = await sanityClient.fetch<{
+    logo?: unknown;
+    seo?: { description?: string; image?: { url?: string } };
+  } | null>(
+    groq`*[_type == "globalSettings"][0] { logo, seo{ description, image{ ..., "url": asset->url } } }`,
     {},
     { next: { revalidate: 86400 } }
   );
-  if (!settings?.logo) return undefined;
-  return buildImageUrl(settings.logo, { width: 1200, height: 630 });
+
+  if (!settings) return {};
+
+  const description = settings.seo?.description || undefined;
+
+  let image: string | undefined;
+  if (settings.seo?.image?.url) {
+    image = settings.seo.image.url;
+  } else if (settings.seo?.image) {
+    image = buildImageUrl(settings.seo.image, { width: 1200, height: 630 });
+  } else if (settings.logo) {
+    image = buildImageUrl(settings.logo, { width: 1200, height: 630 });
+  }
+
+  return { description, image };
+}
+
+/** Fetches globalSettings logo/seo image and returns OG image URL, or undefined if none. */
+export async function getDefaultOgImage(): Promise<string | undefined> {
+  const defaults = await getGlobalSeoDefaults();
+  return defaults.image;
 }
 
 export function generateMetadata({
@@ -32,6 +60,7 @@ export function generateMetadata({
   type = "website",
   publishedTime,
   modifiedTime,
+  keywords,
 }: GenerateMetadataParams): Metadata {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://nackamoderaterna.se";
   const fullUrl = url ? `${siteUrl}${url}` : siteUrl;
@@ -42,6 +71,7 @@ export function generateMetadata({
   return {
     title,
     description,
+    ...(keywords?.length ? { keywords } : {}),
     openGraph: {
       title,
       description,

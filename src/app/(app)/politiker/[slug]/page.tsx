@@ -29,12 +29,13 @@ import {
 } from "@/lib/queries/politicians";
 import {
   generateMetadata as generateSEOMetadata,
-  getDefaultOgImage,
+  getGlobalSeoDefaults,
 } from "@/lib/utils/seo";
 import { Metadata } from "next";
 import { buildImageUrl } from "@/lib/sanity/image";
 import { ROUTE_BASE } from "@/lib/routes";
 import { Button } from "@/lib/components/ui/button";
+import { portableTextToPlainText } from "@/lib/utils/portableText";
 
 // Generate static params for all politicians at build time
 export async function generateStaticParams() {
@@ -53,13 +54,13 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const [politicianRaw, fallbackImage] = await Promise.all([
+  const [politicianRaw, defaults] = await Promise.all([
     sanityClient.fetch<PoliticianWithNamnd>(
       politicianBySlugQuery,
       { slug },
       { next: { revalidate: 86400 } },
     ),
-    getDefaultOgImage(),
+    getGlobalSeoDefaults(),
   ]);
 
   if (!politicianRaw) {
@@ -73,12 +74,16 @@ export async function generateMetadata({
 
   const imageUrl = politician.image
     ? buildImageUrl(politician.image, { width: 1200, height: 630 })
-    : fallbackImage;
+    : defaults.image;
+
+  const bioText = politician.bio
+    ? portableTextToPlainText(politician.bio as unknown[], 150)
+    : undefined;
 
   return generateSEOMetadata({
     title: `${politician.name} | Nackamoderaterna`,
-    description: politician.bio
-      ? `${politician.name} - ${politician.bio[0]?.children?.[0]?.text?.substring(0, 150)}...`
+    description: bioText
+      ? `${politician.name} - ${bioText}`
       : `Läs mer om ${politician.name}`,
     image: imageUrl,
     url: `${ROUTE_BASE.POLITICIANS}/${slug}`,
@@ -136,134 +141,157 @@ export default async function PoliticianPage({
     </div>
   ) : undefined;
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://nackamoderaterna.se";
+  const imageUrl = politician.image
+    ? buildImageUrl(politician.image, { width: 1200, height: 630 })
+    : undefined;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: politician.name,
+    image: imageUrl,
+    url: `${siteUrl}${ROUTE_BASE.POLITICIANS}/${slug}`,
+    worksFor: {
+      "@type": "Organization",
+      name: "Nackamoderaterna",
+    },
+  };
+
   return (
-    <PageContainer as="main" paddingY="compact">
-      <SetBreadcrumbTitle title={politician.name ?? ""} />
-      <ContentHero
-        pageType="Politiker"
-        image={politician.image}
-        title={politician.name ?? ""}
-        subtitle={
-          politician.livingArea?.name
-            ? `${politician.livingArea.name}`
-            : undefined
-        }
-        subtitleHref={
-          politician.livingArea?.slug?.current
-            ? `${ROUTE_BASE.AREAS}/${politician.livingArea.slug.current}`
-            : undefined
-        }
-      >
-        <div className="flex flex-col gap-4">
-          {(politician.email || politician.phone) && (
-            <div className="flex flex-wrap gap-2">
-              {politician.email && (
-                <Button variant="outline" asChild>
-                  <a href={`mailto:${politician.email}`}>
-                    <Mail className="size-4" />
-                    {politician.email}
-                  </a>
-                </Button>
-              )}
-              {politician.phone && (
-                <Button variant="outline" asChild>
-                  <a href={`tel:${politician.phone.replace(/\D/g, "")}`}>
-                    <Phone className="size-4" />
-                    {formatPhoneNumber(politician.phone)}
-                  </a>
-                </Button>
-              )}
-            </div>
-          )}
-          {tocEntries.length > 1 ? (
-            <InPageNav entries={tocEntries} showLabel={false} />
-          ) : null}
-        </div>
-      </ContentHero>
-      <div className="mt-8 ">
-        <ContentWithSidebar
-          mainContent={mainContent}
-          sidebarContent={
-            hasSidebar ? (
-              <PoliticianSidebar
-                socialLinks={politician.socialLinks}
-                politicalAreas={politician.politicalAreas}
-              />
-            ) : null
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <PageContainer as="main" paddingY="compact">
+        <SetBreadcrumbTitle title={politician.name ?? ""} />
+        <ContentHero
+          pageType="Politiker"
+          image={politician.image}
+          title={politician.name ?? ""}
+          subtitle={
+            politician.livingArea?.name
+              ? `${politician.livingArea.name}`
+              : undefined
           }
-        />
-      </div>
-      {roles.length > 0 && (
-        <Section id="uppdrag" title="Uppdrag" className="scroll-mt-24">
-          <ResponsiveGrid cols={4}>
-            {roles.map((role, index) =>
-              role.href ? (
-                <Item
-                  key={index}
-                  asChild
-                  variant="outline"
-                  className="h-full flex-col items-stretch rounded-lg"
-                >
-                  <Link href={role.href}>
+          subtitleHref={
+            politician.livingArea?.slug?.current
+              ? `${ROUTE_BASE.AREAS}/${politician.livingArea.slug.current}`
+              : undefined
+          }
+        >
+          <div className="flex flex-col gap-4">
+            {(politician.email || politician.phone) && (
+              <div className="flex flex-wrap gap-2">
+                {politician.email && (
+                  <Button variant="outline" asChild>
+                    <a href={`mailto:${politician.email}`}>
+                      <Mail className="size-4" />
+                      {politician.email}
+                    </a>
+                  </Button>
+                )}
+                {politician.phone && (
+                  <Button variant="outline" asChild>
+                    <a href={`tel:${politician.phone.replace(/\D/g, "")}`}>
+                      <Phone className="size-4" />
+                      {formatPhoneNumber(politician.phone)}
+                    </a>
+                  </Button>
+                )}
+              </div>
+            )}
+            {tocEntries.length > 1 ? (
+              <InPageNav entries={tocEntries} showLabel={false} />
+            ) : null}
+          </div>
+        </ContentHero>
+        <div className="mt-8 ">
+          <ContentWithSidebar
+            mainContent={mainContent}
+            sidebarContent={
+              hasSidebar ? (
+                <PoliticianSidebar
+                  socialLinks={politician.socialLinks}
+                  politicalAreas={politician.politicalAreas}
+                />
+              ) : null
+            }
+          />
+        </div>
+        {roles.length > 0 && (
+          <Section id="uppdrag" title="Uppdrag" className="scroll-mt-24">
+            <ResponsiveGrid cols={4}>
+              {roles.map((role, index) =>
+                role.href ? (
+                  <Item
+                    key={index}
+                    asChild
+                    variant="outline"
+                    className="h-full flex-col items-stretch rounded-lg"
+                  >
+                    <Link href={role.href}>
+                      <ItemContent>
+                        <ItemTitle>{role.title}</ItemTitle>
+                        {role.description && (
+                          <ItemDescription>{role.description}</ItemDescription>
+                        )}
+                      </ItemContent>
+                    </Link>
+                  </Item>
+                ) : (
+                  <Item
+                    key={index}
+                    variant="outline"
+                    className="h-full flex-col items-stretch rounded-lg"
+                  >
                     <ItemContent>
                       <ItemTitle>{role.title}</ItemTitle>
                       {role.description && (
                         <ItemDescription>{role.description}</ItemDescription>
                       )}
                     </ItemContent>
-                  </Link>
-                </Item>
-              ) : (
-                <Item
-                  key={index}
-                  variant="outline"
-                  className="h-full flex-col items-stretch rounded-lg"
-                >
-                  <ItemContent>
-                    <ItemTitle>{role.title}</ItemTitle>
-                    {role.description && (
-                      <ItemDescription>{role.description}</ItemDescription>
-                    )}
-                  </ItemContent>
-                </Item>
-              ),
-            )}
-          </ResponsiveGrid>
-        </Section>
-      )}
-
-      {politician.referencedInNews &&
-        politician.referencedInNews.length > 0 && (
-          <Section
-            id="nyheter"
-            className="mt-8 scroll-mt-24"
-            title="Artiklar"
-            actions={
-              <Link
-                href={ROUTE_BASE.NEWS}
-                className="text-sm font-medium flex items-center gap-1"
-              >
-                Alla nyheter
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            }
-          >
-            <ExpandableNewsList
-              items={politician.referencedInNews}
-              initialVisible={3}
-            />
+                  </Item>
+                ),
+              )}
+            </ResponsiveGrid>
           </Section>
         )}
 
-      {politician.pressbilder && politician.pressbilder.length > 0 && (
-        <Section
-          id="pressbilder"
-          className="mt-8 scroll-mt-24"
-          title="Pressbilder"
-        >
-          <PressGallery images={politician.pressbilder} />
-        </Section>
-      )}
-    </PageContainer>
+        {politician.referencedInNews &&
+          politician.referencedInNews.length > 0 && (
+            <Section
+              id="nyheter"
+              className="mt-8 scroll-mt-24"
+              title="Artiklar"
+              actions={
+                <Link
+                  href={ROUTE_BASE.NEWS}
+                  className="text-sm font-medium flex items-center gap-1"
+                >
+                  Alla nyheter
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              }
+            >
+              <ExpandableNewsList
+                items={politician.referencedInNews}
+                initialVisible={3}
+              />
+            </Section>
+          )}
+
+        {politician.pressbilder && politician.pressbilder.length > 0 && (
+          <Section
+            id="pressbilder"
+            className="mt-8 scroll-mt-24"
+            title="Pressbilder"
+          >
+            <PressGallery images={politician.pressbilder} />
+          </Section>
+        )}
+      </PageContainer>
+    </>
   );
 }

@@ -98,17 +98,20 @@ export const allPoliticalIssuesQuery = groq`*[_type == "politicalIssue"] | order
 
 // Query to get all political area slugs for static generation
 export const allPoliticalAreaSlugsQuery = groq`*[_type == "politicalArea" && defined(slug.current)] {
-  "slug": slug.current
+  "slug": slug.current,
+  "lastModified": _updatedAt
 }`;
 
 // Query to get all geographical area slugs for static generation
 export const allGeographicalAreaSlugsQuery = groq`*[_type == "geographicalArea" && defined(slug.current)] {
-  "slug": slug.current
+  "slug": slug.current,
+  "lastModified": _updatedAt
 }`;
 
 // Query to get all political issue slugs for static generation
 export const allPoliticalIssueSlugsQuery = groq`*[_type == "politicalIssue" && defined(slug.current)] {
-  "slug": slug.current
+  "slug": slug.current,
+  "lastModified": _updatedAt
 }`;
 
 export const politicalIssuePageQuery = groq`
