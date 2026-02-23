@@ -90,7 +90,8 @@ export default async function NewsArticlePage({
     notFound();
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://nackamoderaterna.se";
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://nackamoderaterna.se";
   const imageUrl =
     news.mainImage && (news.mainImage as { asset?: unknown }).asset
       ? buildImageUrl(news.mainImage, { width: 1200, height: 630 })
@@ -107,7 +108,9 @@ export default async function NewsArticlePage({
     "@type": "NewsArticle",
     headline: news.title,
     datePublished: news.effectiveDate,
-    dateModified: (news as unknown as { _updatedAt?: string })._updatedAt || news.effectiveDate,
+    dateModified:
+      (news as unknown as { _updatedAt?: string })._updatedAt ||
+      news.effectiveDate,
     image: imageUrl,
     description: news.excerpt || undefined,
     url: `${siteUrl}${ROUTE_BASE.NEWS}/${slug}`,
@@ -155,11 +158,11 @@ export default async function NewsArticlePage({
         {formatDate(news.effectiveDate)}
       </time>
 
-      <h2 className="text-xl font-medium text-foreground mt-8">
+      <h2 className="text-xl max-w-3xl font-medium text-foreground mt-8">
         {news.excerpt}
       </h2>
       {news.body && (
-        <div className="mt-8">
+        <div className="mt-8 max-w-3xl">
           <PortableText value={news.body} components={portableTextComponents} />
         </div>
       )}
