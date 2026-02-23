@@ -158,7 +158,9 @@ export default async function NewsArticlePage({
         {formatDate(news.effectiveDate)}
       </time>
       {news.excerpt && (
-        <p className="text-xl text-muted-foreground mt-2">{news.excerpt}</p>
+        <p className="text-xl max-w-3xl text-muted-foreground mt-2">
+          {news.excerpt}
+        </p>
       )}
     </div>
   );
@@ -175,14 +177,14 @@ export default async function NewsArticlePage({
       />
       <div className="max-w-7xl mx-auto mt-8 px-4">
         <SetBreadcrumbTitle title={news.title ?? ""} />
-        {/* Header: image left + metadata right */}
+        {/* Header: metadata left + image right */}
         <div className="flex flex-col md:flex-row items-center gap-6 border-b border-border pb-6 mb-8">
+          {headerContent}
           {news.mainImage && (
             <div className="shrink-0 w-full md:w-72 lg:w-96">
               <NewsArticleImage news={news} />
             </div>
           )}
-          {headerContent}
         </div>
 
         {/* Body: PortableText + sidebar */}

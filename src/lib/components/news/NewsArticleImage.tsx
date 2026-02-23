@@ -1,60 +1,34 @@
 import { SanityImage } from "@/lib/components/shared/SanityImage";
 import { NewsExpanded } from "@/lib/types/news";
 
-const SIDEBAR_ASPECT_CLASSES: Record<string, string> = {
-  portrait: "aspect-[4/5]",
-  square: "aspect-square",
-  landscape: "aspect-video",
-  auto: "aspect-auto",
-};
-
 interface NewsArticleImageProps {
   news: NewsExpanded;
 }
 
-/**
- * Unified hero image for news articles. Renders once - on mobile it appears
- * first (order-1), on desktop in the sidebar (order-2). Single network request.
- */
 export function NewsArticleImage({ news }: NewsArticleImageProps) {
-  const mainImage = news.mainImage as { aspectRatio?: string; alt?: string; asset?: unknown } | undefined;
+  const mainImage = news.mainImage as {
+    alt?: string;
+    asset?: unknown;
+    dimensions?: { width?: number; height?: number };
+  } | undefined;
   if (!mainImage?.asset) return null;
 
-  const aspectRatio =
-    mainImage?.aspectRatio && mainImage.aspectRatio in SIDEBAR_ASPECT_CLASSES
-      ? mainImage.aspectRatio
-      : "portrait";
-  const aspectClass = SIDEBAR_ASPECT_CLASSES[aspectRatio];
-  const useAuto = aspectRatio === "auto";
+  const width = mainImage.dimensions?.width || 800;
+  const height = mainImage.dimensions?.height || 1000;
   const alt = mainImage.alt || news.title || "";
 
   return (
-    <div
-      className={`relative w-full overflow-hidden rounded-lg bg-muted ${aspectClass} max-w-sm mx-auto lg:mx-0 lg:max-w-none`}
-    >
-      {useAuto ? (
-        <SanityImage
-          image={mainImage}
-          fill={false}
-          width={800}
-          height={600}
-          priority
-          className="w-full h-full object-cover"
-          alt={alt}
-          sizes="(max-width: 1023px) 100vw, (min-width: 1024px) 400px, 384px"
-        />
-      ) : (
-        <SanityImage
-          image={mainImage}
-          fill
-          priority
-          sourceWidth={800}
-          sourceHeight={1000}
-          className="object-cover"
-          alt={alt}
-          sizes="(max-width: 1023px) 100vw, (min-width: 1024px) 400px, 384px"
-        />
-      )}
+    <div className="w-full overflow-hidden rounded-lg">
+      <SanityImage
+        image={mainImage}
+        fill={false}
+        width={width}
+        height={height}
+        priority
+        className="w-full h-auto"
+        alt={alt}
+        sizes="(max-width: 767px) 100vw, (max-width: 1023px) 288px, 384px"
+      />
     </div>
   );
 }

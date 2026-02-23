@@ -6,6 +6,10 @@ export const newsQuery = groq`
   slug.current == $slug
 ][0]{
   ...,
+  "mainImage": mainImage{
+    ...,
+    "dimensions": asset->metadata.dimensions
+  },
   "effectiveDate": coalesce(dateOverride, _createdAt),
 
   "documents": documents[]{
