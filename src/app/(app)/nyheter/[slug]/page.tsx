@@ -125,7 +125,7 @@ export default async function NewsArticlePage({
   };
 
   const headerContent = (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 w-full">
       {news.variant && news.variant !== "default" && (
         <div>
           <NewsVariantBadge variant={news.variant} />
