@@ -124,18 +124,18 @@ export default async function NewsArticlePage({
     },
   };
 
-  const mainContent = (
-    <div>
-      <div className="mb-4 flex flex-wrap items-center gap-4">
-        {news.variant && news.variant !== "default" && (
+  const headerContent = (
+    <div className="flex flex-col gap-3">
+      {news.variant && news.variant !== "default" && (
+        <div>
           <NewsVariantBadge variant={news.variant} />
-        )}
-      </div>
-      <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4 text-balance break-words">
+        </div>
+      )}
+      <h1 className="text-3xl md:text-4xl font-bold text-foreground text-balance break-words">
         {news.title}
       </h1>
       {news.politicalAreas && news.politicalAreas.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2 mb-4">
+        <div className="flex flex-wrap items-center gap-2">
           {news.politicalAreas.map((area) => {
             const Icon = area.icon?.name ? getLucideIcon(area.icon.name) : null;
             return (
@@ -151,20 +151,11 @@ export default async function NewsArticlePage({
           })}
         </div>
       )}
-      <time
-        dateTime={news.effectiveDate}
-        className="text-sm text-muted-foreground"
-      >
+      <time dateTime={news.effectiveDate} className="text-sm text-muted-foreground">
         {formatDate(news.effectiveDate)}
       </time>
-
-      <h2 className="text-xl max-w-3xl font-medium text-foreground mt-8">
-        {news.excerpt}
-      </h2>
-      {news.body && (
-        <div className="mt-8 max-w-3xl">
-          <PortableText value={news.body} components={portableTextComponents} />
-        </div>
+      {news.excerpt && (
+        <p className="text-xl font-medium text-foreground mt-2">{news.excerpt}</p>
       )}
     </div>
   );
@@ -181,19 +172,26 @@ export default async function NewsArticlePage({
       />
       <div className="max-w-7xl mx-auto mt-8 px-4">
         <SetBreadcrumbTitle title={news.title ?? ""} />
-        <div className="mb-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Image: top on mobile, top of right column on desktop */}
+        {/* Header: image left + metadata right */}
+        <div className="flex flex-col md:flex-row items-center gap-6 border-b border-border pb-6 mb-8">
           {news.mainImage && (
-            <div className="order-1 lg:col-start-3 lg:row-start-1">
+            <div className="shrink-0 w-full md:w-72 lg:w-96">
               <NewsArticleImage news={news} />
             </div>
           )}
-          {/* Article body: second on mobile, left two columns spanning both rows on desktop */}
-          <div className="order-2 lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:row-span-2">
-            {mainContent}
+          {headerContent}
+        </div>
+
+        {/* Body: PortableText + sidebar */}
+        <div className="flex flex-col lg:flex-row gap-8 mb-16">
+          <div className="flex-1 min-w-0">
+            {news.body && (
+              <div className="max-w-3xl">
+                <PortableText value={news.body} components={portableTextComponents} />
+              </div>
+            )}
           </div>
-          {/* Sidebar: below article on mobile, below image on desktop */}
-          <aside className="order-3 lg:col-start-3 lg:row-start-2">
+          <aside className="lg:w-72 shrink-0">
             <NewsSidebar news={news} currentSlug={slug} />
           </aside>
         </div>

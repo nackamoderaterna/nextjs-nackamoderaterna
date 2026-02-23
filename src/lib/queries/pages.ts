@@ -211,6 +211,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
       images[]{
         _key,
         asset,
+        "dimensions": asset->metadata.dimensions,
         alt,
         caption,
         aspectRatio,

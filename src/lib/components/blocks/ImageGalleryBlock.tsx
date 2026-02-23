@@ -8,6 +8,7 @@ interface ImageGalleryBlockProps {
   images?: Array<{
     _key?: string;
     asset?: any;
+    dimensions?: { width?: number; height?: number; aspectRatio?: number };
     alt?: string;
     caption?: string;
     aspectRatio?: "default" | "portrait" | "square" | "landscape" | "auto";
@@ -73,7 +74,7 @@ export function ImageGalleryBlock({ block }: { block: ImageGalleryBlockProps }) 
   return (
     <Block>
         <BlockHeading title={headingTitle || undefined} />
-        <div className={`grid grid-cols-1 ${gridCols[columns]} gap-4 md:gap-6`}>
+        <div className={`grid grid-cols-1 ${gridCols[columns]} items-start gap-4 md:gap-6`}>
           {validImages.map((image, index) => {
             const imageAspect = getAspectForImage(image);
             const aspectClass = ASPECT_CLASSES[imageAspect] || ASPECT_CLASSES.portrait;
@@ -91,8 +92,8 @@ export function ImageGalleryBlock({ block }: { block: ImageGalleryBlockProps }) 
                     image={image}
                     alt={image.alt || ""}
                     fill={false}
-                    width={800}
-                    height={600}
+                    width={image.dimensions?.width || 800}
+                    height={image.dimensions?.height || 600}
                     sizes={
                       columns === 2
                         ? "(max-width: 768px) 100vw, 50vw"
