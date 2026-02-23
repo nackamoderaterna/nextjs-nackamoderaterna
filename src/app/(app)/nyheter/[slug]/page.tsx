@@ -197,7 +197,7 @@ export default async function NewsArticlePage({
               </div>
             )}
           </div>
-          <aside className="lg:w-72 shrink-0">
+          <aside className="lg:w-1/3 max-w-sm shrink-0">
             <NewsSidebar news={news} currentSlug={slug} />
           </aside>
         </div>
