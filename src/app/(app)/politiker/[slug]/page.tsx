@@ -131,7 +131,7 @@ export default async function PoliticianPage({
     <div className="space-y-8">
       {politician.bio && (
         <Section id="biografi" title="Biografi" className="scroll-mt-24">
-          <div className="prose md:prose-lg">
+          <div>
             <PortableText
               value={politician.bio}
               components={portableTextComponents}

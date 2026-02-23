@@ -125,7 +125,7 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
   });
 
   const main = data.description ? (
-    <div className="prose md:prose-lg">
+    <div>
       <PortableText
         value={data.description}
         components={portableTextComponents}

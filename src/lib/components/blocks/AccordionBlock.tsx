@@ -52,7 +52,7 @@ export function AccordionBlock({ block }: { block: AccordionBlockProps }) {
               {item.title}
             </AccordionTrigger>
             <AccordionContent className="px-0">
-              <div className="prose prose-neutral max-w-none pt-2">
+              <div className="pt-2">
                 <PortableText
                   value={item.content}
                   components={portableTextComponents}

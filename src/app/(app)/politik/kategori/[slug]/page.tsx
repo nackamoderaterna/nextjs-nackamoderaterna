@@ -135,8 +135,7 @@ export default async function PoliticalAreaSinglePage({ params }: Props) {
 
   const mainContent = (
     <div className="space-y-8">
-      <div className="prose md:prose-lg max-w-none">
-      
+      <div>
         {data.description && (
           <PortableText value={data.description} components={portableTextComponents} />
         )}
