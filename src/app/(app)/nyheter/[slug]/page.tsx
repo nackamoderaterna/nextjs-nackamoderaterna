@@ -151,11 +151,14 @@ export default async function NewsArticlePage({
           })}
         </div>
       )}
-      <time dateTime={news.effectiveDate} className="text-sm text-muted-foreground">
+      <time
+        dateTime={news.effectiveDate}
+        className="text-sm text-muted-foreground"
+      >
         {formatDate(news.effectiveDate)}
       </time>
       {news.excerpt && (
-        <p className="text-xl font-medium text-foreground mt-2">{news.excerpt}</p>
+        <p className="text-xl text-muted-foreground mt-2">{news.excerpt}</p>
       )}
     </div>
   );
@@ -187,7 +190,10 @@ export default async function NewsArticlePage({
           <div className="flex-1 min-w-0">
             {news.body && (
               <div className="max-w-3xl">
-                <PortableText value={news.body} components={portableTextComponents} />
+                <PortableText
+                  value={news.body}
+                  components={portableTextComponents}
+                />
               </div>
             )}
           </div>
