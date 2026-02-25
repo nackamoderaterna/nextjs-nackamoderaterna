@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
     sanityClient.fetch<ListingPage>(
       listingPageByKeyQuery,
       { key: "politikOmrade" },
-      { next: { revalidate: 86400 } }
+      { next: { revalidate: 86400, tags: ["listing-pages"] } }
     ),
     getGlobalSeoDefaults(),
   ]);
@@ -47,10 +47,10 @@ type PoliticsPageData = {
 export default async function OmradePage() {
   const [data, listing] = await Promise.all([
     sanityClient.fetch<PoliticsPageData>(politikPageQuery, {}, {
-      next: { revalidate: 86400 },
+      next: { revalidate: 86400, tags: ["politics"] },
     }),
     sanityClient.fetch<ListingPage>(listingPageByKeyQuery, { key: "politikOmrade" }, {
-      next: { revalidate: 86400 },
+      next: { revalidate: 86400, tags: ["listing-pages"] },
     }),
   ]);
 

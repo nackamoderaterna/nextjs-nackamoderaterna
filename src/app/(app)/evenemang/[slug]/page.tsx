@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     sanityClient.fetch<Event | null>(
       singleEventQuery,
       { slug },
-      { next: { revalidate: 86400 } },
+      { next: { revalidate: 86400, tags: ["events"] } },
     ),
     getGlobalSeoDefaults(),
   ]);
@@ -89,7 +89,7 @@ export default async function EventPage({ params }: Props) {
     singleEventQuery,
     { slug },
     {
-      next: { revalidate: 86400 },
+      next: { revalidate: 86400, tags: ["events"] },
     },
   );
 

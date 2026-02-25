@@ -13,10 +13,10 @@ import { PageContainer } from "./PageContainer";
 export async function Footer() {
   const [footer, settings] = await Promise.all([
     sanityClient.fetch<FooterData | null>(footerQuery, {}, {
-      next: { revalidate: 86400 },
+      next: { revalidate: 86400, tags: ["layout"] },
     }),
     sanityClient.fetch<GlobalSettingsData | null>(globalSettingsQuery, {}, {
-      next: { revalidate: 86400 },
+      next: { revalidate: 86400, tags: ["layout"] },
     }),
   ]);
 

@@ -89,7 +89,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const [data, defaults] = await Promise.all([
-    sanityClient.fetch<PoliticalIssuePage>(politicalIssuePageQuery, { slug }, { next: { revalidate: 86400 } }),
+    sanityClient.fetch<PoliticalIssuePage>(politicalIssuePageQuery, { slug }, { next: { revalidate: 86400, tags: ["politics", "news", "politicians"] } }),
     getGlobalSeoDefaults(),
   ]);
 
@@ -131,7 +131,7 @@ export default async function PoliticalIssueSinglePage({ params }: Props) {
     politicalIssuePageQuery,
     { slug },
     {
-      next: { revalidate: 86400 },
+      next: { revalidate: 86400, tags: ["politics", "news", "politicians"] },
     },
   );
 

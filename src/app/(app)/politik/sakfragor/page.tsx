@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
     sanityClient.fetch<ListingPage>(
       listingPageByKeyQuery,
       { key: "politikSakfragor" },
-      { next: { revalidate: 86400 } }
+      { next: { revalidate: 86400, tags: ["listing-pages"] } }
     ),
     getGlobalSeoDefaults(),
   ]);
@@ -44,10 +44,10 @@ export const revalidate = 86400;
 export default async function PolitikSakfragorPage() {
   const [allIssues, listing] = await Promise.all([
     sanityClient.fetch<PoliticalIssueWithAreas[]>(allPoliticalIssuesQuery, {}, {
-      next: { revalidate: 86400 },
+      next: { revalidate: 86400, tags: ["politics"] },
     }),
     sanityClient.fetch<ListingPage>(listingPageByKeyQuery, { key: "politikSakfragor" }, {
-      next: { revalidate: 86400 },
+      next: { revalidate: 86400, tags: ["listing-pages"] },
     }),
   ]);
 

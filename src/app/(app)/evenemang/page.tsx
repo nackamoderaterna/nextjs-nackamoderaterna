@@ -22,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
     sanityClient.fetch<ListingPage>(
       listingPageByKeyQuery,
       { key: "events" },
-      { next: { revalidate: EVENTS_CACHE_SECONDS } }
+      { next: { revalidate: EVENTS_CACHE_SECONDS, tags: ["listing-pages"] } }
     ),
     getGlobalSeoDefaults(),
   ]);
@@ -74,22 +74,22 @@ export default async function EventsPage({
     sanityClient.fetch<ListingPage>(
       listingPageByKeyQuery,
       { key: "events" },
-      { next: { revalidate: EVENTS_CACHE_SECONDS } }
+      { next: { revalidate: EVENTS_CACHE_SECONDS, tags: ["listing-pages"] } }
     ),
     sanityClient.fetch<EventTypeDoc[]>(
       eventTypesQuery,
       {},
-      { next: { revalidate: EVENTS_CACHE_SECONDS } }
+      { next: { revalidate: EVENTS_CACHE_SECONDS, tags: ["events"] } }
     ),
     sanityClient.fetch<{ items: Event[]; total: number }>(
       upcomingQuery,
       queryParams,
-      { next: { revalidate: EVENTS_CACHE_SECONDS } }
+      { next: { revalidate: EVENTS_CACHE_SECONDS, tags: ["events"] } }
     ),
     sanityClient.fetch<{ items: Event[]; total: number }>(
       pastQuery,
       queryParams,
-      { next: { revalidate: EVENTS_CACHE_SECONDS } }
+      { next: { revalidate: EVENTS_CACHE_SECONDS, tags: ["events"] } }
     ),
   ]);
 

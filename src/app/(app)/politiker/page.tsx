@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
     sanityClient.fetch<ListingPage>(
       listingPageByKeyQuery,
       { key: "politicians" },
-      { next: { revalidate: 86400 } }
+      { next: { revalidate: 86400, tags: ["listing-pages"] } }
     ),
     getGlobalSeoDefaults(),
   ]);
@@ -63,14 +63,14 @@ export default async function PoliticiansPage() {
       politiciansDirectoryQuery,
       {},
       {
-        next: { revalidate: 86400 },
+        next: { revalidate: 86400, tags: ["politicians"] },
       }
     ),
     sanityClient.fetch<ListingPage>(
       listingPageByKeyQuery,
       { key: "politicians" },
       {
-        next: { revalidate: 86400 },
+        next: { revalidate: 86400, tags: ["listing-pages"] },
       }
     ),
   ]);

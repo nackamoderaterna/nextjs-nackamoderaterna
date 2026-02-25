@@ -71,13 +71,13 @@ export async function NewsListing({
         areaSlug: areaSlug || null,
         variant: variantFilter,
       },
-      { next: { revalidate: 86400 } }
+      { next: { revalidate: 86400, tags: ["news"] } }
     ),
-    sanityClient.fetch<any[]>(allPoliticalAreasQuery, {}, { next: { revalidate: 86400 } }),
+    sanityClient.fetch<any[]>(allPoliticalAreasQuery, {}, { next: { revalidate: 86400, tags: ["news", "politics"] } }),
     sanityClient.fetch<ListingPage>(
       listingPageByKeyQuery,
       { key: "news" },
-      { next: { revalidate: 86400 } }
+      { next: { revalidate: 86400, tags: ["listing-pages"] } }
     ),
   ]);
 

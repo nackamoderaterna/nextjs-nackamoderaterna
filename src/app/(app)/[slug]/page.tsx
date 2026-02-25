@@ -33,7 +33,7 @@ export async function generateMetadata({
   const page = await sanityClient.fetch<PageData>(
     pageBySlugQuery,
     { slug },
-    { next: { revalidate: 86400 } }
+    { next: { revalidate: 86400, tags: ["pages"] } }
   );
 
   return generatePageMetadata(page, "Sidan hittades inte");
@@ -50,7 +50,7 @@ export default async function SanityPage({
     pageBySlugQuery,
     { slug },
     {
-      next: { revalidate: 86400 },
+      next: { revalidate: 86400, tags: ["pages"] },
     }
   );
 

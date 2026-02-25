@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
     sanityClient.fetch<ListingPage>(
       listingPageByKeyQuery,
       { key: "news" },
-      { next: { revalidate: 86400 } }
+      { next: { revalidate: 86400, tags: ["listing-pages"] } }
     ),
     getGlobalSeoDefaults(),
   ]);

@@ -59,7 +59,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const data = await sanityClient.fetch<GeographicalAreaPage>(
     geographicalAreaPageQuery,
     { slug },
-    { next: { revalidate: 86400 } }
+    { next: { revalidate: 86400, tags: ["politics"] } }
   );
 
   if (!data) {
@@ -95,7 +95,7 @@ export default async function GeographicalAreaSinglePage({ params }: Props) {
     geographicalAreaPageQuery,
     { slug },
     {
-      next: { revalidate: 86400 },
+      next: { revalidate: 86400, tags: ["politics", "news", "politicians"] },
     },
   );
 

@@ -41,7 +41,7 @@ export async function generateMetadata({
     sanityClient.fetch<NewsExpanded>(
       newsQuery,
       { slug },
-      { next: { revalidate: 86400 } },
+      { next: { revalidate: 86400, tags: ["news"] } },
     ),
     getGlobalSeoDefaults(),
   ]);
@@ -82,7 +82,7 @@ export default async function NewsArticlePage({
     newsQuery,
     { slug },
     {
-      next: { revalidate: 86400 },
+      next: { revalidate: 86400, tags: ["news"] },
     },
   );
 

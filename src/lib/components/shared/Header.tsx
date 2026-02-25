@@ -22,10 +22,10 @@ import { Heart } from "lucide-react";
 export default async function Header() {
   const [navigation, globalSettings] = await Promise.all([
     sanityClient.fetch<NavigationData>(navigationQuery, {}, {
-      next: { revalidate: 86400 },
+      next: { revalidate: 86400, tags: ["layout"] },
     }),
     sanityClient.fetch<GlobalSettingsData>(globalSettingsQuery, {}, {
-      next: { revalidate: 86400 },
+      next: { revalidate: 86400, tags: ["layout"] },
     }),
   ]);
 

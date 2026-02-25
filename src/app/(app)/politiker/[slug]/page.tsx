@@ -59,7 +59,7 @@ export async function generateMetadata({
     sanityClient.fetch<PoliticianWithNamnd>(
       politicianBySlugQuery,
       { slug },
-      { next: { revalidate: 86400 } },
+      { next: { revalidate: 86400, tags: ["politicians", "news"] } },
     ),
     getGlobalSeoDefaults(),
   ]);
@@ -103,7 +103,7 @@ export default async function PoliticianPage({
     politicianBySlugQuery,
     { slug },
     {
-      next: { revalidate: 86400 },
+      next: { revalidate: 86400, tags: ["politicians", "news"] },
     },
   );
 

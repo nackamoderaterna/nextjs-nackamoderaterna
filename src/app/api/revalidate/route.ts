@@ -1,7 +1,6 @@
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 import { parseBody } from "next-sanity/webhook";
-import { ROUTE_BASE } from "@/lib/routes";
 
 type WebhookPayload = {
   _type: string;
@@ -16,73 +15,33 @@ const LAYOUT_SINGLETONS = new Set([
   "globalSettings",
 ]);
 
-const LISTING_KEY_TO_PATH: Record<string, string> = {
-  politicians: "/politiker",
-  politics: "/politik",
-  politikOmrade: "/omrade",
-  news: "/nyheter",
-  events: "/evenemang",
-  contact: "/kontakt",
-};
-
-function pathsForPayload(body: WebhookPayload): string[] {
-  const { _type, _id, slug, key } = body;
-  const paths: string[] = [];
+function tagsForPayload(body: WebhookPayload): string[] {
+  const { _type, _id } = body;
 
   if (LAYOUT_SINGLETONS.has(_id ?? _type)) {
-    paths.push("/");
-    return paths;
+    return ["layout"];
   }
 
   switch (_type) {
-    case "page": {
-      if (slug === "hem") {
-        paths.push("/");
-      } else if (slug) {
-        paths.push(`/${slug}`);
-      }
-      break;
-    }
-    case "news": {
-      paths.push("/nyheter");
-      if (slug) paths.push(`/nyheter/${slug}`);
-      break;
-    }
-    case "politician": {
-      paths.push("/politiker");
-      if (slug) paths.push(`/politiker/${slug}`);
-      break;
-    }
-    case "event": {
-      paths.push(ROUTE_BASE.EVENTS);
-      if (slug) paths.push(`${ROUTE_BASE.EVENTS}/${slug}`);
-      break;
-    }
-    case "politicalArea": {
-      paths.push("/politik", "/politik/kategori");
-      if (slug) paths.push(`/politik/kategori/${slug}`);
-      break;
-    }
-    case "geographicalArea": {
-      paths.push("/omrade");
-      if (slug) paths.push(`/omrade/${slug}`);
-      break;
-    }
-    case "politicalIssue": {
-      paths.push("/politik", "/politik/sakfragor");
-      if (slug) paths.push(`/politik/sakfragor/${slug}`);
-      break;
-    }
-    case "listingPage": {
-      const path = key ? LISTING_KEY_TO_PATH[key] : null;
-      if (path) paths.push(path);
-      break;
-    }
+    case "page":
+      return ["pages"];
+    case "news":
+      return ["news"];
+    case "politician":
+      return ["politicians"];
+    case "event":
+      return ["events"];
+    case "politicalArea":
+      return ["politics"];
+    case "geographicalArea":
+      return ["politics"];
+    case "politicalIssue":
+      return ["politics"];
+    case "listingPage":
+      return ["listing-pages"];
     default:
-      break;
+      return [];
   }
-
-  return paths;
 }
 
 export async function POST(req: NextRequest) {
@@ -114,24 +73,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const paths = pathsForPayload(body);
+    const tags = tagsForPayload(body);
 
-    if (paths.length === 0) {
+    if (tags.length === 0) {
       return NextResponse.json({
         revalidated: false,
-        message: `No paths to revalidate for _type=${body._type}`,
+        message: `No tags to revalidate for _type=${body._type}`,
         body: { _type: body._type, _id: body._id, slug: body.slug, key: body.key },
       });
     }
 
-    const isLayoutRevalidate = paths.length === 1 && paths[0] === "/";
-    for (const path of paths) {
-      revalidatePath(path, isLayoutRevalidate ? "layout" : "page");
+    for (const tag of tags) {
+      revalidateTag(tag, { expire: 0 });
     }
 
     return NextResponse.json({
       revalidated: true,
-      paths,
+      tags,
       now: Date.now(),
       body: { _type: body._type, _id: body._id, slug: body.slug, key: body.key },
     });

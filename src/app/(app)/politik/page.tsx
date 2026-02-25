@@ -22,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
     sanityClient.fetch<ListingPage>(
       listingPageByKeyQuery,
       { key: "politics" },
-      { next: { revalidate: 86400 } }
+      { next: { revalidate: 86400, tags: ["listing-pages"] } }
     ),
     getGlobalSeoDefaults(),
   ]);
@@ -83,14 +83,14 @@ export default async function PoliticsPage() {
       politikPageQuery,
       {},
       {
-        next: { revalidate: 86400 },
+        next: { revalidate: 86400, tags: ["politics"] },
       }
     ),
     sanityClient.fetch<ListingPage>(
       listingPageByKeyQuery,
       { key: "politics" },
       {
-        next: { revalidate: 86400 },
+        next: { revalidate: 86400, tags: ["listing-pages"] },
       }
     ),
   ]);
