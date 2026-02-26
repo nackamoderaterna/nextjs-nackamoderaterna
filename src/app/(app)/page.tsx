@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const page = await sanityClient.fetch<PageData>(
     pageBySlugQuery,
     { slug: "hem" },
-    { next: { revalidate: 86400 } },
+    { next: { revalidate: 86400, tags: ["pages", "news", "politicians", "events", "politics"] } },
   );
 
   return generatePageMetadata(page, "Nackamoderaterna");
@@ -29,12 +29,12 @@ export default async function Home() {
     sanityClient.fetch<PageData>(
       pageBySlugQuery,
       { slug: "hem" },
-      { next: { revalidate: 86400 } },
+      { next: { revalidate: 86400, tags: ["pages", "news", "politicians", "events", "politics"] } },
     ),
     sanityClient.fetch<GlobalSettingsData>(
       globalSettingsQuery,
       {},
-      { next: { revalidate: 86400 } },
+      { next: { revalidate: 86400, tags: ["layout"] } },
     ),
   ]);
 
