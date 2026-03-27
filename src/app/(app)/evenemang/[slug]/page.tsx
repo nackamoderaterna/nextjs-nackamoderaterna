@@ -85,13 +85,14 @@ export const revalidate = 86400;
 
 export default async function EventPage({ params }: Props) {
   const { slug } = await params;
-  const event: Event | null = await sanityClient.fetch(
-    singleEventQuery,
-    { slug },
-    {
-      next: { revalidate: 86400, tags: ["events"] },
-    },
-  );
+  const [event, seoDefaults] = await Promise.all([
+    sanityClient.fetch<Event | null>(
+      singleEventQuery,
+      { slug },
+      { next: { revalidate: 86400, tags: ["events"] } },
+    ),
+    getGlobalSeoDefaults(),
+  ]);
 
   if (!event) notFound();
 
@@ -139,7 +140,7 @@ export default async function EventPage({ params }: Props) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://nackamoderaterna.se";
   const imageUrl = event.image
     ? buildImageUrl(event.image, { width: 1200, height: 630 })
-    : undefined;
+    : seoDefaults.image;
 
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     { name: "Hem", url: "/" },
@@ -153,19 +154,31 @@ export default async function EventPage({ params }: Props) {
     name: event.title,
     startDate: event.startDate,
     endDate: event.endDate,
+    eventStatus: "https://schema.org/EventScheduled",
     url: `${siteUrl}${ROUTE_BASE.EVENTS}/${slug}`,
-    image: imageUrl,
+    image: imageUrl ? [imageUrl] : undefined,
     description: descriptionText || undefined,
-    location: address
-      ? {
-          "@type": "Place",
-          name: address,
-          address: address,
-        }
-      : undefined,
+    location: {
+      "@type": "Place",
+      name: address || "Meddelas senare",
+      address: address || "Meddelas senare",
+    },
     organizer: {
       "@type": "Organization",
       name: "Nackamoderaterna",
+      url: siteUrl,
+    },
+    performer: {
+      "@type": "Organization",
+      name: "Nackamoderaterna",
+      url: siteUrl,
+    },
+    offers: {
+      "@type": "Offer",
+      url: event.registrationUrl ?? `${siteUrl}${ROUTE_BASE.EVENTS}/${slug}`,
+      availability: "https://schema.org/InStock",
+      price: "0",
+      priceCurrency: "SEK",
     },
   };
 
