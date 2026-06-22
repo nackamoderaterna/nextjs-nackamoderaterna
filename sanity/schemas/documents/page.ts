@@ -30,7 +30,7 @@ export const page = defineType({
       },
       group: "content",
       validation: (Rule) => Rule.required(),
-      readOnly: ({ parent }) => parent?.slug.current === "hem",
+      readOnly: ({ parent }) => parent?.slug?.current === "hem",
     }),
     defineField({
       name: "blocks",
