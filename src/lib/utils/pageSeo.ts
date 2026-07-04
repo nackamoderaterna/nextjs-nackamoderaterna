@@ -8,7 +8,9 @@ import { portableTextToPlainText } from "./portableText";
  * Extracts a plain text description from page blocks for SEO fallback.
  * Looks for text content in the first text block.
  */
-function extractDescriptionFromBlocks(blocks: any[] = []): string | undefined {
+function extractDescriptionFromBlocks(blocks: any[] | null = []): string | undefined {
+  if (!Array.isArray(blocks)) return undefined;
+
   const textBlock = blocks.find(
     (block) => block._type === "block.text" && block.content
   );
