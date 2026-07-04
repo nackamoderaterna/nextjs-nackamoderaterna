@@ -45,6 +45,17 @@ export function SanityImage({
     return null;
   }
 
+  // Let Next.js request each srcset width directly from Sanity's image
+  // pipeline instead of upscaling the single fixed-resolution `imageUrl`.
+  const sanityLoader: React.ComponentProps<typeof Image>["loader"] = ({
+    width: loaderWidth,
+    quality,
+  }) =>
+    buildImageUrl(image, {
+      width: loaderWidth,
+      quality: quality ?? 85,
+    });
+
   const objectPosition = getObjectPositionFromHotspot(image);
   const imageAlt = alt || image.alt || "";
     // Determine object-fit class: use className if it contains object-*, otherwise default to object-cover
@@ -55,6 +66,7 @@ export function SanityImage({
   return fill ? (
     <Image
       src={imageUrl}
+      loader={sanityLoader}
       alt={imageAlt}
       fill
       sizes={sizes}
@@ -66,6 +78,7 @@ export function SanityImage({
   ) : (
     <Image
       src={imageUrl}
+      loader={sanityLoader}
       alt={imageAlt}
       height={height || 500}
       width={width || 700}
