@@ -112,7 +112,12 @@ export function CTABlock({ block }: { block: CTABlockProps }) {
           (() => {
             const SecondaryIcon = getLucideIcon(secondaryAction.icon?.name);
             return (
-              <Button size="lg" variant="outline" asChild>
+              <Button
+                size="lg"
+                className="text-foreground"
+                variant="outline"
+                asChild
+              >
                 <Link href={secondaryAction.href}>
                   {SecondaryIcon && <SecondaryIcon className="h-4 w-4" />}
                   {secondaryAction.label}
