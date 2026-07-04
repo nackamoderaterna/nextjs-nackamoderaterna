@@ -15,7 +15,7 @@ interface GeographicalAreasBlockProps {
 }
 
 export function GeographicalAreasBlock({ block }: { block: GeographicalAreasBlockProps }) {
-  const { title, subtitle } = getBlockHeading(block);
+  const { title, subtitle, anchorId } = getBlockHeading(block);
   const { items } = block;
 
   if (!items?.length) {
@@ -24,7 +24,7 @@ export function GeographicalAreasBlock({ block }: { block: GeographicalAreasBloc
 
   return (
     <Block paddingY="large">
-      <BlockHeading title={title} subtitle={subtitle} />
+      <BlockHeading title={title} subtitle={subtitle} anchorId={anchorId} />
       <ResponsiveGrid cols={3}>
         {items.map((area) => {
           const slug = area.slug?.current;

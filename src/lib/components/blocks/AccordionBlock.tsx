@@ -26,7 +26,7 @@ interface AccordionBlockProps {
 
 export function AccordionBlock({ block }: { block: AccordionBlockProps }) {
   const allowMultiple = block.allowMultiple ?? false;
-  const { title, subtitle } = getBlockHeading(block);
+  const { title, subtitle, anchorId } = getBlockHeading(block);
 
   return (
     <Block>
@@ -34,6 +34,7 @@ export function AccordionBlock({ block }: { block: AccordionBlockProps }) {
       <BlockHeading
         title={title}
         subtitle={subtitle}
+        anchorId={anchorId}
         subtitleMaxWidth="none"
         className="mb-12"
       />

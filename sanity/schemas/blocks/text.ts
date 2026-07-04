@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { withAnchorBadge } from "../objects/blockHeading";
 
 export const text = defineType({
   name: "block.text",
@@ -35,12 +36,16 @@ export const text = defineType({
     select: {
       columns: "columns",
       "headingTitle": "heading.title",
+      "headingAnchorId": "heading.anchorId.current",
     },
     prepare(selection) {
       const cols = `${selection.columns} kolumner`;
       return {
         title: "Text",
-        subtitle: selection.headingTitle ? `${selection.headingTitle} - ${cols}` : cols,
+        subtitle: withAnchorBadge(
+          selection.headingTitle ? `${selection.headingTitle} - ${cols}` : cols,
+          selection.headingAnchorId
+        ),
       };
     },
   },

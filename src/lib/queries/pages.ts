@@ -83,7 +83,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
     // POLITICIAN END
     // NEWS START
     _type == "block.news" => {
-    heading{ title, subtitle },
+    heading{ title, subtitle, anchorId },
     viewAllLink,
     mode,
     politicalArea,
@@ -205,7 +205,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
   },
     // IMAGE GALLERY START
     _type == "block.imageGallery" => {
-      heading{ title, subtitle },
+      heading{ title, subtitle, anchorId },
       columns,
       aspectRatio,
       images[]{
@@ -222,7 +222,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
     // IMAGE GALLERY END
     // POLITICAL AREAS START
     _type == "block.politicalAreas" => {
-      heading{ title, subtitle },
+      heading{ title, subtitle, anchorId },
       "items": items[]->{
         _id,
         name,
@@ -233,7 +233,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
     // POLITICAL AREAS END
     // GEOGRAPHICAL AREAS START
     _type == "block.geographicalAreas" => {
-      heading{ title, subtitle },
+      heading{ title, subtitle, anchorId },
       "items": items[]->{
         _id,
         name,
@@ -244,7 +244,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
     // GEOGRAPHICAL AREAS END
     // POLITICAL ISSUES START
     _type == "block.politicalIssues" => {
-      heading{ title, subtitle },
+      heading{ title, subtitle, anchorId },
       mode,
       politicalArea,
       filter,

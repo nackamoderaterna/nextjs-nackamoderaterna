@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { withAnchorBadge } from "../objects/blockHeading";
 
 export const imageGalleryBlock = defineType({
   name: "block.imageGallery",
@@ -87,12 +88,16 @@ export const imageGalleryBlock = defineType({
   preview: {
     select: {
       "headingTitle": "heading.title",
+      "headingAnchorId": "heading.anchorId.current",
       images: "images",
     },
-    prepare({ headingTitle, images }) {
+    prepare({ headingTitle, headingAnchorId, images }) {
       return {
         title: "Bildgalleri",
-        subtitle: headingTitle || `${images?.length || 0} bilder`,
+        subtitle: withAnchorBadge(
+          headingTitle || `${images?.length || 0} bilder`,
+          headingAnchorId
+        ),
       };
     },
   },

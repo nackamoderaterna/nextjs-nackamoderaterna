@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { withAnchorBadge } from "../objects/blockHeading";
 
 export const videoBlock = defineType({
   name: "block.video",
@@ -26,11 +27,12 @@ export const videoBlock = defineType({
   preview: {
     select: {
       title: "caption",
+      headingAnchorId: "heading.anchorId.current",
     },
-    prepare({ title }) {
+    prepare({ title, headingAnchorId }) {
       return {
         title: title || "Video",
-        subtitle: "Video",
+        subtitle: withAnchorBadge("Video", headingAnchorId),
       };
     },
   },

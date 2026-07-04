@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { withAnchorBadge } from "../objects/blockHeading";
 
 export const geographicalAreasBlock = defineType({
   name: "block.geographicalAreas",
@@ -27,12 +28,24 @@ export const geographicalAreasBlock = defineType({
   preview: {
     select: {
       "headingTitle": "heading.title",
+      "headingAnchorId": "heading.anchorId.current",
       items: "items",
     },
-    prepare({ headingTitle, items }: { headingTitle?: string; items?: unknown[] }) {
+    prepare({
+      headingTitle,
+      headingAnchorId,
+      items,
+    }: {
+      headingTitle?: string;
+      headingAnchorId?: string;
+      items?: unknown[];
+    }) {
       return {
         title: "Geografiska områden",
-        subtitle: headingTitle || `${items?.length ?? 0} områden`,
+        subtitle: withAnchorBadge(
+          headingTitle || `${items?.length ?? 0} områden`,
+          headingAnchorId
+        ),
       };
     },
   },

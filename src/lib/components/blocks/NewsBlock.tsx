@@ -10,14 +10,16 @@ const INITIAL_VISIBLE = 5;
 
 export interface NewsBlockProps {
   _type: "block.news";
-  heading?: { title?: string | null; subtitle?: string | null } | string;
+  heading?:
+    | { title?: string | null; subtitle?: string | null; anchorId?: { current?: string | null } | null }
+    | string;
   mode: "manual" | "latest" | "byPoliticalArea" | "byGeographicArea";
   viewAllLink?: string | null;
   resolvedItems: News[];
 }
 
 export function NewsBlock({ block }: { block: NewsBlockProps }) {
-  const { title } = getBlockHeading(block);
+  const { title, anchorId } = getBlockHeading(block);
   const resolvedItems = block.resolvedItems ?? [];
   const viewAllHref = block.viewAllLink?.trim() || ROUTE_BASE.NEWS;
 
@@ -27,7 +29,14 @@ export function NewsBlock({ block }: { block: NewsBlockProps }) {
         items={resolvedItems}
         initialVisible={INITIAL_VISIBLE}
         viewAllHref={viewAllHref}
-        title={<BlockHeading title={title} centered={false} className="mb-0" />}
+        title={
+          <BlockHeading
+            title={title}
+            anchorId={anchorId}
+            centered={false}
+            className="mb-0"
+          />
+        }
       />
     </Block>
   );

@@ -1,7 +1,8 @@
 import { PortableText } from "next-sanity";
 import Block from "./Block";
-import { getBlockHeading } from "./BlockHeading";
+import { getBlockHeading, HeadingAnchorLink } from "./BlockHeading";
 import { BlockText } from "~/sanity.types";
+import { cn } from "@/lib/utils";
 import { portableTextComponents } from "../shared/PortableTextComponents";
 
 type BlockTextWithColumns = BlockText & {
@@ -16,14 +17,21 @@ export interface TextBlockProps {
 export function TextBlock({ block }: TextBlockProps) {
   const blockWithColumns = block as BlockTextWithColumns;
   const columns = blockWithColumns.columns ?? 1;
-  const { title } = getBlockHeading(blockWithColumns);
+  const { title, anchorId } = getBlockHeading(blockWithColumns);
 
   return (
     <Block>
       <div className="max-w-3xl mx-auto">
         {title && (
-          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
+          <h2
+            id={anchorId ?? undefined}
+            className={cn(
+              "text-3xl md:text-4xl font-bold mb-8 text-center scroll-mt-24",
+              anchorId && "group inline-flex items-center gap-2 justify-center w-full"
+            )}
+          >
             {title}
+            <HeadingAnchorLink anchorId={anchorId} />
           </h2>
         )}
         <div

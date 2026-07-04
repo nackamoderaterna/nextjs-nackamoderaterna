@@ -40,11 +40,11 @@ export function StatsBlock({ block }: { block: StatsBlockProps }) {
     4: "md:grid-cols-4",
   };
 
-  const { title, subtitle } = getBlockHeading(block);
+  const { title, subtitle, anchorId } = getBlockHeading(block);
 
   return (
     <Block>
-        <BlockHeading title={title} subtitle={subtitle} className="mb-12" />
+        <BlockHeading title={title} subtitle={subtitle} anchorId={anchorId} className="mb-12" />
         <div className={`grid grid-cols-1 ${gridCols[columns] || gridCols[4]} gap-8`}>
           {block.stats?.map((stat, index) => (
             <div key={index} className="text-center">

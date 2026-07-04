@@ -12,10 +12,11 @@ export type { Dereferenced, WithEffectiveDate } from "./shared";
 
 export type BlockAlignment = "left" | "center" | "right";
 
-/** Block heading object (title + subtitle) used across all blocks */
+/** Block heading object (title + subtitle + anchorId) used across all blocks */
 export type BlockHeadingData = {
   title?: string | null;
   subtitle?: string | null;
+  anchorId?: { current?: string | null } | null;
 };
 
 // Inline types for new blocks (until Sanity types are regenerated)
@@ -62,6 +63,7 @@ type BlockAccordion = {
 
 type BlockQuote = {
   _type: "block.quote";
+  heading?: BlockHeadingData;
   quote: string;
   author?: string;
   authorTitle?: string;

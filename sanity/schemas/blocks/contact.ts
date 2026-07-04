@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { withAnchorBadge } from "../objects/blockHeading";
 
 export const contactBlock = defineType({
   name: "block.contact",
@@ -22,11 +23,15 @@ export const contactBlock = defineType({
   preview: {
     select: {
       "headingTitle": "heading.title",
+      "headingAnchorId": "heading.anchorId.current",
     },
     prepare(selection) {
       return {
         title: "Kontaktformulär",
-        subtitle: selection.headingTitle || "Ingen rubrik",
+        subtitle: withAnchorBadge(
+          selection.headingTitle || "Ingen rubrik",
+          selection.headingAnchorId
+        ),
       };
     },
   },

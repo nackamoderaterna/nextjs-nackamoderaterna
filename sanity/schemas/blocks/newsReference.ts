@@ -1,4 +1,5 @@
 import {defineType, defineField} from 'sanity'
+import {withAnchorBadge} from '../objects/blockHeading'
 
 export const newsBlock = defineType({
   name: 'block.news',
@@ -77,11 +78,15 @@ export const newsBlock = defineType({
     }),
 
   preview: {
-    select: {'headingTitle': 'heading.title', mode: 'mode'},
-    prepare: ({headingTitle, mode}) => {
+    select: {
+      'headingTitle': 'heading.title',
+      'headingAnchorId': 'heading.anchorId.current',
+      mode: 'mode',
+    },
+    prepare: ({headingTitle, headingAnchorId, mode}) => {
       return {
         title: 'Nyheter',
-        subtitle: headingTitle || mode,
+        subtitle: withAnchorBadge(headingTitle || mode, headingAnchorId),
       }
     },
   },

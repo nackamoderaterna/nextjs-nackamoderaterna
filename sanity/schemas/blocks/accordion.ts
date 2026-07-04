@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { withAnchorBadge } from "../objects/blockHeading";
 
 export const accordionBlock = defineType({
   name: "block.accordion",
@@ -58,12 +59,16 @@ export const accordionBlock = defineType({
   preview: {
     select: {
       "headingTitle": "heading.title",
+      "headingAnchorId": "heading.anchorId.current",
       items: "items",
     },
-    prepare({ headingTitle, items }) {
+    prepare({ headingTitle, headingAnchorId, items }) {
       return {
         title: "Accordion",
-        subtitle: headingTitle || `${items?.length || 0} objekt`,
+        subtitle: withAnchorBadge(
+          headingTitle || `${items?.length || 0} objekt`,
+          headingAnchorId
+        ),
       };
     },
   },

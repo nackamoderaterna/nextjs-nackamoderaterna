@@ -33,12 +33,12 @@ export function QuoteBlock({ block }: { block: QuoteBlockProps }) {
   const alignClass = alignmentClasses[alignment];
   const flexAlignClass = flexAlignmentClasses[alignment];
 
-  const { title } = getBlockHeading(block);
+  const { title, anchorId } = getBlockHeading(block);
 
   return (
     <Block>
       <div className="max-w-3xl mx-auto">
-      <BlockHeading title={title} />
+      <BlockHeading title={title} anchorId={anchorId} />
       <div className={`${alignClass} flex flex-col ${flexAlignClass}`}>
         <blockquote className="text-2xl font-serif md:text-3xl font-light italic mb-8 leading-relaxed">
           "{block.quote}"

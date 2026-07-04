@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { withAnchorBadge } from "../objects/blockHeading";
 
 export const politicalIssuesBlock = defineType({
   name: "block.politicalIssues",
@@ -67,6 +68,7 @@ export const politicalIssuesBlock = defineType({
   preview: {
     select: {
       headingTitle: "heading.title",
+      headingAnchorId: "heading.anchorId.current",
       mode: "mode",
       areaName: "politicalArea.name",
       filter: "filter",
@@ -74,12 +76,14 @@ export const politicalIssuesBlock = defineType({
     },
     prepare({
       headingTitle,
+      headingAnchorId,
       mode,
       areaName,
       filter,
       itemsCount,
     }: {
       headingTitle?: string;
+      headingAnchorId?: string;
       mode?: string;
       areaName?: string;
       filter?: string;
@@ -88,13 +92,16 @@ export const politicalIssuesBlock = defineType({
       if (mode === "manual") {
         return {
           title: "Sakfrågor",
-          subtitle: headingTitle || `Manuellt urval (${itemsCount || 0} st)`,
+          subtitle: withAnchorBadge(
+            headingTitle || `Manuellt urval (${itemsCount || 0} st)`,
+            headingAnchorId
+          ),
         };
       }
       if (mode === "allFeatured") {
         return {
           title: "Sakfrågor",
-          subtitle: headingTitle || "Alla kärnfrågor",
+          subtitle: withAnchorBadge(headingTitle || "Alla kärnfrågor", headingAnchorId),
         };
       }
       const filterLabels: Record<string, string> = {
@@ -106,7 +113,10 @@ export const politicalIssuesBlock = defineType({
       const filterLabel = filter ? filterLabels[filter] || filter : "alla";
       return {
         title: "Sakfrågor",
-        subtitle: headingTitle || `${areaName ? areaName + " - " : ""}${filterLabel}`,
+        subtitle: withAnchorBadge(
+          headingTitle || `${areaName ? areaName + " - " : ""}${filterLabel}`,
+          headingAnchorId
+        ),
       };
     },
   },

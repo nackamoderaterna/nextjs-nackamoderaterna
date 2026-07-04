@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { withAnchorBadge } from "../objects/blockHeading";
 
 export const imageBlock = defineType({
   name: "block.image",
@@ -54,11 +55,12 @@ export const imageBlock = defineType({
     select: {
       title: "caption",
       media: "image",
+      "headingAnchorId": "heading.anchorId.current",
     },
-    prepare({ title, media }) {
+    prepare({ title, media, headingAnchorId }) {
       return {
         title: title || "Bildblock",
-        subtitle: "Bild",
+        subtitle: withAnchorBadge("Bild", headingAnchorId),
         media,
       };
     },

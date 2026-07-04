@@ -1,4 +1,5 @@
 import {defineType, defineField} from 'sanity'
+import {withAnchorBadge} from '../objects/blockHeading'
 
 export const politicianBlock = defineType({
   name: 'block.politician',
@@ -64,8 +65,16 @@ export const politicianBlock = defineType({
   ],
 
   preview: {
-    select: {mode: 'mode', items: 'items'},
-    prepare: ({mode, items}: {mode: 'manual' | 'kommunalrad'; items?: any[]}) => {
+    select: {mode: 'mode', items: 'items', headingAnchorId: 'heading.anchorId.current'},
+    prepare: ({
+      mode,
+      items,
+      headingAnchorId,
+    }: {
+      mode: 'manual' | 'kommunalrad'
+      items?: any[]
+      headingAnchorId?: string
+    }) => {
       const subtitles = {
         manual: `${items?.length ?? 0} valda politiker`,
         kommunalrad: 'Alla kommunalråd',
@@ -73,7 +82,7 @@ export const politicianBlock = defineType({
 
       return {
         title: 'Politiker',
-        subtitle: subtitles[mode] ?? '',
+        subtitle: withAnchorBadge(subtitles[mode] ?? '', headingAnchorId),
       }
     },
   },

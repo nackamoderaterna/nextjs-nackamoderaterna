@@ -3,7 +3,7 @@ import { Button } from "@/lib/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Block from "./Block";
-import { getBlockHeading } from "./BlockHeading";
+import { getBlockHeading, HeadingAnchorLink } from "./BlockHeading";
 import { cleanInvisibleUnicode } from "@/lib/politicians";
 import { getLucideIcon } from "@/lib/utils/iconUtils";
 
@@ -56,7 +56,7 @@ function getButtons(block: CTABlockProps): ButtonAction[] {
 }
 
 export function CTABlock({ block }: { block: CTABlockProps }) {
-  const { title, subtitle } = getBlockHeading(block);
+  const { title, subtitle, anchorId } = getBlockHeading(block);
   const buttons = getButtons(block);
   const layout = block.layout ?? "fullWidth";
   const alignment =
@@ -87,8 +87,19 @@ export function CTABlock({ block }: { block: CTABlockProps }) {
         alignmentClasses[alignment],
       )}
     >
-      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-balance mb-6">
+      <h2
+        id={anchorId ?? undefined}
+        className={cn(
+          "text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-balance mb-6 scroll-mt-24",
+          anchorId && "group inline-flex items-center gap-2",
+          flexAlignmentClasses[alignment]
+        )}
+      >
         {title ?? ""}
+        <HeadingAnchorLink
+          anchorId={anchorId}
+          className="text-white/70 hover:text-white"
+        />
       </h2>
       {subtitle && (
         <p className="text-lg text-white/80 leading-relaxed text-pretty mb-8">

@@ -85,7 +85,7 @@ export async function PoliticalIssuesBlock({
 }: {
   block: PoliticalIssuesBlockProps;
 }) {
-  const { title, subtitle } = getBlockHeading(block);
+  const { title, subtitle, anchorId } = getBlockHeading(block);
 
   let issues: PoliticalIssueData[];
 
@@ -115,7 +115,7 @@ export async function PoliticalIssuesBlock({
 
   return (
     <Block paddingY="large">
-      <BlockHeading title={title} subtitle={subtitle} />
+      <BlockHeading title={title} subtitle={subtitle} anchorId={anchorId} />
       <ResponsiveGrid cols={3}>
         {sorted.map((issue) => (
           <PoliticalIssueItem

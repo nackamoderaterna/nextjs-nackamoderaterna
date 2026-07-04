@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { withAnchorBadge } from "../objects/blockHeading";
 
 export const quoteBlock = defineType({
   name: "block.quote",
@@ -54,12 +55,16 @@ export const quoteBlock = defineType({
     select: {
       quote: "quote",
       author: "author",
+      headingAnchorId: "heading.anchorId.current",
     },
-    prepare({ quote, author }) {
+    prepare({ quote, author, headingAnchorId }) {
       const preview = quote ? quote.substring(0, 50) + "..." : "Inget citat";
       return {
         title: "Citat",
-        subtitle: author ? `${preview} - ${author}` : preview,
+        subtitle: withAnchorBadge(
+          author ? `${preview} - ${author}` : preview,
+          headingAnchorId
+        ),
       };
     },
   },

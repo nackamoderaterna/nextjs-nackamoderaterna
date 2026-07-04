@@ -44,7 +44,7 @@ export function TextMediaBlock({ block }: { block: TwoColumnBlockProps }) {
     </div>
   );
 
-  const { title, subtitle } = getBlockHeading(block);
+  const { title, subtitle, anchorId } = getBlockHeading(block);
 
   const textColumn = (
     <div
@@ -71,6 +71,7 @@ export function TextMediaBlock({ block }: { block: TwoColumnBlockProps }) {
       <BlockHeading
         title={title}
         subtitle={subtitle}
+        anchorId={anchorId}
         centered={textAlignment === "center"}
       />
       <div

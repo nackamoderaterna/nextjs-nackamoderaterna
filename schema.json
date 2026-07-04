@@ -17,7 +17,7 @@
           "value": {
             "type": "string"
           },
-          "optional": true
+          "optional": false
         },
         "description": {
           "type": "objectAttribute",
@@ -31,14 +31,14 @@
           "value": {
             "type": "string"
           },
-          "optional": true
+          "optional": false
         },
         "linkUrl": {
           "type": "objectAttribute",
           "value": {
             "type": "string"
           },
-          "optional": true
+          "optional": false
         }
       }
     }
@@ -61,14 +61,14 @@
           "value": {
             "type": "string"
           },
-          "optional": true
+          "optional": false
         },
         "name": {
           "type": "objectAttribute",
           "value": {
             "type": "string"
           },
-          "optional": true
+          "optional": false
         },
         "title": {
           "type": "objectAttribute",
@@ -866,7 +866,7 @@
           "value": {
             "type": "string"
           },
-          "optional": true
+          "optional": false
         },
         "linkType": {
           "type": "objectAttribute",
@@ -1123,14 +1123,14 @@
           "value": {
             "type": "string"
           },
-          "optional": true
+          "optional": false
         },
         "href": {
           "type": "objectAttribute",
           "value": {
             "type": "string"
           },
-          "optional": true
+          "optional": false
         },
         "icon": {
           "type": "objectAttribute",
@@ -1167,6 +1167,14 @@
           "type": "objectAttribute",
           "value": {
             "type": "string"
+          },
+          "optional": true
+        },
+        "anchorId": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "slug"
           },
           "optional": true
         }
@@ -1713,7 +1721,7 @@
           "value": {
             "type": "string"
           },
-          "optional": true
+          "optional": false
         },
         "author": {
           "type": "objectAttribute",
@@ -1855,7 +1863,7 @@
                   "value": {
                     "type": "string"
                   },
-                  "optional": true
+                  "optional": false
                 },
                 "content": {
                   "type": "objectAttribute",
@@ -2034,7 +2042,7 @@
                       }
                     }
                   },
-                  "optional": true
+                  "optional": false
                 }
               },
               "rest": {
@@ -2150,7 +2158,7 @@
               }
             }
           },
-          "optional": true
+          "optional": false
         },
         "innerTitle": {
           "type": "objectAttribute",
@@ -2336,7 +2344,7 @@
               }
             }
           },
-          "optional": true
+          "optional": false
         },
         "imagePosition": {
           "type": "objectAttribute",
@@ -2433,14 +2441,14 @@
                   "value": {
                     "type": "string"
                   },
-                  "optional": true
+                  "optional": false
                 },
                 "label": {
                   "type": "objectAttribute",
                   "value": {
                     "type": "string"
                   },
-                  "optional": true
+                  "optional": false
                 },
                 "description": {
                   "type": "objectAttribute",
@@ -2503,6 +2511,28 @@
           "value": {
             "type": "inline",
             "name": "blockHeading"
+          },
+          "optional": false
+        },
+        "buttons": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "array",
+            "of": {
+              "type": "object",
+              "attributes": {
+                "_key": {
+                  "type": "objectAttribute",
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              },
+              "rest": {
+                "type": "inline",
+                "name": "buttonWithIcon"
+              }
+            }
           },
           "optional": true
         },
@@ -2779,7 +2809,7 @@
                     },
                     "dereferencesTo": "politician"
                   },
-                  "optional": true
+                  "optional": false
                 },
                 "titleOverride": {
                   "type": "objectAttribute",
@@ -3186,7 +3216,7 @@
               }
             }
           },
-          "optional": true
+          "optional": false
         },
         "columns": {
           "type": "objectAttribute",
@@ -3571,28 +3601,28 @@
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         },
         "bottom": {
           "type": "objectAttribute",
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         },
         "left": {
           "type": "objectAttribute",
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         },
         "right": {
           "type": "objectAttribute",
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         }
       }
     }
@@ -3615,28 +3645,28 @@
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         },
         "y": {
           "type": "objectAttribute",
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         },
         "height": {
           "type": "objectAttribute",
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         },
         "width": {
           "type": "objectAttribute",
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         }
       }
     }
@@ -3997,14 +4027,14 @@
             }
           ]
         },
-        "optional": true
+        "optional": false
       },
       "title": {
         "type": "objectAttribute",
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "intro": {
         "type": "objectAttribute",
@@ -4258,7 +4288,7 @@
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "description": {
         "type": "objectAttribute",
@@ -4273,7 +4303,7 @@
           "type": "inline",
           "name": "slug"
         },
-        "optional": true
+        "optional": false
       },
       "content": {
         "type": "objectAttribute",
@@ -4563,20 +4593,37 @@
           "of": {
             "type": "object",
             "attributes": {
-              "_ref": {
+              "area": {
                 "type": "objectAttribute",
                 "value": {
-                  "type": "string"
-                }
+                  "type": "object",
+                  "attributes": {
+                    "_ref": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "string"
+                      }
+                    },
+                    "_type": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "string",
+                        "value": "reference"
+                      }
+                    },
+                    "_weak": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "boolean"
+                      },
+                      "optional": true
+                    }
+                  },
+                  "dereferencesTo": "politicalArea"
+                },
+                "optional": false
               },
-              "_type": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string",
-                  "value": "reference"
-                }
-              },
-              "_weak": {
+              "display": {
                 "type": "objectAttribute",
                 "value": {
                   "type": "boolean"
@@ -4584,7 +4631,6 @@
                 "optional": true
               }
             },
-            "dereferencesTo": "politicalArea",
             "rest": {
               "type": "object",
               "attributes": {
@@ -4598,7 +4644,7 @@
             }
           }
         },
-        "optional": true
+        "optional": false
       },
       "geographicalAreas": {
         "type": "objectAttribute",
@@ -4708,7 +4754,7 @@
           "value": {
             "type": "string"
           },
-          "optional": true
+          "optional": false
         },
         "source": {
           "type": "objectAttribute",
@@ -4760,7 +4806,7 @@
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "politician": {
         "type": "objectAttribute",
@@ -4790,7 +4836,7 @@
           },
           "dereferencesTo": "politician"
         },
-        "optional": true
+        "optional": false
       },
       "bolagNamnd": {
         "type": "objectAttribute",
@@ -4820,7 +4866,7 @@
           },
           "dereferencesTo": "namnd"
         },
-        "optional": true
+        "optional": false
       },
       "startDate": {
         "type": "objectAttribute",
@@ -4885,7 +4931,7 @@
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "slug": {
         "type": "objectAttribute",
@@ -4893,7 +4939,7 @@
           "type": "inline",
           "name": "slug"
         },
-        "optional": true
+        "optional": false
       },
       "description": {
         "type": "objectAttribute",
@@ -5229,7 +5275,7 @@
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "endDate": {
         "type": "objectAttribute",
@@ -5263,51 +5309,19 @@
                 "type": "string"
               },
               "optional": true
+            },
+            "mapsUrl": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "string"
+              },
+              "optional": true
             }
           }
         },
         "optional": true
       },
       "eventType": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "union",
-          "of": [
-            {
-              "type": "string",
-              "value": "meeting"
-            },
-            {
-              "type": "string",
-              "value": "conference"
-            },
-            {
-              "type": "string",
-              "value": "campaign"
-            },
-            {
-              "type": "string",
-              "value": "other"
-            }
-          ]
-        },
-        "optional": true
-      },
-      "registrationUrl": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        },
-        "optional": true
-      },
-      "isPublic": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "boolean"
-        },
-        "optional": true
-      },
-      "geographicalArea": {
         "type": "objectAttribute",
         "value": {
           "type": "object",
@@ -5333,51 +5347,106 @@
               "optional": true
             }
           },
-          "dereferencesTo": "geographicalArea"
+          "dereferencesTo": "eventType"
+        },
+        "optional": false
+      },
+      "registrationUrl": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
         },
         "optional": true
       },
-      "politicalAreas": {
+      "isPublic": {
         "type": "objectAttribute",
         "value": {
-          "type": "array",
-          "of": {
-            "type": "object",
-            "attributes": {
-              "_ref": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                }
-              },
-              "_type": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string",
-                  "value": "reference"
-                }
-              },
-              "_weak": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "boolean"
-                },
-                "optional": true
-              }
+          "type": "boolean"
+        },
+        "optional": true
+      }
+    }
+  },
+  {
+    "name": "eventType",
+    "type": "document",
+    "attributes": {
+      "_id": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_type": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string",
+          "value": "eventType"
+        }
+      },
+      "_createdAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_updatedAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_rev": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "name": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": false
+      },
+      "slug": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "slug"
+        },
+        "optional": false
+      },
+      "color": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "union",
+          "of": [
+            {
+              "type": "string",
+              "value": "#0072CE"
             },
-            "dereferencesTo": "politicalArea",
-            "rest": {
-              "type": "object",
-              "attributes": {
-                "_key": {
-                  "type": "objectAttribute",
-                  "value": {
-                    "type": "string"
-                  }
-                }
-              }
+            {
+              "type": "string",
+              "value": "#E53935"
+            },
+            {
+              "type": "string",
+              "value": "#43A047"
+            },
+            {
+              "type": "string",
+              "value": "#FB8C00"
+            },
+            {
+              "type": "string",
+              "value": "#8E24AA"
+            },
+            {
+              "type": "string",
+              "value": "#546E7A"
             }
-          }
+          ]
         },
         "optional": true
       }
@@ -5423,7 +5492,7 @@
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "slug": {
         "type": "objectAttribute",
@@ -5431,7 +5500,7 @@
           "type": "inline",
           "name": "slug"
         },
-        "optional": true
+        "optional": false
       },
       "blocks": {
         "type": "objectAttribute",
@@ -5736,7 +5805,7 @@
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "slug": {
         "type": "objectAttribute",
@@ -5744,7 +5813,7 @@
           "type": "inline",
           "name": "slug"
         },
-        "optional": true
+        "optional": false
       },
       "image": {
         "type": "objectAttribute",
@@ -6429,7 +6498,7 @@
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "slug": {
         "type": "objectAttribute",
@@ -6437,7 +6506,7 @@
           "type": "inline",
           "name": "slug"
         },
-        "optional": true
+        "optional": false
       },
       "description": {
         "type": "objectAttribute",
@@ -6818,7 +6887,7 @@
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "slug": {
         "type": "objectAttribute",
@@ -6826,7 +6895,7 @@
           "type": "inline",
           "name": "slug"
         },
-        "optional": true
+        "optional": false
       },
       "description": {
         "type": "objectAttribute",
@@ -7199,7 +7268,7 @@
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       }
     }
   },
@@ -7243,7 +7312,7 @@
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "slug": {
         "type": "objectAttribute",
@@ -7251,7 +7320,7 @@
           "type": "inline",
           "name": "slug"
         },
-        "optional": true
+        "optional": false
       },
       "variant": {
         "type": "objectAttribute",
@@ -7272,7 +7341,7 @@
             }
           ]
         },
-        "optional": true
+        "optional": false
       },
       "excerpt": {
         "type": "objectAttribute",
@@ -7569,7 +7638,7 @@
             ]
           }
         },
-        "optional": true
+        "optional": false
       },
       "mainImage": {
         "type": "objectAttribute",
@@ -7679,49 +7748,65 @@
           "of": {
             "type": "object",
             "attributes": {
-              "asset": {
+              "title": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": false
+              },
+              "file": {
                 "type": "objectAttribute",
                 "value": {
                   "type": "object",
                   "attributes": {
-                    "_ref": {
+                    "asset": {
                       "type": "objectAttribute",
                       "value": {
-                        "type": "string"
-                      }
+                        "type": "object",
+                        "attributes": {
+                          "_ref": {
+                            "type": "objectAttribute",
+                            "value": {
+                              "type": "string"
+                            }
+                          },
+                          "_type": {
+                            "type": "objectAttribute",
+                            "value": {
+                              "type": "string",
+                              "value": "reference"
+                            }
+                          },
+                          "_weak": {
+                            "type": "objectAttribute",
+                            "value": {
+                              "type": "boolean"
+                            },
+                            "optional": true
+                          }
+                        },
+                        "dereferencesTo": "sanity.fileAsset"
+                      },
+                      "optional": true
+                    },
+                    "media": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "unknown"
+                      },
+                      "optional": true
                     },
                     "_type": {
                       "type": "objectAttribute",
                       "value": {
                         "type": "string",
-                        "value": "reference"
+                        "value": "file"
                       }
-                    },
-                    "_weak": {
-                      "type": "objectAttribute",
-                      "value": {
-                        "type": "boolean"
-                      },
-                      "optional": true
                     }
-                  },
-                  "dereferencesTo": "sanity.fileAsset"
+                  }
                 },
-                "optional": true
-              },
-              "media": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "unknown"
-                },
-                "optional": true
-              },
-              "_type": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string",
-                  "value": "file"
-                }
+                "optional": false
               }
             },
             "rest": {
@@ -8008,7 +8093,7 @@
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "slug": {
         "type": "objectAttribute",
@@ -8016,7 +8101,7 @@
           "type": "inline",
           "name": "slug"
         },
-        "optional": true
+        "optional": false
       },
       "description": {
         "type": "objectAttribute",
@@ -8161,21 +8246,21 @@
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         },
         "width": {
           "type": "objectAttribute",
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         },
         "aspectRatio": {
           "type": "objectAttribute",
           "value": {
             "type": "number"
           },
-          "optional": true
+          "optional": false
         }
       }
     }

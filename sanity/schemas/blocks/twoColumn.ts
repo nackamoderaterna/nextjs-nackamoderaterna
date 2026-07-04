@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { withAnchorBadge } from "../objects/blockHeading";
 
 export const twoColumnBlock = defineType({
   name: "block.twoColumn",
@@ -78,13 +79,17 @@ export const twoColumnBlock = defineType({
   preview: {
     select: {
       headingTitle: "heading.title",
+      headingAnchorId: "heading.anchorId.current",
       innerTitle: "innerTitle",
       imagePosition: "imagePosition",
     },
-    prepare({ headingTitle, innerTitle, imagePosition }) {
+    prepare({ headingTitle, headingAnchorId, innerTitle, imagePosition }) {
       return {
         title: headingTitle || innerTitle || "Text och bild",
-        subtitle: `Bild ${imagePosition === "right" ? "höger" : "vänster"}`,
+        subtitle: withAnchorBadge(
+          `Bild ${imagePosition === "right" ? "höger" : "vänster"}`,
+          headingAnchorId
+        ),
       };
     },
   },

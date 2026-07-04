@@ -25,7 +25,9 @@ type ManualItem = { politician: PoliticianWithLivingArea; titleOverride?: string
 
 export interface BlockPoliticianDereferenced {
   _type: "block.politician";
-  heading?: { title?: string | null; subtitle?: string | null } | string;
+  heading?:
+    | { title?: string | null; subtitle?: string | null; anchorId?: { current?: string | null } | null }
+    | string;
   mode: "manual" | "kommunalrad";
   items: PoliticianWithLivingArea[] | ManualItem[];
 }
@@ -80,11 +82,11 @@ export const PoliticianReferenceBlock = ({
     return <p>Inga politiker att visa.</p>;
   }
 
-  const { title } = getBlockHeading(block);
+  const { title, anchorId } = getBlockHeading(block);
 
   return (
     <Block>
-        <BlockHeading title={title} />
+        <BlockHeading title={title} anchorId={anchorId} />
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           {entries.map(({ politician: p, title }) => (
             <PeopleCard

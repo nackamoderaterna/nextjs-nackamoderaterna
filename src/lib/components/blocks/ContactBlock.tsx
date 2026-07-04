@@ -6,15 +6,19 @@ import { globalSettingsQuery } from "@/lib/queries/globalSettings";
 import { GlobalSettings } from "~/sanity.types";
 import { ContactForm } from "../shared/ContactForm";
 import { getBlockHeading } from "./BlockHeading";
+import { cn } from "@/lib/utils";
 
 interface ContactBlockProps {
   _type: "block.contact";
-  heading?: { title?: string | null; subtitle?: string | null } | string;
+  heading?:
+    | { title?: string | null; subtitle?: string | null; anchorId?: { current?: string | null } | null }
+    | string;
   description?: string;
   showContactInfo?: boolean;
 }
 
 export async function ContactBlock({ block }: { block: ContactBlockProps }) {
+  const anchorId = getBlockHeading(block).anchorId ?? undefined;
   let contactInfo: GlobalSettings | null = null;
   if (block.showContactInfo) {
     contactInfo = await sanityClient.fetch<GlobalSettings>(
@@ -58,7 +62,13 @@ export async function ContactBlock({ block }: { block: ContactBlockProps }) {
               : "w-full max-w-2xl"
           }
         >
-          <div className="bg-card p-8 rounded-lg border border-border">
+          <div
+            id={anchorId}
+            className={cn(
+              "bg-card p-8 rounded-lg border border-border",
+              anchorId && "scroll-mt-24"
+            )}
+          >
             <ContactForm
               heading={getBlockHeading(block).title ?? undefined}
               description={getBlockHeading(block).subtitle ?? undefined}

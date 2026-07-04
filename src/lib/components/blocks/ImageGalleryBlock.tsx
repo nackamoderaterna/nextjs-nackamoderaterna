@@ -38,7 +38,7 @@ export function ImageGalleryBlock({ block }: { block: ImageGalleryBlockProps }) 
   const columns = block.columns || 3;
   const blockAspectRatio = cleanString(block.aspectRatio) as "square" | "landscape" | "portrait" | "auto" || "portrait";
   const defaultAspect = blockAspectRatio || "portrait";
-  const { title } = getBlockHeading(block);
+  const { title, anchorId } = getBlockHeading(block);
   const headingTitle = cleanString(title);
 
   const gridCols = {
@@ -73,7 +73,7 @@ export function ImageGalleryBlock({ block }: { block: ImageGalleryBlockProps }) 
 
   return (
     <Block>
-        <BlockHeading title={headingTitle || undefined} />
+        <BlockHeading title={headingTitle || undefined} anchorId={anchorId} />
         <div className={`grid grid-cols-1 ${gridCols[columns]} items-start gap-4 md:gap-6`}>
           {validImages.map((image, index) => {
             const imageAspect = getAspectForImage(image);

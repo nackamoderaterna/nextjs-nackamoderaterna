@@ -10,7 +10,7 @@ interface VideoBlockProps {
 
 export default function VideoBlock({ block }: VideoBlockProps) {
   const { video, caption } = block;
-  const { title } = getBlockHeading(block as Record<string, unknown>);
+  const { title, anchorId } = getBlockHeading(block as Record<string, unknown>);
 
   if (!video) {
     return null;
@@ -36,7 +36,7 @@ export default function VideoBlock({ block }: VideoBlockProps) {
   return (
     <Block>
       <div className="max-w-3xl mx-auto">
-        <BlockHeading title={title} />
+        <BlockHeading title={title} anchorId={anchorId} />
         <div className={`rounded bg-gray-100 aspect-16/9`}>{renderVideo()}</div>
 
         {caption && <p className="mt-2 text-sm text-center text-muted-foreground">{caption}</p>}

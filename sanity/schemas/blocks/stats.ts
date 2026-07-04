@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { withAnchorBadge } from "../objects/blockHeading";
 
 export const statsBlock = defineType({
   name: "block.stats",
@@ -57,12 +58,16 @@ export const statsBlock = defineType({
   preview: {
     select: {
       "headingTitle": "heading.title",
+      "headingAnchorId": "heading.anchorId.current",
       stats: "stats",
     },
-    prepare({ headingTitle, stats }) {
+    prepare({ headingTitle, headingAnchorId, stats }) {
       return {
         title: "Statistik",
-        subtitle: headingTitle || `${stats?.length || 0} statistik`,
+        subtitle: withAnchorBadge(
+          headingTitle || `${stats?.length || 0} statistik`,
+          headingAnchorId
+        ),
       };
     },
   },

@@ -8,11 +8,11 @@ interface ImageBlockProps {
 }
 
 export function ImageBlock({ block }: ImageBlockProps) {
-  const { title } = getBlockHeading(block as Record<string, unknown>);
+  const { title, anchorId } = getBlockHeading(block as Record<string, unknown>);
 
   return (
     <Block>
-        <BlockHeading title={title} />
+        <BlockHeading title={title} anchorId={anchorId} />
         <SanityImage image={block.image} />
     </Block>
   );

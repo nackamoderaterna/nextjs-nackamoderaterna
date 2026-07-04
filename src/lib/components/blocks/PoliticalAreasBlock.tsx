@@ -17,7 +17,7 @@ interface PoliticalAreasBlockProps {
 }
 
 export function PoliticalAreasBlock({ block }: { block: PoliticalAreasBlockProps }) {
-  const { title, subtitle } = getBlockHeading(block);
+  const { title, subtitle, anchorId } = getBlockHeading(block);
   const { items } = block;
 
   if (!items?.length) {
@@ -26,7 +26,7 @@ export function PoliticalAreasBlock({ block }: { block: PoliticalAreasBlockProps
 
   return (
     <Block paddingY="large">
-      <BlockHeading title={title} subtitle={subtitle} />
+      <BlockHeading title={title} subtitle={subtitle} anchorId={anchorId} />
       
       <ResponsiveGrid cols={3}>
         {items.map((area) => {

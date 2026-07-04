@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { withAnchorBadge } from "../objects/blockHeading";
 
 export const ctaBlock = defineType({
   name: "block.cta",
@@ -72,11 +73,12 @@ export const ctaBlock = defineType({
   preview: {
     select: {
       "headingTitle": "heading.title",
+      "headingAnchorId": "heading.anchorId.current",
     },
     prepare(selection) {
       return {
         title: "Call-to-action",
-        subtitle: selection.headingTitle,
+        subtitle: withAnchorBadge(selection.headingTitle, selection.headingAnchorId),
       };
     },
   },
