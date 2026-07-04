@@ -20,16 +20,22 @@ interface CTABlockProps {
   title?: string;
   subtitle?: string;
   description?: string;
-  primaryAction?: ButtonAction;
-  secondaryAction?: ButtonAction;
+  buttons?: ButtonAction[];
   alignment?: "left" | "center" | "right";
   // Legacy fields (backward compatibility)
+  primaryAction?: ButtonAction;
+  secondaryAction?: ButtonAction;
   primaryButton?: { label: string; link: string };
   secondaryButton?: { label: string; link: string };
 }
 
-export function CTABlock({ block }: { block: CTABlockProps }) {
-  const { title, subtitle } = getBlockHeading(block);
+function getButtons(block: CTABlockProps): ButtonAction[] {
+  const validButtons = block.buttons?.filter((b) => b?.label && b?.href);
+  if (validButtons?.length) {
+    return validButtons;
+  }
+
+  // Legacy fallback for CTA blocks created before the "buttons" array field.
   const primaryAction =
     block.primaryAction ??
     (block.primaryButton
@@ -37,20 +43,27 @@ export function CTABlock({ block }: { block: CTABlockProps }) {
       : undefined);
   const secondaryAction =
     block.secondaryAction ??
-    (block.secondaryButton
-      ? block.secondaryButton.label && block.secondaryButton.link
-        ? {
-            label: block.secondaryButton.label,
-            href: block.secondaryButton.link,
-          }
-        : undefined
+    (block.secondaryButton?.label && block.secondaryButton?.link
+      ? {
+          label: block.secondaryButton.label,
+          href: block.secondaryButton.link,
+        }
       : undefined);
+
+  return [primaryAction, secondaryAction].filter(
+    (action): action is ButtonAction => !!action?.label && !!action?.href,
+  );
+}
+
+export function CTABlock({ block }: { block: CTABlockProps }) {
+  const { title, subtitle } = getBlockHeading(block);
+  const buttons = getButtons(block);
   const layout = block.layout ?? "fullWidth";
   const alignment =
     (cleanInvisibleUnicode(block.alignment) as "left" | "center" | "right") ??
     "center";
 
-  if (!primaryAction?.label || !primaryAction?.href) {
+  if (buttons.length === 0) {
     return null;
   }
 
@@ -84,47 +97,30 @@ export function CTABlock({ block }: { block: CTABlockProps }) {
       )}
       <div
         className={cn(
-          "flex flex-col sm:flex-row gap-4",
+          "flex flex-col sm:flex-row gap-4 flex-wrap",
           flexAlignmentClasses[alignment],
         )}
       >
-        {(() => {
-          const PrimaryIcon = getLucideIcon(primaryAction.icon?.name);
+        {buttons.map((action, index) => {
+          const Icon = getLucideIcon(action.icon?.name);
           return (
             <Button
+              key={`${action.href}-${index}`}
               size="lg"
               className="group text-foreground"
               variant="secondary"
               asChild
             >
-              <Link href={primaryAction.href}>
-                {PrimaryIcon && <PrimaryIcon className="h-4 w-4" />}
-                {primaryAction.label}
-                {!PrimaryIcon && (
+              <Link href={action.href}>
+                {Icon && <Icon className="h-4 w-4" />}
+                {action.label}
+                {!Icon && (
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 )}
               </Link>
             </Button>
           );
-        })()}
-        {secondaryAction?.label &&
-          secondaryAction?.href &&
-          (() => {
-            const SecondaryIcon = getLucideIcon(secondaryAction.icon?.name);
-            return (
-              <Button
-                size="lg"
-                className="text-foreground"
-                variant="outline"
-                asChild
-              >
-                <Link href={secondaryAction.href}>
-                  {SecondaryIcon && <SecondaryIcon className="h-4 w-4" />}
-                  {secondaryAction.label}
-                </Link>
-              </Button>
-            );
-          })()}
+        })}
       </div>
     </div>
   );

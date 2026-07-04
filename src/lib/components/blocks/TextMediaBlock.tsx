@@ -76,17 +76,12 @@ export function TextMediaBlock({ block }: { block: TwoColumnBlockProps }) {
       <div
         className={`grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-12 ${verticalAlignClasses[verticalAlignment]}`}
       >
-        {imagePosition === "right" ? (
-          <>
-            {textColumn}
-            {imageColumn}
-          </>
-        ) : (
-          <>
-            {imageColumn}
-            {textColumn}
-          </>
-        )}
+        <div className={imagePosition === "right" ? "md:order-2" : "md:order-1"}>
+          {imageColumn}
+        </div>
+        <div className={imagePosition === "right" ? "md:order-1" : "md:order-2"}>
+          {textColumn}
+        </div>
       </div>
     </Block>
   );

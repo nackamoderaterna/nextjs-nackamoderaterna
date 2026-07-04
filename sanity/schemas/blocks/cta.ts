@@ -30,16 +30,29 @@ export const ctaBlock = defineType({
         }),
     }),
     defineField({
+      name: "buttons",
+      title: "Knappar",
+      description: "Lägg till valfritt antal knappar. Alla knappar visas med samma utseende.",
+      type: "array",
+      of: [{ type: "buttonWithIcon" }],
+    }),
+    defineField({
       name: "primaryAction",
-      title: "Primär knapp",
-      description: "Huvudknappen som ska fånga användarens uppmärksamhet.",
+      title: "Primär knapp (utgår)",
+      description: "Äldre fält, används inte längre. Lägg till knappar under \"Knappar\" ovan istället.",
       type: "buttonWithIcon",
+      deprecated: {
+        reason: "Ersatt av fältet \"Knappar\", som stödjer valfritt antal knappar.",
+      },
     }),
     defineField({
       name: "secondaryAction",
-      title: "Sekundär knapp",
-      description: "Valfri sekundär knapp för alternativa åtgärder.",
+      title: "Sekundär knapp (utgår)",
+      description: "Äldre fält, används inte längre. Lägg till knappar under \"Knappar\" ovan istället.",
       type: "buttonWithIcon",
+      deprecated: {
+        reason: "Ersatt av fältet \"Knappar\", som stödjer valfritt antal knappar.",
+      },
     }),
     defineField({
       name: "alignment",
