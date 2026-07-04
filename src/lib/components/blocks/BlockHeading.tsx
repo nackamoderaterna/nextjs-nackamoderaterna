@@ -1,4 +1,5 @@
 import { Link as LinkIcon } from "lucide-react";
+import { stegaClean } from "next-sanity";
 import { cn } from "@/lib/utils";
 
 /** Block heading object from Sanity */
@@ -20,7 +21,9 @@ export function getBlockHeading(block: {
     return {
       title: h.title ?? null,
       subtitle: h.subtitle ?? null,
-      anchorId: h.anchorId?.current ?? null,
+      // Strip Visual Editing stega encoding: harmless in visible text, but it
+      // pollutes anchor ids/hrefs with invisible unicode when used as such.
+      anchorId: stegaClean(h.anchorId?.current) ?? null,
     };
   }
   if (typeof h === "string") {

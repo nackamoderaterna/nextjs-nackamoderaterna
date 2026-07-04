@@ -24,28 +24,14 @@ export const blockHeading = defineType({
       name: "anchorId",
       title: "Länk-id",
       description:
-        "Gör rubriken länkbar, t.ex. till en meny eller en annan sida (#lankid). Klicka på 'Generate' för att skapa baserat på titeln, eller skriv ett eget.",
+        "Gör rubriken länkbar, t.ex. till en meny eller en annan sida (#lankid). Skriv ett eget id, t.ex. mitt-lankid.",
       type: "slug",
       options: {
-        // A plain string source resolves against the document root, which would
-        // pick up the page's title instead of this block's own title. Resolving
-        // via `options.parent` targets the immediate blockHeading object instead.
-        source: (_doc, options) => {
-          const parent = options?.parent as { title?: string } | undefined;
-          return parent?.title ?? "";
-        },
-        maxLength: 96,
+        // No `source`/Generate button: nested slugs like this one resolve their
+        // source against the document root rather than this object, which would
+        // pick up the page's title instead of this block's own title. Manual
+        // entry only avoids that mismatch entirely.
         isUnique: () => true,
-        slugify: (input: string) =>
-          input
-            // Strip invisible unicode characters (zero-width spaces, BOM, etc.)
-            // that sneak in via copy-paste from Word/Google Docs.
-            .replace(/[\u200B\u200C\u200D\uFEFF\u200E\u200F\u2060\u00AD\u202A-\u202E\u2066-\u2069]/g, "")
-            .toLowerCase()
-            .trim()
-            .replace(/[^a-z0-9]+/g, "-")
-            .replace(/^-+|-+$/g, "")
-            .slice(0, 96),
       },
       validation: (Rule) =>
         Rule.custom((value) => {
