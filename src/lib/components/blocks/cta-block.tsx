@@ -3,7 +3,8 @@ import { Button } from "@/lib/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Block from "./Block";
-import { getBlockHeading, HeadingAnchorLink } from "./BlockHeading";
+import { getBlockHeading } from "./BlockHeading";
+import { HeadingAnchorLink } from "./HeadingAnchorLink";
 import { cleanInvisibleUnicode } from "@/lib/politicians";
 import { getLucideIcon } from "@/lib/utils/iconUtils";
 

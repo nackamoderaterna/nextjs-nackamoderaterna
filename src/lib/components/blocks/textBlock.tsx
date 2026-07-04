@@ -1,6 +1,7 @@
 import { PortableText } from "next-sanity";
 import Block from "./Block";
-import { getBlockHeading, HeadingAnchorLink } from "./BlockHeading";
+import { getBlockHeading } from "./BlockHeading";
+import { HeadingAnchorLink } from "./HeadingAnchorLink";
 import { BlockText } from "~/sanity.types";
 import { cn } from "@/lib/utils";
 import { portableTextComponents } from "../shared/PortableTextComponents";

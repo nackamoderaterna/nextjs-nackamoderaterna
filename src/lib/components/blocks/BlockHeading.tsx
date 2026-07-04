@@ -1,6 +1,6 @@
-import { Link as LinkIcon } from "lucide-react";
 import { stegaClean } from "next-sanity";
 import { cn } from "@/lib/utils";
+import { HeadingAnchorLink } from "./HeadingAnchorLink";
 
 /** Block heading object from Sanity */
 export type BlockHeadingData = {
@@ -33,30 +33,6 @@ export function getBlockHeading(block: {
     title: block.title ?? null,
     subtitle: block.subtitle ?? block.description ?? null,
   };
-}
-
-/** Renders a small hover-revealed link icon pointing to `#anchorId`. Wrap the target in a "group" class. */
-export function HeadingAnchorLink({
-  anchorId,
-  className,
-}: {
-  anchorId?: string | null;
-  className?: string;
-}) {
-  if (!anchorId) return null;
-
-  return (
-    <a
-      href={`#${anchorId}`}
-      aria-label="Länk till rubrik"
-      className={cn(
-        "opacity-0 transition-opacity group-hover:opacity-100 text-muted-foreground hover:text-foreground",
-        className
-      )}
-    >
-      <LinkIcon className="h-4 w-4" />
-    </a>
-  );
 }
 
 export interface BlockHeadingProps {
