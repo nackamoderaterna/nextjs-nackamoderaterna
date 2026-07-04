@@ -1,3 +1,5 @@
+"use client";
+
 import { buildImageUrl } from "@/lib/sanity/image";
 import { getObjectPositionFromHotspot } from "@/lib/sanity/imageHotspot";
 import Image from "next/image";
