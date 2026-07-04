@@ -41,6 +41,7 @@ export function mapPoliticianRoles({ politician }: MapRolesArgs): Role[] {
 
   if (politician.namndPositions?.length > 0) {
     politician.namndPositions.forEach((pos: any) => {
+      if (!pos.namnd?.title) return;
       roles.push({
         title: pos.namnd.title,
         description: pos.title || "Ledamot",
