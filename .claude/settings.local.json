@@ -20,7 +20,8 @@
       "Bash(git diff:*)",
       "Bash(git stash:*)",
       "Bash(npx next build:*)",
-      "Bash(echo \"exit:$?\")"
+      "Bash(echo \"exit:$?\")",
+      "Bash(curl -s http://localhost:3000/hem -o /private/tmp/claude-501/-Users-nsld-dev-nextjs-nackamoderaterna/1cf2d5cb-f642-4cfe-a656-b8b1a5c91c4b/scratchpad/hem3.html)"
     ]
   }
 }

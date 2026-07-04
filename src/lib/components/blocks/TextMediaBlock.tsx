@@ -3,6 +3,7 @@ import Block from "./Block";
 import { BlockHeading, getBlockHeading } from "./BlockHeading";
 import { SanityImage } from "../shared/SanityImage";
 import { portableTextComponents } from "../shared/PortableTextComponents";
+import { cleanInvisibleUnicode } from "@/lib/politicians";
 
 interface TwoColumnBlockProps {
   _type: "block.twoColumn";
@@ -16,9 +17,19 @@ interface TwoColumnBlockProps {
 }
 
 export function TextMediaBlock({ block }: { block: TwoColumnBlockProps }) {
-  const imagePosition = block.imagePosition || "left";
-  const verticalAlignment = block.verticalAlignment || "top";
-  const textAlignment = block.textAlignment || "left";
+  const imagePosition =
+    (cleanInvisibleUnicode(block.imagePosition) as "left" | "right") ||
+    "left";
+  const verticalAlignment =
+    (cleanInvisibleUnicode(block.verticalAlignment) as
+      | "top"
+      | "center"
+      | "bottom") || "top";
+  const textAlignment =
+    (cleanInvisibleUnicode(block.textAlignment) as
+      | "left"
+      | "center"
+      | "right") || "left";
 
   const verticalAlignClasses = {
     top: "items-start",
@@ -77,10 +88,10 @@ export function TextMediaBlock({ block }: { block: TwoColumnBlockProps }) {
       <div
         className={`grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-12 ${verticalAlignClasses[verticalAlignment]}`}
       >
-        <div className={imagePosition === "right" ? "md:order-2" : "md:order-1"}>
-          {imageColumn}
-        </div>
-        <div className={imagePosition === "right" ? "md:order-1" : "md:order-2"}>
+        <div className="order-first md:order-none h-full">{imageColumn}</div>
+        <div
+          className={`order-last ${imagePosition === "right" ? "md:order-first" : "md:order-none"}`}
+        >
           {textColumn}
         </div>
       </div>
