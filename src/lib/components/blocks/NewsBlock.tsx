@@ -13,7 +13,7 @@ export interface NewsBlockProps {
   heading?:
     | { title?: string | null; subtitle?: string | null; anchorId?: { current?: string | null } | null }
     | string;
-  mode: "manual" | "latest" | "byPoliticalArea" | "byGeographicArea";
+  mode: "manual" | "latest" | "politics" | "area";
   viewAllLink?: string | null;
   resolvedItems: News[];
 }
