@@ -12,7 +12,9 @@ export type PageHeaderData = {
   overlayOpacity?: number | null;
   ctaButton?: {
     label: string;
-    href: string;
+    linkType?: "internal" | "external" | null;
+    href?: string | null;
+    externalUrl?: string | null;
     icon?: { name?: string | null } | null;
   } | null;
 };

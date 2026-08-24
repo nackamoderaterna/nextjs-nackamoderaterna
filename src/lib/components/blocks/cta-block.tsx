@@ -7,10 +7,13 @@ import { getBlockHeading } from "./BlockHeading";
 import { HeadingAnchorLink } from "./HeadingAnchorLink";
 import { cleanInvisibleUnicode } from "@/lib/politicians";
 import { getLucideIcon } from "@/lib/utils/iconUtils";
+import { resolveButtonLink } from "@/lib/utils/linkUtils";
 
 interface ButtonAction {
   label: string;
-  href: string;
+  linkType?: "internal" | "external" | null;
+  href?: string | null;
+  externalUrl?: string | null;
   icon?: { name?: string | null } | null;
 }
 
@@ -31,7 +34,9 @@ interface CTABlockProps {
 }
 
 function getButtons(block: CTABlockProps): ButtonAction[] {
-  const validButtons = block.buttons?.filter((b) => b?.label && b?.href);
+  const validButtons = block.buttons?.filter(
+    (b) => b?.label && resolveButtonLink(b).href,
+  );
   if (validButtons?.length) {
     return validButtons;
   }
@@ -115,21 +120,33 @@ export function CTABlock({ block }: { block: CTABlockProps }) {
       >
         {buttons.map((action, index) => {
           const Icon = getLucideIcon(action.icon?.name);
+          const { href, isExternal } = resolveButtonLink(action);
+          if (!href) return null;
           return (
             <Button
-              key={`${action.href}-${index}`}
+              key={`${href}-${index}`}
               size="lg"
               className="group text-foreground"
               variant="secondary"
               asChild
             >
-              <Link href={action.href}>
-                {Icon && <Icon className="h-4 w-4" />}
-                {action.label}
-                {!Icon && (
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                )}
-              </Link>
+              {isExternal ? (
+                <a href={href} target="_blank" rel="noopener noreferrer">
+                  {Icon && <Icon className="h-4 w-4" />}
+                  {action.label}
+                  {!Icon && (
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  )}
+                </a>
+              ) : (
+                <Link href={href}>
+                  {Icon && <Icon className="h-4 w-4" />}
+                  {action.label}
+                  {!Icon && (
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  )}
+                </Link>
+              )}
             </Button>
           );
         })}

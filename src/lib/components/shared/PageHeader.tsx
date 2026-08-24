@@ -4,6 +4,7 @@ import { Button } from "@/lib/components/ui/button";
 import { SanityImage } from "./SanityImage";
 import { getLucideIcon } from "@/lib/utils/iconUtils";
 import type { PageHeaderData } from "@/lib/types/pages";
+import { resolveButtonLink } from "@/lib/utils/linkUtils";
 
 export type { PageHeaderData };
 
@@ -35,6 +36,9 @@ export function PageHeader({ title, pageHeader }: PageHeaderProps) {
   const CtaIcon = ctaButton?.icon?.name
     ? getLucideIcon(ctaButton.icon.name)
     : null;
+  const { href: ctaHref, isExternal: ctaIsExternal } = ctaButton
+    ? resolveButtonLink(ctaButton)
+    : { href: null, isExternal: false };
 
   const textContent = (
     <div className="flex flex-col max-w-sm justify-center gap-4">
@@ -48,13 +52,20 @@ export function PageHeader({ title, pageHeader }: PageHeaderProps) {
           {description}
         </p>
       )}
-      {ctaButton?.label && ctaButton?.href && (
+      {ctaButton?.label && ctaHref && (
         <div className="mt-2 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200">
           <Button asChild size="lg">
-            <Link href={ctaButton.href}>
-              {CtaIcon && <CtaIcon className="h-4 w-4" />}
-              {ctaButton.label}
-            </Link>
+            {ctaIsExternal ? (
+              <a href={ctaHref} target="_blank" rel="noopener noreferrer">
+                {CtaIcon && <CtaIcon className="h-4 w-4" />}
+                {ctaButton.label}
+              </a>
+            ) : (
+              <Link href={ctaHref}>
+                {CtaIcon && <CtaIcon className="h-4 w-4" />}
+                {ctaButton.label}
+              </Link>
+            )}
           </Button>
         </div>
       )}

@@ -17,7 +17,9 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
     overlayOpacity,
     ctaButton{
       label,
+      linkType,
       href,
+      externalUrl,
       icon{ name }
     }
   },
