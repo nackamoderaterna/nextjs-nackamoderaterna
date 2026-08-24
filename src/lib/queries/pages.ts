@@ -125,7 +125,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
 
       // LATEST
       mode == "latest" => *[_type == "news"]
-        | order(coalesce(dateOverride, publishedAt) desc)
+        | order(coalesce(dateOverride, _createdAt) desc)
         [0...10]{
           _id,
           _createdAt,
@@ -144,8 +144,8 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
         },
 
       // BY POLITICAL AREA
-      mode == "byPoliticalArea" && defined(politicalArea) => *[_type == "news" && references(^.politicalArea._ref)]
-        | order(coalesce(dateOverride, publishedAt) desc)
+      mode == "politics" && defined(politicalArea) => *[_type == "news" && references(^.politicalArea._ref)]
+        | order(coalesce(dateOverride, _createdAt) desc)
         [0...10]{
           _id,
           _createdAt,
@@ -164,8 +164,8 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
         },
 
       // BY GEOGRAPHIC AREA
-      mode == "byGeographicArea" && defined(geographicArea) => *[_type == "news" && references(^.geographicArea._ref)]
-        | order(coalesce(dateOverride, publishedAt) desc)
+      mode == "area" && defined(geographicArea) => *[_type == "news" && references(^.geographicArea._ref)]
+        | order(coalesce(dateOverride, _createdAt) desc)
         [0...10]{
           _id,
           _createdAt,
@@ -185,7 +185,7 @@ export const pageBySlugQuery = groq`*[_type == "page" && slug.current == $slug][
 
       // DEFAULT → empty array
        *[_type == "news"]
-        | order(coalesce(dateOverride, publishedAt) desc)
+        | order(coalesce(dateOverride, _createdAt) desc)
         [0...10]{
           _id,
           _createdAt,
